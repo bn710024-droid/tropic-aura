@@ -1,122 +1,162 @@
 import { useRef, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import * as THREE from 'three'
-import { IMAGES } from '../images'
-import scrollState from '../scrollState'
+import { useGLTF }                    from '@react-three/drei'
+import { ScrollTrigger }              from 'gsap/ScrollTrigger'
+import * as THREE                     from 'three'
+import scrollState                    from '../scrollState'
 
-/* ──────────────────────────────────────────────────────────
-   MangoMesh
-   Deux hémisphères (top/bottom) + caps intérieurs + scanner.
-   Float géré manuellement dans useFrame pour garder
-   le contrôle total et éviter tout conflit.
-   ────────────────────────────────────────────────────────── */
-function MangoMesh() {
-  const groupRef      = useRef()   // groupe global (float + scroll scale)
-  const topRef        = useRef()   // hémisphère supérieur
-  const bottomRef     = useRef()   // hémisphère inférieur
-  const topCapRef     = useRef()   // disque chair haut
-  const bottomCapRef  = useRef()   // disque chair bas
-  const scannerRef    = useRef()   // plan laser orange
+/* ─────────────────────────────────────────────────────────────
+   Préchargement du modèle (évite le flash blanc au montage)
+   ──────────────────────────────────────────────────────────── */
+useGLTF.preload('/mango_free_download.glb')
 
-  // Textures depuis l'objet IMAGES (jamais d'URL hardcodée)
-  const texKent  = useTexture(IMAGES.mangoKent)
-  const texCoupe = useTexture(IMAGES.mangoCoupe)
+/* ─────────────────────────────────────────────────────────────
+   MangoModel
+   Charge le GLB, normalise la géométrie au centre & à l'échelle,
+   crée deux copies clippées (top / bottom) et les anime via
+   useFrame + scrollState (piloté par GSAP ScrollTrigger).
+   ──────────────────────────────────────────────────────────── */
+function MangoModel() {
+  const groupRef     = useRef()   // groupe racine (float + scale global)
+  const topRef       = useRef()   // moitié haute
+  const bottomRef    = useRef()   // moitié basse
+  const scannerRef   = useRef()   // plan laser orange
 
+  /* Clip planes — en world space, constante mise à jour dans useFrame */
+  const topPlane    = useRef(new THREE.Plane(new THREE.Vector3(0,  1, 0), 0))
+  const bottomPlane = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 0))
+
+  /* ── Chargement du modèle ────────────────────────────────── */
+  const { nodes, materials } = useGLTF('/mango_free_download.glb')
+
+  /*  Le seul mesh est sur le node "Object_2" (mesh:0, mat:material_0)  */
+  const rawGeo = nodes['Object_2']?.geometry
+  const rawMat = materials['material_0']
+
+  /* ── Normalisation de la géométrie (une seule fois) ──────── */
   useEffect(() => {
-    texKent.colorSpace  = THREE.SRGBColorSpace
-    texCoupe.colorSpace = THREE.SRGBColorSpace
-    texCoupe.repeat.set(1, 1)
-    texCoupe.center.set(0.5, 0.5)
-  }, [texKent, texCoupe])
+    if (!rawGeo || rawGeo._tropicNormalized) return
 
+    // 1. Centrer la géométrie sur l'origine
+    rawGeo.computeBoundingBox()
+    const center = new THREE.Vector3()
+    rawGeo.boundingBox.getCenter(center)
+    rawGeo.translate(-center.x, -center.y, -center.z)
+
+    // 2. Normaliser à une dimension max de 2 unités (± 1 unité autour de l'origine)
+    rawGeo.computeBoundingBox()
+    const size = new THREE.Vector3()
+    rawGeo.boundingBox.getSize(size)
+    const maxDim = Math.max(size.x, size.y, size.z)
+    if (maxDim > 0) {
+      const s = 2.0 / maxDim
+      rawGeo.scale(s, s, s)
+    }
+
+    rawGeo.computeBoundingBox()
+    rawGeo.computeBoundingSphere()
+    rawGeo._tropicNormalized = true
+  }, [rawGeo])
+
+  /* ── Clonage des matériaux (1 par moitié, clip planes séparées) */
+  const topMat = useMemo(() => {
+    if (!rawMat) return null
+    const m = rawMat.clone()
+    m.clippingPlanes  = [topPlane.current]
+    m.clipIntersection = false
+    m.side            = THREE.FrontSide
+    return m
+  }, [rawMat])
+
+  const bottomMat = useMemo(() => {
+    if (!rawMat) return null
+    const m = rawMat.clone()
+    m.clippingPlanes  = [bottomPlane.current]
+    m.clipIntersection = false
+    m.side            = THREE.FrontSide
+    return m
+  }, [rawMat])
+
+  /* ── Activer le clipping local du renderer ───────────────── */
+  const { gl } = useThree()
+  useEffect(() => {
+    gl.localClippingEnabled = true
+  }, [gl])
+
+  /* ── Boucle d'animation — 60 FPS constants ───────────────── */
   useFrame(({ clock }) => {
     const t  = clock.elapsedTime
     const ss = scrollState
-    if (!groupRef.current) return
+    if (!groupRef.current || !topRef.current || !bottomRef.current) return
 
-    /* ── Float idle autonome ──────────────────────────────
-       Remplace le composant <Float> pour garder le contrôle
-       complet sur le groupe sans conflit GSAP/R3F. */
-    groupRef.current.position.y = Math.sin(t * 0.85) * 0.07
-    groupRef.current.rotation.y += 0.003 * (1 - ss.heroProgress * 0.7)
+    /* Float idle — sans dépendance au composant Float de Drei */
+    groupRef.current.position.y = Math.sin(t * 0.85) * 0.08
 
-    /* ── Scale piloté par heroProgress ────────────────── */
-    const targetScale = 1 + ss.heroProgress * 0.35
+    /* Rotation Y ralentie au fur et à mesure du scroll Hero */
+    groupRef.current.rotation.y += 0.0035 * (1 - ss.heroProgress * 0.65)
+
+    /* Scale global piloté par heroProgress */
+    const targetScale = 1 + ss.heroProgress * 0.30
     groupRef.current.scale.setScalar(targetScale)
 
-    /* ── Ouverture (split) pilotée par splitOpen ──────── */
-    const split = ss.splitOpen
-    const offset = split * 0.72
+    /* ── Split (ouverture en deux moitiés) ───────────────────
+       offset = déplacement world-space de chaque moitié.
+       Les clip planes suivent le mouvement de chaque mesh
+       pour que la coupe reste propre sans artefacts. */
+    const split  = ss.splitOpen
+    const offset = split * 0.72          // max ±0.72 unités world
 
-    // Hémisphère haut monte, bas descend
-    if (topRef.current)       topRef.current.position.y       =  offset
-    if (bottomRef.current)    bottomRef.current.position.y    = -offset
-    // Les caps suivent leurs demi-sphères
-    if (topCapRef.current)    topCapRef.current.position.y    =  offset
-    if (bottomCapRef.current) bottomCapRef.current.position.y = -offset
+    topRef.current.position.y    =  offset
+    bottomRef.current.position.y = -offset
 
-    // Légère rotation d'ouverture
-    if (topRef.current)       topRef.current.rotation.x       =  split * 0.18
-    if (bottomRef.current)    bottomRef.current.rotation.x    = -split * 0.18
+    /* Mise à jour des clip planes en world space :
+       - topPlane    montre world y ≥  offset  (moitié haute qui monte)
+       - bottomPlane montre world y ≤ -offset  (moitié basse qui descend) */
+    topPlane.current.constant    = -offset   // -offset → seuil y = offset
+    bottomPlane.current.constant = -offset   // -offset → seuil y = -offset
 
-    /* ── Scanner laser ────────────────────────────────── */
+    /* Légère rotation d'ouverture */
+    topRef.current.rotation.x    =  split * 0.14
+    bottomRef.current.rotation.x = -split * 0.14
+
+    /* ── Scanner laser orange ────────────────────────────────
+       Navette entre les deux moitiés, dans l'espace ouvert */
     if (scannerRef.current) {
-      scannerRef.current.visible = split > 0.2
-      // Va-et-vient dans l'espace ouvert entre les deux moitiés
-      scannerRef.current.position.y = Math.sin(t * 2.0) * (offset * 0.8)
-      scannerRef.current.material.opacity = 0.5 + Math.sin(t * 3.5) * 0.18
+      scannerRef.current.visible = split > 0.18
+      // Va-et-vient à vitesse constante dans le gap
+      const gap = offset * 0.85
+      scannerRef.current.position.y =
+        Math.sin(t * 2.0) * gap
+      scannerRef.current.material.opacity =
+        0.45 + Math.sin(t * 3.8) * 0.22
     }
   })
 
+  /* Si le modèle n'est pas encore chargé/normalisé, ne rien rendre */
+  if (!rawGeo || !topMat || !bottomMat) return null
+
   return (
     <group ref={groupRef}>
-      {/* Hémisphère supérieur — thetaStart=0, thetaLength=PI/2 */}
-      <mesh ref={topRef}>
-        <sphereGeometry args={[1, 64, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial
-          map={texKent}
-          roughness={0.42}
-          metalness={0.04}
-          side={THREE.FrontSide}
-        />
-      </mesh>
 
-      {/* Cap intérieur haut — disque de chair */}
-      <mesh ref={topCapRef} rotation={[Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.998, 64]} />
-        <meshStandardMaterial
-          map={texCoupe}
-          roughness={0.55}
-          side={THREE.FrontSide}
-        />
-      </mesh>
+      {/* Moitié haute — clip : world y ≥ offset */}
+      <mesh
+        ref={topRef}
+        geometry={rawGeo}
+        material={topMat}
+        castShadow
+      />
 
-      {/* Hémisphère inférieur — thetaStart=PI/2, thetaLength=PI/2 */}
-      <mesh ref={bottomRef}>
-        <sphereGeometry args={[1, 64, 32, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
-        <meshStandardMaterial
-          map={texKent}
-          roughness={0.42}
-          metalness={0.04}
-          side={THREE.FrontSide}
-        />
-      </mesh>
+      {/* Moitié basse — clip : world y ≤ –offset */}
+      <mesh
+        ref={bottomRef}
+        geometry={rawGeo}
+        material={bottomMat}
+        castShadow
+      />
 
-      {/* Cap intérieur bas — même disque de chair, face opposée */}
-      <mesh ref={bottomCapRef} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.998, 64]} />
-        <meshStandardMaterial
-          map={texCoupe}
-          roughness={0.55}
-          side={THREE.FrontSide}
-        />
-      </mesh>
-
-      {/* Scanner laser orange — plan fin entre les deux moitiés */}
-      <mesh ref={scannerRef} visible={false}>
-        <planeGeometry args={[2.6, 0.022]} />
+      {/* Scanner laser — plan fin horizontal orange */}
+      <mesh ref={scannerRef} visible={false} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[3.0, 0.028]} />
         <meshBasicMaterial
           color="#F97316"
           transparent
@@ -127,9 +167,9 @@ function MangoMesh() {
         />
       </mesh>
 
-      {/* Halo ambient autour de la mangue */}
-      <mesh scale={1.06}>
-        <sphereGeometry args={[1, 24, 24]} />
+      {/* Halo ambiant vert derrière la mangue */}
+      <mesh scale={1.08}>
+        <sphereGeometry args={[1, 16, 16]} />
         <meshBasicMaterial
           color="#4ADE80"
           transparent
@@ -139,103 +179,115 @@ function MangoMesh() {
           side={THREE.BackSide}
         />
       </mesh>
+
     </group>
   )
 }
 
-/* ──────────────────────────────────────────────────────────
-   Scene — éclairage de la scène
-   ────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   Scene — éclairage
+   ──────────────────────────────────────────────────────────── */
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[4,  5,  4]} intensity={1.3} color="#FFF5E0" />
-      <directionalLight position={[-3, -2, -3]} intensity={0.35} color="#4ADE80" />
-      <pointLight position={[0, 2, 2.5]} intensity={0.9} color="#F97316" />
-      <MangoMesh />
+      <ambientLight intensity={0.5} />
+      <directionalLight
+        position={[4, 5, 4]}
+        intensity={1.4}
+        color="#FFF5E0"
+        castShadow
+      />
+      <directionalLight
+        position={[-3, -2, -3]}
+        intensity={0.4}
+        color="#4ADE80"
+      />
+      <pointLight
+        position={[0, 2, 2.5]}
+        intensity={1.0}
+        color="#F97316"
+      />
+      <MangoModel />
     </>
   )
 }
 
-/* ──────────────────────────────────────────────────────────
-   Canvas3D — canvas fixe plein écran, z-index 1
-   ScrollTrigger → scrollState (lu par useFrame à 60 FPS)
-   Opacité : rAF sur le wrapper div (jamais via materials)
-   ────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   Canvas3D
+   Canvas fixed plein-écran z-index:1.
+   ScrollTrigger → scrollState → useFrame (60 FPS).
+   Opacité via rAF sur le wrapper div (jamais les materials).
+   ──────────────────────────────────────────────────────────── */
 export default function Canvas3D() {
   const wrapRef = useRef(null)
 
-  /* ── rAF loop : sync l'opacité CSS du wrapper ─────────
-     Plus propre et moins coûteux que traverser les materials
-     Three.js à chaque frame. */
+  /* ── Opacité CSS du wrapper (lit scrollState.canvasOpacity) */
   useEffect(() => {
     let rafId
-    const syncOpacity = () => {
+    const sync = () => {
       if (wrapRef.current) {
         wrapRef.current.style.opacity = String(scrollState.canvasOpacity)
       }
-      rafId = requestAnimationFrame(syncOpacity)
+      rafId = requestAnimationFrame(sync)
     }
-    rafId = requestAnimationFrame(syncOpacity)
+    rafId = requestAnimationFrame(sync)
     return () => cancelAnimationFrame(rafId)
   }, [])
 
-  /* ── ScrollTrigger → scrollState ─────────────────────── */
+  /* ── ScrollTrigger → scrollState ─────────────────────────── */
   useEffect(() => {
-    // Attendre que toutes les sections soient dans le DOM
     const setup = () => {
-      const heroSection    = document.getElementById('hero-section')
-      const techSection    = document.getElementById('tech-section')
-      const humanSection   = document.getElementById('human-section')
-      const closingSection = document.getElementById('closing-section')
-      if (!heroSection || !techSection || !humanSection) return
+      const heroEl    = document.getElementById('hero-section')
+      const techEl    = document.getElementById('tech-section')
+      const humanEl   = document.getElementById('human-section')
+      const closingEl = document.getElementById('closing-section')
+      if (!heroEl || !techEl || !humanEl) return
 
-      // Hero → splitOpen 0→1 au fur et à mesure du scroll
+      /* Hero (0 → 1) : rotation + début du split */
       ScrollTrigger.create({
-        trigger: heroSection,
-        start: 'top top',
-        end:   'bottom top',
-        scrub: true,
-        onUpdate: (self) => {
+        trigger: heroEl,
+        start:   'top top',
+        end:     'bottom top',
+        scrub:   true,
+        onUpdate(self) {
           scrollState.heroProgress = self.progress
-          scrollState.splitOpen    = Math.min(1, self.progress * 2.2)
+          scrollState.splitOpen    = Math.min(1, self.progress * 2.4)
         },
       })
 
-      // Tech → ouverture complète atteinte en milieu de section
+      /* Tech : ouverture totale atteinte au milieu de la section */
       ScrollTrigger.create({
-        trigger: techSection,
-        start: 'top bottom',
-        end:   'bottom top',
-        scrub: true,
-        onUpdate: (self) => {
+        trigger: techEl,
+        start:   'top bottom',
+        end:     'bottom top',
+        scrub:   true,
+        onUpdate(self) {
           scrollState.techProgress = self.progress
           scrollState.splitOpen    = Math.min(1, 0.5 + self.progress * 0.5)
         },
       })
 
-      // Human → canvas s'estompe (fond blanc prend l'écran)
+      /* Human : canvas s'estompe (fond blanc) */
       ScrollTrigger.create({
-        trigger: humanSection,
-        start: 'top 80%',
-        end:   'top 10%',
-        scrub: true,
-        onUpdate: (self) => {
+        trigger: humanEl,
+        start:   'top 80%',
+        end:     'top 10%',
+        scrub:   true,
+        onUpdate(self) {
           scrollState.canvasOpacity = 1 - self.progress
         },
       })
 
-      // Closing → canvas réapparaît + mangue se referme légèrement
-      if (closingSection) {
+      /* Closing : canvas réapparaît + mangue se referme */
+      if (closingEl) {
         ScrollTrigger.create({
-          trigger: closingSection,
-          start: 'top 85%',
-          end:   'top 15%',
-          scrub: true,
-          onUpdate: (self) => {
+          trigger: closingEl,
+          start:   'top 85%',
+          end:     'top 15%',
+          scrub:   true,
+          onUpdate(self) {
             scrollState.canvasOpacity = self.progress
-            scrollState.splitOpen    = Math.max(0, 1 - self.progress * 0.35)
+            scrollState.splitOpen    = Math.max(0, 1 - self.progress * 0.4)
           },
         })
       }
@@ -243,9 +295,9 @@ export default function Canvas3D() {
       ScrollTrigger.refresh()
     }
 
-    // Petit délai pour s'assurer que tous les composants enfants
-    // ont fini leur propre useEffect avant ScrollTrigger.refresh()
-    const id = setTimeout(setup, 80)
+    /* Délai minimal pour s'assurer que tous les composants
+       enfants ont fini leurs propres useEffect */
+    const id = setTimeout(setup, 100)
     return () => {
       clearTimeout(id)
       ScrollTrigger.getAll().forEach((t) => t.kill())
@@ -256,21 +308,22 @@ export default function Canvas3D() {
     <div
       ref={wrapRef}
       style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1,
+        position:      'fixed',
+        inset:          0,
+        zIndex:         1,
         pointerEvents: 'none',
-        background: '#000',   // fond noir derrière la scène 3D
+        background:    '#000',
       }}
     >
       <Canvas
         camera={{ position: [0, 0, 3.2], fov: 48 }}
         gl={{
-          antialias: true,
-          alpha: false,          // alpha:false → THREE gère le fond noir, plus performant
-          powerPreference: 'high-performance',
+          antialias:         true,
+          alpha:             false,
+          powerPreference:   'high-performance',
         }}
         dpr={[1, Math.min(window.devicePixelRatio, 1.5)]}
+        shadows
         style={{ width: '100%', height: '100%' }}
       >
         <Scene />
