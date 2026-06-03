@@ -1,144 +1,139 @@
 import { useRef, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useTexture, Environment, Float } from '@react-three/drei'
-import { gsap } from 'gsap'
+import { useTexture } from '@react-three/drei'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import * as THREE from 'three'
 import { IMAGES } from '../images'
 import scrollState from '../scrollState'
 
 /* ──────────────────────────────────────────────────────────
-   MangoMesh — Géométrie 3D de la mangue + scanner laser
+   MangoMesh
+   Deux hémisphères (top/bottom) + caps intérieurs + scanner.
+   Float géré manuellement dans useFrame pour garder
+   le contrôle total et éviter tout conflit.
    ────────────────────────────────────────────────────────── */
 function MangoMesh() {
-  const topRef     = useRef()
-  const bottomRef  = useRef()
-  const groupRef   = useRef()
-  const scannerRef = useRef()
-  const innerRef   = useRef()
+  const groupRef      = useRef()   // groupe global (float + scroll scale)
+  const topRef        = useRef()   // hémisphère supérieur
+  const bottomRef     = useRef()   // hémisphère inférieur
+  const topCapRef     = useRef()   // disque chair haut
+  const bottomCapRef  = useRef()   // disque chair bas
+  const scannerRef    = useRef()   // plan laser orange
 
-  // Clipping planes — limitent chaque moitié à sa demi-sphère
-  const topPlane    = useMemo(() => new THREE.Plane(new THREE.Vector3(0, -1, 0), 0.01), [])
-  const bottomPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0,  1, 0), 0.01), [])
-
-  // Textures
+  // Textures depuis l'objet IMAGES (jamais d'URL hardcodée)
   const texKent  = useTexture(IMAGES.mangoKent)
   const texCoupe = useTexture(IMAGES.mangoCoupe)
 
-  // Correction texture UV
   useEffect(() => {
     texKent.colorSpace  = THREE.SRGBColorSpace
     texCoupe.colorSpace = THREE.SRGBColorSpace
+    texCoupe.repeat.set(1, 1)
+    texCoupe.center.set(0.5, 0.5)
   }, [texKent, texCoupe])
-
-  const { gl } = useThree()
-  useEffect(() => {
-    gl.localClippingEnabled = true
-  }, [gl])
 
   useFrame(({ clock }) => {
     const t  = clock.elapsedTime
     const ss = scrollState
-
     if (!groupRef.current) return
 
-    // ── Rotation de base (idle) ──────────────────────────
-    const heroP = ss.heroProgress
-    groupRef.current.rotation.y += 0.003 * (1 - heroP * 0.6)
+    /* ── Float idle autonome ──────────────────────────────
+       Remplace le composant <Float> pour garder le contrôle
+       complet sur le groupe sans conflit GSAP/R3F. */
+    groupRef.current.position.y = Math.sin(t * 0.85) * 0.07
+    groupRef.current.rotation.y += 0.003 * (1 - ss.heroProgress * 0.7)
 
-    // ── Scale en fonction du scroll hero ────────────────
-    const baseScale = 1 + heroP * 0.4
-    groupRef.current.scale.setScalar(baseScale)
+    /* ── Scale piloté par heroProgress ────────────────── */
+    const targetScale = 1 + ss.heroProgress * 0.35
+    groupRef.current.scale.setScalar(targetScale)
 
-    // ── Ouverture (split) pilotée par techProgress ───────
+    /* ── Ouverture (split) pilotée par splitOpen ──────── */
     const split = ss.splitOpen
-    if (topRef.current)    topRef.current.position.y    =  split * 0.65
-    if (bottomRef.current) bottomRef.current.position.y = -split * 0.65
+    const offset = split * 0.72
 
-    // Rotation légère d'ouverture
-    if (topRef.current)    topRef.current.rotation.x    =  split * 0.25
-    if (bottomRef.current) bottomRef.current.rotation.x = -split * 0.25
+    // Hémisphère haut monte, bas descend
+    if (topRef.current)       topRef.current.position.y       =  offset
+    if (bottomRef.current)    bottomRef.current.position.y    = -offset
+    // Les caps suivent leurs demi-sphères
+    if (topCapRef.current)    topCapRef.current.position.y    =  offset
+    if (bottomCapRef.current) bottomCapRef.current.position.y = -offset
 
-    // ── Scanner laser ────────────────────────────────────
+    // Légère rotation d'ouverture
+    if (topRef.current)       topRef.current.rotation.x       =  split * 0.18
+    if (bottomRef.current)    bottomRef.current.rotation.x    = -split * 0.18
+
+    /* ── Scanner laser ────────────────────────────────── */
     if (scannerRef.current) {
-      scannerRef.current.visible = split > 0.15
-      scannerRef.current.position.y = Math.sin(t * 2.2) * 0.45
-      scannerRef.current.material.opacity = 0.55 + Math.sin(t * 4) * 0.15
-    }
-
-    // ── Chair intérieure (visible quand ouvert) ──────────
-    if (innerRef.current) {
-      innerRef.current.material.opacity = Math.min(1, split * 2.5)
-    }
-
-    // ── Opacité globale canvas ───────────────────────────
-    if (groupRef.current) {
-      groupRef.current.traverse((child) => {
-        if (child.isMesh && child !== scannerRef.current) {
-          child.material.transparent = true
-          child.material.opacity = ss.canvasOpacity
-        }
-      })
+      scannerRef.current.visible = split > 0.2
+      // Va-et-vient dans l'espace ouvert entre les deux moitiés
+      scannerRef.current.position.y = Math.sin(t * 2.0) * (offset * 0.8)
+      scannerRef.current.material.opacity = 0.5 + Math.sin(t * 3.5) * 0.18
     }
   })
 
   return (
     <group ref={groupRef}>
-      {/* Moitié haute */}
-      <mesh ref={topRef} castShadow>
-        <sphereGeometry args={[1, 64, 64]} />
+      {/* Hémisphère supérieur — thetaStart=0, thetaLength=PI/2 */}
+      <mesh ref={topRef}>
+        <sphereGeometry args={[1, 64, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial
           map={texKent}
-          clippingPlanes={[topPlane]}
-          clipShadows
-          roughness={0.45}
-          metalness={0.05}
+          roughness={0.42}
+          metalness={0.04}
+          side={THREE.FrontSide}
         />
       </mesh>
 
-      {/* Moitié basse */}
-      <mesh ref={bottomRef} castShadow>
-        <sphereGeometry args={[1, 64, 64]} />
-        <meshStandardMaterial
-          map={texKent}
-          clippingPlanes={[bottomPlane]}
-          clipShadows
-          roughness={0.45}
-          metalness={0.05}
-        />
-      </mesh>
-
-      {/* Chair intérieure (disque visible après ouverture) */}
-      <mesh ref={innerRef} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <circleGeometry args={[0.98, 64]} />
+      {/* Cap intérieur haut — disque de chair */}
+      <mesh ref={topCapRef} rotation={[Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.998, 64]} />
         <meshStandardMaterial
           map={texCoupe}
-          transparent
-          opacity={0}
-          roughness={0.6}
-          side={THREE.DoubleSide}
+          roughness={0.55}
+          side={THREE.FrontSide}
         />
       </mesh>
 
-      {/* Scanner laser orange */}
+      {/* Hémisphère inférieur — thetaStart=PI/2, thetaLength=PI/2 */}
+      <mesh ref={bottomRef}>
+        <sphereGeometry args={[1, 64, 32, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
+        <meshStandardMaterial
+          map={texKent}
+          roughness={0.42}
+          metalness={0.04}
+          side={THREE.FrontSide}
+        />
+      </mesh>
+
+      {/* Cap intérieur bas — même disque de chair, face opposée */}
+      <mesh ref={bottomCapRef} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.998, 64]} />
+        <meshStandardMaterial
+          map={texCoupe}
+          roughness={0.55}
+          side={THREE.FrontSide}
+        />
+      </mesh>
+
+      {/* Scanner laser orange — plan fin entre les deux moitiés */}
       <mesh ref={scannerRef} visible={false}>
-        <boxGeometry args={[2.4, 0.018, 2.4]} />
+        <planeGeometry args={[2.6, 0.022]} />
         <meshBasicMaterial
           color="#F97316"
           transparent
           opacity={0.55}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
+          side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Halo orange autour de la mangue */}
-      <mesh scale={[1.08, 1.08, 1.08]}>
-        <sphereGeometry args={[1, 32, 32]} />
+      {/* Halo ambient autour de la mangue */}
+      <mesh scale={1.06}>
+        <sphereGeometry args={[1, 24, 24]} />
         <meshBasicMaterial
-          color="#F97316"
+          color="#4ADE80"
           transparent
-          opacity={0.06}
+          opacity={0.04}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.BackSide}
@@ -149,92 +144,112 @@ function MangoMesh() {
 }
 
 /* ──────────────────────────────────────────────────────────
-   Scene — éclairage + flottaison idle de la mangue
+   Scene — éclairage de la scène
    ────────────────────────────────────────────────────────── */
 function Scene() {
   return (
     <>
-      {/* Éclairage ambiant */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[3, 5, 3]}  intensity={1.2} color="#FFF8E7" />
-      <directionalLight position={[-3, -2, -3]} intensity={0.3} color="#4ADE80" />
-      <pointLight position={[0, 3, 2]} intensity={0.8} color="#F97316" />
-
-      {/* Float — idle animation subtile en Three.js */}
-      <Float speed={1.6} rotationIntensity={0.12} floatIntensity={0.18}>
-        <MangoMesh />
-      </Float>
+      <ambientLight intensity={0.45} />
+      <directionalLight position={[4,  5,  4]} intensity={1.3} color="#FFF5E0" />
+      <directionalLight position={[-3, -2, -3]} intensity={0.35} color="#4ADE80" />
+      <pointLight position={[0, 2, 2.5]} intensity={0.9} color="#F97316" />
+      <MangoMesh />
     </>
   )
 }
 
 /* ──────────────────────────────────────────────────────────
-   Canvas3D — canvas fixed plein écran en arrière-plan
+   Canvas3D — canvas fixe plein écran, z-index 1
+   ScrollTrigger → scrollState (lu par useFrame à 60 FPS)
+   Opacité : rAF sur le wrapper div (jamais via materials)
    ────────────────────────────────────────────────────────── */
 export default function Canvas3D() {
   const wrapRef = useRef(null)
 
+  /* ── rAF loop : sync l'opacité CSS du wrapper ─────────
+     Plus propre et moins coûteux que traverser les materials
+     Three.js à chaque frame. */
+  useEffect(() => {
+    let rafId
+    const syncOpacity = () => {
+      if (wrapRef.current) {
+        wrapRef.current.style.opacity = String(scrollState.canvasOpacity)
+      }
+      rafId = requestAnimationFrame(syncOpacity)
+    }
+    rafId = requestAnimationFrame(syncOpacity)
+    return () => cancelAnimationFrame(rafId)
+  }, [])
+
   /* ── ScrollTrigger → scrollState ─────────────────────── */
   useEffect(() => {
-    const heroSection  = document.getElementById('hero-section')
-    const techSection  = document.getElementById('tech-section')
-    const humanSection = document.getElementById('human-section')
-    const closingSection = document.getElementById('closing-section')
+    // Attendre que toutes les sections soient dans le DOM
+    const setup = () => {
+      const heroSection    = document.getElementById('hero-section')
+      const techSection    = document.getElementById('tech-section')
+      const humanSection   = document.getElementById('human-section')
+      const closingSection = document.getElementById('closing-section')
+      if (!heroSection || !techSection || !humanSection) return
 
-    if (!heroSection || !techSection || !humanSection) return
-
-    // Hero progress (0→1)
-    ScrollTrigger.create({
-      trigger: heroSection,
-      start: 'top top',
-      end:   'bottom top',
-      scrub: true,
-      onUpdate: (self) => {
-        scrollState.heroProgress = self.progress
-        scrollState.splitOpen    = Math.min(1, self.progress * 2.5)
-      },
-    })
-
-    // Tech progress
-    ScrollTrigger.create({
-      trigger: techSection,
-      start: 'top bottom',
-      end:   'bottom top',
-      scrub: true,
-      onUpdate: (self) => {
-        scrollState.techProgress = self.progress
-        // Ouverture totale en section Tech
-        scrollState.splitOpen = Math.min(1, 0.5 + self.progress * 0.5)
-      },
-    })
-
-    // Human — canvas disparaît (fond blanc)
-    ScrollTrigger.create({
-      trigger: humanSection,
-      start: 'top 80%',
-      end:   'top 20%',
-      scrub: true,
-      onUpdate: (self) => {
-        scrollState.canvasOpacity = 1 - self.progress
-      },
-    })
-
-    // Closing — canvas réapparaît
-    if (closingSection) {
+      // Hero → splitOpen 0→1 au fur et à mesure du scroll
       ScrollTrigger.create({
-        trigger: closingSection,
-        start: 'top 80%',
-        end:   'top 20%',
+        trigger: heroSection,
+        start: 'top top',
+        end:   'bottom top',
         scrub: true,
         onUpdate: (self) => {
-          scrollState.canvasOpacity = self.progress
-          // Referme légèrement pour le closing
-          scrollState.splitOpen = 1 - self.progress * 0.3
+          scrollState.heroProgress = self.progress
+          scrollState.splitOpen    = Math.min(1, self.progress * 2.2)
         },
       })
+
+      // Tech → ouverture complète atteinte en milieu de section
+      ScrollTrigger.create({
+        trigger: techSection,
+        start: 'top bottom',
+        end:   'bottom top',
+        scrub: true,
+        onUpdate: (self) => {
+          scrollState.techProgress = self.progress
+          scrollState.splitOpen    = Math.min(1, 0.5 + self.progress * 0.5)
+        },
+      })
+
+      // Human → canvas s'estompe (fond blanc prend l'écran)
+      ScrollTrigger.create({
+        trigger: humanSection,
+        start: 'top 80%',
+        end:   'top 10%',
+        scrub: true,
+        onUpdate: (self) => {
+          scrollState.canvasOpacity = 1 - self.progress
+        },
+      })
+
+      // Closing → canvas réapparaît + mangue se referme légèrement
+      if (closingSection) {
+        ScrollTrigger.create({
+          trigger: closingSection,
+          start: 'top 85%',
+          end:   'top 15%',
+          scrub: true,
+          onUpdate: (self) => {
+            scrollState.canvasOpacity = self.progress
+            scrollState.splitOpen    = Math.max(0, 1 - self.progress * 0.35)
+          },
+        })
+      }
+
+      ScrollTrigger.refresh()
     }
 
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill())
+    // Petit délai pour s'assurer que tous les composants enfants
+    // ont fini leur propre useEffect avant ScrollTrigger.refresh()
+    const id = setTimeout(setup, 80)
+    return () => {
+      clearTimeout(id)
+      ScrollTrigger.getAll().forEach((t) => t.kill())
+    }
   }, [])
 
   return (
@@ -245,17 +260,17 @@ export default function Canvas3D() {
         inset: 0,
         zIndex: 1,
         pointerEvents: 'none',
+        background: '#000',   // fond noir derrière la scène 3D
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 3.5], fov: 45 }}
+        camera={{ position: [0, 0, 3.2], fov: 48 }}
         gl={{
           antialias: true,
-          alpha: true,
+          alpha: false,          // alpha:false → THREE gère le fond noir, plus performant
           powerPreference: 'high-performance',
-          localClippingEnabled: true,
         }}
-        dpr={[1, 1.5]}
+        dpr={[1, Math.min(window.devicePixelRatio, 1.5)]}
         style={{ width: '100%', height: '100%' }}
       >
         <Scene />

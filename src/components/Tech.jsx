@@ -46,8 +46,7 @@ export default function Tech() {
         start: 'top top',
         end:   'bottom top',
         scrub: 1.4,
-        pin: stickyRef.current,
-        anticipatePin: 1,
+        // PAS de pin: — CSS sticky s'en charge, pas GSAP.
       },
     })
 

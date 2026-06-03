@@ -15,7 +15,13 @@
   justify-content: flex-end;
   padding: 0 6vw 0 0;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(5,26,16,0.92) 0%, rgba(0,0,0,0.95) 100%);
+  /* Semi-transparent : la mangue 3D reste visible à gauche
+     pendant que les cartes arrivent depuis la droite. */
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0,0,0,0.55) 35%,
+    rgba(0,0,0,0.88) 100%
+  );
 }
 
 /* Label section */

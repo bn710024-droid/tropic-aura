@@ -29,18 +29,16 @@ export default function App() {
     })
     lenisRef.current = lenis
 
-    // Connect Lenis to GSAP ticker — évite tout tremblement ScrollTrigger
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
+    // Stocker la référence de la fonction pour pouvoir la retirer proprement
+    const tickerFn = (time) => lenis.raf(time * 1000)
+    gsap.ticker.add(tickerFn)
     gsap.ticker.lagSmoothing(0)
-
-    // Inform ScrollTrigger of scroll position via Lenis events
-    lenis.on('scroll', ScrollTrigger.update)
+    // NE PAS ajouter lenis.on('scroll', ScrollTrigger.update) —
+    // cela crée un double update avec le ticker GSAP et fait trembler le scroll.
 
     return () => {
+      gsap.ticker.remove(tickerFn)
       lenis.destroy()
-      gsap.ticker.remove(lenis.raf)
     }
   }, [])
 
