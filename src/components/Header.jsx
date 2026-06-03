@@ -1,84 +1,106 @@
-import { useEffect, useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { IMAGES } from '../images'
 import './Header.css'
 
-const NAV_LINKS = ['Products', 'Story', 'Markets', 'Contact']
+const NAV_LINKS = [
+  ['Fruits tropicaux', '#'],  ['Légumes sous serre', '#'],
+  ['Fruits exotiques',  '#'],  ['Notre histoire',    '#'],
+  ['Marchés cibles',   '#'],  ['Qualité & Certif.', '#'],
+  ['Logistique',       '#'],  ['Contact B2B',       '#'],
+]
 
 export default function Header() {
-  const headerRef = useRef(null)
-  const ctaRef    = useRef(null)
+  const [open, setOpen] = useState(false)
+  const overlayRef = useRef(null)
+  const navLinksRef = useRef([])
+  const tlRef = useRef(null)
 
-  /* ── Scroll-aware background ──────────────────────────── */
   useEffect(() => {
-    const el = headerRef.current
+    const overlay = overlayRef.current
+    gsap.set(overlay, { y: '-100%' })
 
-    ScrollTrigger.create({
-      start: 'top -60px',
-      end: 99999,
-      onToggle: (self) => {
-        if (self.isActive) {
-          gsap.to(el, {
-            backgroundColor: 'rgba(0,0,0,0.88)',
-            backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            duration: 0.4,
-            ease: 'power2.out',
-          })
-        } else {
-          gsap.to(el, {
-            backgroundColor: 'rgba(0,0,0,0)',
-            backdropFilter: 'blur(0px)',
-            borderBottom: '1px solid transparent',
-            duration: 0.4,
-            ease: 'power2.out',
-          })
-        }
-      },
-    })
+    tlRef.current = gsap.timeline({ paused: true })
+      .to(overlay, {
+        y: '0%',
+        duration: 0.55,
+        ease: 'power3.inOut',
+      })
+      .fromTo(
+        navLinksRef.current.filter(Boolean),
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.045, duration: 0.4, ease: 'power3.out' },
+        '-=0.2'
+      )
   }, [])
 
-  /* ── Magnetic CTA ─────────────────────────────────────── */
-  useEffect(() => {
-    const btn = ctaRef.current
-    if (!btn) return
-
-    const onMove = (e) => {
-      const rect = btn.getBoundingClientRect()
-      const cx = rect.left + rect.width  / 2
-      const cy = rect.top  + rect.height / 2
-      const dx = (e.clientX - cx) * 0.3
-      const dy = (e.clientY - cy) * 0.3
-      gsap.to(btn, { x: dx, y: dy, duration: 0.4, ease: 'power2.out', overwrite: true })
+  const toggle = () => {
+    if (!open) {
+      setOpen(true)
+      tlRef.current.play()
+    } else {
+      tlRef.current.reverse().then(() => setOpen(false))
     }
-
-    const onLeave = () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)', overwrite: true })
-    }
-
-    btn.addEventListener('mousemove', onMove)
-    btn.addEventListener('mouseleave', onLeave)
-    return () => {
-      btn.removeEventListener('mousemove', onMove)
-      btn.removeEventListener('mouseleave', onLeave)
-    }
-  }, [])
+  }
 
   return (
-    <header ref={headerRef} className="header">
-      <div className="header__logo">TROPIC-AURA</div>
+    <>
+      <header className="header">
+        {/* Logo */}
+        <div className="header__logo">
+          <img
+            src={IMAGES.logo}
+            alt="Tropic-Aura"
+            style={{ height: 40, width: 40, borderRadius: 6, objectFit: 'cover' }}
+          />
+          <span className="header__logo-text">TROPIC-AURA</span>
+        </div>
 
-      <nav className="header__nav">
-        {NAV_LINKS.map((link) => (
-          <a key={link} href={`#${link.toLowerCase()}`}>{link}</a>
-        ))}
-      </nav>
+        {/* Right zone */}
+        <div className="header__right">
+          <span className="header__lang">FR</span>
+          <button className="header__contact">Contact</button>
+          <button className="header__menu-btn" onClick={toggle} aria-label="Menu">
+            {open
+              ? <span className="header__close-icon">✕</span>
+              : <div className="header__grid-icon">
+                  <span /><span /><span /><span />
+                </div>
+            }
+          </button>
+        </div>
+      </header>
 
-      <div className="header__cta-wrap">
-        <button ref={ctaRef} className="header__cta">
-          Initier un partenariat
-        </button>
+      {/* Overlay curtain */}
+      <div ref={overlayRef} className="overlay">
+        <button className="overlay__close" onClick={toggle}>✕</button>
+
+        {/* Gauche — image terroir */}
+        <div className="overlay__left">
+          <img src={IMAGES.mainTerroir} alt="Terroir Sénégal" />
+          <span className="overlay__left-badge">Export B2B • Dakar</span>
+        </div>
+
+        {/* Droite — liens */}
+        <div className="overlay__right">
+          <nav className="overlay__nav">
+            {NAV_LINKS.map(([label, href], i) => (
+              <a
+                key={label}
+                href={href}
+                ref={el => { navLinksRef.current[i] = el }}
+                onClick={toggle}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="overlay__bottom">
+            <p>Port de Dakar · FOB / FAS · Export B2B</p>
+          </div>
+        </div>
       </div>
-    </header>
+    </>
   )
 }
