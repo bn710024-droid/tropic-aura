@@ -48,42 +48,48 @@ export default function Hero() {
         trigger: section,
         start: 'top top',
         end:   'bottom top',
-        scrub: 1.2,
-        // PAS de pin: — CSS sticky gère déjà l'accrochage visuel.
-        // Ajouter pin: crée position:fixed qui entre en conflit.
+        // scrub:0.3 — colle l'animation au doigt sans lag perceptible.
+        // La valeur (en secondes) = temps de rattrappage maxi.
+        scrub: 0.3,
       },
     })
 
-    // "TROPICAL" part à gauche
+    // ── Split-text : s'exécute dans les PREMIERS 12% du scroll ──
+    // duration:0.12 sur une timeline totale de ~1s = 12% de la course.
+    // L'utilisateur voit l'action dès le premier coup de molette.
     tl.to(left, {
       x: '-115vw',
       opacity: 0,
-      ease: 'power2.in',
+      ease: 'power3.out',
+      duration: 0.12,
     }, 0)
 
-    // "ESSENCE" part à droite
     tl.to(right, {
       x: '115vw',
       opacity: 0,
-      ease: 'power2.in',
+      ease: 'power3.out',
+      duration: 0.12,
     }, 0)
 
-    // Textes du bas disparaissent
+    // Sous-titres disparaissent légèrement après (15%)
     tl.to(bottomRef.current, {
       opacity: 0,
-      y: -28,
-      ease: 'power1.in',
+      y: -24,
+      ease: 'power2.in',
+      duration: 0.15,
     }, 0)
 
     tl.to(hintRef.current, {
       opacity: 0,
-      ease: 'power1.in',
+      ease: 'power2.in',
+      duration: 0.10,
     }, 0)
 
-    // Aura vire à l'orange/doré en scrollant
+    // Aura change de couleur sur toute la durée (étalon de la timeline)
     tl.to(auraRef.current, {
       background: 'radial-gradient(circle, rgba(249,115,22,0.30) 0%, rgba(251,191,36,0.12) 45%, transparent 70%)',
       ease: 'none',
+      duration: 1.0,
     }, 0)
 
     return () => {

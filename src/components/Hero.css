@@ -1,7 +1,7 @@
 .hero {
   position: relative;
   width: 100%;
-  height: 200vh;             /* 200vh — split-text a le temps de respirer */
+  height: 120vh;             /* 120vh — transitions serrées, impact immédiat */
   background: transparent;
 }
 

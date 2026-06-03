@@ -22,9 +22,11 @@ export default function App() {
   /* ── Lenis + GSAP ticker sync ─────────────────────────── */
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
+      // lerp : facteur d'interpolation linéaire — 0.15 = réponse nerveuse,
+      // le scroll s'arrête net sans traîner. Remplace duration+easing.
+      lerp:            0.15,
+      smoothWheel:     true,
+      wheelMultiplier: 1.2,   // amplification légère de la molette
       touchMultiplier: 2,
     })
     lenisRef.current = lenis

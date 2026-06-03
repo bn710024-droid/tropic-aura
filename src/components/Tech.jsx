@@ -37,36 +37,29 @@ export default function Tech() {
     const cards   = cardRefs.current
     if (!section || cards.some((c) => !c)) return
 
-    // Initialise les cartes hors écran à droite
-    gsap.set(cards, { x: 140, opacity: 0 })
+    // Initialise les cartes hors écran à droite, invisibles
+    gsap.set(cards, { x: 120, opacity: 0 })
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top top',
-        end:   'bottom top',
-        scrub: 1.4,
-        // PAS de pin: — CSS sticky s'en charge, pas GSAP.
+        start: 'top 80%',  // démarre dès que la section entre dans le viewport
+        end:   'top 20%',  // finit rapidement — fenêtre de 60% de viewport
+        scrub: 0.3,        // rattrappage ultra-rapide, animation au doigt
       },
     })
 
-    // Entrée en stagger des cartes depuis la droite
+    // ── Cartes : fade-in + slide rapide en stagger serré ──
+    // Les 3 cartes aparaissent en cascade immédiate dès l'entrée de section.
+    // stagger réduit à 0.055 (vs 0.12) = les cartes sautent aux yeux B2B.
     cards.forEach((card, i) => {
       tl.to(card, {
         x: 0,
         opacity: 1,
         ease: 'power3.out',
         duration: 0.4,
-      }, i * 0.12)
+      }, i * 0.055)
     })
-
-    // Au milieu du scroll — les cartes se compressent légèrement pour suggérer la fin
-    tl.to(cards, {
-      scale: 0.96,
-      opacity: 0.7,
-      ease: 'power1.in',
-      duration: 0.3,
-    }, 0.72)
 
     return () => ScrollTrigger.getAll().forEach((t) => {
       if (t.trigger === section) t.kill()

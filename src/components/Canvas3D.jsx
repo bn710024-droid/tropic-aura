@@ -243,7 +243,9 @@ export default function Canvas3D() {
       const closingEl = document.getElementById('closing-section')
       if (!heroEl || !techEl || !humanEl) return
 
-      /* Hero (0 → 1) : rotation + début du split */
+      /* Hero : split IMMÉDIAT — la mangue s'ouvre dès les premiers px de scroll.
+         progress * 8 => splitOpen = 1 dès 12.5% de la section scrollée.
+         Synchronisé avec la disparition du split-text (scrub:0.3 dans Hero.jsx). */
       ScrollTrigger.create({
         trigger: heroEl,
         start:   'top top',
@@ -251,11 +253,11 @@ export default function Canvas3D() {
         scrub:   true,
         onUpdate(self) {
           scrollState.heroProgress = self.progress
-          scrollState.splitOpen    = Math.min(1, self.progress * 2.4)
+          scrollState.splitOpen    = Math.min(1, self.progress * 8)
         },
       })
 
-      /* Tech : ouverture totale atteinte au milieu de la section */
+      /* Tech : split déjà ouvert à 100%, on maintient */
       ScrollTrigger.create({
         trigger: techEl,
         start:   'top bottom',
@@ -263,7 +265,7 @@ export default function Canvas3D() {
         scrub:   true,
         onUpdate(self) {
           scrollState.techProgress = self.progress
-          scrollState.splitOpen    = Math.min(1, 0.5 + self.progress * 0.5)
+          scrollState.splitOpen    = 1   // maintenu grand ouvert pendant Tech
         },
       })
 
