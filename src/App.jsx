@@ -1,122 +1,92 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useRef } from 'react'
+import Lenis from 'lenis'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Header   from './components/Header'
+import Canvas3D from './components/Canvas3D'
+import Hero     from './components/Hero'
+import Tech     from './components/Tech'
+import Human    from './components/Human'
+import Closing  from './components/Closing'
+import Footer   from './components/Footer'
+
+gsap.registerPlugin(ScrollTrigger)
+
+export default function App() {
+  const cursorRef  = useRef(null)
+  const ringRef    = useRef(null)
+  const lenisRef   = useRef(null)
+
+  /* ── Lenis + GSAP ticker sync ─────────────────────────── */
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 2,
+    })
+    lenisRef.current = lenis
+
+    // Connect Lenis to GSAP ticker — évite tout tremblement ScrollTrigger
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+    gsap.ticker.lagSmoothing(0)
+
+    // Inform ScrollTrigger of scroll position via Lenis events
+    lenis.on('scroll', ScrollTrigger.update)
+
+    return () => {
+      lenis.destroy()
+      gsap.ticker.remove(lenis.raf)
+    }
+  }, [])
+
+  /* ── Custom cursor ────────────────────────────────────── */
+  useEffect(() => {
+    const cursor = cursorRef.current
+    const ring   = ringRef.current
+    if (!cursor || !ring) return
+
+    // quickTo pour la fluidité maximale
+    const setCX = gsap.quickTo(cursor, 'x', { duration: 0.08, ease: 'none' })
+    const setCY = gsap.quickTo(cursor, 'y', { duration: 0.08, ease: 'none' })
+    const setRX = gsap.quickTo(ring,   'x', { duration: 0.18, ease: 'power2.out' })
+    const setRY = gsap.quickTo(ring,   'y', { duration: 0.18, ease: 'power2.out' })
+
+    const onMove = (e) => {
+      setCX(e.clientX)
+      setCY(e.clientY)
+      setRX(e.clientX)
+      setRY(e.clientY)
+    }
+
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      {/* Custom cursor */}
+      <div className="ta-cursor"      ref={cursorRef} />
+      <div className="ta-cursor-ring" ref={ringRef}   />
 
-      <div className="ticks"></div>
+      {/* Navigation fixe */}
+      <Header />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* Canvas Three.js global — fixed derrière tout le contenu */}
+      <Canvas3D />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      {/* Contenu HTML scrollable — z-index supérieur au canvas */}
+      <div className="ta-scroll-container">
+        <Hero    />
+        <Tech    />
+        <Human   />
+        <Closing />
+        <Footer  />
+      </div>
     </>
   )
 }
-
-export default App
