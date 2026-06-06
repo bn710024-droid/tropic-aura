@@ -20,18 +20,22 @@ import { IMAGES } from "../images";
 //  Les autres : plus petits + flous (profondeur de champ).
 //  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
 //  reste lisible.  imgs[0] = le fruit star de la section.
-//  Tailles calées sur les proportions Combilo : la vedette domine la
-//  moitié DROITE (~70%) sans recouvrir le titre de gauche.
+//  Composition DENSE plein écran (style Combilo) : des fruits PARTOUT.
+//  2 gros nets (★ centre-droite + un gros haut-gauche DERRIÈRE le titre),
+//  + moyens/petits flous qui remplissent haut, droite et bas.
+//  TOUT en z < 5 → le texte (z5) passe par-dessus = parfaitement lisible.
 const COMPO = [
-  { x: 70, y: 50, size: 430, blur: 0, speed: 1.04, z: 7, r: -5 }, // ★ VEDETTE
-  { x: 11, y: 93, size: 240, blur: 6, speed: 0.94, z: 3, r: 8  }, // gros secondaire bas-gauche (flou)
-  { x: 92, y: 18, size: 135, blur: 3, speed: 1.0,  z: 5, r: -4 }, // moyen haut-droite
-  { x: 90, y: 82, size: 160, blur: 3, speed: 1.0,  z: 5, r: 6  }, // moyen bas-droite
-  { x: 97, y: 50, size: 100, blur: 8, speed: 0.85, z: 2, r: 3  }, // petit flou extrême droite
-  { x: 64, y: 9,  size: 90,  blur: 9, speed: 0.84, z: 2, r: -7 }, // petit flou haut
-  { x: 58, y: 94, size: 95,  blur: 7, speed: 0.9,  z: 2, r: 4  }, // petit flou bas
-  { x: 95, y: 90, size: 84,  blur: 9, speed: 0.82, z: 2, r: -6 }, // petit flou coin bas-droite
-  { x: 82, y: 68, size: 78,  blur: 8, speed: 0.86, z: 2, r: 6  }, // petit flou
+  { x: 70, y: 48, size: 380, blur: 0, speed: 1.05, z: 4, r: -5 }, // ★ VEDETTE (centre-droite, net)
+  { x: 31, y: 16, size: 300, blur: 0, speed: 1.0,  z: 4, r: 6  }, // gros net haut-gauche (derrière titre)
+  { x: 53, y: 10, size: 150, blur: 1, speed: 0.98, z: 3, r: -4 }, // haut-centre
+  { x: 90, y: 27, size: 165, blur: 2, speed: 1.0,  z: 3, r: 5  }, // droite haut
+  { x: 81, y: 13, size: 110, blur: 2, speed: 0.95, z: 3, r: 3  }, // haut-droite
+  { x: 95, y: 58, size: 130, blur: 6, speed: 0.85, z: 2, r: -7 }, // droite milieu (flou)
+  { x: 88, y: 85, size: 150, blur: 5, speed: 0.9,  z: 2, r: 4  }, // bas-droite (flou)
+  { x: 63, y: 88, size: 115, blur: 6, speed: 0.86, z: 2, r: -6 }, // bas-centre (flou)
+  { x: 16, y: 90, size: 130, blur: 6, speed: 0.9,  z: 2, r: 6  }, // bas-gauche (sous le texte)
+  { x: 6,  y: 33, size: 92,  blur: 8, speed: 0.84, z: 1, r: 3  }, // bord gauche (flou, profondeur)
+  { x: 45, y: 92, size: 86,  blur: 7, speed: 0.86, z: 2, r: -5 }, // bas
 ];
 
 const build = (imgs) =>
@@ -196,9 +200,14 @@ export default function Home() {
       }
     };
 
+    const readScroll = () => {
+      const s = lenis.animatedScroll;
+      return Number.isFinite(s) ? s : (window.scrollY || 0);  // garde anti-NaN/undefined
+    };
+
     const raf = (time) => {
       lenis.raf(time);
-      const scroll = lenis.animatedScroll ?? window.scrollY;
+      const scroll = readScroll();
       // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
@@ -206,6 +215,10 @@ export default function Home() {
       }
       rafId = requestAnimationFrame(raf);
     };
+
+    // 1er rendu forcé : les fruits reçoivent leur opacité dès le montage,
+    // sans dépendre de l'état initial de Lenis.
+    update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
