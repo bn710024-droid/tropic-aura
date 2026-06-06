@@ -6,39 +6,40 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body, #root { height: 100%; }
+html, body { width: 100%; }
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  overflow: hidden;            /* tout le scroll se fait dans .snap */
   -webkit-font-smoothing: antialiased;
   background: #0E9F6E;
+  overflow-x: hidden;
 }
+
+/* ---------- LENIS (smooth scroll à inertie) ---------- */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+/* masquer la scrollbar pour une immersion totale */
+body { scrollbar-width: none; }
+body::-webkit-scrollbar { display: none; }
 
 ::selection { background: rgba(255,255,255,.3); }
 
-/* ---------- CONTENEUR SCROLL-SNAP ---------- */
-.snap {
-  height: 100vh;
-  width: 100vw;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  /* proximity (pas mandatory) : alignement magnétique souple qui recentre
-     chaque produit à l'arrêt, MAIS laisse le scroll traverser les positions
-     intermédiaires → la couleur de fond s'interpole en continu (fusion). */
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
-  scrollbar-width: none;               /* Firefox */
-  /* le fond est interpolé en continu par JS (rAF) selon la position
-     de scroll — PAS de transition CSS (qui créerait un saut + fondu). */
+/* ---------- CALQUE DE FOND FIXE (couleur interpolée) ---------- */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* la couleur est posée par JS chaque frame — aucune transition CSS */
 }
-.snap::-webkit-scrollbar { display: none; }
 
-/* ---------- SECTION PLEIN ÉCRAN ---------- */
+/* ---------- SECTION PLEIN ÉCRAN (flux libre) ---------- */
 .scene {
   position: relative;
+  z-index: 1;
   height: 100vh;
   width: 100%;
-  scroll-snap-align: start;
   display: flex;
   align-items: center;
   justify-content: center;
