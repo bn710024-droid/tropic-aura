@@ -15,37 +15,29 @@ import { IMAGES } from "../images";
 //  Aucune transition CSS sur les fruits : tout est calculé.
 // ============================================================
 
-// ---- Gabarit de positions ----
-const TEMPLATE = [
-  { x: 7,  y: 15, size: 175, depth: 3, r: -8, fd: 6.5 },
-  { x: 80, y: 11, size: 150, depth: 3, r: 7,  fd: 7.2 },
-  { x: 18, y: 58, size: 128, depth: 2, r: -4, fd: 6.0 },
-  { x: 73, y: 54, size: 138, depth: 2, r: 5,  fd: 6.8 },
-  { x: 48, y: 30, size: 104, depth: 1, r: 3,  fd: 5.6 },
-  { x: 90, y: 40, size: 92,  depth: 1, r: -6, fd: 6.3 },
-  { x: 5,  y: 46, size: 96,  depth: 1, r: 4,  fd: 5.9 },
-  { x: 62, y: 78, size: 120, depth: 2, r: -5, fd: 6.6 },
-  { x: 31, y: 84, size: 116, depth: 3, r: 6,  fd: 7.0 },
+// ---- COMPOSITION (règle du "Fruit Vedette", style Combilo) ----
+//  slot 0 = LA VEDETTE : énorme, parfaitement nette, moitié droite.
+//  Les autres : plus petits + flous (profondeur de champ).
+//  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
+//  reste lisible.  imgs[0] = le fruit star de la section.
+const COMPO = [
+  { x: 64, y: 50, size: 460, blur: 0, speed: 1.04, z: 7, r: -5 }, // ★ VEDETTE
+  { x: 13, y: 90, size: 300, blur: 5, speed: 0.94, z: 3, r: 8  }, // gros secondaire bas-gauche (flou)
+  { x: 89, y: 19, size: 155, blur: 2, speed: 1.0,  z: 5, r: -4 }, // moyen haut-droite
+  { x: 86, y: 82, size: 185, blur: 2, speed: 1.0,  z: 5, r: 6  }, // moyen bas-droite
+  { x: 96, y: 52, size: 115, blur: 8, speed: 0.85, z: 2, r: 3  }, // petit flou extrême droite
+  { x: 58, y: 8,  size: 100, blur: 9, speed: 0.84, z: 2, r: -7 }, // petit flou haut-centre
+  { x: 55, y: 92, size: 105, blur: 7, speed: 0.9,  z: 2, r: 4  }, // petit flou bas-centre
+  { x: 94, y: 90, size: 95,  blur: 9, speed: 0.82, z: 2, r: -6 }, // petit flou coin bas-droite
+  { x: 75, y: 66, size: 88,  blur: 8, speed: 0.86, z: 2, r: 6  }, // petit flou
 ];
 
-//  depth → flou (statique) + vitesse de parallaxe (subtile, premium)
-//  speed 1.0 = le fruit défile exactement avec sa section (cohésion).
-//  <1 = légèrement plus lent (fond), >1 = légèrement plus rapide (1er plan).
-const DEPTH = {
-  1: { blur: 1.5, speed: 0.92, z: 1 },
-  2: { blur: 0,   speed: 1.0,  z: 3 },
-  3: { blur: 5,   speed: 1.1,  z: 8 },
-};
-
 const build = (imgs) =>
-  TEMPLATE.map((t, i) => {
-    const d = DEPTH[t.depth];
-    return {
-      img: imgs[i % imgs.length],
-      x: t.x, y: t.y, size: t.size, r: t.r,
-      blur: d.blur, speed: d.speed, z: d.z,
-    };
-  });
+  COMPO.map((c, i) => ({
+    img: imgs[i % imgs.length],
+    x: c.x, y: c.y, size: c.size, r: c.r,
+    blur: c.blur, speed: c.speed, z: c.z,
+  }));
 
 // ---- Les 6 univers ----
 const SECTIONS = [
@@ -55,8 +47,9 @@ const SECTIONS = [
     desc: "L'offre et la demande s'équilibrent chaque jour pour offrir les meilleurs produits tropicaux frais. C'est ça, Tropic-Aura.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangue, IMAGES.ananas, IMAGES.avocat, IMAGES.citronVert,
-      IMAGES.papaye, IMAGES.banane, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.orange,
+      IMAGES.mangue,        // ★ vedette
+      IMAGES.pasteque, IMAGES.ananas, IMAGES.avocat, IMAGES.citronVert,
+      IMAGES.fraises, IMAGES.fruitPassion, IMAGES.orange, IMAGES.banane,
     ]),
   },
   {
@@ -65,8 +58,9 @@ const SECTIONS = [
     desc: "Chair ferme, peu fibreuse, sucrosité intense. Cueillies à maturité optimale et calibrées pour les marchés européens.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangue, IMAGES.mangue, IMAGES.orange, IMAGES.mangue,
-      IMAGES.papayeCoupe, IMAGES.mangue, IMAGES.fruitPassion,
+      IMAGES.mangue,        // ★ vedette
+      IMAGES.papayeCoupe, IMAGES.mangue, IMAGES.orange,
+      IMAGES.fruitPassion, IMAGES.mangue, IMAGES.orange, IMAGES.mangue, IMAGES.papaye,
     ]),
   },
   {
@@ -75,8 +69,9 @@ const SECTIONS = [
     desc: "Petit format, chair dorée ultra-sucrée. Le préféré des marchés premium néerlandais et belges.",
     cta: "Découvrir",
     items: build([
-      IMAGES.ananas, IMAGES.melonJaune, IMAGES.ananas,
-      IMAGES.papaye, IMAGES.melonVert, IMAGES.orange,
+      IMAGES.ananas,        // ★ vedette
+      IMAGES.melonJaune, IMAGES.papaye, IMAGES.orange,
+      IMAGES.melonVert, IMAGES.ananas, IMAGES.fruitPassion, IMAGES.orange, IMAGES.papayeCoupe,
     ]),
   },
   {
@@ -85,8 +80,9 @@ const SECTIONS = [
     desc: "Onctuosité parfaite, agrumes gorgés de jus. Calibrés et conditionnés pour les distributeurs les plus exigeants.",
     cta: "Découvrir",
     items: build([
-      IMAGES.avocat, IMAGES.citronVert, IMAGES.citronVertCoupe,
-      IMAGES.avocat, IMAGES.citronJaune,
+      IMAGES.avocat,        // ★ vedette
+      IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.citronJaune,
+      IMAGES.avocat, IMAGES.citronVert, IMAGES.orange, IMAGES.citronJaune, IMAGES.avocat,
     ]),
   },
   {
@@ -95,7 +91,9 @@ const SECTIONS = [
     desc: "Cultures de plein champ de la zone des Niayes. Conformité stricte aux normes LMR européennes.",
     cta: "Découvrir",
     items: build([
-      IMAGES.haricots, IMAGES.gombo, IMAGES.haricots, IMAGES.gombo,
+      IMAGES.haricots,      // ★ vedette
+      IMAGES.gombo, IMAGES.haricots, IMAGES.gombo,
+      IMAGES.haricots, IMAGES.gombo, IMAGES.haricots, IMAGES.gombo, IMAGES.haricots,
     ]),
   },
   {
@@ -104,8 +102,9 @@ const SECTIONS = [
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
     cta: "Découvrir",
     items: build([
-      IMAGES.papaye, IMAGES.papayeCoupe, IMAGES.melonVert, IMAGES.coco,
-      IMAGES.pasteque, IMAGES.pastequeTranche, IMAGES.banane, IMAGES.myrtilles, IMAGES.melonJaune,
+      IMAGES.papayeCoupe,   // ★ vedette
+      IMAGES.melonVert, IMAGES.coco, IMAGES.pasteque,
+      IMAGES.banane, IMAGES.myrtilles, IMAGES.melonJaune, IMAGES.pastequeTranche, IMAGES.papaye,
     ]),
   },
 ];
@@ -171,19 +170,24 @@ export default function Home() {
         const si = +ds.i, y = +ds.y, size = +ds.size, speed = +ds.speed, baseR = +ds.r;
 
         const sectionTop = si * H - scroll;
-        const restCenterY = sectionTop + (y / 100) * H + size / 2;
+        // le fruit est centré sur son point d'ancrage (marges négatives)
+        const restCenterY = sectionTop + (y / 100) * H;
         const rel = scroll - si * H;
         const parY = -rel * (speed - 1);            // parallaxe douce liée au scroll
         const centerY = restCenterY + parY;
 
-        const vc = (centerY - half) / half;
-        const d = Math.min(1, Math.abs(vc));
-        if (d >= 1) { el.style.opacity = "0"; continue; }
+        const av = Math.abs((centerY - half) / half);
+        if (av >= 1) { el.style.opacity = "0"; continue; }
 
-        const e = easeOut(1 - d);
+        // plateau : pleine présence dans la bande centrale (av < 0.5),
+        // fondu doux uniquement vers les bords haut/bas (power2.out).
+        const fade = 1 - Math.min(1, Math.max(0, (av - 0.5) / 0.5));
+        const e = easeOut(fade);
         el.style.opacity = e.toFixed(3);
+        // scale très subtil (les tailles sont déjà fixées par la compo) :
+        // la vedette reste grande et nette, ne rétrécit quasiment pas.
         el.style.transform =
-          `translateY(${parY.toFixed(1)}px) scale(${(0.62 + 0.38 * e).toFixed(3)}) rotate(${baseR}deg)`;
+          `translateY(${parY.toFixed(1)}px) scale(${(0.86 + 0.14 * e).toFixed(3)}) rotate(${baseR}deg)`;
       }
     };
 
@@ -213,6 +217,14 @@ export default function Home() {
 
   return (
     <>
+      {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
+      <header className="ghost">
+        <span className="ghost__logo">TROPIC-AURA</span>
+        <button className="ghost__contact" onClick={() => goTo(SECTIONS.length - 1)}>
+          Contact <span>→</span>
+        </button>
+      </header>
+
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
@@ -240,6 +252,8 @@ export default function Home() {
                   top: `${it.y}%`,
                   width: it.size,
                   height: it.size,
+                  marginLeft: -it.size / 2,   /* centre le fruit sur (x, y) */
+                  marginTop: -it.size / 2,
                   zIndex: it.z,
                 }}
               >
@@ -268,8 +282,8 @@ export default function Home() {
 
           {i === 0 && (
             <div className="scene__hint">
-              <span>Défilez vers le bas</span>
               <i />
+              <span>Défilez vers le bas</span>
             </div>
           )}
         </section>
