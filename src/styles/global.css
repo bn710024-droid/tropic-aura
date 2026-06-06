@@ -80,12 +80,14 @@ body::-webkit-scrollbar { display: none; }
   transform-origin: center center;
 }
 
+/* PNG transparents : le fruit entier s'affiche (contain), aucune ombre
+   rectangulaire ni coin arrondi — l'ombre portée douce vient du
+   drop-shadow (filter) appliqué en JS, qui épouse la forme du fruit. */
 .cell img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
-  box-shadow: 0 22px 55px rgba(0, 0, 0, .25);
   user-select: none;
 }
 

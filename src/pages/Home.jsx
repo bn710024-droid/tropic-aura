@@ -32,9 +32,9 @@ const TEMPLATE = [
 //  speed 1.0 = le fruit défile exactement avec sa section (cohésion).
 //  <1 = légèrement plus lent (fond), >1 = légèrement plus rapide (1er plan).
 const DEPTH = {
-  1: { blur: 2, speed: 0.92, z: 1, round: "16px" },
-  2: { blur: 0, speed: 1.0,  z: 3, round: "22px" },
-  3: { blur: 7, speed: 1.1,  z: 8, round: "50%"  },
+  1: { blur: 1.5, speed: 0.92, z: 1 },
+  2: { blur: 0,   speed: 1.0,  z: 3 },
+  3: { blur: 5,   speed: 1.1,  z: 8 },
 };
 
 const build = (imgs) =>
@@ -43,7 +43,7 @@ const build = (imgs) =>
     return {
       img: imgs[i % imgs.length],
       x: t.x, y: t.y, size: t.size, r: t.r,
-      blur: d.blur, speed: d.speed, z: d.z, round: d.round,
+      blur: d.blur, speed: d.speed, z: d.z,
     };
   });
 
@@ -55,8 +55,8 @@ const SECTIONS = [
     desc: "L'offre et la demande s'équilibrent chaque jour pour offrir les meilleurs produits tropicaux frais. C'est ça, Tropic-Aura.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangoKent, IMAGES.ananas, IMAGES.avocat, IMAGES.citron,
-      IMAGES.papaye, IMAGES.banane, IMAGES.mangoCoupe, IMAGES.melonCoupe, IMAGES.mangoKeitt,
+      IMAGES.mangue, IMAGES.ananas, IMAGES.avocat, IMAGES.citronVert,
+      IMAGES.papaye, IMAGES.banane, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.orange,
     ]),
   },
   {
@@ -65,8 +65,8 @@ const SECTIONS = [
     desc: "Chair ferme, peu fibreuse, sucrosité intense. Cueillies à maturité optimale et calibrées pour les marchés européens.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangoKent, IMAGES.mangoKeitt, IMAGES.mangoCoupe, IMAGES.mangoArbreKent,
-      IMAGES.mangoVerger, IMAGES.mangoArbreKeitt, IMAGES.mangoCaisse,
+      IMAGES.mangue, IMAGES.mangue, IMAGES.orange, IMAGES.mangue,
+      IMAGES.papayeCoupe, IMAGES.mangue, IMAGES.fruitPassion,
     ]),
   },
   {
@@ -75,8 +75,8 @@ const SECTIONS = [
     desc: "Petit format, chair dorée ultra-sucrée. Le préféré des marchés premium néerlandais et belges.",
     cta: "Découvrir",
     items: build([
-      IMAGES.ananas, IMAGES.ananasChamp, IMAGES.ananasExport,
-      IMAGES.melon, IMAGES.melonCoupe, IMAGES.papaye,
+      IMAGES.ananas, IMAGES.melonJaune, IMAGES.ananas,
+      IMAGES.papaye, IMAGES.melonVert, IMAGES.orange,
     ]),
   },
   {
@@ -85,17 +85,17 @@ const SECTIONS = [
     desc: "Onctuosité parfaite, agrumes gorgés de jus. Calibrés et conditionnés pour les distributeurs les plus exigeants.",
     cta: "Découvrir",
     items: build([
-      IMAGES.avocat, IMAGES.citron, IMAGES.citronArbre,
-      IMAGES.avocat, IMAGES.citron,
+      IMAGES.avocat, IMAGES.citronVert, IMAGES.citronVertCoupe,
+      IMAGES.avocat, IMAGES.citronJaune,
     ]),
   },
   {
     id: "primeurs", bg: "#D8392F",
-    title: "Haricots verts & Piments",
+    title: "Haricots verts & Gombo",
     desc: "Cultures de plein champ de la zone des Niayes. Conformité stricte aux normes LMR européennes.",
     cta: "Découvrir",
     items: build([
-      IMAGES.haricots, IMAGES.haricots2, IMAGES.piments, IMAGES.capsicum,
+      IMAGES.haricots, IMAGES.gombo, IMAGES.haricots, IMAGES.gombo,
     ]),
   },
   {
@@ -104,8 +104,8 @@ const SECTIONS = [
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
     cta: "Découvrir",
     items: build([
-      IMAGES.papaye, IMAGES.papayeArbre, IMAGES.melon, IMAGES.melonCoupe,
-      IMAGES.coco, IMAGES.banane, IMAGES.pasteque,
+      IMAGES.papaye, IMAGES.papayeCoupe, IMAGES.melonVert, IMAGES.coco,
+      IMAGES.pasteque, IMAGES.pastequeTranche, IMAGES.banane, IMAGES.myrtilles, IMAGES.melonJaune,
     ]),
   },
 ];
@@ -248,7 +248,11 @@ export default function Home() {
                   alt=""
                   loading={i === 0 ? "eager" : "lazy"}
                   draggable={false}
-                  style={{ filter: `blur(${it.blur}px)`, borderRadius: it.round }}
+                  style={{
+                    filter:
+                      `drop-shadow(0 16px 22px rgba(0,0,0,.28))` +
+                      (it.blur ? ` blur(${it.blur}px)` : ""),
+                  }}
                 />
               </div>
             ))}
