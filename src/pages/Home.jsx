@@ -110,69 +110,80 @@ const SECTIONS = [
   },
 ];
 
+// hex -> [r,g,b], calculé une seule fois
+const hexToRgb = (h) => {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
+
 export default function Home() {
   const containerRef = useRef(null);
   const scenesRef = useRef([]);
   const activeRef = useRef(0);
   const [active, setActive] = useState(0);
 
-  // ---- Section active déterminée par la position de scroll ----
-  //  Plus fiable qu'un IntersectionObserver sur un conteneur scrollable :
-  //  l'index = round(scrollTop / hauteur d'écran).
+  // ---- Boucle unique rAF ----
+  //  • couleur de fond INTERPOLÉE en continu selon la position de scroll
+  //    (à 35 % entre la section 2 et 3 → couleur à 35 % entre les deux)
+  //  • dérive verticale des produits liée au scroll (fusion entre sections)
+  //  • parallaxe souris sur la section active
+  //  • index actif (cascade) = round(progression)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const idx = Math.max(
-        0,
-        Math.min(SECTIONS.length - 1, Math.round(el.scrollTop / el.clientHeight))
-      );
-      if (idx !== activeRef.current) {
-        activeRef.current = idx;
-        setActive(idx);
-      }
-    };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    // cascade de la 1re section après le 1er paint
-    const raf = requestAnimationFrame(() => {
-      activeRef.current = -1; // force le 1er setActive
-      update();
-    });
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  // ---- Parallaxe souris (uniquement la section active) ----
-  useEffect(() => {
     let mx = 0, my = 0, cx = 0, cy = 0, raf;
     const onMove = (e) => {
       mx = (e.clientX / window.innerWidth - 0.5) * 2;
       my = (e.clientY / window.innerHeight - 0.5) * 2;
     };
+
+    const lerp = (a, b, t) => Math.round(a + (b - a) * t);
+    const last = SECTIONS.length - 1;
+
     const loop = () => {
+      // ---- progression continue du scroll ----
+      const h = el.clientHeight || 1;
+      const prog = el.scrollTop / h;                 // ex. 2.35
+      const i = Math.min(last, Math.floor(prog));     // section courante
+      const t = Math.min(1, Math.max(0, prog - i));   // fraction 0→1 vers la suivante
+
+      // ---- INTERPOLATION DE COULEUR (la fusion) ----
+      const a = COLORS[i];
+      const b = COLORS[Math.min(last, i + 1)];
+      el.style.backgroundColor =
+        `rgb(${lerp(a[0], b[0], t)},${lerp(a[1], b[1], t)},${lerp(a[2], b[2], t)})`;
+
+      // ---- index actif pour la cascade ----
+      const idx = Math.max(0, Math.min(last, Math.round(prog)));
+      if (idx !== activeRef.current) {
+        activeRef.current = idx;
+        setActive(idx);
+      }
+
+      // ---- parallaxe souris (section active) ----
       cx += (mx - cx) * 0.06;
       cy += (my - cy) * 0.06;
-      const scene = scenesRef.current[activeRef.current];
+      const scene = scenesRef.current[idx];
       if (scene) {
-        scene.querySelectorAll(".cell").forEach((el) => {
-          const f = Number(el.dataset.par) || 0;
-          el.style.transform = `translate(${cx * f}px, ${cy * f}px)`;
+        scene.querySelectorAll(".cell").forEach((c) => {
+          const f = Number(c.dataset.par) || 0;
+          c.style.transform = `translate(${cx * f}px, ${cy * f}px)`;
         });
       }
+
+      // ---- dérive continue des produits (fusion entre sections) ----
+      //  la couche de pluie de la section courante et de la suivante
+      //  glisse légèrement avec la fraction t → continuité du mouvement
+      const rainCur = scenesRef.current[i]?.querySelector(".rain");
+      const rainNext = scenesRef.current[Math.min(last, i + 1)]?.querySelector(".rain");
+      if (rainCur) rainCur.style.transform = `translateY(${-t * 40}px)`;
+      if (rainNext && i + 1 <= last) rainNext.style.transform = `translateY(${(1 - t) * 40}px)`;
+
       raf = requestAnimationFrame(loop);
     };
+
     window.addEventListener("mousemove", onMove, { passive: true });
     raf = requestAnimationFrame(loop);
     return () => {
@@ -190,7 +201,7 @@ export default function Home() {
     <div
       className="snap"
       ref={containerRef}
-      style={{ backgroundColor: SECTIONS[active].bg }}
+      style={{ backgroundColor: SECTIONS[0].bg }}
     >
       {SECTIONS.map((s, i) => (
         <section

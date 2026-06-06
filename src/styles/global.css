@@ -22,11 +22,14 @@ body {
   width: 100vw;
   overflow-y: scroll;
   overflow-x: hidden;
-  scroll-snap-type: y mandatory;       /* blocage net section par section */
+  /* proximity (pas mandatory) : alignement magnétique souple qui recentre
+     chaque produit à l'arrêt, MAIS laisse le scroll traverser les positions
+     intermédiaires → la couleur de fond s'interpole en continu (fusion). */
+  scroll-snap-type: y proximity;
   scroll-behavior: smooth;
   scrollbar-width: none;               /* Firefox */
-  /* le fond morphe en fondu d'une section à l'autre */
-  transition: background-color 0.8s cubic-bezier(.25, 1, .5, 1);
+  /* le fond est interpolé en continu par JS (rAF) selon la position
+     de scroll — PAS de transition CSS (qui créerait un saut + fondu). */
 }
 .snap::-webkit-scrollbar { display: none; }
 
@@ -36,7 +39,6 @@ body {
   height: 100vh;
   width: 100%;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
   display: flex;
   align-items: center;
   justify-content: center;
