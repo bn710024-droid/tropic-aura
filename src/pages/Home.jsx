@@ -72,8 +72,8 @@ const SECTIONS = [
     cta: "Découvrir",
     items: build([
       IMAGES.ananas,        // ★ vedette
-      IMAGES.melonJaune, IMAGES.papaye, IMAGES.orange,
-      IMAGES.melonVert, IMAGES.ananas, IMAGES.fruitPassion, IMAGES.orange, IMAGES.papayeCoupe,
+      IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune,
+      IMAGES.ananas, IMAGES.papayeCoupe, IMAGES.orange, IMAGES.melonJaune, IMAGES.banane,
     ]),
   },
   {
@@ -83,12 +83,12 @@ const SECTIONS = [
     cta: "Découvrir",
     items: build([
       IMAGES.avocat,        // ★ vedette
-      IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.citronJaune,
-      IMAGES.avocat, IMAGES.citronVert, IMAGES.orange, IMAGES.citronJaune, IMAGES.avocat,
+      IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert,
+      IMAGES.avocat, IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.avocat,
     ]),
   },
   {
-    id: "primeurs", bg: "#D8392F",
+    id: "primeurs", bg: "#C9912B",
     title: "Haricots verts & Gombo",
     desc: "Cultures de plein champ de la zone des Niayes. Conformité stricte aux normes LMR européennes.",
     cta: "Découvrir",
@@ -99,17 +99,20 @@ const SECTIONS = [
     ]),
   },
   {
-    id: "exotiques", bg: "#E84393",
+    id: "exotiques", bg: "#0D9488",
     title: "Papaye, Melon & Noix de Coco",
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
     cta: "Découvrir",
     items: build([
       IMAGES.papayeCoupe,   // ★ vedette
-      IMAGES.melonVert, IMAGES.coco, IMAGES.pasteque,
-      IMAGES.banane, IMAGES.myrtilles, IMAGES.melonJaune, IMAGES.pastequeTranche, IMAGES.papaye,
+      IMAGES.melonVert, IMAGES.coco, IMAGES.banane,
+      IMAGES.papaye, IMAGES.melonJaune, IMAGES.coco, IMAGES.melonVert, IMAGES.banane,
     ]),
   },
 ];
+
+/* Pastèque & fruits rouges (myrtilles, fraises, fruit de la passion) sont
+   gardés pour le mix d'accueil — ils ressortent sur le vert du Hero. */
 
 const hexToRgb = (h) => {
   const n = parseInt(h.slice(1), 16);
