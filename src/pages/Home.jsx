@@ -28,11 +28,13 @@ const TEMPLATE = [
   { x: 31, y: 84, size: 116, depth: 3, r: 6,  fd: 7.0 },
 ];
 
-//  depth → flou (statique), vitesse parallaxe, multiplicateur souris
+//  depth → flou (statique) + vitesse de parallaxe (subtile, premium)
+//  speed 1.0 = le fruit défile exactement avec sa section (cohésion).
+//  <1 = légèrement plus lent (fond), >1 = légèrement plus rapide (1er plan).
 const DEPTH = {
-  1: { blur: 2,   speed: 0.78, par: 8,  z: 1, round: "16px" },
-  2: { blur: 0,   speed: 1.0,  par: 16, z: 3, round: "22px" },
-  3: { blur: 7,   speed: 1.3,  par: 30, z: 8, round: "50%"  },
+  1: { blur: 2, speed: 0.92, z: 1, round: "16px" },
+  2: { blur: 0, speed: 1.0,  z: 3, round: "22px" },
+  3: { blur: 7, speed: 1.1,  z: 8, round: "50%"  },
 };
 
 const build = (imgs) =>
@@ -40,9 +42,8 @@ const build = (imgs) =>
     const d = DEPTH[t.depth];
     return {
       img: imgs[i % imgs.length],
-      x: t.x, y: t.y, size: t.size, r: t.r, fd: t.fd,
-      blur: d.blur, speed: d.speed + (i % 3) * 0.03, par: d.par,
-      z: d.z, round: d.round, phase: (i * 1.7) % 6.283,
+      x: t.x, y: t.y, size: t.size, r: t.r,
+      blur: d.blur, speed: d.speed, z: d.z, round: d.round,
     };
   });
 
@@ -135,24 +136,22 @@ export default function Home() {
     });
     lenisRef.current = lenis;
 
-    let mx = 0, my = 0, cx = 0, cy = 0, rafId;
-    const onMove = (e) => {
-      mx = (e.clientX / window.innerWidth - 0.5) * 2;
-      my = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-
+    let rafId;
     const lerp = (a, b, t) => Math.round(a + (b - a) * t);
     const easeOut = (t) => 1 - (1 - t) * (1 - t);  // power2.out
     const last = SECTIONS.length - 1;
 
-    const raf = (time) => {
-      lenis.raf(time);
-      const H = window.innerHeight || 1;
-      const half = H / 2;
-      const scroll = lenis.animatedScroll ?? window.scrollY;
+    // ---- tout est INDEXÉ SUR LE SCROLL ----
+    //  Aucun terme temporel : si le scroll ne bouge pas, rien ne bouge.
+    //  Les fruits sont parfaitement figés au repos.
+    let lastScroll = -99999;
+    const onResize = () => { lastScroll = -99999; };  // force un recalcul
+    window.addEventListener("resize", onResize, { passive: true });
 
-      // ---- couleur de fond interpolée (fusion continue) ----
+    const update = (scroll, H) => {
+      const half = H / 2;
+
+      // couleur de fond interpolée (fusion continue, liée au scroll)
       const prog = scroll / H;
       const i = Math.min(last, Math.floor(prog));
       const ft = Math.min(1, Math.max(0, prog - i));
@@ -163,61 +162,46 @@ export default function Home() {
           `rgb(${lerp(a[0], b[0], ft)},${lerp(a[1], b[1], ft)},${lerp(a[2], b[2], ft)})`;
       }
 
-      // ---- lissage parallaxe souris ----
-      cx += (mx - cx) * 0.06;
-      cy += (my - cy) * 0.06;
-      const tSec = time * 0.001;  // secondes
-
-      // ---- chaque fruit : scale / opacity / position recalculés ----
+      // chaque fruit : scale / opacity / position = fonction PURE du scroll
       const fruits = fruitsRef.current;
       for (let k = 0; k < fruits.length; k++) {
         const el = fruits[k];
         if (!el) continue;
         const ds = el.dataset;
-        const si = +ds.i, y = +ds.y, size = +ds.size;
-        const speed = +ds.speed, par = +ds.par, baseR = +ds.r, phase = +ds.phase;
+        const si = +ds.i, y = +ds.y, size = +ds.size, speed = +ds.speed, baseR = +ds.r;
 
-        // position de repos (centre) du fruit dans le viewport
         const sectionTop = si * H - scroll;
         const restCenterY = sectionTop + (y / 100) * H + size / 2;
-        // parallaxe : décalage selon la profondeur
         const rel = scroll - si * H;
-        const parY = -rel * (speed - 1);
+        const parY = -rel * (speed - 1);            // parallaxe douce liée au scroll
         const centerY = restCenterY + parY;
 
-        // distance normalisée au centre du viewport (0 centre, 1 bord)
         const vc = (centerY - half) / half;
         const d = Math.min(1, Math.abs(vc));
-
-        // hors champ → invisible, on saute les calculs lourds
         if (d >= 1) { el.style.opacity = "0"; continue; }
 
-        const e = easeOut(1 - d);          // courbe douce
-        const opacity = e;                  // 0 → 1
-        const scale = 0.6 + 0.4 * e;        // 0.6 → 1
-
-        // flottement autonome (respiration)
-        const fy = Math.sin(tSec * 0.9 + phase) * 9;
-        const fx = Math.cos(tSec * 0.8 + phase) * 7;
-        const rot = baseR + Math.sin(tSec * 0.7 + phase) * 4;
-
-        // parallaxe souris (selon profondeur)
-        const mxv = cx * par;
-        const myv = cy * par;
-
-        el.style.opacity = opacity.toFixed(3);
+        const e = easeOut(1 - d);
+        el.style.opacity = e.toFixed(3);
         el.style.transform =
-          `translate(${(mxv + fx).toFixed(1)}px, ${(parY + fy + myv).toFixed(1)}px) ` +
-          `scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+          `translateY(${parY.toFixed(1)}px) scale(${(0.62 + 0.38 * e).toFixed(3)}) rotate(${baseR}deg)`;
       }
+    };
 
+    const raf = (time) => {
+      lenis.raf(time);
+      const scroll = lenis.animatedScroll ?? window.scrollY;
+      // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
+      if (Math.abs(scroll - lastScroll) > 0.04) {
+        lastScroll = scroll;
+        update(scroll, window.innerHeight || 1);
+      }
       rafId = requestAnimationFrame(raf);
     };
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("resize", onResize);
       lenis.destroy();
     };
   }, []);
@@ -250,9 +234,7 @@ export default function Home() {
                 data-y={it.y}
                 data-size={it.size}
                 data-speed={it.speed}
-                data-par={it.par}
                 data-r={it.r}
-                data-phase={it.phase}
                 style={{
                   left: `${it.x}%`,
                   top: `${it.y}%`,
