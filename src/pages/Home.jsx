@@ -20,16 +20,18 @@ import { IMAGES } from "../images";
 //  Les autres : plus petits + flous (profondeur de champ).
 //  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
 //  reste lisible.  imgs[0] = le fruit star de la section.
+//  Tailles calées sur les proportions Combilo : la vedette domine la
+//  moitié DROITE (~70%) sans recouvrir le titre de gauche.
 const COMPO = [
-  { x: 64, y: 50, size: 460, blur: 0, speed: 1.04, z: 7, r: -5 }, // ★ VEDETTE
-  { x: 13, y: 90, size: 300, blur: 5, speed: 0.94, z: 3, r: 8  }, // gros secondaire bas-gauche (flou)
-  { x: 89, y: 19, size: 155, blur: 2, speed: 1.0,  z: 5, r: -4 }, // moyen haut-droite
-  { x: 86, y: 82, size: 185, blur: 2, speed: 1.0,  z: 5, r: 6  }, // moyen bas-droite
-  { x: 96, y: 52, size: 115, blur: 8, speed: 0.85, z: 2, r: 3  }, // petit flou extrême droite
-  { x: 58, y: 8,  size: 100, blur: 9, speed: 0.84, z: 2, r: -7 }, // petit flou haut-centre
-  { x: 55, y: 92, size: 105, blur: 7, speed: 0.9,  z: 2, r: 4  }, // petit flou bas-centre
-  { x: 94, y: 90, size: 95,  blur: 9, speed: 0.82, z: 2, r: -6 }, // petit flou coin bas-droite
-  { x: 75, y: 66, size: 88,  blur: 8, speed: 0.86, z: 2, r: 6  }, // petit flou
+  { x: 70, y: 50, size: 430, blur: 0, speed: 1.04, z: 7, r: -5 }, // ★ VEDETTE
+  { x: 11, y: 93, size: 240, blur: 6, speed: 0.94, z: 3, r: 8  }, // gros secondaire bas-gauche (flou)
+  { x: 92, y: 18, size: 135, blur: 3, speed: 1.0,  z: 5, r: -4 }, // moyen haut-droite
+  { x: 90, y: 82, size: 160, blur: 3, speed: 1.0,  z: 5, r: 6  }, // moyen bas-droite
+  { x: 97, y: 50, size: 100, blur: 8, speed: 0.85, z: 2, r: 3  }, // petit flou extrême droite
+  { x: 64, y: 9,  size: 90,  blur: 9, speed: 0.84, z: 2, r: -7 }, // petit flou haut
+  { x: 58, y: 94, size: 95,  blur: 7, speed: 0.9,  z: 2, r: 4  }, // petit flou bas
+  { x: 95, y: 90, size: 84,  blur: 9, speed: 0.82, z: 2, r: -6 }, // petit flou coin bas-droite
+  { x: 82, y: 68, size: 78,  blur: 8, speed: 0.86, z: 2, r: 6  }, // petit flou
 ];
 
 const build = (imgs) =>
