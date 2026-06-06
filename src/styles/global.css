@@ -34,6 +34,21 @@ body::-webkit-scrollbar { display: none; }
   /* la couleur est posée par JS chaque frame — aucune transition CSS */
 }
 
+/* ---------- COUCHE DE PROFONDEUR (le fond n'est jamais plat) ----------
+   Halo lumineux doux au centre + vignette sombre sur les bords →
+   sensation d'espace 3D où les fruits flottent, pas une feuille de papier. */
+.bg-depth {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 85% at 50% 32%,
+      rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 55%),
+    radial-gradient(130% 120% at 50% 105%,
+      rgba(0, 0, 0, .22), rgba(0, 0, 0, 0) 60%);
+}
+
 /* ---------- SECTION PLEIN ÉCRAN (flux libre) ---------- */
 .scene {
   position: relative;
@@ -43,7 +58,9 @@ body::-webkit-scrollbar { display: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* visible : les fruits peuvent naître/mourir à travers les bords
+     du viewport (l'opacité scrub gère le fondu), pas de coupe nette. */
+  overflow: visible;
 }
 
 /* ---------- PLUIE DE PRODUITS ---------- */
@@ -53,39 +70,17 @@ body::-webkit-scrollbar { display: none; }
   pointer-events: none;
 }
 
-/* outer : porte la parallaxe souris */
+/* Chaque fruit : transform + opacity pilotés ENTIÈREMENT par la
+   boucle rAF (scale/opacity/position selon sa place dans le viewport).
+   Aucune transition CSS → aucune bascule, tout est calculé. */
 .cell {
   position: absolute;
-  will-change: transform;
-}
-
-/* middle : porte la CHUTE (cascade). Hors écran par défaut. */
-.fall {
-  transform: translateY(-130vh);
-  opacity: 0;
-  transition:
-    transform 1.1s cubic-bezier(.16, 1, .3, 1),
-    opacity 0.6s ease;
+  opacity: 0;                 /* rAF remplit dès la 1re frame */
   will-change: transform, opacity;
-}
-.scene.active .fall {
-  transform: translateY(0);
-  opacity: var(--op, 1);
+  transform-origin: center center;
 }
 
-/* inner : flottement autonome une fois posé */
-.float {
-  width: 100%;
-  height: 100%;
-  will-change: transform;
-  animation: floaty var(--fd, 6s) ease-in-out infinite;
-}
-@keyframes floaty {
-  0%, 100% { transform: translateY(0)     rotate(var(--r, 0deg)); }
-  50%      { transform: translateY(-14px) rotate(calc(var(--r, 0deg) * -1)); }
-}
-
-.fall img {
+.cell img {
   width: 100%;
   height: 100%;
   object-fit: cover;
