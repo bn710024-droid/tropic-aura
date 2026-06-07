@@ -92,16 +92,6 @@ const SECTIONS = [
     ]),
   },
   {
-    id: "primeurs", bg: "#C9912B",
-    title: "Haricots verts & Gombo",
-    desc: "Cultures de plein champ de la zone des Niayes. Conformité stricte aux normes LMR européennes.",
-    cta: "Découvrir",
-    items: build(LAYOUTS[4], [
-      IMAGES.haricots,      // ★ géant net
-      IMAGES.gombo, IMAGES.haricots, IMAGES.gombo, IMAGES.haricots,
-    ]),
-  },
-  {
     id: "exotiques", bg: "#0D9488",
     title: "Papaye, Melon & Noix de Coco",
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
