@@ -92,6 +92,16 @@ const SECTIONS = [
     ]),
   },
   {
+    id: "pasteque", bg: "#C9912B",
+    title: "Pastèque & Fruits frais",
+    desc: "Pastèques juteuses et fruits gorgés de soleil, calibrés pour l'export. Fraîcheur garantie de la récolte au conteneur.",
+    cta: "Découvrir",
+    items: build(LAYOUTS[4], [
+      IMAGES.pastequeTranche,   // ★ géant net
+      IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
+    ]),
+  },
+  {
     id: "exotiques", bg: "#0D9488",
     title: "Papaye, Melon & Noix de Coco",
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
