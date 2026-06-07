@@ -174,28 +174,28 @@ body::-webkit-scrollbar { display: none; }
   background: #1FA637;
   overflow: hidden;
   flex-shrink: 0;
-  transition: transform .6s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .55s cubic-bezier(.4, 0, .2, 1);
 }
 .scene__cta:hover .cta-circle { transform: translateX(4px); }
-/* swap de flèche : l'actuelle sort à droite, la nouvelle arrive de l'extrémité
-   gauche et glisse vers la droite (trajet long + lent pour bien la voir). */
-.cta-track {
+/* SWAP DE FLÈCHE avec décalage :
+   1) la flèche actuelle sort vers la DROITE
+   2) puis (delay) une nouvelle arrive de l'EXTRÉMITÉ GAUCHE vers la droite */
+.cta-arrow {
   position: absolute;
   inset: 0;
-  display: flex;
-  transform: translateX(-42px);
-  transition: transform .6s cubic-bezier(.34, 1.2, .4, 1);
-}
-.scene__cta:hover .cta-track { transform: translateX(0); }
-.cta-arrow {
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-size: 16px;
+  transition: transform .5s cubic-bezier(.4, 0, .2, 1);
+}
+.cta-arrow--out { transform: translateX(0); }
+.cta-arrow--in  { transform: translateX(-150%); }          /* cachée à gauche */
+.scene__cta:hover .cta-arrow--out { transform: translateX(150%); }   /* sort à droite */
+.scene__cta:hover .cta-arrow--in  {                        /* entre de la gauche, APRÈS */
+  transform: translateX(0);
+  transition-delay: .32s;
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */

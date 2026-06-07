@@ -312,10 +312,8 @@ export default function Home() {
             <button className="scene__cta" onClick={() => goTo(i + 1)}>
               <span className="cta-label">{s.cta}</span>
               <span className="cta-circle">
-                <span className="cta-track">
-                  <span className="cta-arrow">→</span>
-                  <span className="cta-arrow">→</span>
-                </span>
+                <span className="cta-arrow cta-arrow--out">→</span>
+                <span className="cta-arrow cta-arrow--in">→</span>
               </span>
             </button>
           </div>
