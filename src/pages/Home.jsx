@@ -179,14 +179,12 @@ export default function Home() {
         const sectionTop = si * H - scroll;
         // le fruit est centré sur son point d'ancrage (marges négatives)
         const restCenterY = sectionTop + (y / 100) * H;
-        const rel = scroll - si * H;
-        // drift > 1 → le fruit descend À L'ÉCRAN quand on scrolle (haut → bas).
-        // Drift FORT sur les gros : pendant une transition, le géant qui part
-        // descend bas pendant que celui qui arrive vient d'en haut → ils sont
-        // SÉPARÉS verticalement (plus de collision/empilement au centre).
-        const drift = 1.05 + (size / 440) * 0.5;   // géant ≈1.55, petits ≈1.2
-        const parY = rel * drift;
-        const centerY = restCenterY + parY;
+        // parY = 0 : chaque fruit suit EXACTEMENT sa section (flux naturel).
+        // Quand une section sort par le haut, ses fruits sortent avec elle ;
+        // la suivante entre par le bas. Les géants de 2 sections ne sont
+        // JAMAIS au centre en même temps → ILS NE SE TOUCHENT PAS.
+        const parY = 0;
+        const centerY = restCenterY;
 
         const av = Math.abs((centerY - half) / half);
         if (av >= 1) { el.style.opacity = "0"; continue; }
