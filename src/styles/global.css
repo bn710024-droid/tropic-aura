@@ -150,7 +150,7 @@ body::-webkit-scrollbar { display: none; }
   inset: 0;
   background: #1FA637;
   z-index: 0;
-  transition: transform .42s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .6s cubic-bezier(.4, 0, .2, 1);
 }
 .scene__cta:hover::before { transform: translateX(101%); }
 
@@ -168,27 +168,28 @@ body::-webkit-scrollbar { display: none; }
 .cta-circle {
   position: relative;
   z-index: 1;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #1FA637;
   overflow: hidden;
   flex-shrink: 0;
-  transition: transform .42s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .6s cubic-bezier(.4, 0, .2, 1);
 }
 .scene__cta:hover .cta-circle { transform: translateX(4px); }
-/* swap de flèche : l'actuelle sort à droite, une nouvelle suit depuis la gauche */
+/* swap de flèche : l'actuelle sort à droite, la nouvelle arrive de l'extrémité
+   gauche et glisse vers la droite (trajet long + lent pour bien la voir). */
 .cta-track {
   position: absolute;
   inset: 0;
   display: flex;
-  transform: translateX(-36px);
-  transition: transform .38s ease;
+  transform: translateX(-42px);
+  transition: transform .6s cubic-bezier(.34, 1.2, .4, 1);
 }
 .scene__cta:hover .cta-track { transform: translateX(0); }
 .cta-arrow {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
