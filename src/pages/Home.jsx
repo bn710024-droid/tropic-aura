@@ -40,7 +40,7 @@ const build = (imgs) =>
     img: imgs[i % imgs.length],
     x: c.x, y: c.y, size: c.size, r: c.r,
     blur: c.blur, speed: c.speed, z: c.z,
-  }));
+  })).filter((it) => it.img); // null = emplacement laissé vide (ex : pas de vedette)
 
 // ---- Les 6 univers ----
 const SECTIONS = [
@@ -50,7 +50,7 @@ const SECTIONS = [
     desc: "L'offre et la demande s'équilibrent chaque jour pour offrir les meilleurs produits tropicaux frais. C'est ça, Tropic-Aura.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangue,        // ★ vedette
+      null,                 // ★ vedette retirée (grosse mangue enlevée du hero)
       IMAGES.pasteque, IMAGES.ananas, IMAGES.avocat, IMAGES.citronVert,
       IMAGES.fraises, IMAGES.fruitPassion, IMAGES.orange, IMAGES.banane,
     ]),
@@ -61,7 +61,7 @@ const SECTIONS = [
     desc: "Chair ferme, peu fibreuse, sucrosité intense. Cueillies à maturité optimale et calibrées pour les marchés européens.",
     cta: "Découvrir",
     items: build([
-      IMAGES.mangue,        // ★ vedette
+      null,                 // ★ vedette retirée (grosse mangue centrale enlevée)
       IMAGES.papayeCoupe, IMAGES.mangue, IMAGES.orange,
       IMAGES.fruitPassion, IMAGES.mangue, IMAGES.orange, IMAGES.mangue, IMAGES.papaye,
     ]),
