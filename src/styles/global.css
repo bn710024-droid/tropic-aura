@@ -125,40 +125,55 @@ body::-webkit-scrollbar { display: none; }
   text-shadow: 0 2px 18px rgba(0, 0, 0, .3);
 }
 
-/* ----- Bouton "Découvrir" : pilule pleine (style Combilo) ------------------
-   Vert plein, texte blanc, flèche simple. Au survol : la flèche démarre
-   depuis la position du curseur (gérée en JS) et glisse jusqu'à sa place. */
+/* ----- Bouton "Découvrir" (style Combilo) ----------------------------------
+   Normal : pilule verte pleine.
+   Survol : 1) le remplissage vert GLISSE à droite → pilule TRANSPARENTE
+               (contour vert, texte blanc)
+            2) la FLÈCHE démarre depuis la position du curseur (JS) et glisse. */
 .scene__cta {
+  position: relative;
+  overflow: hidden;            /* clippe le remplissage + la flèche venue de loin */
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  background: transparent;
+  border: 2px solid #1FA637;
+  border-radius: 100px;
+  padding: 13px 28px;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+}
+/* remplissage vert qui couvre le bouton, puis glisse hors champ au survol */
+.scene__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: #1FA637;
-  color: #fff;
+  z-index: 0;
+  transition: transform .8s cubic-bezier(.4, 0, .2, 1);
+}
+.scene__cta:hover::before { transform: translateX(101%); }
+
+.cta-label {
+  position: relative;
+  z-index: 1;
+  color: #fff;                 /* texte toujours blanc */
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: .04em;
-  padding: 15px 30px;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;            /* clippe la flèche quand elle vient de loin */
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
-  transition: background-color .3s ease;
-}
-.scene__cta:hover { background: #178F2E; }   /* léger assombrissement */
-
-.cta-label {
-  display: inline-block;
-  position: relative;
-  z-index: 1;                  /* le texte reste au-dessus de la flèche */
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .28);
 }
 .cta-arrow {
+  position: relative;
+  z-index: 1;
   display: inline-block;
   font-size: 18px;
   line-height: 1;
-  /* glisse jusqu'à sa place ; le point de départ est posé en JS (curseur) */
-  transition: transform .55s cubic-bezier(.2, .7, .2, 1);
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .28);
+  /* glisse LENTEMENT jusqu'à sa place ; départ posé en JS (curseur/gauche) */
+  transition: transform 1s cubic-bezier(.2, .7, .2, 1);
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
