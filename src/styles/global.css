@@ -112,16 +112,16 @@ body::-webkit-scrollbar { display: none; }
   letter-spacing: -.03em;
   color: #fff;
   text-shadow: 0 6px 40px rgba(0, 0, 0, .28);
-  margin-bottom: 24px;
+  margin-bottom: 34px;          /* plus d'air entre titre et paragraphe */
 }
 
 .scene__desc {
   font-size: clamp(16px, 1.6vw, 19px);
-  line-height: 1.6;
+  line-height: 1.7;
   font-weight: 500;
   color: #fff;
-  max-width: 430px;
-  margin: 0 0 34px;
+  max-width: 420px;
+  margin: 0 0 40px;             /* plus d'air avant le bouton */
   text-shadow: 0 2px 18px rgba(0, 0, 0, .3);
 }
 
