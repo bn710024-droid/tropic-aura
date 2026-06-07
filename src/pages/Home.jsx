@@ -29,7 +29,7 @@ const LAYOUTS = [
   // 0 HERO — géant centre-droite
   [ {x:68,y:48,s:430,b:0}, {x:16,y:20,s:150,b:0}, {x:92,y:24,s:185,b:0}, {x:12,y:84,s:135,b:0}, {x:90,y:82,s:200,b:0}, {x:52,y:94,s:120,b:0} ],
   // 1 MANGUES — géant bas-droite, petits en haut
-  [ {x:74,y:66,s:400,b:0}, {x:18,y:18,s:165,b:0}, {x:90,y:14,s:150,b:0}, {x:46,y:12,s:130,b:0}, {x:95,y:88,s:175,b:0} ],
+  [ {x:74,y:66,s:350,b:0}, {x:18,y:18,s:165,b:0}, {x:90,y:14,s:150,b:0}, {x:46,y:12,s:130,b:0}, {x:95,y:88,s:175,b:0} ],
   // 2 ANANAS — géant haut-droite, petits en bas
   [ {x:72,y:34,s:420,b:0}, {x:16,y:70,s:150,b:0}, {x:92,y:84,s:185,b:0}, {x:50,y:92,s:135,b:0}, {x:14,y:22,s:150,b:0} ],
   // 3 AVOCATS — géant droite milieu, petits aux coins
@@ -37,7 +37,7 @@ const LAYOUTS = [
   // 4 PRIMEURS — géant centre-droite haut
   [ {x:66,y:40,s:400,b:0}, {x:20,y:66,s:150,b:0}, {x:90,y:78,s:170,b:0}, {x:90,y:22,s:160,b:0}, {x:48,y:92,s:130,b:0} ],
   // 5 EXOTIQUES — géant droite bas
-  [ {x:73,y:60,s:425,b:0}, {x:16,y:20,s:150,b:0}, {x:92,y:24,s:190,b:0}, {x:50,y:10,s:135,b:0}, {x:14,y:80,s:150,b:0} ],
+  [ {x:73,y:60,s:190,b:0}, {x:16,y:20,s:150,b:0}, {x:92,y:24,s:190,b:0}, {x:50,y:10,s:135,b:0}, {x:14,y:80,s:150,b:0} ],
 ];
 
 const ROT = [-4, 6, -5, 4, -6, 3];
