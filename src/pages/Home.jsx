@@ -108,7 +108,7 @@ const SECTIONS = [
     cta: "Découvrir",
     items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,   // ★ géant net
-      IMAGES.melonVert, IMAGES.melonJaune, IMAGES.banane, IMAGES.papaye,
+      IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.papaye,
     ]),
   },
 ];
