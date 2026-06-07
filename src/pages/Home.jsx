@@ -20,24 +20,34 @@ import { IMAGES } from "../images";
 //  Les autres : plus petits + flous (profondeur de champ).
 //  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
 //  reste lisible.  imgs[0] = le fruit star de la section.
-//  DA Combilo = lentille caméra 3D : 1 fruit GÉANT net devant + quelques
-//  petites taches très floues dispersées loin derrière. Zéro ombre.
-//  Centre + gauche dégagés → le texte respire. (slot 0 = vedette nette)
-const COMPO = [
-  { x: 66, y: 50, size: 510, blur: 0,  z: 4, r: -4 }, // ★ GÉANT net (centre-droite, domine)
-  { x: 15, y: 18, size: 165, blur: 18, z: 1, r: 6  }, // petite tache floue — haut-gauche
-  { x: 92, y: 14, size: 200, blur: 22, z: 1, r: -5 }, // petite tache floue — haut-droite
-  { x: 9,  y: 84, size: 150, blur: 17, z: 1, r: 4  }, // petite tache floue — bas-gauche
-  { x: 95, y: 86, size: 220, blur: 24, z: 1, r: -6 }, // petite tache floue — bas-droite
-  { x: 54, y: 93, size: 135, blur: 20, z: 1, r: 3  }, // petite tache floue — bas-centre
+//  UNE COMPOSITION DIFFÉRENTE PAR SECTION (sinon tout se ressemble au scroll).
+//  Chaque layout : slot 0 = GÉANT net devant + quelques petites taches très
+//  floues dispersées. Le GÉANT change de position/taille à chaque section →
+//  variété + les géants voisins ne se télescopent plus pendant la transition.
+//  s = size px, b = blur px. Géant toujours à DROITE (texte à gauche dégagé).
+const LAYOUTS = [
+  // 0 HERO — géant centre-droite
+  [ {x:68,y:48,s:430,b:0}, {x:16,y:20,s:150,b:18}, {x:92,y:24,s:185,b:22}, {x:12,y:84,s:135,b:16}, {x:90,y:82,s:200,b:24}, {x:52,y:94,s:120,b:20} ],
+  // 1 MANGUES — géant bas-droite, petits en haut
+  [ {x:74,y:66,s:400,b:0}, {x:18,y:18,s:165,b:20}, {x:90,y:14,s:150,b:22}, {x:46,y:12,s:130,b:18}, {x:95,y:88,s:175,b:24} ],
+  // 2 ANANAS — géant haut-droite, petits en bas
+  [ {x:72,y:34,s:420,b:0}, {x:16,y:70,s:150,b:18}, {x:92,y:84,s:185,b:23}, {x:50,y:92,s:135,b:20}, {x:14,y:22,s:150,b:22} ],
+  // 3 AVOCATS — géant droite milieu, petits aux coins
+  [ {x:78,y:56,s:410,b:0}, {x:18,y:24,s:155,b:19}, {x:46,y:12,s:140,b:22}, {x:14,y:82,s:150,b:17}, {x:92,y:86,s:185,b:24} ],
+  // 4 PRIMEURS — géant centre-droite haut
+  [ {x:66,y:40,s:400,b:0}, {x:20,y:66,s:150,b:20}, {x:90,y:78,s:170,b:22}, {x:90,y:22,s:160,b:23}, {x:48,y:92,s:130,b:18} ],
+  // 5 EXOTIQUES — géant droite bas
+  [ {x:73,y:60,s:425,b:0}, {x:16,y:20,s:150,b:18}, {x:92,y:24,s:190,b:23}, {x:50,y:10,s:135,b:20}, {x:14,y:80,s:150,b:22} ],
 ];
 
-const build = (imgs) =>
-  COMPO.map((c, i) => ({
+const ROT = [-4, 6, -5, 4, -6, 3];
+const build = (layout, imgs) =>
+  layout.map((c, i) => ({
     img: imgs[i % imgs.length],
-    x: c.x, y: c.y, size: c.size, r: c.r,
-    blur: c.blur, z: c.z,
-  })).filter((it) => it.img); // null = emplacement laissé vide (ex : pas de vedette)
+    x: c.x, y: c.y, size: c.s, blur: c.b,
+    z: i === 0 ? 4 : 1,          // slot 0 = géant net devant les petites taches
+    r: ROT[i % ROT.length],
+  })).filter((it) => it.img);
 
 // ---- Les 6 univers ----
 const SECTIONS = [
@@ -46,7 +56,7 @@ const SECTIONS = [
     title: "Créer des façons rafraîchissantes ensemble",
     desc: "L'offre et la demande s'équilibrent chaque jour pour offrir les meilleurs produits tropicaux frais. C'est ça, Tropic-Aura.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[0], [
       IMAGES.ananas,        // ★ géant net (ananas sur le vert — pas la mangue)
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
@@ -56,9 +66,9 @@ const SECTIONS = [
     title: "Mangues Kent & Keitt",
     desc: "Chair ferme, peu fibreuse, sucrosité intense. Cueillies à maturité optimale et calibrées pour les marchés européens.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[1], [
       IMAGES.mangue,        // ★ géant net (section Mangues)
-      IMAGES.papayeCoupe, IMAGES.orange, IMAGES.fruitPassion, IMAGES.papaye, IMAGES.orange,
+      IMAGES.papayeCoupe, IMAGES.orange, IMAGES.fruitPassion, IMAGES.papaye,
     ]),
   },
   {
@@ -66,9 +76,9 @@ const SECTIONS = [
     title: "Ananas Victoria",
     desc: "Petit format, chair dorée ultra-sucrée. Le préféré des marchés premium néerlandais et belges.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[2], [
       IMAGES.ananas,        // ★ géant net
-      IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.papayeCoupe, IMAGES.orange,
+      IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
   },
   {
@@ -76,9 +86,9 @@ const SECTIONS = [
     title: "Avocats Hass & Citrons verts",
     desc: "Onctuosité parfaite, agrumes gorgés de jus. Calibrés et conditionnés pour les distributeurs les plus exigeants.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[3], [
       IMAGES.avocat,        // ★ géant net
-      IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune, IMAGES.avocat,
+      IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
   },
   {
@@ -86,9 +96,9 @@ const SECTIONS = [
     title: "Haricots verts & Gombo",
     desc: "Cultures de plein champ de la zone des Niayes. Conformité stricte aux normes LMR européennes.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[4], [
       IMAGES.haricots,      // ★ géant net
-      IMAGES.gombo, IMAGES.haricots, IMAGES.gombo, IMAGES.haricots, IMAGES.gombo,
+      IMAGES.gombo, IMAGES.haricots, IMAGES.gombo, IMAGES.haricots,
     ]),
   },
   {
@@ -96,9 +106,9 @@ const SECTIONS = [
     title: "Papaye, Melon & Noix de Coco",
     desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
     cta: "Découvrir",
-    items: build([
+    items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,   // ★ géant net
-      IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.papaye, IMAGES.melonJaune,
+      IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.papaye,
     ]),
   },
 ];
@@ -171,8 +181,10 @@ export default function Home() {
         const restCenterY = sectionTop + (y / 100) * H;
         const rel = scroll - si * H;
         // drift > 1 → le fruit descend À L'ÉCRAN quand on scrolle (haut → bas).
-        // Doux (compo dispersée) pour rester organisé, pas de "totem".
-        const drift = 1.05 + (size / 510) * 0.12;
+        // Drift FORT sur les gros : pendant une transition, le géant qui part
+        // descend bas pendant que celui qui arrive vient d'en haut → ils sont
+        // SÉPARÉS verticalement (plus de collision/empilement au centre).
+        const drift = 1.05 + (size / 440) * 0.5;   // géant ≈1.55, petits ≈1.2
         const parY = rel * drift;
         const centerY = restCenterY + parY;
 
