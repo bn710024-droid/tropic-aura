@@ -20,22 +20,19 @@ import { IMAGES } from "../images";
 //  Les autres : plus petits + flous (profondeur de champ).
 //  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
 //  reste lisible.  imgs[0] = le fruit star de la section.
-//  Composition DENSE plein écran (style Combilo) : des fruits PARTOUT.
-//  2 gros nets (★ centre-droite + un gros haut-gauche DERRIÈRE le titre),
-//  + moyens/petits flous qui remplissent haut, droite et bas.
-//  TOUT en z < 5 → le texte (z5) passe par-dessus = parfaitement lisible.
+//  PREMIUM (style Combilo) : moins de fruits, BEAUCOUP plus gros, qui
+//  DÉBORDENT des bords (immersion + échelle), avec un flou bokeh fort sur
+//  le fond (profondeur de champ cinématographique).
+//  TOUT en z < 5 → le texte (z5) passe par-dessus = lisible.
 const COMPO = [
-  { x: 70, y: 48, size: 380, blur: 0, speed: 1.05, z: 4, r: -5 }, // ★ VEDETTE (centre-droite, net)
-  { x: 31, y: 16, size: 300, blur: 0, speed: 1.0,  z: 4, r: 6  }, // gros net haut-gauche (derrière titre)
-  { x: 53, y: 10, size: 150, blur: 1, speed: 0.98, z: 3, r: -4 }, // haut-centre
-  { x: 90, y: 27, size: 165, blur: 2, speed: 1.0,  z: 3, r: 5  }, // droite haut
-  { x: 81, y: 13, size: 110, blur: 2, speed: 0.95, z: 3, r: 3  }, // haut-droite
-  { x: 95, y: 58, size: 130, blur: 6, speed: 0.85, z: 2, r: -7 }, // droite milieu (flou)
-  { x: 88, y: 85, size: 150, blur: 5, speed: 0.9,  z: 2, r: 4  }, // bas-droite (flou)
-  { x: 63, y: 88, size: 115, blur: 6, speed: 0.86, z: 2, r: -6 }, // bas-centre (flou)
-  { x: 16, y: 90, size: 130, blur: 6, speed: 0.9,  z: 2, r: 6  }, // bas-gauche (sous le texte)
-  { x: 6,  y: 33, size: 92,  blur: 8, speed: 0.84, z: 1, r: 3  }, // bord gauche (flou, profondeur)
-  { x: 45, y: 92, size: 86,  blur: 7, speed: 0.86, z: 2, r: -5 }, // bas
+  { x: 73, y: 50, size: 470, blur: 0,  speed: 1.05, z: 4, r: -5 }, // ★ VEDETTE (centre-droite)
+  { x: 2,  y: 98, size: 400, blur: 1,  speed: 1.0,  z: 3, r: 8  }, // gros NET bas-gauche (déborde)
+  { x: 99, y: 6,  size: 360, blur: 14, speed: 0.84, z: 1, r: -6 }, // gros FLOU haut-droite (déborde, bokeh)
+  { x: 49, y: -1, size: 220, blur: 4,  speed: 0.95, z: 3, r: 4  }, // haut-centre (déborde en haut)
+  { x: 96, y: 67, size: 260, blur: 16, speed: 0.82, z: 1, r: 5  }, // droite (gros flou bokeh)
+  { x: 64, y: 83, size: 155, blur: 1,  speed: 0.98, z: 3, r: -7 }, // accent NET (type framboise)
+  { x: 0,  y: 36, size: 210, blur: 18, speed: 0.8,  z: 1, r: 3  }, // bord gauche (gros flou, derrière texte)
+  { x: 87, y: 95, size: 190, blur: 9,  speed: 0.9,  z: 2, r: -5 }, // bas-droite (flou)
 ];
 
 const build = (imgs) =>
@@ -282,7 +279,7 @@ export default function Home() {
                   draggable={false}
                   style={{
                     filter:
-                      `drop-shadow(0 16px 22px rgba(0,0,0,.28))` +
+                      `drop-shadow(0 18px 34px rgba(0,0,0,.18))` +  // ombre douce → flotte
                       (it.blur ? ` blur(${it.blur}px)` : ""),
                   }}
                 />
