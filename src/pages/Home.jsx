@@ -20,19 +20,18 @@ import { IMAGES } from "../images";
 //  Les autres : plus petits + flous (profondeur de champ).
 //  Tout est calé à DROITE / sur les bords → la colonne gauche (texte)
 //  reste lisible.  imgs[0] = le fruit star de la section.
-//  PREMIUM (style Combilo) : moins de fruits, BEAUCOUP plus gros, qui
-//  DÉBORDENT des bords (immersion + échelle), avec un flou bokeh fort sur
-//  le fond (profondeur de champ cinématographique).
+//  Gros fruits qui débordent (immersion), mais NETS : on doit voir la
+//  beauté des fruits → flou quasi nul (max 1px sur les plus lointains).
 //  TOUT en z < 5 → le texte (z5) passe par-dessus = lisible.
 const COMPO = [
-  { x: 73, y: 50, size: 470, blur: 0,  speed: 1.05, z: 4, r: -5 }, // ★ VEDETTE (centre-droite)
-  { x: 2,  y: 98, size: 400, blur: 1,  speed: 1.0,  z: 3, r: 8  }, // gros NET bas-gauche (déborde)
-  { x: 99, y: 6,  size: 360, blur: 14, speed: 0.84, z: 1, r: -6 }, // gros FLOU haut-droite (déborde, bokeh)
-  { x: 49, y: -1, size: 220, blur: 4,  speed: 0.95, z: 3, r: 4  }, // haut-centre (déborde en haut)
-  { x: 96, y: 67, size: 260, blur: 16, speed: 0.82, z: 1, r: 5  }, // droite (gros flou bokeh)
-  // { x: 64, y: 83, size: 155, blur: 1,  speed: 0.98, z: 3, r: -7 }, // accent NET (retiré — test)
-  { x: 0,  y: 36, size: 210, blur: 18, speed: 0.8,  z: 1, r: 3  }, // bord gauche (gros flou, derrière texte)
-  // { x: 87, y: 95, size: 190, blur: 9,  speed: 0.9,  z: 2, r: -5 }, // bas-droite (retiré — test)
+  { x: 73, y: 50, size: 470, blur: 0, speed: 1.05, z: 4, r: -5 }, // ★ VEDETTE (centre-droite)
+  { x: 2,  y: 98, size: 400, blur: 0, speed: 1.0,  z: 3, r: 8  }, // gros bas-gauche (déborde)
+  { x: 99, y: 6,  size: 360, blur: 1, speed: 0.84, z: 1, r: -6 }, // gros haut-droite (déborde)
+  { x: 49, y: -1, size: 220, blur: 0, speed: 0.95, z: 3, r: 4  }, // haut-centre (déborde en haut)
+  { x: 96, y: 67, size: 260, blur: 1, speed: 0.82, z: 1, r: 5  }, // droite
+  // { x: 64, y: 83, size: 155, blur: 0, speed: 0.98, z: 3, r: -7 }, // accent (retiré — test)
+  { x: 0,  y: 36, size: 210, blur: 1, speed: 0.8,  z: 1, r: 3  }, // bord gauche (derrière texte)
+  // { x: 87, y: 95, size: 190, blur: 0, speed: 0.9,  z: 2, r: -5 }, // bas-droite (retiré — test)
 ];
 
 const build = (imgs) =>
@@ -179,7 +178,12 @@ export default function Home() {
         // le fruit est centré sur son point d'ancrage (marges négatives)
         const restCenterY = sectionTop + (y / 100) * H;
         const rel = scroll - si * H;
-        const parY = -rel * (speed - 1);            // parallaxe douce liée au scroll
+        // drift > 1 → le fruit descend À L'ÉCRAN quand on scrolle (haut → bas).
+        //   screenY = y%H + rel*(drift-1), drift-1 > 0 ⇒ descend.
+        // Section qui arrive d'en bas : ses fruits sont HAUT (rel<0) puis
+        // descendent en place. Drift ∝ taille (gros = +proche, descend +).
+        const drift = 1.07 + (size / 470) * 0.28;
+        const parY = rel * drift;
         const centerY = restCenterY + parY;
 
         const av = Math.abs((centerY - half) / half);
