@@ -125,77 +125,40 @@ body::-webkit-scrollbar { display: none; }
   text-shadow: 0 2px 18px rgba(0, 0, 0, .3);
 }
 
-/* ----- Bouton "Découvrir" (effet Combilo) ----------------------------------
-   Normal : pilule verte pleine + cercle vert avec flèche.
-   Survol : le remplissage vert GLISSE vers la droite → la pilule devient
-   transparente (contour vert), le texte reste blanc, et dans le cercle la
-   flèche sort à droite pendant qu'une nouvelle entre par la gauche.        */
+/* ----- Bouton "Découvrir" : pilule pleine (style Combilo) ------------------
+   Vert plein, texte blanc, flèche simple. Au survol : la flèche démarre
+   depuis la position du curseur (gérée en JS) et glisse jusqu'à sa place. */
 .scene__cta {
-  position: relative;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  background: transparent;
-  border: 2px solid #1FA637;
-  border-radius: 100px;
-  padding: 8px 8px 8px 26px;
-  cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
-}
-/* remplissage vert qui couvre le bouton, puis glisse hors champ au survol */
-.scene__cta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
+  gap: 12px;
   background: #1FA637;
-  z-index: 0;
-  transition: transform .6s cubic-bezier(.4, 0, .2, 1);
-}
-.scene__cta:hover::before { transform: translateX(101%); }
-
-.cta-label {
-  position: relative;
-  z-index: 1;
-  color: #fff;                 /* texte toujours blanc */
+  color: #fff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: .04em;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, .22);
+  padding: 15px 30px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;            /* clippe la flèche quand elle vient de loin */
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+  transition: background-color .3s ease;
 }
-/* cercle vert autour de la flèche : reste vert même quand le fond se vide */
-.cta-circle {
+.scene__cta:hover { background: #178F2E; }   /* léger assombrissement */
+
+.cta-label {
+  display: inline-block;
   position: relative;
-  z-index: 1;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #1FA637;
-  overflow: hidden;
-  flex-shrink: 0;
-  transition: transform .55s cubic-bezier(.4, 0, .2, 1);
+  z-index: 1;                  /* le texte reste au-dessus de la flèche */
 }
-.scene__cta:hover .cta-circle { transform: translateX(4px); }
-/* SWAP DE FLÈCHE avec décalage :
-   1) la flèche actuelle sort vers la DROITE
-   2) puis (delay) une nouvelle arrive de l'EXTRÉMITÉ GAUCHE vers la droite */
 .cta-arrow {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 16px;
-  transition: transform .5s cubic-bezier(.4, 0, .2, 1);
-}
-.cta-arrow--out { transform: translateX(0); }
-.cta-arrow--in  { transform: translateX(-150%); }          /* cachée à gauche */
-.scene__cta:hover .cta-arrow--out { transform: translateX(150%); }   /* sort à droite */
-.scene__cta:hover .cta-arrow--in  {                        /* entre de la gauche, APRÈS */
-  transform: translateX(0);
-  transition-delay: .32s;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  /* glisse jusqu'à sa place ; le point de départ est posé en JS (curseur) */
+  transition: transform .55s cubic-bezier(.2, .7, .2, 1);
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
