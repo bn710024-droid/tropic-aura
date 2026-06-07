@@ -125,34 +125,76 @@ body::-webkit-scrollbar { display: none; }
   text-shadow: 0 2px 18px rgba(0, 0, 0, .3);
 }
 
+/* ----- Bouton "Découvrir" (effet Combilo) ----------------------------------
+   Normal : pilule verte pleine + cercle vert avec flèche.
+   Survol : le remplissage vert GLISSE vers la droite → la pilule devient
+   transparente (contour vert), le texte reste blanc, et dans le cercle la
+   flèche sort à droite pendant qu'une nouvelle entre par la gauche.        */
 .scene__cta {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: #1FA637;          /* pilule verte "DÉCOUVRIR" (comme Combilo) */
-  color: #fff;
+  gap: 14px;
+  background: transparent;
+  border: 2px solid #1FA637;
+  border-radius: 100px;
+  padding: 8px 8px 8px 26px;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+}
+/* remplissage vert qui couvre le bouton, puis glisse hors champ au survol */
+.scene__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #1FA637;
+  z-index: 0;
+  transition: transform .42s cubic-bezier(.4, 0, .2, 1);
+}
+.scene__cta:hover::before { transform: translateX(101%); }
+
+.cta-label {
+  position: relative;
+  z-index: 1;
+  color: #fff;                 /* texte toujours blanc */
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: .04em;
-  padding: 15px 32px;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);  /* ombre statique, subtile */
-  /* le bouton NE bouge PAS, NE grossit PAS : seule la couleur change en douceur */
-  transition: background-color .3s ease-in-out;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .22);
 }
-.scene__cta:hover {
-  background: #178F2E;          /* vert légèrement plus foncé (assombrissement subtil) */
+/* cercle vert autour de la flèche : reste vert même quand le fond se vide */
+.cta-circle {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1FA637;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform .42s cubic-bezier(.4, 0, .2, 1);
 }
-/* la flèche glisse doucement vers la droite, le texte reste fixe */
-.scene__cta span {
-  display: inline-block;
-  transition: transform .3s ease-in-out;
+.scene__cta:hover .cta-circle { transform: translateX(4px); }
+/* swap de flèche : l'actuelle sort à droite, une nouvelle suit depuis la gauche */
+.cta-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  transform: translateX(-36px);
+  transition: transform .38s ease;
 }
-.scene__cta:hover span {
-  transform: translateX(5px);
+.scene__cta:hover .cta-track { transform: translateX(0); }
+.cta-arrow {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */

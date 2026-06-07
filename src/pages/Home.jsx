@@ -310,7 +310,13 @@ export default function Home() {
             <h1 className="scene__title">{s.title}</h1>
             <p className="scene__desc">{s.desc}</p>
             <button className="scene__cta" onClick={() => goTo(i + 1)}>
-              {s.cta} <span>→</span>
+              <span className="cta-label">{s.cta}</span>
+              <span className="cta-circle">
+                <span className="cta-track">
+                  <span className="cta-arrow">→</span>
+                  <span className="cta-arrow">→</span>
+                </span>
+              </span>
             </button>
           </div>
 
