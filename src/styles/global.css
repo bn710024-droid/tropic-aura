@@ -139,16 +139,21 @@ body::-webkit-scrollbar { display: none; }
   border-radius: 100px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, .18);
-  transition: transform .25s, box-shadow .25s;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);  /* ombre statique, subtile */
+  /* le bouton NE bouge PAS, NE grossit PAS : seule la couleur change en douceur */
+  transition: background-color .3s ease-in-out;
 }
 .scene__cta:hover {
-  background: #18922F;          /* vert légèrement plus foncé */
-  transform: translateY(-3px);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, .26);
+  background: #178F2E;          /* vert légèrement plus foncé (assombrissement subtil) */
 }
-.scene__cta span { transition: transform .25s; }
-.scene__cta:hover span { transform: translateX(5px); }
+/* la flèche glisse doucement vers la droite, le texte reste fixe */
+.scene__cta span {
+  display: inline-block;
+  transition: transform .3s ease-in-out;
+}
+.scene__cta:hover span {
+  transform: translateX(5px);
+}
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
 .ghost {
