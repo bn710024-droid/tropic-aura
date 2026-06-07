@@ -30,9 +30,9 @@ const COMPO = [
   { x: 99, y: 6,  size: 360, blur: 14, speed: 0.84, z: 1, r: -6 }, // gros FLOU haut-droite (déborde, bokeh)
   { x: 49, y: -1, size: 220, blur: 4,  speed: 0.95, z: 3, r: 4  }, // haut-centre (déborde en haut)
   { x: 96, y: 67, size: 260, blur: 16, speed: 0.82, z: 1, r: 5  }, // droite (gros flou bokeh)
-  { x: 64, y: 83, size: 155, blur: 1,  speed: 0.98, z: 3, r: -7 }, // accent NET (type framboise)
+  // { x: 64, y: 83, size: 155, blur: 1,  speed: 0.98, z: 3, r: -7 }, // accent NET (retiré — test)
   { x: 0,  y: 36, size: 210, blur: 18, speed: 0.8,  z: 1, r: 3  }, // bord gauche (gros flou, derrière texte)
-  { x: 87, y: 95, size: 190, blur: 9,  speed: 0.9,  z: 2, r: -5 }, // bas-droite (flou)
+  // { x: 87, y: 95, size: 190, blur: 9,  speed: 0.9,  z: 2, r: -5 }, // bas-droite (retiré — test)
 ];
 
 const build = (imgs) =>
