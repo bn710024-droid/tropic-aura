@@ -41,13 +41,29 @@ const LAYOUTS = [
 ];
 
 const ROT = [-4, 6, -5, 4, -6, 3];
-const build = (layout, imgs) =>
-  layout.map((c, i) => ({
+
+// Taches FLOUES de fond, posées dans les zones vides (centre) → profondeur,
+// remplit le vide sans surcharger. Elles réutilisent les fruits de la section.
+const FILLERS = [
+  { x: 57, y: 38, s: 175, b: 18 },
+  { x: 56, y: 72, s: 155, b: 16 },
+];
+
+const build = (layout, imgs) => {
+  const main = layout.map((c, i) => ({
     img: imgs[i % imgs.length],
     x: c.x, y: c.y, size: c.s, blur: c.b,
-    z: i === 0 ? 4 : 1,          // slot 0 = géant net devant les petites taches
+    z: i === 0 ? 4 : 1,          // slot 0 = fruit principal net
     r: ROT[i % ROT.length],
-  })).filter((it) => it.img);
+  }));
+  const fill = FILLERS.map((f, i) => ({
+    img: imgs[(i + 1) % imgs.length],  // réutilise un fruit de la section
+    x: f.x, y: f.y, size: f.s, blur: f.b,
+    z: 0,                              // tout au fond (derrière les fruits nets)
+    r: ROT[i % ROT.length],
+  }));
+  return [...main, ...fill].filter((it) => it.img);
+};
 
 // ---- Les 6 univers ----
 const SECTIONS = [
