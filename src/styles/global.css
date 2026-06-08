@@ -126,8 +126,8 @@ body::-webkit-scrollbar { display: none; }
 }
 
 /* ----- Bouton "Découvrir" (style Combilo exact) ----------------------------
-   Default : pilule sombre, texte seul — zéro cercle visible
-   Hover   : cercle vert s'ouvre lentement depuis la droite, flèche apparaît */
+   Default : pilule sombre + pillule verte intérieure pleine (flèche visible)
+   Hover   : pillule verte rétrécit vers la droite → demi-cercle → cercle vert */
 .scene__cta {
   position: relative;
   display: inline-flex;
@@ -139,8 +139,20 @@ body::-webkit-scrollbar { display: none; }
   padding: 5px 5px 5px 22px;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .20);
-  overflow: hidden;            /* clippe le cercle qui grandit dans le cap droit */
+  overflow: hidden;
 }
+
+/* Pillule verte intérieure — glisse à droite au hover, bord gauche = demi-cercle */
+.scene__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #1FA637;
+  border-radius: 100px;
+  z-index: 0;
+  transition: transform 0.65s cubic-bezier(.4, 0, .2, 1);
+}
+.scene__cta:hover::before { transform: translateX(101%); }
 
 .cta-label {
   position: relative;
@@ -150,54 +162,32 @@ body::-webkit-scrollbar { display: none; }
   font-weight: 700;
   font-size: 13px;
   letter-spacing: .10em;
-  text-transform: uppercase;   /* DÉCOUVRIR comme Combilo */
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-/* Cercle vert — width:0 par défaut, s'ouvre lentement au hover */
+/* Cercle vert fixe à droite — toujours présent, z:2 au-dessus du ::before */
 .cta-arrow {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
-  width: 0;
+  width: 44px;
   height: 44px;
   border-radius: 50%;
   background: #1FA637;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  margin-left: 0;
-  transition:
-    width       0.65s cubic-bezier(.4, 0, .2, 1),
-    margin-left 0.65s cubic-bezier(.4, 0, .2, 1);
-}
-
-.scene__cta:hover .cta-arrow {
-  width: 44px;
   margin-left: 10px;
 }
 
-/* Flèche blanche — apparaît une fois le cercle presque formé */
+/* Flèche blanche — toujours visible sur le vert */
 .cta-arrow > span {
   display: inline-block;
   font-size: 20px;
   line-height: 1;
   color: #fff;
   font-weight: 700;
-  white-space: nowrap;
-  min-width: 20px;
-  text-align: center;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition:
-    opacity   0.25s ease 0.4s,
-    transform 0.25s ease 0.4s;
-}
-
-.scene__cta:hover .cta-arrow > span {
-  opacity: 1;
-  transform: translateX(0);
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
