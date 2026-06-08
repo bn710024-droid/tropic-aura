@@ -69,9 +69,10 @@ const build = (layout, imgs) => {
 const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
-    title: "Créer des façons rafraîchissantes ensemble",
-    desc: "L'offre et la demande s'équilibrent chaque jour pour offrir les meilleurs produits tropicaux frais. C'est ça, Tropic-Aura.",
-    cta: "Découvrir",
+    title: "Connecting Tropical Lands and Global Markets",
+    desc: "Tropic-Aura connects international buyers with carefully sourced tropical produce from West Africa. Our ambition is not simply to move products across borders, but to create a more direct, transparent and reliable connection between exceptional origins and global demand.",
+    cta: "Discover Our Vision",
+    link: "/about",
     items: build(LAYOUTS[0], [
       IMAGES.ananas,        // ★ géant net (ananas sur le vert — pas la mangue)
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
@@ -310,7 +311,7 @@ export default function Home() {
           <div className="scene__content">
             <h1 className="scene__title">{s.title}</h1>
             <p className="scene__desc">{s.desc}</p>
-            <button className="scene__cta" onClick={() => goTo(i + 1)}>
+            <button className="scene__cta" onClick={() => s.link ? window.location.href = s.link : goTo(i + 1)}>
               <span className="cta-label">{s.cta}</span>
               <span className="cta-arrow"><span>→</span></span>
             </button>
