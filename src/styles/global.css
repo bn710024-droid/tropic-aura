@@ -145,12 +145,13 @@ body::-webkit-scrollbar { display: none; }
   box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
 }
 
-/* remplissage vert plein — glisse à droite au survol */
+/* remplissage vert plein — rétrécit vers la droite, bord gauche = demi-cercle */
 .scene__cta::before {
   content: "";
   position: absolute;
   inset: 0;
   background: #1FA637;
+  border-radius: 100px;        /* bord gauche arrondi → demi-cercle Combilo */
   z-index: 0;
   transition: transform .8s cubic-bezier(.4, 0, .2, 1);
 }
@@ -191,18 +192,7 @@ body::-webkit-scrollbar { display: none; }
   font-weight: 700;
 }
 
-/* AU SURVOL : sort à droite → saute au "D" → glisse lentement jusqu'au cercle
-   DOM mesuré : D=26px, cercle-centre=128px, distance=102px */
-.scene__cta:hover .cta-arrow > span {
-  animation: ctaArrowSwap 1.8s cubic-bezier(.4, 0, .2, 1);
-}
-@keyframes ctaArrowSwap {
-  0%   { transform: translateX(0);      opacity: 1; }   /* en place dans le cercle */
-  18%  { transform: translateX(35px);   opacity: 0; }   /* sort à droite (clippé par btn) */
-  19%  { transform: translateX(-102px); opacity: 0; }   /* saute au "D" de Découvrir */
-  34%  { opacity: 1; }                                   /* apparaît au "D" */
-  100% { transform: translateX(0);      opacity: 1; }   /* arrive lentement au cercle */
-}
+/* La flèche reste fixe sur le cercle vert — pas d'animation séparée */
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
 .ghost {
