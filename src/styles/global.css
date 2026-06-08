@@ -169,8 +169,8 @@ body::-webkit-scrollbar { display: none; }
   overflow: hidden;
   margin-left: 0;
   transition:
-    width       1.5s cubic-bezier(.4, 0, .2, 1),
-    margin-left 1.5s cubic-bezier(.4, 0, .2, 1);
+    width       0.65s cubic-bezier(.4, 0, .2, 1),
+    margin-left 0.65s cubic-bezier(.4, 0, .2, 1);
 }
 
 .scene__cta:hover .cta-arrow {
@@ -191,8 +191,8 @@ body::-webkit-scrollbar { display: none; }
   opacity: 0;
   transform: translateX(-4px);
   transition:
-    opacity   0.4s ease 0.95s,
-    transform 0.4s ease 0.95s;
+    opacity   0.25s ease 0.4s,
+    transform 0.25s ease 0.4s;
 }
 
 .scene__cta:hover .cta-arrow > span {
