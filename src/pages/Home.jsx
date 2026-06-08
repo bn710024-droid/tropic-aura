@@ -70,7 +70,7 @@ const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
     title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
-    desc: "Tropic-Aura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
+    desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
     cta: "Découvrir Notre Vision",
     link: "/about",
     items: build(LAYOUTS[0], [
@@ -81,7 +81,7 @@ const SECTIONS = [
   {
     id: "origins", bg: "#E8631C",
     title: "Le Potentiel de l'Afrique. Livré Autrement.",
-    desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropic-Aura existe pour connecter la richesse des régions tropicales d'Afrique de l'Ouest aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
+    desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
     cta: "Découvrir Notre Histoire",
     link: "/about",
     items: build(LAYOUTS[1], [
@@ -115,7 +115,7 @@ const SECTIONS = [
   {
     id: "vision", bg: "#C9912B",
     title: "Au-delà des Marchés d'Aujourd'hui.",
-    desc: "Tropic-Aura regarde au-delà du simple mouvement de produits. Notre ambition est de contribuer à un avenir où l'agriculture africaine est reconnue pour son excellence, son professionnalisme et sa capacité à rivaliser sur les marchés les plus exigeants du monde.",
+    desc: "Tropicaura regarde au-delà du simple mouvement de produits. Notre ambition est de contribuer à un avenir où l'agriculture africaine est reconnue pour son excellence, son professionnalisme et sa capacité à rivaliser sur les marchés les plus exigeants du monde.",
     cta: "Notre Engagement",
     link: "/about",
     items: build(LAYOUTS[4], [
@@ -126,7 +126,7 @@ const SECTIONS = [
   {
     id: "contact", bg: "#0D9488",
     title: "Créons de Nouvelles Opportunités.",
-    desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique de l'Ouest, nous sommes à votre écoute.",
+    desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
     cta: "Nous Contacter",
     link: "/contact",
     items: build(LAYOUTS[5], [
