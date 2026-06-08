@@ -70,7 +70,7 @@ const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
     title: "Connecting Tropical Lands and Global Markets",
-    desc: "Tropic-Aura connects international buyers with carefully sourced tropical produce from West Africa, creating trusted links between exceptional origins and global markets.",
+    desc: "Tropic-Aura connects exceptional tropical origins with global markets through trusted partnerships, quality-driven sourcing and a long-term vision for African trade.",
     cta: "Discover Our Vision",
     link: "/about",
     items: build(LAYOUTS[0], [
@@ -79,53 +79,58 @@ const SECTIONS = [
     ]),
   },
   {
-    id: "mangues", bg: "#E8631C",
-    title: "Mangues Kent & Keitt",
-    desc: "Chair ferme, peu fibreuse, sucrosité intense. Cueillies à maturité optimale et calibrées pour les marchés européens.",
-    cta: "Découvrir",
+    id: "origins", bg: "#E8631C",
+    title: "Africa's Potential. Delivered Differently.",
+    desc: "Beyond every exceptional fruit lies an exceptional origin. Tropic-Aura exists to connect the richness of West Africa's tropical regions with the opportunities of global markets, creating value where authenticity, quality and ambition meet.",
+    cta: "Discover Our Story",
+    link: "/about",
     items: build(LAYOUTS[1], [
-      IMAGES.mangue,        // produit principal (taille proche des autres)
+      IMAGES.mangue,
       IMAGES.orange, IMAGES.papayeCoupe, IMAGES.fruitPassion,
-      IMAGES.mangue, IMAGES.orange, IMAGES.papaye,   // quelques répétitions
+      IMAGES.mangue, IMAGES.orange, IMAGES.papaye,
     ]),
   },
   {
-    id: "ananas", bg: "#F3B500",
-    title: "Ananas Victoria",
-    desc: "Petit format, chair dorée ultra-sucrée. Le préféré des marchés premium néerlandais et belges.",
-    cta: "Découvrir",
+    id: "products", bg: "#F3B500",
+    title: "Selected for Demanding Markets.",
+    desc: "Excellence begins long before a product reaches its destination. We focus on opportunities capable of meeting the expectations of modern international markets, where quality, consistency and reliability are not advantages—they are requirements.",
+    cta: "Explore Products",
+    link: "/products",
     items: build(LAYOUTS[2], [
       IMAGES.ananas,        // ★ géant net
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
   },
   {
-    id: "avocats", bg: "#1B7A3D",
-    title: "Avocats Hass & Citrons verts",
-    desc: "Onctuosité parfaite, agrumes gorgés de jus. Calibrés et conditionnés pour les distributeurs les plus exigeants.",
-    cta: "Découvrir",
+    id: "partnerships", bg: "#1B7A3D",
+    title: "More Than Transactions.",
+    desc: "The strongest supply chains are built on trust. We cultivate partnerships designed to create long-term value, connecting producers, logistics networks and international buyers through a shared commitment to excellence.",
+    cta: "Partnership Approach",
+    link: "/partnerships",
     items: build(LAYOUTS[3], [
       IMAGES.avocat,        // ★ géant net
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
   },
   {
-    id: "pasteque", bg: "#C9912B",
-    title: "Pastèque & Fruits frais",
-    desc: "Pastèques juteuses et fruits gorgés de soleil, calibrés pour l'export. Fraîcheur garantie de la récolte au conteneur.",
-    cta: "Découvrir",
+    id: "vision", bg: "#C9912B",
+    title: "Beyond Today's Markets.",
+    desc: "Tropic-Aura looks beyond the movement of products. Our ambition is to contribute to a future where African agriculture is recognized for its excellence, professionalism and capacity to compete on the world's most demanding stages.",
+    cta: "Our Commitment",
+    link: "/about",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,   // ★ géant net
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
     ]),
   },
   {
-    id: "exotiques", bg: "#0D9488",
-    title: "Papaye, Melon & Noix de Coco",
-    desc: "La force des terroirs tropicaux d'Afrique de l'Ouest, acheminée avec une logistique zéro défaut.",
-    cta: "Découvrir",
+    id: "contact", bg: "#0D9488",
+    title: "Let's Create New Opportunities.",
+    desc: "Every meaningful partnership begins with a conversation. Whether you are exploring new sourcing opportunities or seeking a trusted presence in West Africa, we welcome the opportunity to connect.",
+    cta: "Contact Us",
+    link: "/contact",
     items: build(LAYOUTS[5], [
-      IMAGES.papayeCoupe,   // produit principal (taille proche des autres)
+      IMAGES.papayeCoupe,
       IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.melonJaune, IMAGES.papaye,
     ]),
   },
