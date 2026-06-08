@@ -167,7 +167,7 @@ body::-webkit-scrollbar { display: none; }
   text-shadow: 0 1px 6px rgba(0, 0, 0, .28);
 }
 
-/* Cercle flèche — toujours vert, toujours au-dessus du ::before */
+/* Cercle flèche — fond blanc, flèche verte → contraste max partout */
 .cta-arrow {
   position: relative;
   z-index: 2;                  /* au-dessus du fond vert qui glisse */
@@ -175,19 +175,20 @@ body::-webkit-scrollbar { display: none; }
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #1FA637;         /* propre fond vert permanent */
+  background: #ffffff;         /* cercle blanc : la flèche verte pop dessus */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   /* PAS d'overflow:hidden → la flèche voyage librement dans tout le bouton */
 }
 
-/* Flèche intérieure */
+/* Flèche intérieure — verte, visible sur fond blanc ET sur le fond de section */
 .cta-arrow > span {
   display: inline-block;
   font-size: 17px;
   line-height: 1;
-  color: #fff;
+  color: #1FA637;              /* vert → lisible pendant tout le voyage */
+  font-weight: 700;
 }
 
 /* AU SURVOL : sort à droite → saute au "D" → glisse lentement jusqu'au cercle
