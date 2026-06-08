@@ -105,14 +105,20 @@ body::-webkit-scrollbar { display: none; }
 .scene__content > * { pointer-events: auto; }
 
 .scene__title {
-  font-family: 'Plus Jakarta Sans', sans-serif;  /* sans-serif bold, comme Combilo */
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
-  font-size: clamp(40px, 5.4vw, 92px);            /* massif mais le mot long tient */
-  line-height: 0.92;                              /* interligne serré */
+  font-size: clamp(40px, 5.4vw, 92px);
+  line-height: 0.92;
   letter-spacing: -.03em;
   color: #fff;
   text-shadow: 0 6px 40px rgba(0, 0, 0, .28);
-  margin-bottom: 34px;          /* plus d'air entre titre et paragraphe */
+  margin-bottom: 34px;
+}
+/* Hero : titre plus petit → description + bouton restent dans l'écran */
+.scene__title--hero {
+  font-size: clamp(28px, 3.4vw, 54px);
+  line-height: 1.05;
+  margin-bottom: 24px;
 }
 
 .scene__desc {
@@ -140,6 +146,8 @@ body::-webkit-scrollbar { display: none; }
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .20);
   overflow: hidden;
+  pointer-events: auto !important;  /* toujours cliquable même sous les fruits */
+  z-index: 10;                       /* au-dessus des fruits de la section suivante */
 }
 
 .cta-label {

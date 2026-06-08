@@ -309,7 +309,7 @@ export default function Home() {
           </div>
 
           <div className="scene__content">
-            <h1 className="scene__title">{s.title}</h1>
+            <h1 className={`scene__title${i === 0 ? ' scene__title--hero' : ''}`}>{s.title}</h1>
             <p className="scene__desc">{s.desc}</p>
             <button className="scene__cta" onClick={() => s.link ? window.location.href = s.link : goTo(i + 1)}>
               <span className="cta-label">{s.cta}</span>
