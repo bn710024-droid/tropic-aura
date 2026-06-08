@@ -165,9 +165,9 @@ export default function APropos() {
         <section style={sec("#FAF9F5", 10)}>
           <img ref={el => f1.current[0]=el} src="/png/mangue.png" alt="" onError={hide}
             style={{ position:"absolute", right:"5%", top:"5%", width:"clamp(240px,28vw,400px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f1.current[1]=el} src="/png/feuille_manguier.png" alt="" onError={hide}
+          <img ref={el => f1.current[1]=el} src="/png/feuille_manguier.jpg" alt="" onError={hide}
             style={{ position:"absolute", right:"27%", top:"2%", width:200, opacity:0.7, transform:"rotate(-18deg)", pointerEvents:"none", zIndex:2 }}/>
-          <img ref={el => f1.current[2]=el} src="/png/feuille_manguier.png" alt="" onError={hide}
+          <img ref={el => f1.current[2]=el} src="/png/feuille_manguier.jpg" alt="" onError={hide}
             style={{ position:"absolute", right:"2%", bottom:"12%", width:160, opacity:0.5, transform:"rotate(22deg) scaleX(-1)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#8BA98D")}>01 . ORIGINES</span>
@@ -184,7 +184,7 @@ export default function APropos() {
         <section style={sec("#E3E8E3", 20)}>
           <img ref={el => f2.current[0]=el} src="/png/avocat.png" alt="" onError={hide}
             style={{ position:"absolute", right:"6%", top:"8%", width:"clamp(220px,25vw,360px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f2.current[1]=el} src="/png/feuille_avocatier.png" alt="" onError={hide}
+          <img ref={el => f2.current[1]=el} src="/png/feuille_avocatier.jpg" alt="" onError={hide}
             style={{ position:"absolute", left:"38%", bottom:"8%", width:220, opacity:0.65, transform:"rotate(10deg)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#5A7A5C")}>02 . ENGAGEMENT</span>
@@ -201,9 +201,9 @@ export default function APropos() {
         <section style={sec("#EFEAE2", 30)}>
           <img ref={el => f3.current[0]=el} src="/png/ananas.png" alt="" onError={hide}
             style={{ position:"absolute", right:"5%", top:"4%", width:"clamp(260px,30vw,420px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f3.current[1]=el} src="/png/feuille_palmier_1.png" alt="" onError={hide}
+          <img ref={el => f3.current[1]=el} src="/png/feuille_palmier_1.jpg" alt="" onError={hide}
             style={{ position:"absolute", right:"29%", top:"15%", width:175, opacity:0.6, transform:"rotate(-28deg)", pointerEvents:"none", zIndex:2 }}/>
-          <img ref={el => f3.current[2]=el} src="/png/feuille_palmier_2.png" alt="" onError={hide}
+          <img ref={el => f3.current[2]=el} src="/png/feuille_palmier_2.jpg" alt="" onError={hide}
             style={{ position:"absolute", right:"11%", bottom:"8%", width:150, opacity:0.5, transform:"rotate(18deg)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#8A7A5A")}>03 . AMBITION</span>
