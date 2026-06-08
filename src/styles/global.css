@@ -126,24 +126,26 @@ body::-webkit-scrollbar { display: none; }
 }
 
 /* ----- Bouton "Découvrir" (style Combilo) ----------------------------------
-   Normal : pilule verte pleine.
-   Survol : 1) le remplissage vert GLISSE à droite → pilule TRANSPARENTE
-               (contour vert, texte blanc)
-            2) la FLÈCHE démarre depuis la position du curseur (JS) et glisse. */
+   Normal  : pilule verte pleine — label + cercle flèche fondus en un.
+   Survol  : remplissage vert glisse à droite → label transparent (outline) ;
+             le cercle flèche RESTE TOUJOURS VERT (son propre fond, z:2).
+             La flèche sort par la droite du cercle → nouvelle flèche entre
+             par la gauche du cercle et arrive au centre. */
 .scene__cta {
   position: relative;
-  overflow: hidden;            /* clippe le remplissage + la flèche venue de loin */
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 12px;
   background: transparent;
   border: 2px solid #1FA637;
   border-radius: 100px;
-  padding: 13px 28px;
+  padding: 6px 6px 6px 24px;   /* droite serré → cercle flush au bord */
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
 }
-/* remplissage vert qui couvre le bouton, puis glisse hors champ au survol */
+
+/* remplissage vert plein — glisse à droite au survol */
 .scene__cta::before {
   content: "";
   position: absolute;
@@ -157,23 +159,47 @@ body::-webkit-scrollbar { display: none; }
 .cta-label {
   position: relative;
   z-index: 1;
-  color: #fff;                 /* texte toujours blanc */
+  color: #fff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: .04em;
   text-shadow: 0 1px 6px rgba(0, 0, 0, .28);
 }
+
+/* Cercle flèche — toujours vert, toujours au-dessus du ::before */
 .cta-arrow {
   position: relative;
-  z-index: 1;
+  z-index: 2;                  /* au-dessus du fond vert qui glisse */
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1FA637;         /* propre fond vert permanent */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;            /* clippe l'animation AU cercle */
+}
+
+/* Flèche intérieure */
+.cta-arrow > span {
   display: inline-block;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
   color: #fff;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, .28);
-  /* glisse LENTEMENT jusqu'à sa place ; départ posé en JS (curseur/gauche) */
-  transition: transform 1s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* AU SURVOL : sort par la droite du cercle → nouvelle entre par la gauche */
+.scene__cta:hover .cta-arrow > span {
+  animation: ctaArrowSwap 1.0s cubic-bezier(.4, 0, .2, 1);
+}
+@keyframes ctaArrowSwap {
+  0%   { transform: translateX(0);     opacity: 1; }   /* en place */
+  28%  { transform: translateX(38px);  opacity: 0; }   /* sort à droite (clippé) */
+  29%  { transform: translateX(-38px); opacity: 0; }   /* saute à gauche (clippé) */
+  54%  { opacity: 1; }                                  /* apparaît depuis la gauche */
+  100% { transform: translateX(0);     opacity: 1; }   /* arrive au centre */
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */

@@ -143,24 +143,6 @@ const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
 const OFFSETS = [];
 SECTIONS.reduce((acc, s, i) => { OFFSETS[i] = acc; return acc + s.items.length; }, 0);
 
-// Au survol du bouton : la flèche DÉMARRE depuis la position du curseur,
-// puis glisse jusqu'à sa place (effet "départ depuis la souris").
-function ctaArrowFromCursor(e) {
-  const arrow = e.currentTarget.querySelector(".cta-arrow");
-  if (!arrow) return;
-  const r = arrow.getBoundingClientRect();
-  const dx = e.clientX - (r.left + r.width / 2);  // décalage curseur → flèche
-  arrow.style.transition = "none";
-  arrow.style.transform = `translateX(${dx}px)`;
-  // 2 rAF : on applique le "saut" au curseur avant de lancer la glisse
-  requestAnimationFrame(() =>
-    requestAnimationFrame(() => {
-      arrow.style.transition = "";
-      arrow.style.transform = "";
-    })
-  );
-}
-
 export default function Home() {
   const bgRef = useRef(null);
   const scenesRef = useRef([]);
@@ -327,13 +309,9 @@ export default function Home() {
           <div className="scene__content">
             <h1 className="scene__title">{s.title}</h1>
             <p className="scene__desc">{s.desc}</p>
-            <button
-              className="scene__cta"
-              onClick={() => goTo(i + 1)}
-              onMouseEnter={ctaArrowFromCursor}
-            >
+            <button className="scene__cta" onClick={() => goTo(i + 1)}>
               <span className="cta-label">{s.cta}</span>
-              <span className="cta-arrow">→</span>
+              <span className="cta-arrow"><span>→</span></span>
             </button>
           </div>
 
