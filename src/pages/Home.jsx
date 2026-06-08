@@ -69,20 +69,20 @@ const build = (layout, imgs) => {
 const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
-    title: "Connecting Tropical Lands and Global Markets",
-    desc: "Tropic-Aura connects exceptional tropical origins with global markets through trusted partnerships, quality-driven sourcing and a long-term vision for African trade.",
-    cta: "Discover Our Vision",
+    title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
+    desc: "Tropic-Aura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
+    cta: "Découvrir Notre Vision",
     link: "/about",
     items: build(LAYOUTS[0], [
-      IMAGES.ananas,        // ★ géant net (ananas sur le vert — pas la mangue)
+      IMAGES.ananas,
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
   },
   {
     id: "origins", bg: "#E8631C",
-    title: "Africa's Potential. Delivered Differently.",
-    desc: "Beyond every exceptional fruit lies an exceptional origin. Tropic-Aura exists to connect the richness of West Africa's tropical regions with the opportunities of global markets, creating value where authenticity, quality and ambition meet.",
-    cta: "Discover Our Story",
+    title: "Le Potentiel de l'Afrique. Livré Autrement.",
+    desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropic-Aura existe pour connecter la richesse des régions tropicales d'Afrique de l'Ouest aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
+    cta: "Découvrir Notre Histoire",
     link: "/about",
     items: build(LAYOUTS[1], [
       IMAGES.mangue,
@@ -92,42 +92,42 @@ const SECTIONS = [
   },
   {
     id: "products", bg: "#F3B500",
-    title: "Selected for Demanding Markets.",
-    desc: "Excellence begins long before a product reaches its destination. We focus on opportunities capable of meeting the expectations of modern international markets, where quality, consistency and reliability are not advantages—they are requirements.",
-    cta: "Explore Products",
+    title: "Sélectionnés pour les Marchés Exigeants.",
+    desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
+    cta: "Explorer nos Produits",
     link: "/products",
     items: build(LAYOUTS[2], [
-      IMAGES.ananas,        // ★ géant net
+      IMAGES.ananas,
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
   },
   {
     id: "partnerships", bg: "#1B7A3D",
-    title: "More Than Transactions.",
-    desc: "The strongest supply chains are built on trust. We cultivate partnerships designed to create long-term value, connecting producers, logistics networks and international buyers through a shared commitment to excellence.",
-    cta: "Partnership Approach",
+    title: "Plus que des Transactions.",
+    desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
+    cta: "Notre Approche Partenariale",
     link: "/partnerships",
     items: build(LAYOUTS[3], [
-      IMAGES.avocat,        // ★ géant net
+      IMAGES.avocat,
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
   },
   {
     id: "vision", bg: "#C9912B",
-    title: "Beyond Today's Markets.",
-    desc: "Tropic-Aura looks beyond the movement of products. Our ambition is to contribute to a future where African agriculture is recognized for its excellence, professionalism and capacity to compete on the world's most demanding stages.",
-    cta: "Our Commitment",
+    title: "Au-delà des Marchés d'Aujourd'hui.",
+    desc: "Tropic-Aura regarde au-delà du simple mouvement de produits. Notre ambition est de contribuer à un avenir où l'agriculture africaine est reconnue pour son excellence, son professionnalisme et sa capacité à rivaliser sur les marchés les plus exigeants du monde.",
+    cta: "Notre Engagement",
     link: "/about",
     items: build(LAYOUTS[4], [
-      IMAGES.pastequeTranche,   // ★ géant net
+      IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
     ]),
   },
   {
     id: "contact", bg: "#0D9488",
-    title: "Let's Create New Opportunities.",
-    desc: "Every meaningful partnership begins with a conversation. Whether you are exploring new sourcing opportunities or seeking a trusted presence in West Africa, we welcome the opportunity to connect.",
-    cta: "Contact Us",
+    title: "Créons de Nouvelles Opportunités.",
+    desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique de l'Ouest, nous sommes à votre écoute.",
+    cta: "Nous Contacter",
     link: "/contact",
     items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,
