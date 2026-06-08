@@ -257,7 +257,8 @@ export default function Home() {
       <header className="ghost">
         <span className="ghost__logo">TROPIC-AURA</span>
         <button className="ghost__contact" onClick={() => goTo(SECTIONS.length - 1)}>
-          Contact <span>→</span>
+          <span className="ghost__contact-label">Contact</span>
+          <span className="ghost__contact-arrow"><span>→</span></span>
         </button>
       </header>
 
