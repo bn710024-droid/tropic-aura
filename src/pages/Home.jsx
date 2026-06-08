@@ -70,7 +70,7 @@ const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
     title: "Connecting Tropical Lands and Global Markets",
-    desc: "Tropic-Aura connects international buyers with carefully sourced tropical produce from West Africa. Our ambition is not simply to move products across borders, but to create a more direct, transparent and reliable connection between exceptional origins and global demand.",
+    desc: "Tropic-Aura connects international buyers with carefully sourced tropical produce from West Africa, creating trusted links between exceptional origins and global markets.",
     cta: "Discover Our Vision",
     link: "/about",
     items: build(LAYOUTS[0], [
