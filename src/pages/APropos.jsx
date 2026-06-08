@@ -108,12 +108,6 @@ export default function APropos() {
       {/* ════════ SECTION 1 — ORIGINES ════════ */}
       <div ref={wrapper1} style={{ height:"200vh" }}>
         <section style={sec("rgba(250,249,245,0.80)", 10)}>
-          <img ref={el => f1.current[0]=el} src="/png/mangue.png" alt="" onError={hide}
-            style={{ position:"absolute", right:"5%", top:"5%", width:"clamp(240px,28vw,400px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f1.current[1]=el} src="/png/feuille_manguier.jpg" alt="" onError={hide}
-            style={{ position:"absolute", right:"27%", top:"2%", width:200, opacity:0.7, transform:"rotate(-18deg)", pointerEvents:"none", zIndex:2 }}/>
-          <img ref={el => f1.current[2]=el} src="/png/feuille_manguier.jpg" alt="" onError={hide}
-            style={{ position:"absolute", right:"2%", bottom:"12%", width:160, opacity:0.5, transform:"rotate(22deg) scaleX(-1)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#4A7A5A")}>01 . ORIGINES</span>
             <h1 style={tit("#0A1A0C")}>Pourquoi Tropicaura existe</h1>
@@ -127,10 +121,6 @@ export default function APropos() {
       {/* ════════ SECTION 2 — ENGAGEMENT ════════ */}
       <div ref={wrapper2} style={{ height:"200vh" }}>
         <section style={sec("rgba(220,230,220,0.82)", 20)}>
-          <img ref={el => f2.current[0]=el} src="/png/avocat.png" alt="" onError={hide}
-            style={{ position:"absolute", right:"6%", top:"8%", width:"clamp(220px,25vw,360px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f2.current[1]=el} src="/png/feuille_avocatier.jpg" alt="" onError={hide}
-            style={{ position:"absolute", left:"38%", bottom:"8%", width:220, opacity:0.65, transform:"rotate(10deg)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#2E6040")}>02 . ENGAGEMENT</span>
             <h2 style={tit("#0A1A0C")}>Ce que nous faisons aujourd'hui</h2>
@@ -144,12 +134,6 @@ export default function APropos() {
       {/* ════════ SECTION 3 — AMBITION ════════ */}
       <div ref={wrapper3} style={{ height:"200vh" }}>
         <section style={sec("rgba(235,228,215,0.82)", 30)}>
-          <img ref={el => f3.current[0]=el} src="/png/ananas.png" alt="" onError={hide}
-            style={{ position:"absolute", right:"5%", top:"4%", width:"clamp(260px,30vw,420px)", pointerEvents:"none", zIndex:3 }}/>
-          <img ref={el => f3.current[1]=el} src="/png/feuille_palmier_1.jpg" alt="" onError={hide}
-            style={{ position:"absolute", right:"29%", top:"15%", width:175, opacity:0.6, transform:"rotate(-28deg)", pointerEvents:"none", zIndex:2 }}/>
-          <img ref={el => f3.current[2]=el} src="/png/feuille_palmier_2.jpg" alt="" onError={hide}
-            style={{ position:"absolute", right:"11%", bottom:"8%", width:150, opacity:0.5, transform:"rotate(18deg)", pointerEvents:"none", zIndex:2 }}/>
           <div style={pad}>
             <span style={sur("#5C4A20")}>03 . AMBITION</span>
             <h2 style={tit("#140E04")}>Là où nous voulons aller</h2>
