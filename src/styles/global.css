@@ -126,8 +126,8 @@ body::-webkit-scrollbar { display: none; }
 }
 
 /* ----- Bouton "Découvrir" (style Combilo exact) ----------------------------
-   Default : pilule sombre + pillule verte intérieure pleine (flèche visible)
-   Hover   : pillule verte rétrécit vers la droite → demi-cercle → cercle vert */
+   Default : pilule sombre, texte seul — zéro cercle visible
+   Hover   : cercle vert s'ouvre depuis la droite (0.65s), flèche apparaît */
 .scene__cta {
   position: relative;
   display: inline-flex;
@@ -142,18 +142,6 @@ body::-webkit-scrollbar { display: none; }
   overflow: hidden;
 }
 
-/* Pillule verte intérieure — glisse à droite au hover, bord gauche = demi-cercle */
-.scene__cta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #1FA637;
-  border-radius: 100px;
-  z-index: 0;
-  transition: transform 0.65s cubic-bezier(.4, 0, .2, 1);
-}
-.scene__cta:hover::before { transform: translateX(101%); }
-
 .cta-label {
   position: relative;
   z-index: 1;
@@ -166,28 +154,50 @@ body::-webkit-scrollbar { display: none; }
   white-space: nowrap;
 }
 
-/* Cercle vert fixe à droite — toujours présent, z:2 au-dessus du ::before */
+/* Cercle vert — width:0 par défaut, s'ouvre au hover */
 .cta-arrow {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
-  width: 44px;
+  width: 0;
   height: 44px;
   border-radius: 50%;
   background: #1FA637;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  margin-left: 0;
+  transition:
+    width       0.65s cubic-bezier(.4, 0, .2, 1),
+    margin-left 0.65s cubic-bezier(.4, 0, .2, 1);
+}
+
+.scene__cta:hover .cta-arrow {
+  width: 44px;
   margin-left: 10px;
 }
 
-/* Flèche blanche — toujours visible sur le vert */
+/* Flèche blanche — apparaît quand le cercle est formé */
 .cta-arrow > span {
   display: inline-block;
   font-size: 20px;
   line-height: 1;
   color: #fff;
   font-weight: 700;
+  white-space: nowrap;
+  min-width: 20px;
+  text-align: center;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity   0.25s ease 0.4s,
+    transform 0.25s ease 0.4s;
+}
+
+.scene__cta:hover .cta-arrow > span {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* ---------- HEADER FANTÔME (transparent, ancrage marque) ---------- */
