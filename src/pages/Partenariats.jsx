@@ -77,7 +77,7 @@ export default function Partenariats() {
       const vh          = window.innerHeight || 900;
       const totalScroll = (N - 1) * vh;
       const progress    = Math.min(1, Math.max(0, scroll / totalScroll));
-      const yPos        = 5 + 85 * progress;   // 5% (arbre) → 90% (lumière)
+      const yPos        = 0 + 30 * progress;   // 0% (arbre visible) → 30% (glissement doux)
 
       if (imgRef.current) {
         imgRef.current.style.objectPosition = `center ${yPos.toFixed(1)}%`;
@@ -108,7 +108,7 @@ export default function Partenariats() {
           width:           "100vw",
           height:          "100vh",
           objectFit:       "cover",
-          objectPosition:  "center 5%",
+          objectPosition:  "center 0%",
           zIndex:           0,
           willChange:      "object-position",
         }}
