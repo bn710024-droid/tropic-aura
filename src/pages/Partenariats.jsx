@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import Lenis from "lenis";
 
 /* ─── Content ───────────────────────────────────────────────────────────── */
@@ -45,42 +44,72 @@ const SECTIONS = [
   },
 ];
 
+const IMAGES = [
+  "/png/texture-s1.jpg",
+  "/png/texture-s2.jpg",
+  "/png/texture-s3.jpg",
+  "/png/texture-s4.jpg",
+  "/png/texture-s5.jpg",
+];
+
 const N = SECTIONS.length;
 
 /* ─── Component ─────────────────────────────────────────────────────────── */
 export default function Partenariats() {
-  const imgRef = useRef(null);
+  const sectionRefs = useRef([]);
 
   useEffect(() => {
     const prevBg = document.body.style.background;
-    document.body.style.background = "transparent";
+    document.body.style.background = "#080808";
 
+    /* ── Lenis smooth scroll ── */
     const lenis = new Lenis({ duration:1.2, easing:t=>1-Math.pow(1-t,3), smoothWheel:true });
-    gsap.ticker.lagSmoothing(0);
-
-    const tick = (t) => {
-      lenis.raf(t * 1000);
-      const scroll      = lenis.animatedScroll ?? window.scrollY ?? 0;
-      const totalScroll = (N - 1) * (window.innerHeight || 900);
-      const prog        = Math.min(1, Math.max(0, scroll / totalScroll));
-      const yPos        = prog * prog * 85;
-      if (imgRef.current) {
-        imgRef.current.style.objectPosition = `center ${yPos.toFixed(1)}%`;
-      }
+    let stopped = false;
+    const rafCb = (time) => {
+      if (stopped) return;
+      lenis.raf(time);
+      requestAnimationFrame(rafCb);
     };
-    gsap.ticker.add(tick);
+    requestAnimationFrame(rafCb);
+
+    /* ── IntersectionObserver : fade texte à l'entrée/sortie de chaque section ── */
+    const observers = sectionRefs.current.map((el) => {
+      if (!el) return null;
+      const textEl = el.querySelector(".section-text");
+      if (!textEl) return null;
+
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          textEl.style.opacity    = "1";
+          textEl.style.transform  = "translateY(0px)";
+        } else {
+          textEl.style.opacity    = "0";
+          textEl.style.transform  = "translateY(28px)";
+        }
+      }, { threshold: 0.3 });
+
+      obs.observe(el);
+      return obs;
+    });
 
     return () => {
-      gsap.ticker.remove(tick);
+      stopped = true;
       lenis.destroy();
+      observers.forEach(o => o?.disconnect());
       document.body.style.background = prevBg;
     };
   }, []);
 
   return (
-    <div style={{ background:"#080808", overflowX:"hidden" }}>
+    <div style={{ background:"#080808" }}>
 
       <style>{`
+        .section-text {
+          opacity: 0;
+          transform: translateY(28px);
+          transition: opacity 0.85s cubic-bezier(0.4,0,0.2,1),
+                      transform 0.85s cubic-bezier(0.4,0,0.2,1);
+        }
         .pill-cta {
           font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:11px;
           letter-spacing:.18em; text-transform:uppercase; color:#C9912B;
@@ -100,18 +129,6 @@ export default function Partenariats() {
         .pill-cta:hover::before, .pill-cta:hover::after { transform:scaleX(1); }
         .pill-cta:hover   { border-color:rgba(212,175,55,0.85); color:#F4EFE4; }
       `}</style>
-
-      {/* ── Texture de fond avec parallax ── */}
-      <img
-        ref={imgRef}
-        src="/png/texture-pierre.png"
-        alt=""
-        style={{
-          position:"fixed", inset:0, zIndex:0,
-          width:"100vw", height:"100vh",
-          objectFit:"cover", objectPosition:"center 0%",
-        }}
-      />
 
       {/* ── Header ── */}
       <header style={{
@@ -136,88 +153,112 @@ export default function Partenariats() {
         </a>
       </header>
 
-      {/* ── 500vh scroll container ── */}
-      <div style={{ height:`${N*100}vh`, position:"relative", zIndex:2 }}>
-        {SECTIONS.map((s, idx) => {
-          const isLeft   = s.side === "left";
-          const isRight  = s.side === "right";
-          const isCenter = s.side === "center";
-          return (
-            <section
-              key={s.id}
+      {/* ── Sections ── */}
+      {SECTIONS.map((s, idx) => {
+        const isLeft   = s.side === "left";
+        const isRight  = s.side === "right";
+        const isCenter = s.side === "center";
+        return (
+          <section
+            key={s.id}
+            ref={el => { sectionRefs.current[idx] = el; }}
+            style={{
+              position:"relative", height:"100vh", overflow:"hidden",
+              display:"flex", alignItems:"center",
+              justifyContent: isCenter ? "center" : isLeft ? "flex-start" : "flex-end",
+              paddingLeft:  isLeft   ? "7vw" : "4vw",
+              paddingRight: isRight  ? "7vw" : "4vw",
+            }}
+          >
+            {/* Image de fond propre à cette section */}
+            <img
+              src={IMAGES[idx]}
+              alt=""
               style={{
-                height:"100vh", position:"relative", background:"transparent",
-                display:"flex", alignItems:"center",
-                justifyContent: isCenter ? "center" : isLeft ? "flex-start" : "flex-end",
-                paddingLeft:  isLeft   ? "7vw" : "4vw",
-                paddingRight: isRight  ? "7vw" : "4vw",
+                position:"absolute", inset:0,
+                width:"100%", height:"100%",
+                objectFit:"cover", objectPosition:"center",
+                zIndex:0,
+              }}
+            />
+
+            {/* Voile sombre pour lisibilité du texte */}
+            <div style={{
+              position:"absolute", inset:0, zIndex:1,
+              background:"rgba(0,0,0,0.35)",
+            }}/>
+
+            {/* Numéro de section */}
+            <div style={{
+              position:"absolute", zIndex:3,
+              [isRight ? "left" : "right"]: "clamp(10px,2vw,22px)",
+              top:"50%", transform:"translateY(-50%)",
+              display:"flex", flexDirection:"column", alignItems:"center", gap:8,
+            }}>
+              <div style={{ width:1, height:40, background:"rgba(212,175,55,0.3)" }}/>
+              <span style={{
+                fontFamily:"'Plus Jakarta Sans',sans-serif",
+                fontSize:9, fontWeight:700, letterSpacing:".2em",
+                color:"rgba(212,175,55,0.45)", writingMode:"vertical-rl",
+              }}>{s.num}</span>
+              <div style={{
+                width:4, height:4, borderRadius:"50%",
+                background:"rgba(212,175,55,0.5)",
+                boxShadow:"0 0 6px rgba(212,175,55,0.6)",
+              }}/>
+            </div>
+
+            {/* Texte — fade in/out via IntersectionObserver */}
+            <div
+              className="section-text"
+              style={{
+                position:"relative", zIndex:2,
+                maxWidth: isCenter ? 580 : 360,
+                textAlign: isCenter ? "center" : "left",
               }}
             >
-              {/* Numéro de section */}
+              <span style={{
+                fontFamily:"'Plus Jakarta Sans',sans-serif",
+                fontSize:9, fontWeight:700, letterSpacing:".30em",
+                textTransform:"uppercase", color:"#D4AF37",
+                marginBottom:14, display:"block",
+              }}>{s.num} . {s.surtitre}</span>
+
               <div style={{
-                position:"absolute",
-                [isRight ? "left" : "right"]: "clamp(10px,2vw,22px)",
-                top:"50%", transform:"translateY(-50%)",
-                display:"flex", flexDirection:"column", alignItems:"center", gap:8,
-              }}>
-                <div style={{ width:1, height:40, background:"rgba(212,175,55,0.3)" }}/>
-                <span style={{
+                width:28, height:1, background:"rgba(212,175,55,0.45)",
+                marginBottom:18,
+                marginLeft: isCenter ? "auto" : 0,
+                marginRight: isCenter ? "auto" : 0,
+              }}/>
+
+              <h2 style={{
+                fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800,
+                fontSize: isCenter ? "clamp(22px,2.4vw,40px)" : "clamp(18px,2vw,32px)",
+                lineHeight:1.1, letterSpacing:"-.03em", color:"#FFFFFF", marginBottom:18,
+                textShadow:"0 2px 24px rgba(0,0,0,0.98), 0 0 60px rgba(0,0,0,0.85)",
+              }}>{s.title}</h2>
+
+              {s.paragraphs.map((p, pi) => (
+                <p key={pi} style={{
                   fontFamily:"'Plus Jakarta Sans',sans-serif",
-                  fontSize:9, fontWeight:700, letterSpacing:".2em",
-                  color:"rgba(212,175,55,0.45)", writingMode:"vertical-rl",
-                }}>{s.num}</span>
-                <div style={{
-                  width:4, height:4, borderRadius:"50%",
-                  background:"rgba(212,175,55,0.5)",
-                  boxShadow:"0 0 6px rgba(212,175,55,0.6)",
-                }}/>
-              </div>
+                  fontSize:"clamp(11px,0.9vw,13px)", lineHeight:1.9, fontWeight:400,
+                  color:"rgba(255,255,255,0.62)",
+                  marginBottom: pi < s.paragraphs.length - 1 ? 10 : 0,
+                  textShadow:"0 1px 10px rgba(0,0,0,0.95)",
+                }}>{p}</p>
+              ))}
 
-              {/* Texte */}
-              <div style={{ maxWidth: isCenter ? 580 : 360, textAlign: isCenter ? "center" : "left" }}>
-                <span style={{
-                  fontFamily:"'Plus Jakarta Sans',sans-serif",
-                  fontSize:9, fontWeight:700, letterSpacing:".30em",
-                  textTransform:"uppercase", color:"#D4AF37",
-                  marginBottom:14, display:"block",
-                }}>{s.num} . {s.surtitre}</span>
-
-                <div style={{
-                  width:28, height:1, background:"rgba(212,175,55,0.45)",
-                  marginBottom:18,
-                  marginLeft: isCenter ? "auto" : 0,
-                  marginRight: isCenter ? "auto" : 0,
-                }}/>
-
-                <h2 style={{
-                  fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800,
-                  fontSize: isCenter ? "clamp(22px,2.4vw,40px)" : "clamp(18px,2vw,32px)",
-                  lineHeight:1.1, letterSpacing:"-.03em", color:"#FFFFFF", marginBottom:18,
-                  textShadow:"0 2px 24px rgba(0,0,0,0.98), 0 0 60px rgba(0,0,0,0.85)",
-                }}>{s.title}</h2>
-
-                {s.paragraphs.map((p, pi) => (
-                  <p key={pi} style={{
-                    fontFamily:"'Plus Jakarta Sans',sans-serif",
-                    fontSize:"clamp(11px,0.9vw,13px)", lineHeight:1.9, fontWeight:400,
-                    color:"rgba(255,255,255,0.62)",
-                    marginBottom: pi < s.paragraphs.length - 1 ? 10 : 0,
-                    textShadow:"0 1px 10px rgba(0,0,0,0.95)",
-                  }}>{p}</p>
-                ))}
-
-                {s.hasButton && (
-                  <div style={{ marginTop:28 }}>
-                    <a href="/contact" style={{ textDecoration:"none" }}>
-                      <button className="pill-cta"><span>Devenir partenaire</span></button>
-                    </a>
-                  </div>
-                )}
-              </div>
-            </section>
-          );
-        })}
-      </div>
+              {s.hasButton && (
+                <div style={{ marginTop:28 }}>
+                  <a href="/contact" style={{ textDecoration:"none" }}>
+                    <button className="pill-cta"><span>Devenir partenaire</span></button>
+                  </a>
+                </div>
+              )}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
