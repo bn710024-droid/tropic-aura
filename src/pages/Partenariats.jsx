@@ -114,16 +114,48 @@ export default function Partenariats() {
           border-radius: 100px;
           padding: 13px 38px;
           cursor: pointer;
-          transform-origin: center center;
+          position: relative;
+          overflow: hidden;
           transition:
-            transform  0.55s cubic-bezier(0.65, 0, 0.35, 1),
-            border-color 0.45s ease,
-            color       0.35s ease;
+            color        0.40s ease,
+            border-color 0.40s ease;
+        }
+        /* Couche gauche — part du bord gauche vers le centre */
+        .pill-cta::before,
+        /* Couche droite — part du bord droit vers le centre */
+        .pill-cta::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 51%;           /* 51% pour couvrir sans laisser de gap */
+          background: rgba(201, 145, 43, 0.18);
+          transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+          z-index: 0;
+        }
+        .pill-cta::before {
+          left: 0;
+          transform: scaleX(0);
+          transform-origin: left center;
+        }
+        .pill-cta::after {
+          right: 0;
+          transform: scaleX(0);
+          transform-origin: right center;
+        }
+        /* Texte au-dessus des couches */
+        .pill-cta span {
+          position: relative;
+          z-index: 1;
+        }
+        /* Hover : les deux couches glissent vers le centre */
+        .pill-cta:hover::before,
+        .pill-cta:hover::after {
+          transform: scaleX(1);
         }
         .pill-cta:hover {
-          transform:    scaleX(0);
-          border-color: rgba(201, 145, 43, 0);
-          color:        transparent;
+          border-color: rgba(201,145,43,0.85);
+          color: #F4EFE4;
         }
       `}</style>
 
@@ -253,7 +285,7 @@ export default function Partenariats() {
                 {s.hasButton && (
                   <div style={{ marginTop: 26 }}>
                     <a href="/contact" style={{ textDecoration: "none" }}>
-                      <button className="pill-cta">Devenir partenaire</button>
+                      <button className="pill-cta"><span>Devenir partenaire</span></button>
                     </a>
                   </div>
                 )}
