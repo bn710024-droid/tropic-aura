@@ -313,16 +313,11 @@ export default function Partenariats() {
         }}
       >
         <defs>
-          {/* Glow subtil : halo chaud amber + cœur doré */}
-          <filter id="kglow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.45" result="b1"/>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.15" result="b2"/>
-            <feColorMatrix in="b1" type="matrix"
-              values="1.1 0.5 0 0 0.04  0.7 0.4 0 0 0  0 0 0 0 0  0 0 0 0.8 0"
-              result="amber"/>
+          {/* Glow très discret — juste un léger halo chaud */}
+          <filter id="kglow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.18" result="blur"/>
             <feMerge>
-              <feMergeNode in="amber"/>
-              <feMergeNode in="b2"/>
+              <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
@@ -338,11 +333,11 @@ export default function Partenariats() {
           </filter>
         </defs>
 
-        {/* Fissures dormantes — toujours visibles en filigrane */}
+        {/* Fissures dormantes — filigrane très discret */}
         {CRACKS.map(c => (
           <path key={c.id + "-d"} d={c.d} fill="none"
-            stroke="#C8913A" strokeWidth={c.sw * 1.2}
-            strokeLinecap="round" strokeOpacity={0.18}/>
+            stroke="#8B6820" strokeWidth={c.sw}
+            strokeLinecap="round" strokeOpacity={0.25}/>
         ))}
 
         {/* Fissures animées — or vif au scroll */}
