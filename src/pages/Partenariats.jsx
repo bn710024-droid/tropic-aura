@@ -100,6 +100,33 @@ export default function Partenariats() {
   return (
     <div style={{ background: "#000", overflowX: "hidden" }}>
 
+      {/* ══ PILL BUTTON ANIMATION ══ */}
+      <style>{`
+        .pill-cta {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 700;
+          font-size: 11px;
+          letter-spacing: .18em;
+          text-transform: uppercase;
+          color: #C9912B;
+          background: transparent;
+          border: 1.5px solid rgba(201,145,43,0.50);
+          border-radius: 100px;
+          padding: 13px 38px;
+          cursor: pointer;
+          transform-origin: center center;
+          transition:
+            transform  0.55s cubic-bezier(0.65, 0, 0.35, 1),
+            border-color 0.45s ease,
+            color       0.35s ease;
+        }
+        .pill-cta:hover {
+          transform:    scaleX(0);
+          border-color: rgba(201, 145, 43, 0);
+          color:        transparent;
+        }
+      `}</style>
+
       {/* ══ IMAGE fixe, nette, glisse au scroll ══ */}
       <img
         ref={imgRef}
@@ -226,30 +253,7 @@ export default function Partenariats() {
                 {s.hasButton && (
                   <div style={{ marginTop: 26 }}>
                     <a href="/contact" style={{ textDecoration: "none" }}>
-                      <button
-                        style={{
-                          fontFamily:    "'Plus Jakarta Sans',sans-serif",
-                          fontWeight:     700,
-                          fontSize:       11,
-                          letterSpacing: ".18em",
-                          textTransform: "uppercase",
-                          color:         "#C9912B",
-                          background:    "transparent",
-                          border:        "1.5px solid rgba(201,145,43,0.50)",
-                          borderRadius:   100,
-                          padding:       "13px 38px",
-                          cursor:        "pointer",
-                          transition:    "border-color .4s, color .4s",
-                        }}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.borderColor = "#C9912B";
-                          e.currentTarget.style.color       = "#F4EFE4";
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.borderColor = "rgba(201,145,43,0.50)";
-                          e.currentTarget.style.color       = "#C9912B";
-                        }}
-                      >Devenir partenaire</button>
+                      <button className="pill-cta">Devenir partenaire</button>
                     </a>
                   </div>
                 )}
