@@ -47,153 +47,14 @@ const SECTIONS = [
 
 const N = SECTIONS.length;
 
-/* ─── SVG Crack Network ──────────────────────────────────────────────────
-   viewBox 0 0 100 56  (16:9 normalisé)
-   segIdx → section index (0=S1 … 4=S5)
-   Chaque section anime ses cracks automatiquement à l'entrée (IntersectionObserver)
-   ─────────────────────────────────────────────────────────────────────── */
-const CRACKS = [
-  /* ── S1 : tronc diagonal principal ── */
-  { id:"c1",  sw:0.12, segIdx:0,
-    d:"M 76,2 C 73,5 70,8 67,12 L 65,15 C 62,18 59,22 56,26 L 54,29 C 51,33 47,37 44,41 L 42,44 C 40,47 38,50 36,53" },
-  { id:"c1b", sw:0.05, segIdx:0,
-    d:"M 65,15 C 67,17 69,18 70,20" },
-  { id:"c1c", sw:0.05, segIdx:0,
-    d:"M 44,41 C 42,42 41,44 42,46" },
-
-  /* ── S2 : continuation gauche + branche droite ── */
-  { id:"c2a", sw:0.09, segIdx:1,
-    d:"M 36,53 C 32,54 28,54 24,53 L 21,52 C 18,52 15,53 13,55" },
-  { id:"c2b", sw:0.09, segIdx:1,
-    d:"M 56,26 C 60,28 63,31 67,35 L 69,38 C 71,41 73,43 75,46" },
-  { id:"c2c", sw:0.04, segIdx:1,
-    d:"M 24,53 C 23,51 22,50 23,48" },
-
-  /* ── S3 : réseau icônes ── */
-  { id:"c3a", sw:0.08, segIdx:2,
-    d:"M 75,46 C 77,41 78,35 78,28 L 78,22 C 78,18 77,16 77,14" },
-  { id:"c3b", sw:0.08, segIdx:2,
-    d:"M 54,29 C 53,34 52,40 51,45 L 50,48 L 50,49" },
-  { id:"c3c", sw:0.08, segIdx:2,
-    d:"M 75,46 C 80,45 85,44 88,43 L 90,42" },
-  { id:"c3d", sw:0.07, segIdx:2,
-    d:"M 36,53 C 37,53 37,52 38,52" },
-  { id:"c3e", sw:0.07, segIdx:2,
-    d:"M 75,46 C 77,49 79,51 80,53 L 81,54" },
-  { id:"c3f", sw:0.04, segIdx:2,
-    d:"M 78,28 C 80,27 82,26 83,24" },
-
-  /* ── S4 : expansion gauche ── */
-  { id:"c4a", sw:0.08, segIdx:3,
-    d:"M 13,55 C 13,51 14,47 14,44 L 15,42 L 16,41" },
-  { id:"c4b", sw:0.07, segIdx:3,
-    d:"M 36,53 C 35,54 34,54 32,54" },
-  { id:"c4c", sw:0.07, segIdx:3,
-    d:"M 13,55 C 10,54 8,51 7,49 L 7,48" },
-  { id:"c4d", sw:0.07, segIdx:3,
-    d:"M 42,44 C 43,47 44,50 44,53 L 44,54" },
-  { id:"c4e", sw:0.04, segIdx:3,
-    d:"M 16,41 C 14,39 13,37 14,35" },
-
-  /* ── S5 : constellation finale ── */
-  { id:"c5a", sw:0.07, segIdx:4,
-    d:"M 50,28 C 53,32 57,36 60,40 L 63,43 C 65,46 67,48 69,50" },
-  { id:"c5b", sw:0.07, segIdx:4,
-    d:"M 50,28 C 47,32 43,36 40,40 L 37,43 C 35,46 33,48 31,50" },
-  { id:"c5c", sw:0.07, segIdx:4,
-    d:"M 50,28 C 51,23 53,17 54,12 L 55,8 C 56,5 57,3 58,2" },
-  { id:"c5d", sw:0.05, segIdx:4,
-    d:"M 69,50 C 72,51 75,52 78,53 L 80,54" },
-  { id:"c5e", sw:0.05, segIdx:4,
-    d:"M 31,50 C 28,51 25,52 22,53 L 20,54" },
-  { id:"c5f", sw:0.05, segIdx:4,
-    d:"M 50,28 C 56,27 62,25 68,23 L 71,22" },
-  { id:"c5g", sw:0.05, segIdx:4,
-    d:"M 50,28 C 44,27 38,25 32,23 L 29,22" },
-];
-
-const ICON_NODES = [
-  { id:"n-plane1", cx:77, cy:14, icon:"plane",     segIdx:2 },
-  { id:"n-box",    cx:50, cy:49, icon:"box",        segIdx:2 },
-  { id:"n-people", cx:90, cy:42, icon:"people",     segIdx:2 },
-  { id:"n-shake",  cx:38, cy:52, icon:"handshake",  segIdx:2 },
-  { id:"n-build",  cx:81, cy:54, icon:"building",   segIdx:2 },
-  { id:"n-ship",   cx:16, cy:41, icon:"ship",       segIdx:3 },
-  { id:"n-truck",  cx:32, cy:54, icon:"truck",      segIdx:3 },
-  { id:"n-plane2", cx: 7, cy:48, icon:"plane",      segIdx:3 },
-  { id:"n-globe",  cx:44, cy:54, icon:"globe",      segIdx:3 },
-];
-
-function IconPaths({ icon }) {
-  const p = { stroke:"#D4AF37", strokeWidth:1.2, fill:"none", strokeLinecap:"round", strokeLinejoin:"round" };
-  switch (icon) {
-    case "plane":
-      return <g {...p}>
-        <path d="M 0,-8 L 8,3 L 0,1 L -8,3 Z"/>
-        <line x1="0" y1="1" x2="0" y2="8"/>
-        <line x1="-4" y1="4" x2="4" y2="4"/>
-      </g>;
-    case "box":
-      return <g {...p}>
-        <rect x="-7" y="-7" width="14" height="14" rx="1"/>
-        <line x1="-7" y1="0" x2="7" y2="0"/>
-        <line x1="0" y1="-7" x2="0" y2="7"/>
-      </g>;
-    case "people":
-      return <g {...p}>
-        <circle cx="-4" cy="-5" r="3"/>
-        <circle cx="4"  cy="-5" r="3"/>
-        <path d="M -9,5 C -9,0 0,-1 0,3 C 0,-1 9,0 9,5"/>
-      </g>;
-    case "handshake":
-      return <g {...p}>
-        <path d="M -8,-1 C -5,-4 -1,-4 0,-2 C 1,-4 5,-4 8,-1"/>
-        <path d="M -8,-1 L -8,5 C -5,8 5,8 8,5 L 8,-1"/>
-      </g>;
-    case "building":
-      return <g {...p}>
-        <rect x="-7" y="-3" width="14" height="10" rx="0.5"/>
-        <rect x="-3" y="-8" width="6" height="5"/>
-        <line x1="-4" y1="3" x2="-4" y2="7"/>
-        <line x1="0"  y1="3" x2="0"  y2="7"/>
-        <line x1="4"  y1="3" x2="4"  y2="7"/>
-      </g>;
-    case "ship":
-      return <g {...p}>
-        <line x1="0" y1="-8" x2="0" y2="0"/>
-        <path d="M -8,2 C -7,0 7,0 8,2 C 8,6 -8,6 -8,2 Z"/>
-        <path d="M -5,6 C -3,9 3,9 5,6"/>
-      </g>;
-    case "truck":
-      return <g {...p}>
-        <rect x="-9" y="-3" width="11" height="7" rx="0.5"/>
-        <path d="M 2,-3 L 9,-3 L 9,4 L 2,4"/>
-        <path d="M 4,-3 L 4,-7 L 2,-7 L 2,-3"/>
-        <circle cx="-5" cy="6" r="2"/>
-        <circle cx="6"  cy="6" r="2"/>
-      </g>;
-    case "globe":
-      return <g {...p}>
-        <circle cx="0" cy="0" r="8"/>
-        <path d="M 0,-8 C 2,-4 2,4 0,8 M 0,-8 C -2,-4 -2,4 0,8"/>
-        <line x1="-8" y1="0" x2="8" y2="0"/>
-      </g>;
-    default: return null;
-  }
-}
-
 /* ─── Component ─────────────────────────────────────────────────────────── */
 export default function Partenariats() {
-  const imgRef      = useRef(null);
-  const pathRefs    = useRef({});
-  const nodeRefs    = useRef({});
-  const sectionRefs = useRef([]);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     const prevBg = document.body.style.background;
     document.body.style.background = "transparent";
 
-    /* ── Lenis smooth scroll ── */
     const lenis = new Lenis({ duration:1.2, easing:t=>1-Math.pow(1-t,3), smoothWheel:true });
     gsap.ticker.lagSmoothing(0);
 
@@ -209,70 +70,9 @@ export default function Partenariats() {
     };
     gsap.ticker.add(tick);
 
-    /* ── Init : toutes les fissures cachées ── */
-    CRACKS.forEach(c => {
-      const el = pathRefs.current[c.id];
-      if (!el) return;
-      const L = el.getTotalLength();
-      el.setAttribute("stroke-dasharray",  L);
-      el.setAttribute("stroke-dashoffset", L);
-    });
-
-    /* ── Init : toutes les icônes cachées ── */
-    ICON_NODES.forEach(n => {
-      const el = nodeRefs.current[n.id];
-      if (el) el.style.opacity = "0";
-    });
-
-    /* ── IntersectionObserver : animation automatique par section ── */
-    const played    = new Set();
-    const observers = [];
-
-    sectionRefs.current.forEach((sectionEl, idx) => {
-      if (!sectionEl) return;
-
-      const obs = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting || played.has(idx)) return;
-        played.add(idx);
-
-        const sectionCracks = CRACKS.filter(c => c.segIdx === idx);
-        const sectionIcons  = ICON_NODES.filter(n => n.segIdx === idx);
-        const tl = gsap.timeline();
-
-        /* Fissures : émergence lente et organique, l'une après l'autre */
-        sectionCracks.forEach((c, ci) => {
-          const el = pathRefs.current[c.id];
-          if (!el) return;
-          const L = parseFloat(el.getAttribute("stroke-dasharray") || "0");
-          tl.to(el, {
-            attr: { "stroke-dashoffset": 0 },
-            duration: 1.6,
-            ease: "power1.inOut",
-          }, ci * 0.35);
-        });
-
-        /* Icônes : apparaissent après les fissures */
-        const iconDelay = sectionCracks.length * 0.35 + 0.6;
-        sectionIcons.forEach((n, ni) => {
-          const el = nodeRefs.current[n.id];
-          if (!el) return;
-          tl.to(el, {
-            opacity: 1,
-            duration: 0.8,
-            ease: "power2.out",
-          }, iconDelay + ni * 0.18);
-        });
-
-      }, { threshold: 0.35 });
-
-      obs.observe(sectionEl);
-      observers.push(obs);
-    });
-
     return () => {
       gsap.ticker.remove(tick);
       lenis.destroy();
-      observers.forEach(o => o.disconnect());
       document.body.style.background = prevBg;
     };
   }, []);
@@ -301,7 +101,7 @@ export default function Partenariats() {
         .pill-cta:hover   { border-color:rgba(212,175,55,0.85); color:#F4EFE4; }
       `}</style>
 
-      {/* ── Texture de fond avec parallax objectPosition ── */}
+      {/* ── Texture de fond avec parallax ── */}
       <img
         ref={imgRef}
         src="/png/texture-pierre.png"
@@ -312,73 +112,6 @@ export default function Partenariats() {
           objectFit:"cover", objectPosition:"center 0%",
         }}
       />
-
-      {/* ── SVG Kintsugi : réseau de fissures + icônes ── */}
-      <svg
-        viewBox="-12 -7 124 70"
-        preserveAspectRatio="xMidYMid slice"
-        style={{
-          position:"fixed", inset:0,
-          width:"100vw", height:"100vh",
-          zIndex:1, pointerEvents:"none",
-        }}
-      >
-        <defs>
-          <filter id="kglow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.18" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <filter id="iglow" x="-120%" y="-120%" width="340%" height="340%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur"/>
-            <feColorMatrix in="blur" type="matrix"
-              values="1.3 0.8 0 0 0.1  0.9 0.6 0 0 0  0 0 0 0 0  0 0 0 0.85 0"
-              result="gb"/>
-            <feMerge>
-              <feMergeNode in="gb"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Fissures dormantes — filigrane très discret, toujours visible */}
-        {CRACKS.map(c => (
-          <path key={c.id + "-d"} d={c.d} fill="none"
-            stroke="#8B6820" strokeWidth={c.sw}
-            strokeLinecap="round" strokeOpacity={0.15}/>
-        ))}
-
-        {/* Fissures animées — s'allument section par section */}
-        {CRACKS.map(c => (
-          <path
-            key={c.id}
-            ref={el => { pathRefs.current[c.id] = el; }}
-            d={c.d}
-            fill="none"
-            stroke="#E8C04A"
-            strokeWidth={c.sw}
-            strokeLinecap="round"
-            filter="url(#kglow)"
-          />
-        ))}
-
-        {/* Icônes supply-chain */}
-        {ICON_NODES.map(n => (
-          <g
-            key={n.id}
-            ref={el => { nodeRefs.current[n.id] = el; }}
-            transform={`translate(${n.cx},${n.cy})`}
-            filter="url(#iglow)"
-          >
-            <circle r="1.8" fill="rgba(8,8,8,0.80)" stroke="#D4AF37" strokeWidth="0.07"/>
-            <g transform="scale(0.12)">
-              <IconPaths icon={n.icon}/>
-            </g>
-          </g>
-        ))}
-      </svg>
 
       {/* ── Header ── */}
       <header style={{
@@ -412,7 +145,6 @@ export default function Partenariats() {
           return (
             <section
               key={s.id}
-              ref={el => { sectionRefs.current[idx] = el; }}
               style={{
                 height:"100vh", position:"relative", background:"transparent",
                 display:"flex", alignItems:"center",
@@ -441,7 +173,7 @@ export default function Partenariats() {
                 }}/>
               </div>
 
-              {/* Texte direct sur texture */}
+              {/* Texte */}
               <div style={{ maxWidth: isCenter ? 580 : 360, textAlign: isCenter ? "center" : "left" }}>
                 <span style={{
                   fontFamily:"'Plus Jakarta Sans',sans-serif",
@@ -464,12 +196,12 @@ export default function Partenariats() {
                   textShadow:"0 2px 24px rgba(0,0,0,0.98), 0 0 60px rgba(0,0,0,0.85)",
                 }}>{s.title}</h2>
 
-                {s.paragraphs.map((p,pi) => (
+                {s.paragraphs.map((p, pi) => (
                   <p key={pi} style={{
                     fontFamily:"'Plus Jakarta Sans',sans-serif",
                     fontSize:"clamp(11px,0.9vw,13px)", lineHeight:1.9, fontWeight:400,
                     color:"rgba(255,255,255,0.62)",
-                    marginBottom: pi < s.paragraphs.length-1 ? 10 : 0,
+                    marginBottom: pi < s.paragraphs.length - 1 ? 10 : 0,
                     textShadow:"0 1px 10px rgba(0,0,0,0.95)",
                   }}>{p}</p>
                 ))}
