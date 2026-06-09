@@ -130,7 +130,7 @@ export default function Partenariats() {
           height: 100%;
           width: 51%;           /* 51% pour couvrir sans laisser de gap */
           background: rgba(201, 145, 43, 0.18);
-          transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+          transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
           z-index: 0;
         }
         .pill-cta::before {
