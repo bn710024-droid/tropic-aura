@@ -1,9 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Content ───────────────────────────────────────────────────────────── */
 const SECTIONS = [
@@ -50,13 +47,13 @@ const SECTIONS = [
 
 const N = SECTIONS.length;
 
-/* ─── SVG Crack Network ──────────────────────────────────────────────────────
+/* ─── SVG Crack Network ──────────────────────────────────────────────────
    viewBox 0 0 100 56  (16:9 normalisé)
-   segIdx 0→S1  1→S2  2→S3  3→S4  4→S5   (chaque segment = 20% du scroll)
-   sw = strokeWidth en unités SVG
-   ─────────────────────────────────────────────────────────────────────────── */
+   segIdx → section index (0=S1 … 4=S5)
+   Chaque section anime ses cracks automatiquement à l'entrée (IntersectionObserver)
+   ─────────────────────────────────────────────────────────────────────── */
 const CRACKS = [
-  /* ── S1 : tronc diagonal principal, organique ── */
+  /* ── S1 : tronc diagonal principal ── */
   { id:"c1",  sw:0.12, segIdx:0,
     d:"M 76,2 C 73,5 70,8 67,12 L 65,15 C 62,18 59,22 56,26 L 54,29 C 51,33 47,37 44,41 L 42,44 C 40,47 38,50 36,53" },
   { id:"c1b", sw:0.05, segIdx:0,
@@ -98,7 +95,7 @@ const CRACKS = [
   { id:"c4e", sw:0.04, segIdx:3,
     d:"M 16,41 C 14,39 13,37 14,35" },
 
-  /* ── S5 : constellation ── */
+  /* ── S5 : constellation finale ── */
   { id:"c5a", sw:0.07, segIdx:4,
     d:"M 50,28 C 53,32 57,36 60,40 L 63,43 C 65,46 67,48 69,50" },
   { id:"c5b", sw:0.07, segIdx:4,
@@ -115,7 +112,6 @@ const CRACKS = [
     d:"M 50,28 C 44,27 38,25 32,23 L 29,22" },
 ];
 
-/* Endpoints des chemins → positions des icônes */
 const ICON_NODES = [
   { id:"n-plane1", cx:77, cy:14, icon:"plane",     segIdx:2 },
   { id:"n-box",    cx:50, cy:49, icon:"box",        segIdx:2 },
@@ -128,7 +124,6 @@ const ICON_NODES = [
   { id:"n-globe",  cx:44, cy:54, icon:"globe",      segIdx:3 },
 ];
 
-/* ─── Icon paths (local ±10 units, rendu via scale 0.12) ────────────────── */
 function IconPaths({ icon }) {
   const p = { stroke:"#D4AF37", strokeWidth:1.2, fill:"none", strokeLinecap:"round", strokeLinejoin:"round" };
   switch (icon) {
@@ -189,79 +184,95 @@ function IconPaths({ icon }) {
 
 /* ─── Component ─────────────────────────────────────────────────────────── */
 export default function Partenariats() {
-  const imgRef   = useRef(null);
-  const pathRefs = useRef({});
-  const nodeRefs = useRef({});
+  const imgRef      = useRef(null);
+  const pathRefs    = useRef({});
+  const nodeRefs    = useRef({});
+  const sectionRefs = useRef([]);
 
   useEffect(() => {
     const prevBg = document.body.style.background;
     document.body.style.background = "transparent";
 
-    /* ── Lenis + ScrollTrigger sync ── */
+    /* ── Lenis smooth scroll ── */
     const lenis = new Lenis({ duration:1.2, easing:t=>1-Math.pow(1-t,3), smoothWheel:true });
     gsap.ticker.lagSmoothing(0);
-    lenis.on("scroll", ScrollTrigger.update);
 
     const tick = (t) => {
       lenis.raf(t * 1000);
-
-      /* Parallax texture : objectPosition glisse de 0% à 85% */
       const scroll      = lenis.animatedScroll ?? window.scrollY ?? 0;
       const totalScroll = (N - 1) * (window.innerHeight || 900);
       const prog        = Math.min(1, Math.max(0, scroll / totalScroll));
-      const yPos        = prog * prog * 85; // ease quadratique
+      const yPos        = prog * prog * 85;
       if (imgRef.current) {
         imgRef.current.style.objectPosition = `center ${yPos.toFixed(1)}%`;
       }
     };
     gsap.ticker.add(tick);
 
-    /* ── Init crack paths ── */
-    const lengths = {};
+    /* ── Init : toutes les fissures cachées ── */
     CRACKS.forEach(c => {
       const el = pathRefs.current[c.id];
       if (!el) return;
       const L = el.getTotalLength();
-      lengths[c.id] = L;
       el.setAttribute("stroke-dasharray",  L);
       el.setAttribute("stroke-dashoffset", L);
     });
 
-    /* ── Init icons invisible ── */
+    /* ── Init : toutes les icônes cachées ── */
     ICON_NODES.forEach(n => {
       const el = nodeRefs.current[n.id];
       if (el) el.style.opacity = "0";
     });
 
-    /* ── ScrollTrigger : anime dashoffset + icons ── */
-    const st = ScrollTrigger.create({
-      trigger: document.documentElement,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1.4,
-      onUpdate: ({ progress }) => {
-        CRACKS.forEach(c => {
+    /* ── IntersectionObserver : animation automatique par section ── */
+    const played    = new Set();
+    const observers = [];
+
+    sectionRefs.current.forEach((sectionEl, idx) => {
+      if (!sectionEl) return;
+
+      const obs = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting || played.has(idx)) return;
+        played.add(idx);
+
+        const sectionCracks = CRACKS.filter(c => c.segIdx === idx);
+        const sectionIcons  = ICON_NODES.filter(n => n.segIdx === idx);
+        const tl = gsap.timeline();
+
+        /* Fissures : émergence lente et organique, l'une après l'autre */
+        sectionCracks.forEach((c, ci) => {
           const el = pathRefs.current[c.id];
-          if (!el || lengths[c.id] == null) return;
-          const localP = Math.min(1, Math.max(0, (progress - c.segIdx * 0.2) / 0.2));
-          el.setAttribute("stroke-dashoffset", lengths[c.id] * (1 - localP));
+          if (!el) return;
+          const L = parseFloat(el.getAttribute("stroke-dasharray") || "0");
+          tl.to(el, {
+            attr: { "stroke-dashoffset": 0 },
+            duration: 1.6,
+            ease: "power1.inOut",
+          }, ci * 0.35);
         });
-        ICON_NODES.forEach(n => {
+
+        /* Icônes : apparaissent après les fissures */
+        const iconDelay = sectionCracks.length * 0.35 + 0.6;
+        sectionIcons.forEach((n, ni) => {
           const el = nodeRefs.current[n.id];
           if (!el) return;
-          /* apparaît à mi-segment */
-          const triggerP = n.segIdx * 0.2 + 0.08;
-          const localP   = Math.min(1, Math.max(0, (progress - triggerP) / 0.06));
-          el.style.opacity = localP;
+          tl.to(el, {
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          }, iconDelay + ni * 0.18);
         });
-      },
+
+      }, { threshold: 0.35 });
+
+      obs.observe(sectionEl);
+      observers.push(obs);
     });
 
     return () => {
-      st.kill();
       gsap.ticker.remove(tick);
       lenis.destroy();
-      ScrollTrigger.getAll().forEach(s => s.kill());
+      observers.forEach(o => o.disconnect());
       document.body.style.background = prevBg;
     };
   }, []);
@@ -302,7 +313,7 @@ export default function Partenariats() {
         }}
       />
 
-      {/* ── SVG Kintsugi : fissures organiques + icônes ── */}
+      {/* ── SVG Kintsugi : réseau de fissures + icônes ── */}
       <svg
         viewBox="0 0 100 56"
         preserveAspectRatio="xMidYMid slice"
@@ -313,7 +324,6 @@ export default function Partenariats() {
         }}
       >
         <defs>
-          {/* Glow très discret — juste un léger halo chaud */}
           <filter id="kglow" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="0.18" result="blur"/>
             <feMerge>
@@ -333,14 +343,14 @@ export default function Partenariats() {
           </filter>
         </defs>
 
-        {/* Fissures dormantes — filigrane très discret */}
+        {/* Fissures dormantes — filigrane très discret, toujours visible */}
         {CRACKS.map(c => (
           <path key={c.id + "-d"} d={c.d} fill="none"
             stroke="#8B6820" strokeWidth={c.sw}
-            strokeLinecap="round" strokeOpacity={0.25}/>
+            strokeLinecap="round" strokeOpacity={0.15}/>
         ))}
 
-        {/* Fissures animées — or vif au scroll */}
+        {/* Fissures animées — s'allument section par section */}
         {CRACKS.map(c => (
           <path
             key={c.id}
@@ -361,7 +371,6 @@ export default function Partenariats() {
             ref={el => { nodeRefs.current[n.id] = el; }}
             transform={`translate(${n.cx},${n.cy})`}
             filter="url(#iglow)"
-            style={{ transition:"opacity 0.5s ease" }}
           >
             <circle r="1.8" fill="rgba(8,8,8,0.80)" stroke="#D4AF37" strokeWidth="0.07"/>
             <g transform="scale(0.12)">
@@ -396,19 +405,22 @@ export default function Partenariats() {
 
       {/* ── 500vh scroll container ── */}
       <div style={{ height:`${N*100}vh`, position:"relative", zIndex:2 }}>
-        {SECTIONS.map(s => {
+        {SECTIONS.map((s, idx) => {
           const isLeft   = s.side === "left";
           const isRight  = s.side === "right";
           const isCenter = s.side === "center";
           return (
-            <section key={s.id} style={{
-              height:"100vh", position:"relative", background:"transparent",
-              display:"flex", alignItems:"center",
-              justifyContent: isCenter ? "center" : isLeft ? "flex-start" : "flex-end",
-              paddingLeft:  isLeft   ? "7vw" : "4vw",
-              paddingRight: isRight  ? "7vw" : "4vw",
-            }}>
-
+            <section
+              key={s.id}
+              ref={el => { sectionRefs.current[idx] = el; }}
+              style={{
+                height:"100vh", position:"relative", background:"transparent",
+                display:"flex", alignItems:"center",
+                justifyContent: isCenter ? "center" : isLeft ? "flex-start" : "flex-end",
+                paddingLeft:  isLeft   ? "7vw" : "4vw",
+                paddingRight: isRight  ? "7vw" : "4vw",
+              }}
+            >
               {/* Numéro de section */}
               <div style={{
                 position:"absolute",
