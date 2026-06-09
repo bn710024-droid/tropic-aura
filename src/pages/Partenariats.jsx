@@ -50,86 +50,113 @@ const SECTIONS = [
 
 const N = SECTIONS.length;
 
-/* ─── SVG Network (viewBox 0 0 100 56, normalized 16:9) ─────────────────────
-   segIdx → scroll progress band:
-     0 = 0.00–0.20  (S1 Fondations)
-     1 = 0.20–0.40  (S2 Réseau)
-     2 = 0.40–0.60  (S3 Terroirs)
-     3 = 0.60–0.80  (S4 Avenir)
-     4 = 0.80–1.00  (S5 CTA)
+/* ─── SVG Crack Network ──────────────────────────────────────────────────────
+   viewBox 0 0 100 56  (16:9 normalisé)
+   segIdx 0→S1  1→S2  2→S3  3→S4  4→S5   (chaque segment = 20% du scroll)
+   sw = strokeWidth en unités SVG
    ─────────────────────────────────────────────────────────────────────────── */
 const CRACKS = [
-  /* S1 — tronc diagonal principal, haut-droite → centre-gauche */
-  { id:"c1",  d:"M 73,2  C 66,10 58,19 50,28  C 44,33 38,40 33,48", segIdx:0 },
+  /* ── S1 : tronc diagonal principal, organique ── */
+  { id:"c1",  sw:0.35, segIdx:0,
+    d:"M 76,2 C 73,5 70,8 67,12 L 65,15 C 62,18 59,22 56,26 L 54,29 C 51,33 47,37 44,41 L 42,44 C 40,47 38,50 36,53" },
+  { id:"c1b", sw:0.14, segIdx:0,
+    d:"M 65,15 C 67,17 69,18 70,20" },
+  { id:"c1c", sw:0.13, segIdx:0,
+    d:"M 44,41 C 42,42 41,44 42,46" },
 
-  /* S2 — continue + première branche droite */
-  { id:"c2a", d:"M 33,48 C 27,51 21,53 15,55", segIdx:1 },
-  { id:"c2b", d:"M 50,28 C 58,32 66,37 75,43", segIdx:1 },
+  /* ── S2 : continuation gauche + branche droite ── */
+  { id:"c2a", sw:0.27, segIdx:1,
+    d:"M 36,53 C 32,54 28,54 24,53 L 21,52 C 18,52 15,53 13,55" },
+  { id:"c2b", sw:0.27, segIdx:1,
+    d:"M 56,26 C 60,28 63,31 67,35 L 69,38 C 71,41 73,43 75,46" },
+  { id:"c2c", sw:0.12, segIdx:1,
+    d:"M 24,53 C 23,51 22,50 23,48" },
 
-  /* S3 — réseau icônes */
-  { id:"c3a", d:"M 75,43 C 77,35 78,26 77,16",  segIdx:2 }, /* → ✈ (77,14) */
-  { id:"c3b", d:"M 50,28 C 50,35 50,41 50,47",  segIdx:2 }, /* → 📦 (50,49) */
-  { id:"c3c", d:"M 75,43 C 82,42 87,42 92,42",  segIdx:2 }, /* → 👥 (94,42) */
-  { id:"c3d", d:"M 33,48 C 35,50 37,51 39,53",  segIdx:2 }, /* → 🤝 (40,54) */
-  { id:"c3e", d:"M 75,43 C 76,46 78,49 79,52",  segIdx:2 }, /* → 🏭 (80,54) */
+  /* ── S3 : réseau icônes ── */
+  { id:"c3a", sw:0.22, segIdx:2,
+    d:"M 75,46 C 77,41 78,35 78,28 L 78,22 C 78,18 77,16 77,14" },
+  { id:"c3b", sw:0.22, segIdx:2,
+    d:"M 54,29 C 53,34 52,40 51,45 L 50,48 L 50,49" },
+  { id:"c3c", sw:0.22, segIdx:2,
+    d:"M 75,46 C 80,45 85,44 88,43 L 90,42" },
+  { id:"c3d", sw:0.20, segIdx:2,
+    d:"M 36,53 C 37,53 37,52 38,52" },
+  { id:"c3e", sw:0.20, segIdx:2,
+    d:"M 75,46 C 77,49 79,51 80,53 L 81,54" },
+  { id:"c3f", sw:0.12, segIdx:2,
+    d:"M 78,28 C 80,27 82,26 83,24" },
 
-  /* S4 — expansion gauche */
-  { id:"c4a", d:"M 15,55 C 15,51 15,47 16,43",  segIdx:3 }, /* → 🚢 (16,41) */
-  { id:"c4b", d:"M 33,48 C 32,50 32,53 32,56",  segIdx:3 }, /* → 🚚 (32,58) — hors viewport sur phones, OK desktop */
-  { id:"c4c", d:"M 15,55 C 11,53  8,51  6,49",  segIdx:3 }, /* → ✈₂ (5,48) */
-  { id:"c4d", d:"M 33,48 C 37,50 41,52 44,54",  segIdx:3 }, /* → 🌐 (45,55) */
+  /* ── S4 : expansion gauche ── */
+  { id:"c4a", sw:0.22, segIdx:3,
+    d:"M 13,55 C 13,51 14,47 14,44 L 15,42 L 16,41" },
+  { id:"c4b", sw:0.20, segIdx:3,
+    d:"M 36,53 C 35,54 34,54 32,54" },
+  { id:"c4c", sw:0.20, segIdx:3,
+    d:"M 13,55 C 10,54 8,51 7,49 L 7,48" },
+  { id:"c4d", sw:0.20, segIdx:3,
+    d:"M 42,44 C 43,47 44,50 44,53 L 44,54" },
+  { id:"c4e", sw:0.12, segIdx:3,
+    d:"M 16,41 C 14,39 13,37 14,35" },
 
-  /* S5 — constellation */
-  { id:"c5a", d:"M 50,28 C 56,34 62,38 68,44",  segIdx:4 },
-  { id:"c5b", d:"M 50,28 C 44,34 38,38 30,44",  segIdx:4 },
-  { id:"c5c", d:"M 50,28 C 52,20 55,13 57,6",   segIdx:4 },
-  { id:"c5d", d:"M 68,44 C 73,46 78,48 83,50",  segIdx:4 },
-  { id:"c5e", d:"M 30,44 C 25,46 20,48 15,50",  segIdx:4 },
-  { id:"c5f", d:"M 50,28 C 57,26 63,24 70,22",  segIdx:4 },
-  { id:"c5g", d:"M 50,28 C 43,26 36,24 28,22",  segIdx:4 },
+  /* ── S5 : constellation ── */
+  { id:"c5a", sw:0.18, segIdx:4,
+    d:"M 50,28 C 53,32 57,36 60,40 L 63,43 C 65,46 67,48 69,50" },
+  { id:"c5b", sw:0.18, segIdx:4,
+    d:"M 50,28 C 47,32 43,36 40,40 L 37,43 C 35,46 33,48 31,50" },
+  { id:"c5c", sw:0.18, segIdx:4,
+    d:"M 50,28 C 51,23 53,17 54,12 L 55,8 C 56,5 57,3 58,2" },
+  { id:"c5d", sw:0.13, segIdx:4,
+    d:"M 69,50 C 72,51 75,52 78,53 L 80,54" },
+  { id:"c5e", sw:0.13, segIdx:4,
+    d:"M 31,50 C 28,51 25,52 22,53 L 20,54" },
+  { id:"c5f", sw:0.13, segIdx:4,
+    d:"M 50,28 C 56,27 62,25 68,23 L 71,22" },
+  { id:"c5g", sw:0.13, segIdx:4,
+    d:"M 50,28 C 44,27 38,25 32,23 L 29,22" },
 ];
 
+/* Endpoints des chemins → positions des icônes */
 const ICON_NODES = [
   { id:"n-plane1", cx:77, cy:14, icon:"plane",     segIdx:2 },
   { id:"n-box",    cx:50, cy:49, icon:"box",        segIdx:2 },
-  { id:"n-people", cx:94, cy:42, icon:"people",     segIdx:2 },
-  { id:"n-shake",  cx:40, cy:54, icon:"handshake",  segIdx:2 },
-  { id:"n-build",  cx:80, cy:54, icon:"building",   segIdx:2 },
+  { id:"n-people", cx:90, cy:42, icon:"people",     segIdx:2 },
+  { id:"n-shake",  cx:38, cy:52, icon:"handshake",  segIdx:2 },
+  { id:"n-build",  cx:81, cy:54, icon:"building",   segIdx:2 },
   { id:"n-ship",   cx:16, cy:41, icon:"ship",       segIdx:3 },
-  { id:"n-truck",  cx:32, cy:58, icon:"truck",      segIdx:3 },
-  { id:"n-plane2", cx: 5, cy:48, icon:"plane",      segIdx:3 },
-  { id:"n-globe",  cx:45, cy:55, icon:"globe",      segIdx:3 },
+  { id:"n-truck",  cx:32, cy:54, icon:"truck",      segIdx:3 },
+  { id:"n-plane2", cx: 7, cy:48, icon:"plane",      segIdx:3 },
+  { id:"n-globe",  cx:44, cy:54, icon:"globe",      segIdx:3 },
 ];
 
-/* ─── Icon path data (local ±10 units, rendered via scale 0.12) ─────────── */
+/* ─── Icon paths (local ±10 units, rendu via scale 0.12) ────────────────── */
 function IconPaths({ icon }) {
-  const props = { stroke:"#D4AF37", strokeWidth:1.2, fill:"none", strokeLinecap:"round", strokeLinejoin:"round" };
+  const p = { stroke:"#D4AF37", strokeWidth:1.2, fill:"none", strokeLinecap:"round", strokeLinejoin:"round" };
   switch (icon) {
     case "plane":
-      return <g {...props}>
+      return <g {...p}>
         <path d="M 0,-8 L 8,3 L 0,1 L -8,3 Z"/>
         <line x1="0" y1="1" x2="0" y2="8"/>
         <line x1="-4" y1="4" x2="4" y2="4"/>
       </g>;
     case "box":
-      return <g {...props}>
+      return <g {...p}>
         <rect x="-7" y="-7" width="14" height="14" rx="1"/>
         <line x1="-7" y1="0" x2="7" y2="0"/>
         <line x1="0" y1="-7" x2="0" y2="7"/>
       </g>;
     case "people":
-      return <g {...props}>
+      return <g {...p}>
         <circle cx="-4" cy="-5" r="3"/>
         <circle cx="4"  cy="-5" r="3"/>
         <path d="M -9,5 C -9,0 0,-1 0,3 C 0,-1 9,0 9,5"/>
       </g>;
     case "handshake":
-      return <g {...props}>
+      return <g {...p}>
         <path d="M -8,-1 C -5,-4 -1,-4 0,-2 C 1,-4 5,-4 8,-1"/>
         <path d="M -8,-1 L -8,5 C -5,8 5,8 8,5 L 8,-1"/>
       </g>;
     case "building":
-      return <g {...props}>
+      return <g {...p}>
         <rect x="-7" y="-3" width="14" height="10" rx="0.5"/>
         <rect x="-3" y="-8" width="6" height="5"/>
         <line x1="-4" y1="3" x2="-4" y2="7"/>
@@ -137,13 +164,13 @@ function IconPaths({ icon }) {
         <line x1="4"  y1="3" x2="4"  y2="7"/>
       </g>;
     case "ship":
-      return <g {...props}>
+      return <g {...p}>
         <line x1="0" y1="-8" x2="0" y2="0"/>
         <path d="M -8,2 C -7,0 7,0 8,2 C 8,6 -8,6 -8,2 Z"/>
         <path d="M -5,6 C -3,9 3,9 5,6"/>
       </g>;
     case "truck":
-      return <g {...props}>
+      return <g {...p}>
         <rect x="-9" y="-3" width="11" height="7" rx="0.5"/>
         <path d="M 2,-3 L 9,-3 L 9,4 L 2,4"/>
         <path d="M 4,-3 L 4,-7 L 2,-7 L 2,-3"/>
@@ -151,7 +178,7 @@ function IconPaths({ icon }) {
         <circle cx="6"  cy="6" r="2"/>
       </g>;
     case "globe":
-      return <g {...props}>
+      return <g {...p}>
         <circle cx="0" cy="0" r="8"/>
         <path d="M 0,-8 C 2,-4 2,4 0,8 M 0,-8 C -2,-4 -2,4 0,8"/>
         <line x1="-8" y1="0" x2="8" y2="0"/>
@@ -162,6 +189,7 @@ function IconPaths({ icon }) {
 
 /* ─── Component ─────────────────────────────────────────────────────────── */
 export default function Partenariats() {
+  const imgRef   = useRef(null);
   const pathRefs = useRef({});
   const nodeRefs = useRef({});
 
@@ -169,14 +197,26 @@ export default function Partenariats() {
     const prevBg = document.body.style.background;
     document.body.style.background = "transparent";
 
-    /* Lenis */
+    /* ── Lenis + ScrollTrigger sync ── */
     const lenis = new Lenis({ duration:1.2, easing:t=>1-Math.pow(1-t,3), smoothWheel:true });
     gsap.ticker.lagSmoothing(0);
     lenis.on("scroll", ScrollTrigger.update);
-    const tick = t => lenis.raf(t * 1000);
+
+    const tick = (t) => {
+      lenis.raf(t * 1000);
+
+      /* Parallax texture : objectPosition glisse de 0% à 85% */
+      const scroll      = lenis.animatedScroll ?? window.scrollY ?? 0;
+      const totalScroll = (N - 1) * (window.innerHeight || 900);
+      const prog        = Math.min(1, Math.max(0, scroll / totalScroll));
+      const yPos        = prog * prog * 85; // ease quadratique
+      if (imgRef.current) {
+        imgRef.current.style.objectPosition = `center ${yPos.toFixed(1)}%`;
+      }
+    };
     gsap.ticker.add(tick);
 
-    /* Measure + init crack paths */
+    /* ── Init crack paths ── */
     const lengths = {};
     CRACKS.forEach(c => {
       const el = pathRefs.current[c.id];
@@ -187,15 +227,15 @@ export default function Partenariats() {
       el.setAttribute("stroke-dashoffset", L);
     });
 
-    /* Init icons invisible */
+    /* ── Init icons invisible ── */
     ICON_NODES.forEach(n => {
       const el = nodeRefs.current[n.id];
       if (el) el.style.opacity = "0";
     });
 
-    /* Main scroll animation */
+    /* ── ScrollTrigger : anime dashoffset + icons ── */
     const st = ScrollTrigger.create({
-      trigger: "body",
+      trigger: document.documentElement,
       start: "top top",
       end: "bottom bottom",
       scrub: 1.4,
@@ -209,7 +249,7 @@ export default function Partenariats() {
         ICON_NODES.forEach(n => {
           const el = nodeRefs.current[n.id];
           if (!el) return;
-          /* appear in the last 15% of its segment */
+          /* apparaît dans les 3 derniers % de son segment */
           const triggerP = n.segIdx * 0.2 + 0.17;
           const localP   = Math.min(1, Math.max(0, (progress - triggerP) / 0.03));
           el.style.opacity = localP;
@@ -250,15 +290,19 @@ export default function Partenariats() {
         .pill-cta:hover   { border-color:rgba(212,175,55,0.85); color:#F4EFE4; }
       `}</style>
 
-      {/* ── Stone texture background ── */}
-      <div style={{
-        position:"fixed", inset:0, zIndex:0,
-        backgroundImage:"url('/png/texture-pierre.png')",
-        backgroundSize:"cover", backgroundPosition:"center",
-        backgroundColor:"#080808",
-      }}/>
+      {/* ── Texture de fond avec parallax objectPosition ── */}
+      <img
+        ref={imgRef}
+        src="/png/texture-pierre.png"
+        alt=""
+        style={{
+          position:"fixed", inset:0, zIndex:0,
+          width:"100vw", height:"100vh",
+          objectFit:"cover", objectPosition:"center 0%",
+        }}
+      />
 
-      {/* ── SVG Kintsugi overlay (fixed, viewBox 16:9) ── */}
+      {/* ── SVG Kintsugi : fissures organiques + icônes ── */}
       <svg
         viewBox="0 0 100 56"
         preserveAspectRatio="xMidYMid slice"
@@ -269,15 +313,18 @@ export default function Partenariats() {
         }}
       >
         <defs>
-          <filter id="kglow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur"/>
+          {/* Double glow : halo large + halo serré + cœur vif */}
+          <filter id="kglow" x="-120%" y="-120%" width="340%" height="340%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" result="b1"/>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.35" result="b2"/>
             <feMerge>
-              <feMergeNode in="blur"/>
+              <feMergeNode in="b1"/>
+              <feMergeNode in="b2"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
           <filter id="iglow" x="-120%" y="-120%" width="340%" height="340%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" result="blur"/>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur"/>
             <feColorMatrix in="blur" type="matrix"
               values="1.3 0.8 0 0 0.1  0.9 0.6 0 0 0  0 0 0 0 0  0 0 0 0.85 0"
               result="gb"/>
@@ -288,7 +335,7 @@ export default function Partenariats() {
           </filter>
         </defs>
 
-        {/* Crack paths */}
+        {/* Fissures */}
         {CRACKS.map(c => (
           <path
             key={c.id}
@@ -296,13 +343,13 @@ export default function Partenariats() {
             d={c.d}
             fill="none"
             stroke="#D4AF37"
-            strokeWidth="0.18"
+            strokeWidth={c.sw}
             strokeLinecap="round"
             filter="url(#kglow)"
           />
         ))}
 
-        {/* Icon nodes */}
+        {/* Icônes supply-chain */}
         {ICON_NODES.map(n => (
           <g
             key={n.id}
@@ -311,7 +358,7 @@ export default function Partenariats() {
             filter="url(#iglow)"
             style={{ transition:"opacity 0.5s ease" }}
           >
-            <circle r="1.8" fill="rgba(8,8,8,0.78)" stroke="#D4AF37" strokeWidth="0.07"/>
+            <circle r="1.8" fill="rgba(8,8,8,0.80)" stroke="#D4AF37" strokeWidth="0.07"/>
             <g transform="scale(0.12)">
               <IconPaths icon={n.icon}/>
             </g>
@@ -357,7 +404,7 @@ export default function Partenariats() {
               paddingRight: isRight  ? "7vw" : "4vw",
             }}>
 
-              {/* Section number */}
+              {/* Numéro de section */}
               <div style={{
                 position:"absolute",
                 [isRight ? "left" : "right"]: "clamp(10px,2vw,22px)",
@@ -377,7 +424,7 @@ export default function Partenariats() {
                 }}/>
               </div>
 
-              {/* Text — direct on texture, no rgba box */}
+              {/* Texte direct sur texture */}
               <div style={{ maxWidth: isCenter ? 580 : 360, textAlign: isCenter ? "center" : "left" }}>
                 <span style={{
                   fontFamily:"'Plus Jakarta Sans',sans-serif",
@@ -397,7 +444,7 @@ export default function Partenariats() {
                   fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800,
                   fontSize: isCenter ? "clamp(22px,2.4vw,40px)" : "clamp(18px,2vw,32px)",
                   lineHeight:1.1, letterSpacing:"-.03em", color:"#FFFFFF", marginBottom:18,
-                  textShadow:"0 2px 24px rgba(0,0,0,0.98), 0 0 60px rgba(0,0,0,0.9)",
+                  textShadow:"0 2px 24px rgba(0,0,0,0.98), 0 0 60px rgba(0,0,0,0.85)",
                 }}>{s.title}</h2>
 
                 {s.paragraphs.map((p,pi) => (
