@@ -77,7 +77,10 @@ export default function Partenariats() {
       const vh          = window.innerHeight || 900;
       const totalScroll = (N - 1) * vh;
       const progress    = Math.min(1, Math.max(0, scroll / totalScroll));
-      const yPos        = 0 + 30 * progress;   // 0% (arbre visible) → 30% (glissement doux)
+      /* Ease quadratique : mouvement lent sur section 1 (arbre visible),
+         accélère vers la fin → vortex lumineux pleinement visible sur section 5 */
+      const eased = progress * progress;
+      const yPos  = 0 + 90 * eased;            // 0% (arbre) → 90% (vortex)
 
       if (imgRef.current) {
         imgRef.current.style.objectPosition = `center ${yPos.toFixed(1)}%`;
