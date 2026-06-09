@@ -315,7 +315,7 @@ export default function Partenariats() {
 
       {/* ── SVG Kintsugi : réseau de fissures + icônes ── */}
       <svg
-        viewBox="0 0 100 56"
+        viewBox="-12 -7 124 70"
         preserveAspectRatio="xMidYMid slice"
         style={{
           position:"fixed", inset:0,
