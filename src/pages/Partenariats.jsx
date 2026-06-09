@@ -113,7 +113,10 @@ export default function Partenariats() {
           objectFit:       "cover",
           objectPosition:  "center 0%",
           zIndex:           0,
-          willChange:      "object-position",
+          /* Rendu haute qualité : contraste + saturation → dorés plus vifs,
+             bords plus nets perceptuellement, sans toucher à la résolution source */
+          filter:          "contrast(1.08) saturate(1.14) brightness(1.03)",
+          imageRendering:  "high-quality",
         }}
       />
 
