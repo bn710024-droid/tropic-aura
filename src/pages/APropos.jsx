@@ -214,7 +214,7 @@ export default function APropos() {
           SVG : arcs organiques concentriques (canopée)
       ══════════════════════════════════════════════════ */}
       <div ref={wrapper1} style={{ height: "200vh" }}>
-        <section style={sec("#F6F1E8", 10)}>
+        <section style={sec("#FBFAF6", 10)}>
 
           <svg ref={svg1}
             viewBox="0 0 1440 900"
@@ -260,7 +260,7 @@ export default function APropos() {
           SVG : lignes verticales architecturales fines
       ══════════════════════════════════════════════════ */}
       <div ref={wrapper2} style={{ height: "200vh" }}>
-        <section style={sec("#DCE6DF", 20)}>
+        <section style={sec("#F2F5F1", 20)}>
 
           <svg ref={svg2}
             viewBox="0 0 1440 900"
@@ -306,7 +306,7 @@ export default function APropos() {
           SVG : système de branchement — cartographie/architecture
       ══════════════════════════════════════════════════ */}
       <div ref={wrapper3} style={{ height: "200vh" }}>
-        <section style={sec("#E7DFD2", 30)}>
+        <section style={sec("#F6F1E8", 30)}>
 
           <svg ref={svg3}
             viewBox="0 0 1440 900"
@@ -359,13 +359,13 @@ export default function APropos() {
           SVG : réseau constellation / routes commerciales
       ══════════════════════════════════════════════════ */}
       <div ref={wrapper4} style={{ height: "260vh" }}>
-        <section style={sec("#0B1310", 40)}>
+        <section style={sec("#F8F6F2", 40)}>
 
           <svg ref={svg4}
             viewBox="0 0 1440 900"
             preserveAspectRatio="xMidYMid slice"
             style={{ ...svgLayer, opacity: 0.11 }}>
-            <g fill="none" stroke="#ffffff" strokeWidth="0.8" strokeLinecap="round">
+            <g fill="none" stroke="#2C3428" strokeWidth="0.8" strokeLinecap="round">
               {/* Grandes courbes — routes maritimes / connexions mondiales */}
               <path d="M -100 380 Q 360 180 720 360 Q 1080 540 1540 380"/>
               <path d="M -100 520 Q 360 340 720 460 Q 1080 580 1540 520"/>
@@ -390,7 +390,7 @@ export default function APropos() {
               <line x1="1292" y1="188" x2="720"  y2="496"/>
             </g>
             {/* Nœuds — points fixes */}
-            <g fill="rgba(255,255,255,0.18)" stroke="none">
+            <g fill="rgba(30,40,28,0.15)" stroke="none">
               <circle cx="148"  cy="188" r="2.5"/>
               <circle cx="380"  cy="298" r="2"/>
               <circle cx="720"  cy="228" r="3"/>
@@ -417,26 +417,26 @@ export default function APropos() {
             <svg viewBox="0 0 80 80" width="72" height="72">
               <circle cx="40" cy="40" r="34"
                 fill="none"
-                stroke="rgba(255,255,255,0.28)"
+                stroke="rgba(30,40,28,0.22)"
                 strokeWidth="0.8"/>
               <circle cx="40" cy="40" r="3"
-                fill="rgba(255,255,255,0.25)"/>
+                fill="rgba(30,40,28,0.20)"/>
               <line x1="40" y1="3"  x2="40" y2="16"
-                stroke="rgba(255,255,255,0.18)" strokeWidth="0.8"/>
+                stroke="rgba(30,40,28,0.14)" strokeWidth="0.8"/>
               <line x1="77" y1="40" x2="64" y2="40"
-                stroke="rgba(255,255,255,0.18)" strokeWidth="0.8"/>
+                stroke="rgba(30,40,28,0.14)" strokeWidth="0.8"/>
               <line x1="40" y1="77" x2="40" y2="64"
-                stroke="rgba(255,255,255,0.18)" strokeWidth="0.8"/>
+                stroke="rgba(30,40,28,0.14)" strokeWidth="0.8"/>
               <line x1="3"  y1="40" x2="16" y2="40"
-                stroke="rgba(255,255,255,0.18)" strokeWidth="0.8"/>
+                stroke="rgba(30,40,28,0.14)" strokeWidth="0.8"/>
             </svg>
           </div>
 
           {/* Contenu principal — disparaît au scroll */}
           <div ref={s4content} style={{ ...pad, position: "relative", zIndex: 5 }}>
-            <span style={sur("rgba(255,255,255,.38)")}>04 . HORIZON</span>
-            <h2 style={tit("#ffffff")}>Ce que nous construisons</h2>
-            <p style={dsc("rgba(255,255,255,.58)")}>
+            <span style={sur("#5A4A30")}>04 . HORIZON</span>
+            <h2 style={tit("#0A1A0C")}>Ce que nous construisons</h2>
+            <p style={dsc("#302512")}>
               Nous imaginons un futur où les produits tropicaux africains seront
               recherchés non seulement pour leur qualité naturelle, mais aussi pour
               les standards d'excellence, de professionnalisme et d'innovation qui
@@ -465,7 +465,7 @@ export default function APropos() {
               fontSize: "clamp(22px,3vw,50px)",
               lineHeight: 1.2,
               letterSpacing: "-.02em",
-              color: "#ffffff",
+              color: "#0A1A0C",
               maxWidth: 640,
             }}>
               "L'avenir ne se construit pas seul.
