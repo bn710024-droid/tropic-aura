@@ -156,8 +156,9 @@ export default function APropos() {
               minHeight: "100vh",
               background: s.bg,
               display: "flex",
-              alignItems: "center",
-              padding: `${i === 0 ? 128 : 100}px clamp(32px, 9vw, 140px) 100px`,
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: `${i === 0 ? 110 : 90}px clamp(32px, 9vw, 140px)`,
               boxSizing: "border-box",
             }}
           >
