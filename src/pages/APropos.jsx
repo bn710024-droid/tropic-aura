@@ -106,7 +106,7 @@ export default function APropos() {
   });
 
   return (
-    <div style={{ overflowX: "hidden" }}>
+    <div style={{ overflowX: "hidden", background: "#F5F2ED" }}>
 
       {/* ── Header ── */}
       <header style={{
