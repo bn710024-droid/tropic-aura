@@ -100,6 +100,8 @@ export default function APropos() {
     zIndex: zi,
     display: "flex",
     alignItems: "center",
+    paddingTop: 66,
+    boxSizing: "border-box",
     overflow: "hidden",
   });
 
