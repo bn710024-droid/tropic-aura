@@ -8,33 +8,33 @@ import Lenis from "lenis";
 const SECTIONS = [
   {
     id:    "conviction",
-    bg:    "#F7ECD9",
-    label: "01 · Conviction",
-    title: "Pourquoi Tropicaura existe",
+    bg:    "#C08B10",   // ambre chaud
+    label: "01 · Notre conviction",
+    title: "Notre conviction",
     desc:  "Nous croyons que les terroirs tropicaux africains comptent parmi les plus remarquables au monde. Tropicaura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
     side:  "left",
   },
   {
     id:    "mission",
-    bg:    "#E5EEE6",
-    label: "02 · Mission",
-    title: "Ce que nous faisons aujourd'hui",
+    bg:    "#4E8F6A",   // vert sauge
+    label: "02 · Notre mission",
+    title: "Notre mission",
     desc:  "Nous développons des partenariats durables entre producteurs, stations de conditionnement, acteurs logistiques et importateurs internationaux pour créer davantage de valeur à l'origine et bâtir un commerce plus équitable.",
     side:  "right",
   },
   {
     id:    "vision",
-    bg:    "#EFE4D7",
-    label: "03 · Vision",
-    title: "Là où nous voulons aller",
+    bg:    "#8272BC",   // lavande douce
+    label: "03 · Notre vision",
+    title: "Notre vision",
     desc:  "Nous voulons participer à la construction d'une nouvelle génération de marques africaines capables d'inspirer confiance et de représenter l'excellence des régions tropicales sur la scène internationale.",
     side:  "left",
   },
   {
     id:    "avenir",
-    bg:    "#E2D1AF",
-    label: "04 · Avenir",
-    title: "Ce que nous construisons",
+    bg:    "#1B434E",   // bleu-nuit teal
+    label: "04 · Notre avenir",
+    title: "Notre avenir",
     desc:  "Nous imaginons un futur où les produits tropicaux africains seront recherchés pour leur excellence et leurs standards d'innovation. L'avenir ne se construit pas seul — il se construit ensemble.",
     side:  "right",
   },
@@ -125,7 +125,7 @@ export default function APropos() {
         <span style={{
           fontFamily: "'Plus Jakarta Sans',sans-serif",
           fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
-          color: "#1A1A1A",
+          color: "#fff",
         }}>
           TROPICAURA
         </span>
@@ -134,9 +134,9 @@ export default function APropos() {
             display: "inline-flex", alignItems: "center",
             fontFamily: "'Plus Jakarta Sans',sans-serif",
             fontWeight: 700, fontSize: 13, letterSpacing: ".10em",
-            textTransform: "uppercase", color: "#1A1A1A",
-            background: "rgba(0,0,0,0.07)",
-            border: "2px solid rgba(0,0,0,0.18)",
+            textTransform: "uppercase", color: "#fff",
+            background: "rgba(255,255,255,0.12)",
+            border: "2px solid rgba(255,255,255,0.35)",
             borderRadius: 100, padding: "5px 18px", cursor: "pointer",
           }}>
             ← Accueil
@@ -171,14 +171,14 @@ export default function APropos() {
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontSize: 11, fontWeight: 700,
                 letterSpacing: ".22em", textTransform: "uppercase",
-                color: "rgba(0,0,0,0.40)", marginBottom: 14,
+                color: "rgba(255,255,255,0.60)", marginBottom: 14,
               }}>
                 {s.label}
               </span>
-              <h1 className="scene__title" style={{ color: "#1A1A1A", textShadow: "none" }}>
+              <h1 className="scene__title" style={{ color: "#fff", textShadow: "none" }}>
                 {s.title}
               </h1>
-              <p className="scene__desc" style={{ color: "#3A3A3A", textShadow: "none" }}>
+              <p className="scene__desc" style={{ color: "rgba(255,255,255,0.85)", textShadow: "none" }}>
                 {s.desc}
               </p>
             </div>
