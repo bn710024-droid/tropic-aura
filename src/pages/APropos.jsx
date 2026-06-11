@@ -2,14 +2,13 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
-//  À PROPOS — calqué sur le modèle de référence
-//  Titres larges · 2-3 §§ · nav dots · overlay directionnel
+//  À PROPOS — RAF + bg-layer interpolé · 4 couleurs · 0 image
 // ============================================================
 
 const SECTIONS = [
   {
     id:    "conviction",
-    img:   "/about/about-conviction.png",
+    bg:    "#C08B10",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
     paras: [
@@ -21,7 +20,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
-    img:   "/about/about-mission.png",
+    bg:    "#4E8F6A",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
     paras: [
@@ -32,7 +31,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
-    img:   "/about/about-vision.png",
+    bg:    "#8272BC",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
     paras: [
@@ -44,7 +43,7 @@ const SECTIONS = [
   },
   {
     id:    "avenir",
-    img:   "/about/about-avenir.png",
+    bg:    "#1B434E",
     label: "04 — NOTRE AVENIR",
     title: "Notre avenir",
     paras: [
@@ -56,8 +55,15 @@ const SECTIONS = [
   },
 ];
 
+const hexToRgb = (h) => {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
+
 // ============================================================
 export default function APropos() {
+  const bgRef       = useRef(null);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const revealed    = useRef(new Set());
@@ -74,6 +80,7 @@ export default function APropos() {
     lenisRef.current = lenis;
 
     let rafId;
+    const lerp    = (a, b, t) => Math.round(a + (b - a) * t);
     const easeOut = (t) => 1 - (1 - t) * (1 - t);
     const last    = SECTIONS.length - 1;
     let lastScroll = -99999;
@@ -81,27 +88,36 @@ export default function APropos() {
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
-      // ── fade-in contenu (révèle une fois) ──
-      SECTIONS.forEach((_, i) => {
-        const el = contentRefs.current[i];
-        if (!el) return;
-        if (revealed.current.has(i)) return;
+      // ── bg-layer interpolé ──
+      const prog = scroll / H;
+      const i  = Math.min(last, Math.floor(prog));
+      const ft = Math.min(1, Math.max(0, prog - i));
+      const a  = COLORS[i];
+      const b  = COLORS[Math.min(last, i + 1)];
+      if (bgRef.current) {
+        bgRef.current.style.backgroundColor =
+          `rgb(${lerp(a[0],b[0],ft)},${lerp(a[1],b[1],ft)},${lerp(a[2],b[2],ft)})`;
+      }
 
-        const enter    = i === 0 ? -H * 0.5 : i * H - H * 0.08;
+      // ── fade-in contenu (révèle une fois) ──
+      SECTIONS.forEach((_, j) => {
+        const el = contentRefs.current[j];
+        if (!el || revealed.current.has(j)) return;
+        const enter    = j === 0 ? -H * 0.5 : j * H - H * 0.08;
         const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.28)));
         const e        = easeOut(progress);
         el.style.opacity   = e.toFixed(3);
         el.style.transform = `translateY(${(28 * (1 - e)).toFixed(1)}px)`;
-        if (e >= 0.999) revealed.current.add(i);
+        if (e >= 0.999) revealed.current.add(j);
       });
 
-      // ── nav dots : active = section visible ──
+      // ── nav dots ──
       const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
-      dotRefs.current.forEach((dot, i) => {
+      dotRefs.current.forEach((dot, j) => {
         if (!dot) return;
-        const on = i === active;
-        dot.style.width      = on ? "9px"  : "6px";
-        dot.style.height     = on ? "9px"  : "6px";
+        const on = j === active;
+        dot.style.width      = on ? "9px" : "6px";
+        dot.style.height     = on ? "9px" : "6px";
         dot.style.background = on ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.32)";
         dot.style.boxShadow  = on ? "0 0 0 2px rgba(255,255,255,0.18)" : "none";
       });
@@ -132,9 +148,8 @@ export default function APropos() {
     };
   }, []);
 
-  const scrollTo = (i) => {
+  const scrollTo = (i) =>
     lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
-  };
 
   return (
     <>
@@ -149,7 +164,7 @@ export default function APropos() {
         <span style={{
           fontFamily: "'Plus Jakarta Sans',sans-serif",
           fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
-          color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.4)",
+          color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.35)",
         }}>
           TROPICAURA
         </span>
@@ -169,7 +184,12 @@ export default function APropos() {
         </a>
       </header>
 
-      {/* ── Navigation dots ── */}
+      {/* ── Fond interpolé + profondeur ── */}
+      <div className="bg-layer" ref={bgRef}
+           style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-depth" />
+
+      {/* ── Nav dots ── */}
       <nav style={{
         position: "fixed",
         right: "clamp(14px,2vw,28px)",
@@ -204,25 +224,8 @@ export default function APropos() {
             key={s.id}
             data-index={i}
             className="scene"
-            style={{
-              backgroundImage:    `url(${s.img})`,
-              backgroundSize:     "cover",
-              backgroundPosition: "center",
-              backgroundRepeat:   "no-repeat",
-              justifyContent: isRight ? "flex-end" : "flex-start",
-              overflow: "hidden",
-            }}
+            style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}
           >
-            {/* Overlay directionnel */}
-            <div aria-hidden="true" style={{
-              position: "absolute", inset: 0, zIndex: 2,
-              background: isRight
-                ? "linear-gradient(to left,  rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.08) 55%)"
-                : "linear-gradient(to right, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.08) 55%)",
-              pointerEvents: "none",
-            }} />
-
-            {/* Contenu */}
             <div
               ref={(el) => (contentRefs.current[i] = el)}
               className="scene__content"
@@ -235,7 +238,6 @@ export default function APropos() {
                 transform: i === 0 ? "translateY(0)" : "translateY(28px)",
               }}
             >
-              {/* Surtitre */}
               <span style={{
                 display: "block",
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
@@ -246,7 +248,6 @@ export default function APropos() {
                 {s.label}
               </span>
 
-              {/* Titre — grand comme le modèle */}
               <h1 style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontWeight: 800,
@@ -254,13 +255,12 @@ export default function APropos() {
                 lineHeight: 1.04,
                 letterSpacing: "-.03em",
                 color: "#fff",
-                textShadow: "0 6px 40px rgba(0,0,0,0.28)",
+                textShadow: "0 6px 40px rgba(0,0,0,0.22)",
                 margin: "0 0 18px",
               }}>
                 {s.title}
               </h1>
 
-              {/* Trait doré */}
               <div style={{
                 width: 38, height: 3,
                 background: "#D4A017",
@@ -268,30 +268,25 @@ export default function APropos() {
                 margin: "0 0 26px",
               }} />
 
-              {/* Paragraphes */}
               {s.paras.map((p, j) => (
                 <p key={j} style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: "clamp(14px, 1.3vw, 16px)",
-                  lineHeight: 1.72,
-                  fontWeight: 400,
+                  lineHeight: 1.72, fontWeight: 400,
                   color: "rgba(255,255,255,0.88)",
-                  textShadow: "0 1px 10px rgba(0,0,0,0.25)",
+                  textShadow: "0 1px 8px rgba(0,0,0,0.18)",
                   margin: j < s.paras.length - 1 ? "0 0 14px" : "0",
                 }}>
                   {p}
                 </p>
               ))}
 
-              {/* Citation finale (S4) */}
               {s.quote && (
                 <p style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: "clamp(14px, 1.3vw, 16px)",
-                  lineHeight: 1.72,
-                  fontWeight: 700,
+                  lineHeight: 1.72, fontWeight: 700,
                   color: "#fff",
-                  textShadow: "0 1px 10px rgba(0,0,0,0.25)",
                   margin: "14px 0 0",
                 }}>
                   {s.quote}
@@ -299,11 +294,9 @@ export default function APropos() {
               )}
             </div>
 
-            {/* Hint scroll — section 0 */}
             {i === 0 && (
               <div className="scene__hint">
-                <i />
-                <span>Défilez vers le bas</span>
+                <i /><span>Défilez vers le bas</span>
               </div>
             )}
           </section>
