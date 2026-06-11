@@ -1,131 +1,183 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { IMAGES } from "../images";
 
-gsap.registerPlugin(ScrollTrigger);
+// ============================================================
+//  À PROPOS — même mécanique que Home (RAF + bg interpolé + fruits)
+//  4 sections · couleurs chaudes · textes About · fruits tropicaux
+// ============================================================
 
-/* ─── Données sections ─────────────────────────────────────────────────────── */
-const DATA = [
+const LAYOUTS = [
+  // S1 CONVICTION — ananas géant centre-droite
+  [ {x:68,y:46,s:420,b:0}, {x:14,y:18,s:145,b:0}, {x:90,y:22,s:180,b:0}, {x:12,y:82,s:130,b:0}, {x:90,y:80,s:195,b:0}, {x:50,y:92,s:115,b:0} ],
+  // S2 MISSION — avocat géant droite-bas
+  [ {x:76,y:54,s:400,b:0}, {x:18,y:18,s:150,b:0}, {x:90,y:24,s:145,b:0}, {x:46,y:12,s:135,b:0}, {x:88,y:82,s:175,b:0}, {x:14,y:80,s:155,b:0} ],
+  // S3 VISION — mangue géant haut-droite
+  [ {x:72,y:32,s:410,b:0}, {x:16,y:72,s:148,b:0}, {x:92,y:82,s:182,b:0}, {x:50,y:90,s:128,b:0}, {x:14,y:22,s:148,b:0} ],
+  // S4 AVENIR — ananas géant droite-milieu
+  [ {x:78,y:54,s:400,b:0}, {x:18,y:22,s:152,b:0}, {x:46,y:12,s:138,b:0}, {x:14,y:80,s:148,b:0}, {x:92,y:84,s:182,b:0} ],
+];
+
+const ROT    = [-4, 6, -5, 4, -6, 3];
+const FILLERS = [
+  { x: 56, y: 38, s: 170, b: 18 },
+  { x: 57, y: 72, s: 150, b: 16 },
+];
+
+const build = (layout, imgs) => {
+  const main = layout.map((c, i) => ({
+    img: imgs[i % imgs.length],
+    x: c.x, y: c.y, size: c.s, blur: c.b,
+    z: i === 0 ? 4 : 1,
+    r: ROT[i % ROT.length],
+  }));
+  const fill = FILLERS.map((f, i) => ({
+    img: imgs[(i + 1) % imgs.length],
+    x: f.x, y: f.y, size: f.s, blur: f.b,
+    z: 0,
+    r: ROT[i % ROT.length],
+  }));
+  return [...main, ...fill].filter((it) => it.img);
+};
+
+const SECTIONS = [
   {
-    bg: "linear-gradient(180deg, #F7ECD9 0%, #F0E3CF 100%)",
-    zIndex: 10,
-    align: "left",
-    label: "01 · CONVICTION",
-    labelColor: "#7A5C2E",
+    id: "conviction",
+    bg: "#F7ECD9",
     title: "Pourquoi Tropicaura existe",
-    paras: [
-      "Nous croyons que les terroirs tropicaux africains comptent parmi les plus remarquables au monde. Pourtant, leur potentiel reste encore insuffisamment valorisé sur les marchés internationaux.",
-      "Tropicaura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
-      "Nous invitons nos partenaires à participer à cette nouvelle dynamique : construire des connexions durables, révéler la véritable valeur des origines africaines et contribuer à une chaîne d'approvisionnement plus équitable, plus moderne et plus performante.",
-    ],
+    label: "01 · Conviction",
+    desc: "Nous croyons que les terroirs tropicaux africains comptent parmi les plus remarquables au monde. Tropicaura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
+    items: build(LAYOUTS[0], [
+      IMAGES.ananas, IMAGES.mangue, IMAGES.papaye, IMAGES.fraises, IMAGES.orange, IMAGES.citronVert,
+    ]),
   },
   {
-    bg: "linear-gradient(180deg, #E5EEE6 0%, #D9E5DB 100%)",
-    zIndex: 20,
-    align: "right",
-    label: "02 · MISSION",
-    labelColor: "#2E5A3C",
+    id: "mission",
+    bg: "#E5EEE6",
     title: "Ce que nous faisons aujourd'hui",
-    paras: [
-      "Nous développons des partenariats durables entre producteurs, stations de conditionnement, acteurs logistiques et importateurs internationaux afin de faciliter l'accès à des produits tropicaux de qualité tout en créant davantage de valeur à l'origine.",
-      "Chaque collaboration représente une opportunité de bâtir ensemble un commerce plus efficace, plus transparent et plus bénéfique pour l'ensemble des acteurs de la chaîne de valeur.",
-    ],
+    label: "02 · Mission",
+    desc: "Nous développons des partenariats durables entre producteurs, stations de conditionnement, acteurs logistiques et importateurs internationaux pour créer davantage de valeur à l'origine et bâtir un commerce plus équitable.",
+    items: build(LAYOUTS[1], [
+      IMAGES.avocat, IMAGES.citronVert, IMAGES.melonVert, IMAGES.citronJaune, IMAGES.citronVertCoupe, IMAGES.orange,
+    ]),
   },
   {
-    bg: "linear-gradient(180deg, #EFE4D7 0%, #E2D6C7 100%)",
-    zIndex: 30,
-    align: "left",
-    label: "03 · VISION",
-    labelColor: "#6B5022",
+    id: "vision",
+    bg: "#EFE4D7",
     title: "Là où nous voulons aller",
-    paras: [
-      "Nous ne voulons pas simplement exporter des fruits. Nous voulons participer à la construction d'une nouvelle génération de marques africaines capables d'inspirer confiance, de créer de la valeur et de représenter l'excellence des régions tropicales sur la scène internationale.",
-      "Nous recherchons des partenaires qui partagent cette ambition : faire émerger une nouvelle référence du commerce international, fondée sur la qualité, l'innovation et une vision à long terme.",
-    ],
+    label: "03 · Vision",
+    desc: "Nous voulons participer à la construction d'une nouvelle génération de marques africaines capables d'inspirer confiance et de représenter l'excellence des régions tropicales sur la scène internationale.",
+    items: build(LAYOUTS[2], [
+      IMAGES.mangue, IMAGES.fruitPassion, IMAGES.papayeCoupe, IMAGES.orange, IMAGES.banane,
+    ]),
   },
   {
-    bg: "linear-gradient(180deg, #E2D1AF 0%, #D4C29B 100%)",
-    zIndex: 40,
-    align: "right",
-    label: "04 · AVENIR",
-    labelColor: "#5A3F10",
+    id: "avenir",
+    bg: "#E2D1AF",
     title: "Ce que nous construisons",
-    paras: [
-      "Nous imaginons un futur où les produits tropicaux africains seront recherchés non seulement pour leur qualité naturelle, mais aussi pour les standards d'excellence, de professionnalisme et d'innovation qui les accompagnent.",
-      "Tropicaura entend contribuer à cette transformation aux côtés de producteurs, d'acheteurs et d'acteurs engagés qui souhaitent participer à l'émergence d'une Afrique plus visible, plus compétitive et plus influente sur les marchés mondiaux.",
-    ],
-    quote: "L'avenir ne se construit pas seul. Il se construit ensemble.",
+    label: "04 · Avenir",
+    desc: "Nous imaginons un futur où les produits tropicaux africains seront recherchés pour leur excellence et leurs standards d'innovation. L'avenir ne se construit pas seul — il se construit ensemble.",
+    items: build(LAYOUTS[3], [
+      IMAGES.ananas, IMAGES.orange, IMAGES.melonJaune, IMAGES.banane, IMAGES.papaye,
+    ]),
   },
 ];
 
-/* ─── Composant ─────────────────────────────────────────────────────────────── */
+const hexToRgb = (h) => {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const COLORS  = SECTIONS.map((s) => hexToRgb(s.bg));
+const OFFSETS = [];
+SECTIONS.reduce((acc, s, i) => { OFFSETS[i] = acc; return acc + s.items.length; }, 0);
+
+// ============================================================
 export default function APropos() {
-  const secRefs  = useRef([]);
-  const contRefs = useRef([]);
+  const bgRef     = useRef(null);
+  const scenesRef = useRef([]);
+  const fruitsRef = useRef([]);
+  const lenisRef  = useRef(null);
 
   useEffect(() => {
-    /* Smooth scroll */
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
     });
-    const raf = (t) => lenis.raf(t * 1000);
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-    lenis.on("scroll", ScrollTrigger.update);
+    lenisRef.current = lenis;
 
-    /* S1 — fade-in immédiat au chargement */
-    if (contRefs.current[0]) {
-      gsap.fromTo(
-        contRefs.current[0],
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", delay: 0.3 }
-      );
-    }
+    let rafId;
+    const lerp    = (a, b, t) => Math.round(a + (b - a) * t);
+    const easeOut = (t) => 1 - (1 - t) * (1 - t);
+    const last    = SECTIONS.length - 1;
 
-    /* S2→S4 — contenu fade-in quand la section est pleinement sticky (top top) */
-    secRefs.current.slice(1).forEach((sec, i) => {
-      const content = contRefs.current[i + 1];
-      if (!sec || !content) return;
-      gsap.set(content, { opacity: 0, y: 30 });
-      gsap.to(content, {
-        opacity: 1,
-        y: 0,
-        duration: 1.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sec,
-          start: "top top",
-          toggleActions: "play none none none",
-        },
-      });
-    });
+    let lastScroll = -99999;
+    const onResize = () => { lastScroll = -99999; };
+    window.addEventListener("resize", onResize, { passive: true });
+
+    const update = (scroll, H) => {
+      const half = H / 2;
+
+      // fond interpolé
+      const prog = scroll / H;
+      const i  = Math.min(last, Math.floor(prog));
+      const ft = Math.min(1, Math.max(0, prog - i));
+      const a  = COLORS[i];
+      const b  = COLORS[Math.min(last, i + 1)];
+      if (bgRef.current) {
+        bgRef.current.style.backgroundColor =
+          `rgb(${lerp(a[0],b[0],ft)},${lerp(a[1],b[1],ft)},${lerp(a[2],b[2],ft)})`;
+      }
+
+      // fruits — même logique que Home
+      const fruits = fruitsRef.current;
+      for (let k = 0; k < fruits.length; k++) {
+        const el = fruits[k];
+        if (!el) continue;
+        const ds    = el.dataset;
+        const si    = +ds.i, y = +ds.y, baseR = +ds.r;
+        const sectionTop = si * H - scroll;
+        const centerY    = sectionTop + (y / 100) * H;
+        const av = Math.abs((centerY - half) / half);
+        if (av >= 1) { el.style.opacity = "0"; continue; }
+        const fade = 1 - Math.min(1, Math.max(0, (av - 0.5) / 0.5));
+        const e    = easeOut(fade);
+        el.style.opacity   = e.toFixed(3);
+        el.style.transform =
+          `scale(${(0.86 + 0.14 * e).toFixed(3)}) rotate(${baseR}deg)`;
+      }
+    };
+
+    const readScroll = () => {
+      const s = lenis.animatedScroll;
+      return Number.isFinite(s) ? s : (window.scrollY || 0);
+    };
+
+    const raf = (time) => {
+      lenis.raf(time);
+      const scroll = readScroll();
+      if (Math.abs(scroll - lastScroll) > 0.04) {
+        lastScroll = scroll;
+        update(scroll, window.innerHeight || 1);
+      }
+      rafId = requestAnimationFrame(raf);
+    };
+
+    update(0, window.innerHeight || 1);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
-      gsap.ticker.remove(raf);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
       lenis.destroy();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
-  /* ─── Styles partagés ── */
-  const heading = {
-    fontFamily: "'Plus Jakarta Sans',sans-serif",
-    fontWeight: 800,
-    fontSize: "clamp(30px,4.2vw,56px)",
-    lineHeight: 1.05,
-    letterSpacing: "-.025em",
-    color: "#1A1A1A",
-    margin: "0 0 32px",
-  };
-
   return (
-    /* fond = couleur de fin de S4 — couvre les micro-gaps entre wrappers */
-    <div style={{ background: "#D4C29B", overflowX: "hidden" }}>
-
-      {/* ── Header ─────────────────────────────────────────────────────────── */}
+    <>
+      {/* ── Header ── */}
       <header style={{
         position: "fixed",
         top: 0, left: 0, right: 0,
@@ -135,148 +187,103 @@ export default function APropos() {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 clamp(20px,5vw,48px)",
-        background: "rgba(247,236,217,0.82)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(0,0,0,0.07)",
         pointerEvents: "none",
+        background: "transparent",
       }}>
-        <a href="/" style={{
-          pointerEvents: "auto",
+        <span style={{
           fontFamily: "'Plus Jakarta Sans',sans-serif",
-          fontWeight: 800,
-          fontSize: 18,
-          letterSpacing: ".04em",
+          fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
           color: "#1A1A1A",
-          textDecoration: "none",
         }}>
           TROPICAURA
-        </a>
+        </span>
         <a href="/" style={{ pointerEvents: "auto", textDecoration: "none" }}>
           <span style={{
-            display: "inline-block",
+            display: "inline-flex", alignItems: "center",
             fontFamily: "'Plus Jakarta Sans',sans-serif",
-            fontWeight: 700,
-            fontSize: 12,
-            letterSpacing: ".12em",
-            textTransform: "uppercase",
-            color: "#1A1A1A",
-            background: "rgba(0,0,0,0.05)",
-            border: "1.5px solid rgba(0,0,0,0.12)",
-            borderRadius: 100,
-            padding: "9px 22px",
-            cursor: "pointer",
+            fontWeight: 700, fontSize: 13, letterSpacing: ".10em",
+            textTransform: "uppercase", color: "#1A1A1A",
+            background: "rgba(0,0,0,0.07)",
+            border: "2px solid rgba(0,0,0,0.18)",
+            borderRadius: 100, padding: "5px 5px 5px 18px", cursor: "pointer",
           }}>
             ← Accueil
           </span>
         </a>
       </header>
 
-      {/* ── Wrapper unique — toutes les sections empilées ───────────────────
-           Layout naturel dans le wrapper (wrapper = 860vh) :
-           S1 (100) · spacer (100) · S2 (100) · spacer (100)
-           S3 (100) · spacer (100) · S4 (100) · dwell S4 (160)
-      ──────────────────────────────────────────────────────────────────── */}
-      <div style={{ height: "860vh" }}>
+      {/* ── Fond interpolé + profondeur (même que Home) ── */}
+      <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-depth" />
 
-        {DATA.flatMap((s, i) => {
-          const Tag = i === 0 ? "h1" : "h2";
-          const els = [
-
-            /* Section sticky */
-            <section
-              key={`sec-${i}`}
-              ref={(el) => (secRefs.current[i] = el)}
-              style={{
-                position: "sticky",
-                top: 0,
-                height: "100vh",
-                background: s.bg,
-                zIndex: s.zIndex,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                padding: "80px clamp(32px,9vw,140px)",
-                boxSizing: "border-box",
-                overflow: "hidden",
-              }}
-            >
+      {/* ── Sections ── */}
+      {SECTIONS.map((s, i) => (
+        <section
+          key={s.id}
+          data-index={i}
+          ref={(el) => (scenesRef.current[i] = el)}
+          className="scene"
+        >
+          {/* Fruits */}
+          <div className="rain">
+            {s.items.map((it, j) => (
               <div
-                ref={(el) => (contRefs.current[i] = el)}
+                key={j}
+                className="cell"
+                ref={(el) => (fruitsRef.current[OFFSETS[i] + j] = el)}
+                data-i={i}
+                data-y={it.y}
+                data-size={it.size}
+                data-r={it.r}
                 style={{
-                  width: "100%",
-                  maxWidth: 540,
-                  marginLeft: s.align === "right" ? "auto" : 0,
+                  left: `${it.x}%`, top: `${it.y}%`,
+                  width: it.size, height: it.size,
+                  marginLeft: -it.size / 2, marginTop: -it.size / 2,
+                  zIndex: it.z,
                 }}
               >
-                {/* Label */}
-                <span style={{
-                  display: "block",
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: ".24em",
-                  textTransform: "uppercase",
-                  color: s.labelColor,
-                  marginBottom: 20,
-                }}>
-                  {s.label}
-                </span>
-
-                {/* Titre */}
-                <Tag style={heading}>{s.title}</Tag>
-
-                {/* Corps */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-                  {s.paras.map((p, j) => (
-                    <p key={j} style={{
-                      fontFamily: "'Plus Jakarta Sans',sans-serif",
-                      fontSize: "clamp(14px,1.35vw,17px)",
-                      lineHeight: 1.82,
-                      fontWeight: 400,
-                      color: "#4A4A4A",
-                      margin: 0,
-                    }}>
-                      {p}
-                    </p>
-                  ))}
-                </div>
-
-                {/* Citation — S4 uniquement */}
-                {s.quote && (
-                  <p style={{
-                    fontFamily: "'Plus Jakarta Sans',sans-serif",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    fontSize: "clamp(17px,1.8vw,23px)",
-                    lineHeight: 1.5,
-                    letterSpacing: "-.01em",
-                    color: "#1A1A1A",
-                    margin: "40px 0 0",
-                    paddingLeft: 22,
-                    borderLeft: "2px solid rgba(0,0,0,0.15)",
-                  }}>
-                    "{s.quote}"
-                  </p>
-                )}
+                <img
+                  src={it.img} alt=""
+                  loading={i === 0 ? "eager" : "lazy"}
+                  draggable={false}
+                  style={{
+                    filter: it.blur
+                      ? `blur(${it.blur}px)`
+                      : "drop-shadow(0 8px 28px rgba(0,0,0,0.10))",
+                  }}
+                />
               </div>
-            </section>,
+            ))}
+          </div>
 
-          ];
+          {/* Texte */}
+          <div className="scene__content">
+            <span style={{
+              display: "block",
+              fontFamily: "'Plus Jakarta Sans',sans-serif",
+              fontSize: 11, fontWeight: 700,
+              letterSpacing: ".22em", textTransform: "uppercase",
+              color: "rgba(0,0,0,0.40)", marginBottom: 14,
+            }}>
+              {s.label}
+            </span>
+            <h1 className="scene__title" style={{ color: "#1A1A1A", textShadow: "none" }}>
+              {s.title}
+            </h1>
+            <p className="scene__desc" style={{ color: "#3A3A3A", textShadow: "none" }}>
+              {s.desc}
+            </p>
+          </div>
 
-          /* Spacer entre sections (100vh) — donne du temps de lecture
-             et déclenche la transition de la section suivante */
-          if (i < DATA.length - 1) {
-            els.push(<div key={`sp-${i}`} style={{ height: "100vh" }} />);
-          }
-
-          return els;
-        })}
-
-        {/* Temps de lecture supplémentaire pour S4 (160vh) */}
-        <div style={{ height: "160vh" }} />
-
-      </div>
-    </div>
+          {/* Hint scroll — section 1 uniquement */}
+          {i === 0 && (
+            <div className="scene__hint scene__hint--dark">
+              <i />
+              <span>Défilez vers le bas</span>
+            </div>
+          )}
+        </section>
+      ))}
+    </>
   );
 }

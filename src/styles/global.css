@@ -330,6 +330,18 @@ body::-webkit-scrollbar { display: none; }
   50%      { transform: translateY(7px); }
 }
 
+/* ---------- HINT DARK (fonds clairs : About…) ---------- */
+.scene__hint--dark {
+  color: rgba(0, 0, 0, .45);
+}
+.scene__hint--dark i {
+  border-color: rgba(0, 0, 0, .35);
+}
+.scene__hint--dark i::before {
+  border-right-color: rgba(0, 0, 0, .55);
+  border-bottom-color: rgba(0, 0, 0, .55);
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
   .scene__desc { max-width: 90%; }
