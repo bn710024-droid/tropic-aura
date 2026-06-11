@@ -205,11 +205,12 @@ export default function APropos() {
             data-index={i}
             className="scene"
             style={{
-              backgroundImage:      `url(${s.img})`,
-              backgroundSize:       "cover",
-              backgroundPosition:   "center",
-              backgroundAttachment: "fixed",
+              backgroundImage:    `url(${s.img})`,
+              backgroundSize:     "cover",
+              backgroundPosition: "center",
+              backgroundRepeat:   "no-repeat",
               justifyContent: isRight ? "flex-end" : "flex-start",
+              overflow: "hidden",
             }}
           >
             {/* Overlay directionnel */}
