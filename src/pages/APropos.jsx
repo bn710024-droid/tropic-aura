@@ -2,13 +2,14 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
-//  À PROPOS — RAF + bg interpolé · 0 fruit · alternance gauche/droite
+//  À PROPOS — image bg cover + parallaxe fixed + fade-in RAF
+//  Scroll mechanism inchangé (Lenis + rAF loop)
 // ============================================================
 
 const SECTIONS = [
   {
     id:    "conviction",
-    bg:    "#C08B10",   // ambre chaud
+    img:   "/about/about-conviction.png",
     label: "01 · Notre conviction",
     title: "Notre conviction",
     desc:  "Nous croyons que les terroirs tropicaux africains comptent parmi les plus remarquables au monde. Tropicaura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
@@ -16,7 +17,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
-    bg:    "#4E8F6A",   // vert sauge
+    img:   "/about/about-mission.png",
     label: "02 · Notre mission",
     title: "Notre mission",
     desc:  "Nous développons des partenariats durables entre producteurs, stations de conditionnement, acteurs logistiques et importateurs internationaux pour créer davantage de valeur à l'origine et bâtir un commerce plus équitable.",
@@ -24,7 +25,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
-    bg:    "#8272BC",   // lavande douce
+    img:   "/about/about-vision.png",
     label: "03 · Notre vision",
     title: "Notre vision",
     desc:  "Nous voulons participer à la construction d'une nouvelle génération de marques africaines capables d'inspirer confiance et de représenter l'excellence des régions tropicales sur la scène internationale.",
@@ -32,7 +33,7 @@ const SECTIONS = [
   },
   {
     id:    "avenir",
-    bg:    "#1B434E",   // bleu-nuit teal
+    img:   "/about/about-avenir.png",
     label: "04 · Notre avenir",
     title: "Notre avenir",
     desc:  "Nous imaginons un futur où les produits tropicaux africains seront recherchés pour leur excellence et leurs standards d'innovation. L'avenir ne se construit pas seul — il se construit ensemble.",
@@ -40,16 +41,11 @@ const SECTIONS = [
   },
 ];
 
-const hexToRgb = (h) => {
-  const n = parseInt(h.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-};
-const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
-
 // ============================================================
 export default function APropos() {
-  const bgRef    = useRef(null);
-  const lenisRef = useRef(null);
+  const contentRefs = useRef([]);
+  const revealed    = useRef(new Set());
+  const lenisRef    = useRef(null);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -62,24 +58,29 @@ export default function APropos() {
     lenisRef.current = lenis;
 
     let rafId;
-    const lerp = (a, b, t) => Math.round(a + (b - a) * t);
-    const last = SECTIONS.length - 1;
-
+    const easeOut = (t) => 1 - (1 - t) * (1 - t);
     let lastScroll = -99999;
     const onResize = () => { lastScroll = -99999; };
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
-      // fond interpolé entre les 4 couleurs
-      const prog = scroll / H;
-      const i  = Math.min(last, Math.floor(prog));
-      const ft = Math.min(1, Math.max(0, prog - i));
-      const a  = COLORS[i];
-      const b  = COLORS[Math.min(last, i + 1)];
-      if (bgRef.current) {
-        bgRef.current.style.backgroundColor =
-          `rgb(${lerp(a[0],b[0],ft)},${lerp(a[1],b[1],ft)},${lerp(a[2],b[2],ft)})`;
-      }
+      SECTIONS.forEach((_, i) => {
+        const el = contentRefs.current[i];
+        if (!el) return;
+
+        // section 0 toujours visible, les autres révèlent une fois
+        if (revealed.current.has(i)) return;
+
+        // début de la fenêtre de fade-in
+        const enter    = i === 0 ? -H * 0.5 : i * H - H * 0.1;
+        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.28)));
+        const e        = easeOut(progress);
+
+        el.style.opacity   = e.toFixed(3);
+        el.style.transform = `translateY(${(28 * (1 - e)).toFixed(1)}px)`;
+
+        if (e >= 0.999) revealed.current.add(i);
+      });
     };
 
     const readScroll = () => {
@@ -115,9 +116,7 @@ export default function APropos() {
         top: 0, left: 0, right: 0,
         zIndex: 200,
         height: 66,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "0 clamp(20px,5vw,48px)",
         pointerEvents: "none",
         background: "transparent",
@@ -125,7 +124,7 @@ export default function APropos() {
         <span style={{
           fontFamily: "'Plus Jakarta Sans',sans-serif",
           fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
-          color: "#fff",
+          color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.4)",
         }}>
           TROPICAURA
         </span>
@@ -135,57 +134,84 @@ export default function APropos() {
             fontFamily: "'Plus Jakarta Sans',sans-serif",
             fontWeight: 700, fontSize: 13, letterSpacing: ".10em",
             textTransform: "uppercase", color: "#fff",
-            background: "rgba(255,255,255,0.12)",
-            border: "2px solid rgba(255,255,255,0.35)",
+            background: "rgba(255,255,255,0.14)",
+            border: "2px solid rgba(255,255,255,0.38)",
             borderRadius: 100, padding: "5px 18px", cursor: "pointer",
+            backdropFilter: "blur(6px)",
           }}>
             ← Accueil
           </span>
         </a>
       </header>
 
-      {/* ── Fond interpolé + profondeur ── */}
-      <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
-      <div className="bg-depth" />
-
       {/* ── Sections ── */}
       {SECTIONS.map((s, i) => {
         const isRight = s.side === "right";
+
         return (
           <section
             key={s.id}
             data-index={i}
             className="scene"
-            style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}
+            style={{
+              backgroundImage:      `url(${s.img})`,
+              backgroundSize:       "cover",
+              backgroundPosition:   "center",
+              backgroundAttachment: "fixed",
+              justifyContent: isRight ? "flex-end" : "flex-start",
+            }}
           >
+            {/* Overlay sombre — suit le côté du texte */}
+            <div aria-hidden="true" style={{
+              position: "absolute", inset: 0, zIndex: 2,
+              background: isRight
+                ? "linear-gradient(to left,  rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.10) 100%)"
+                : "linear-gradient(to right, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.10) 100%)",
+              pointerEvents: "none",
+            }} />
+
+            {/* Contenu texte */}
             <div
+              ref={(el) => (contentRefs.current[i] = el)}
               className="scene__content"
               style={{
-                paddingLeft:  isRight ? 16                        : "clamp(20px,7vw,96px)",
-                paddingRight: isRight ? "clamp(20px,7vw,96px)"   : 16,
+                paddingLeft:  isRight ? 16                      : "clamp(20px,7vw,96px)",
+                paddingRight: isRight ? "clamp(20px,7vw,96px)" : 16,
                 textAlign: "left",
+                /* état initial — le RAF prend le relais dès la 1re frame */
+                opacity:   i === 0 ? 1 : 0,
+                transform: i === 0 ? "translateY(0)" : "translateY(28px)",
               }}
             >
+              {/* Surtitre */}
               <span style={{
                 display: "block",
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontSize: 11, fontWeight: 700,
                 letterSpacing: ".22em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.60)", marginBottom: 14,
+                color: "rgba(255,255,255,0.65)", marginBottom: 12,
               }}>
                 {s.label}
               </span>
-              <h1 className="scene__title" style={{ color: "#fff", textShadow: "none" }}>
-                {s.title}
-              </h1>
-              <p className="scene__desc" style={{ color: "rgba(255,255,255,0.85)", textShadow: "none" }}>
-                {s.desc}
-              </p>
+
+              {/* Titre */}
+              <h1 className="scene__title">{s.title}</h1>
+
+              {/* Trait doré */}
+              <div style={{
+                width: 40, height: 3,
+                background: "#D4A017",
+                borderRadius: 2,
+                margin: "0 0 24px",
+              }} />
+
+              {/* Description */}
+              <p className="scene__desc">{s.desc}</p>
             </div>
 
-            {/* Hint scroll — section 1 uniquement */}
+            {/* Hint scroll — section 0 uniquement */}
             {i === 0 && (
-              <div className="scene__hint scene__hint--dark">
+              <div className="scene__hint">
                 <i />
                 <span>Défilez vers le bas</span>
               </div>
