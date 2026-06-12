@@ -205,8 +205,8 @@ export default function APropos() {
               backgroundPosition: "center",
               backgroundRepeat:   "no-repeat",
               justifyContent: isRight ? "flex-end" : "flex-start",
-              paddingTop: "120px",
-              overflow: "hidden",
+              paddingTop: "80px",
+              paddingBottom: "40px",
             }}
           >
             {/* Overlay uniforme rgba(0,0,0,0.3) */}
@@ -242,28 +242,28 @@ export default function APropos() {
               <h1 style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontWeight: 800,
-                fontSize: "clamp(46px, 5.6vw, 72px)",
-                lineHeight: 1.04, letterSpacing: "-.03em",
+                fontSize: "clamp(32px, 3.6vw, 48px)",
+                lineHeight: 1.08, letterSpacing: "-.03em",
                 color: "#fff",
                 textShadow: "0 4px 32px rgba(0,0,0,0.35)",
-                margin: "0 0 18px",
+                margin: "0 0 14px",
               }}>
                 {s.title}
               </h1>
 
               <div style={{
-                width: 38, height: 3, background: "#D4A017",
-                borderRadius: 2, margin: "0 0 26px",
+                width: 34, height: 3, background: "#D4A017",
+                borderRadius: 2, margin: "0 0 18px",
               }} />
 
               {s.paras.map((p, j) => (
                 <p key={j} style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: "clamp(14px, 1.3vw, 16px)",
-                  lineHeight: 1.72, fontWeight: 400,
+                  fontSize: "clamp(13px, 1.15vw, 15px)",
+                  lineHeight: 1.68, fontWeight: 400,
                   color: "rgba(255,255,255,0.90)",
                   textShadow: "0 1px 8px rgba(0,0,0,0.30)",
-                  margin: j < s.paras.length - 1 ? "0 0 14px" : "0",
+                  margin: j < s.paras.length - 1 ? "0 0 10px" : "0",
                 }}>
                   {p}
                 </p>
