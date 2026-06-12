@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import KintsugiLayer from "../components/KintsugiLayer";
 
 // ============================================================
 //  À PROPOS — images bg cover (no fixed) + overlay 0.3 + RAF
@@ -206,9 +205,7 @@ export default function APropos() {
         ))}
       </nav>
 
-      {/* ── Sections + calque kintsugi ── */}
-      <div style={{ position: "relative" }}>
-        <KintsugiLayer />
+      {/* ── Sections ── */}
       {SECTIONS.map((s, i) => {
         const isRight   = s.side === "right";
         const titleCol  = s.dark ? "#fff"                    : "#1A1A1A";
@@ -313,7 +310,6 @@ export default function APropos() {
           </section>
         );
       })}
-      </div>
     </>
   );
 }
