@@ -8,7 +8,7 @@ import Lenis from "lenis";
 const SECTIONS = [
   {
     id:    "conviction",
-    bg:    "#FDF5E6",           // crème chaude — fond clair
+    bg:    "#C08B10",           // ambre vif — identique à l'image
     img:   "/about/about-conviction.png",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
@@ -22,7 +22,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
-    bg:    "#EFF7F2",           // vert très clair — fond clair
+    bg:    "#4E8F6A",           // sage vif — identique à l'image
     img:   "/about/about-mission.png",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
@@ -35,7 +35,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
-    bg:    "#F3F1FA",           // lavande très clair — fond clair
+    bg:    "#8272BC",           // lavande vif — identique à l'image
     img:   "/about/about-vision.png",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
@@ -208,9 +208,9 @@ export default function APropos() {
       {/* ── Sections ── */}
       {SECTIONS.map((s, i) => {
         const isRight   = s.side === "right";
-        const titleCol  = s.dark ? "#fff"                       : "#1A1A1A";
-        const labelCol  = s.dark ? "rgba(255,255,255,0.58)"     : "rgba(40,30,10,0.50)";
-        const paraCol   = s.dark ? "rgba(255,255,255,0.88)"     : "rgba(30,25,15,0.72)";
+        const titleCol  = s.dark ? "#fff"                    : "#1A1A1A";
+        const labelCol  = s.dark ? "rgba(255,255,255,0.58)" : "rgba(0,0,0,0.52)";
+        const paraCol   = s.dark ? "rgba(255,255,255,0.88)" : "rgba(0,0,0,0.78)";
         const quoteShadow = s.dark ? "0 1px 8px rgba(0,0,0,0.30)" : "none";
         return (
           <section
