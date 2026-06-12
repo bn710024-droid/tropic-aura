@@ -24,7 +24,19 @@ const LINKS = [
 // Structure fixe : M x y  L x y  L x y  C x y x y x y  Z
 //                 [0 1]  [2 3]  [4 5]  [6 7] [8 9] [10 11]
 const N_CLOSED = [0,0, 100,0, 100,0,   100,0,   0,0,   0,0  ];
-const N_WAVE   = [0,0, 100,0, 100,100, 100,38,  0,38,  0,68 ];
+
+// OUVERTURE — arche concave : les deux bords restent mi-hauteur (~62),
+// le centre plonge jusqu'en bas grâce aux points de contrôle à y=100.
+// → "rideau lourd attiré par la gravité, bords ancrés plus haut"
+// Centre à t=0.5 : y ≈ 0.125×62 + 0.375×100 + 0.375×100 + 0.125×62 ≈ 90
+const N_WAVE   = [0,0, 100,0, 100,62, 100,100, 0,100, 0,62 ];
+
+// FERMETURE — dôme convexe : le centre est aspiré vers le haut en premier,
+// les bords latéraux restent bas. Physique inverse de l'ouverture.
+// → "effet ventouse / aspiration vers le coin supérieur"
+// Centre à t=0.5 : y ≈ 0.125×78 + 0.375×24 + 0.375×24 + 0.125×78 ≈ 37
+const N_WAVE_C = [0,0, 100,0, 100,78, 100,24,  0,24,  0,78 ];
+
 const N_FULL   = [0,0, 100,0, 100,100, 100,100, 0,100, 0,100];
 
 // Easing
@@ -145,10 +157,10 @@ export default function LiquidMenu() {
       el.style.transform  = "translateY(-24px)";
     });
 
-    // Plein écran → vague → fermé
-    after(220, () =>
-      tweenPath(N_FULL, N_WAVE, 0.26, ein2, () =>
-        tweenPath(N_WAVE, N_CLOSED, 0.38, eio3, () => {
+    // Plein écran → dôme convexe (aspiration) → fermé
+    after(150, () =>
+      tweenPath(N_FULL, N_WAVE_C, 0.24, ein2, () =>
+        tweenPath(N_WAVE_C, N_CLOSED, 0.36, eio3, () => {
           overlayRef.current.style.pointerEvents = "none";
           isBusy.current = false;
           onDone?.();
