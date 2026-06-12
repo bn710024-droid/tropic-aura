@@ -8,8 +8,7 @@ import Lenis from "lenis";
 const SECTIONS = [
   {
     id:    "conviction",
-    bg:    "#C08B10",           // ambre vif — identique à l'image
-    img:   "/about/about-conviction.png",
+    bg:    "#C08B10",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
     paras: [
@@ -22,8 +21,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
-    bg:    "#4E8F6A",           // sage vif — identique à l'image
-    img:   "/about/about-mission.png",
+    bg:    "#4E8F6A",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
     paras: [
@@ -35,8 +33,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
-    bg:    "#8272BC",           // lavande vif — identique à l'image
-    img:   "/about/about-vision.png",
+    bg:    "#8272BC",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
     paras: [
@@ -49,8 +46,7 @@ const SECTIONS = [
   },
   {
     id:    "avenir",
-    bg:    "#1B434E",           // teal sombre — fond foncé
-    img:   "/about/about-avenir.png",
+    bg:    "#1B434E",
     label: "04 — NOTRE AVENIR",
     title: "Notre avenir",
     paras: [
@@ -218,11 +214,7 @@ export default function APropos() {
             data-index={i}
             className="scene"
             style={{
-              backgroundColor:    s.bg,
-              backgroundImage:    `url(${s.img})`,
-              backgroundSize:     "55% auto",
-              backgroundPosition: isRight ? "left center" : "right center",
-              backgroundRepeat:   "no-repeat",
+              backgroundColor: s.bg,
               justifyContent: isRight ? "flex-end" : "flex-start",
               paddingTop: "80px",
               paddingBottom: "40px",
