@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import ScrollArrow from "../components/ScrollArrow";
 
 // ============================================================
 //  À PROPOS — même mécanique que Home :
@@ -195,8 +196,10 @@ export default function APropos() {
         ))}
       </nav>
 
-      {/* ── Sections ── */}
-      {SECTIONS.map((s, i) => {
+      {/* ── Sections + flèche scroll ── */}
+      <div style={{ position: "relative" }}>
+        <ScrollArrow />
+        {SECTIONS.map((s, i) => {
         const isRight = s.side === "right";
         return (
         <section key={s.id} data-index={i} className="scene" style={{
@@ -273,7 +276,8 @@ export default function APropos() {
           )}
         </section>
         );
-      })}
+        })}
+      </div>
     </>
   );
 }
