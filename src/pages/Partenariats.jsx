@@ -2,14 +2,15 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
-//  PARTENARIATS — Option B : palette pastel, luxe européen
-//  bg-layer interpolé en RAF (même mécanique que Home/About)
+//  PARTENARIATS — gradients par section, crossfade au scroll
+//  5 calques bg-layer empilés en DOM order (dernier = dessus)
 // ============================================================
 
 const SECTIONS = [
   {
     id: "fondations", num: "01", surtitre: "FONDATIONS", side: "left",
-    bg: "#E3F0EC",
+    bg: "linear-gradient(180deg, #E1CCA0 0%, #D1B57A 100%)",
+    dark: true,
     title: "Des fondations construites sur la confiance.",
     paragraphs: [
       "Chaque partenariat durable repose sur des fondations solides.",
@@ -19,7 +20,8 @@ const SECTIONS = [
   },
   {
     id: "reseau", num: "02", surtitre: "RÉSEAU", side: "right",
-    bg: "#D8E3F2",
+    bg: "linear-gradient(180deg, #90A984 0%, #708A65 100%)",
+    dark: true,
     title: "Un réseau qui dépasse les frontières.",
     paragraphs: [
       "Derrière chaque réussite commerciale se trouve un réseau de partenaires engagés.",
@@ -29,7 +31,8 @@ const SECTIONS = [
   },
   {
     id: "terroirs", num: "03", surtitre: "TERROIRS", side: "left",
-    bg: "#D9D6E8",
+    bg: "linear-gradient(180deg, #4F7980 0%, #355C62 100%)",
+    dark: false,
     title: "Révéler le potentiel des terroirs tropicaux.",
     paragraphs: [
       "Certaines des opportunités agricoles les plus prometteuses au monde se trouvent dans les régions tropicales africaines.",
@@ -39,7 +42,8 @@ const SECTIONS = [
   },
   {
     id: "avenir", num: "04", surtitre: "AVENIR", side: "right",
-    bg: "#CBBEAA",
+    bg: "linear-gradient(180deg, #D4B47B 0%, #BE9A5A 100%)",
+    dark: true,
     title: "Construire l'avenir ensemble.",
     paragraphs: [
       "Nous croyons que l'avenir du commerce tropical sera porté par des partenariats solides, une vision partagée et une collaboration durable.",
@@ -49,7 +53,8 @@ const SECTIONS = [
   },
   {
     id: "cta", num: "05", surtitre: "REJOINDRE LE RÉSEAU", side: "left",
-    bg: "#BFB09A",
+    bg: "linear-gradient(180deg, #C49A5A 0%, #A87E40 100%)",
+    dark: true,
     title: "Rejoignez un réseau qui façonne l'avenir du commerce tropical.",
     paragraphs: [
       "Les plus grandes opportunités naissent lorsque des partenaires ambitieux avancent dans la même direction. Que vous soyez producteur, importateur, distributeur ou partenaire logistique, Tropic-Aura souhaite collaborer avec des acteurs qui partagent une même exigence de qualité et de création de valeur.",
@@ -58,16 +63,11 @@ const SECTIONS = [
   },
 ];
 
-const hexToRgb = (h) => {
-  const n = parseInt(h.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-};
-const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
 const N = SECTIONS.length;
 
 // ============================================================
 export default function Partenariats() {
-  const bgRef       = useRef(null);
+  const bgRefs      = useRef([]);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const revealed    = useRef(new Set());
@@ -84,26 +84,27 @@ export default function Partenariats() {
     lenisRef.current = lenis;
 
     let rafId;
-    const lerp    = (a, b, t) => Math.round(a + (b - a) * t);
-    const easeOut = (t) => 1 - (1 - t) * (1 - t);
-    const last    = N - 1;
+    const easeOut  = (t) => 1 - (1 - t) * (1 - t);
+    const last     = N - 1;
     let lastScroll = -99999;
     const onResize = () => { lastScroll = -99999; };
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
-      // ── fond interpolé ──
       const prog = scroll / H;
       const ci   = Math.min(last, Math.floor(prog));
       const ft   = Math.min(1, Math.max(0, prog - ci));
-      const ca   = COLORS[ci];
-      const cb   = COLORS[Math.min(last, ci + 1)];
-      if (bgRef.current) {
-        bgRef.current.style.backgroundColor =
-          `rgb(${lerp(ca[0],cb[0],ft)},${lerp(ca[1],cb[1],ft)},${lerp(ca[2],cb[2],ft)})`;
-      }
 
-      // ── fade-in contenu ──
+      // ── crossfade entre couches de gradient ──
+      // DOM order = z-order: bg-4 est au-dessus de bg-3, etc.
+      // bg-0 toujours visible en dessous. Les suivants s'ouvrent en fondu.
+      bgRefs.current.forEach((el, j) => {
+        if (!el) return;
+        const opacity = j <= ci ? 1 : j === ci + 1 ? ft : 0;
+        el.style.opacity = opacity.toFixed(3);
+      });
+
+      // ── fade-in contenu (une seule fois) ──
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
         if (!el || revealed.current.has(j)) return;
@@ -115,15 +116,19 @@ export default function Partenariats() {
         if (e >= 0.999) revealed.current.add(j);
       });
 
-      // ── nav dots ──
-      const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
+      // ── nav dots (couleur adaptée à la section active) ──
+      const active   = Math.min(last, Math.max(0, Math.round(scroll / H)));
+      const isDark   = SECTIONS[active].dark;
+      const dotOn    = isDark ? "rgba(0,0,0,0.60)"    : "rgba(255,255,255,0.90)";
+      const dotOff   = isDark ? "rgba(0,0,0,0.20)"    : "rgba(255,255,255,0.30)";
+      const shadowOn = isDark ? "0 0 0 2px rgba(0,0,0,0.10)" : "0 0 0 2px rgba(255,255,255,0.15)";
       dotRefs.current.forEach((dot, j) => {
         if (!dot) return;
         const on = j === active;
         dot.style.width      = on ? "9px" : "6px";
         dot.style.height     = on ? "9px" : "6px";
-        dot.style.background = on ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.20)";
-        dot.style.boxShadow  = on ? "0 0 0 2px rgba(0,0,0,0.10)" : "none";
+        dot.style.background = on ? dotOn : dotOff;
+        dot.style.boxShadow  = on ? shadowOn : "none";
       });
     };
 
@@ -157,72 +162,59 @@ export default function Partenariats() {
 
   return (
     <>
-      {/* ── Header ── */}
+      {/* ── Header frosted glass ── */}
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 66,
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "0 clamp(20px,5vw,48px)",
         pointerEvents: "none",
-        background: "rgba(255,255,255,0.60)",
+        background: "rgba(255,255,255,0.55)",
         backdropFilter: "blur(14px)",
         borderBottom: "1px solid rgba(0,0,0,0.06)",
       }}>
-        <a href="/" style={{
-          pointerEvents: "auto", textDecoration: "none",
-          fontFamily: "'Plus Jakarta Sans',sans-serif",
-          fontWeight: 800, fontSize: 18, letterSpacing: ".04em",
-          color: "#1A1A1A",
-        }}>TROPICAURA</a>
-        <a href="/" style={{ pointerEvents: "auto", textDecoration: "none" }}>
-          <span style={{
-            display: "inline-block",
-            fontFamily: "'Plus Jakarta Sans',sans-serif",
-            fontWeight: 700, fontSize: 12, letterSpacing: ".12em",
-            textTransform: "uppercase", color: "#1A1A1A",
-            background: "rgba(0,0,0,0.05)",
-            border: "1.5px solid rgba(0,0,0,0.16)",
-            borderRadius: 100, padding: "7px 20px", cursor: "pointer",
-          }}>← Accueil</span>
+        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:"#1A1A1A" }}>
+          TROPICAURA
+        </a>
+        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
+          <span style={{ display:"inline-block", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:12, letterSpacing:".12em", textTransform:"uppercase", color:"#1A1A1A", background:"rgba(0,0,0,0.05)", border:"1.5px solid rgba(0,0,0,0.16)", borderRadius:100, padding:"7px 20px", cursor:"pointer" }}>
+            ← Accueil
+          </span>
         </a>
       </header>
 
-      {/* ── Fond interpolé ── */}
-      <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      {/* ── Couches de gradient (DOM order = z-order) ── */}
+      {SECTIONS.map((s, i) => (
+        <div
+          key={s.id + "-bg"}
+          ref={(el) => (bgRefs.current[i] = el)}
+          className="bg-layer"
+          style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
+        />
+      ))}
 
       {/* ── Nav dots ── */}
-      <nav style={{
-        position: "fixed", right: "clamp(14px,2vw,28px)",
-        top: "50%", transform: "translateY(-50%)",
-        zIndex: 150, display: "flex", flexDirection: "column", gap: 12,
-        pointerEvents: "auto",
-      }}>
+      <nav style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
         {SECTIONS.map((s, i) => (
           <button
             key={s.id}
             ref={(el) => (dotRefs.current[i] = el)}
             onClick={() => scrollTo(i)}
             title={s.title}
-            style={{
-              width: 6, height: 6, borderRadius: "50%",
-              background: "rgba(0,0,0,0.20)",
-              border: "none", cursor: "pointer", padding: 0,
-              transition: "width .25s, height .25s, background .25s, box-shadow .25s",
-              display: "block",
-            }}
+            style={{ width:6, height:6, borderRadius:"50%", background:"rgba(0,0,0,0.20)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block" }}
           />
         ))}
       </nav>
 
       {/* ── Sections ── */}
       {SECTIONS.map((s, i) => {
-        const isRight = s.side === "right";
+        const isRight      = s.side === "right";
+        const textColor    = s.dark ? "#111111"              : "#FFFFFF";
+        const labelColor   = s.dark ? "rgba(0,0,0,0.40)"    : "rgba(255,255,255,0.62)";
+        const dividerColor = s.dark ? "rgba(0,0,0,0.18)"    : "rgba(255,255,255,0.35)";
+        const paraColor    = s.dark ? "rgba(0,0,0,0.62)"    : "rgba(255,255,255,0.82)";
+
         return (
-          <section
-            key={s.id}
-            data-index={i}
-            className="scene"
-            style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}
-          >
+          <section key={s.id} data-index={i} className="scene" style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}>
             <div
               ref={(el) => (contentRefs.current[i] = el)}
               className="scene__content"
@@ -234,75 +226,39 @@ export default function Partenariats() {
               }}
             >
               {/* Numéro + surtitre */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                <span style={{
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: 10, fontWeight: 700, letterSpacing: ".26em",
-                  textTransform: "uppercase", color: "rgba(0,0,0,0.35)",
-                }}>{s.num}</span>
-                <div style={{ width: 1, height: 24, background: "rgba(0,0,0,0.15)" }} />
-                <span style={{
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: 10, fontWeight: 700, letterSpacing: ".22em",
-                  textTransform: "uppercase", color: "rgba(0,0,0,0.40)",
-                }}>{s.surtitre}</span>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
+                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".26em", textTransform:"uppercase", color:labelColor }}>
+                  {s.num}
+                </span>
+                <div style={{ width:1, height:24, background:dividerColor }} />
+                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".22em", textTransform:"uppercase", color:labelColor }}>
+                  {s.surtitre}
+                </span>
               </div>
 
               {/* Titre */}
-              <h2 style={{
-                fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontWeight: 800,
-                fontSize: "clamp(24px, 2.8vw, 44px)",
-                lineHeight: 1.08, letterSpacing: "-.03em",
-                color: "#111111",
-                margin: "0 0 18px",
-              }}>
+              <h2 style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:"clamp(24px, 2.8vw, 44px)", lineHeight:1.08, letterSpacing:"-.03em", color:textColor, margin:"0 0 18px" }}>
                 {s.title}
               </h2>
 
-              {/* Ligne de séparation */}
-              <div style={{
-                width: 32, height: 1,
-                background: "rgba(0,0,0,0.18)",
-                margin: "0 0 20px",
-              }} />
+              {/* Filet */}
+              <div style={{ width:32, height:1, background:dividerColor, margin:"0 0 20px" }} />
 
               {/* Paragraphes */}
               {s.paragraphs.map((p, pi) => (
-                <p key={pi} style={{
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: "clamp(13px, 1.1vw, 15px)",
-                  lineHeight: 1.80, fontWeight: 400,
-                  color: "rgba(0,0,0,0.62)",
-                  margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0",
-                }}>
+                <p key={pi} style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:"clamp(13px,1.1vw,15px)", lineHeight:1.80, fontWeight:400, color:paraColor, margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0" }}>
                   {p}
                 </p>
               ))}
 
               {/* Bouton CTA */}
               {s.hasButton && (
-                <div style={{ marginTop: 36 }}>
-                  <a href="/contact" style={{ textDecoration: "none" }}>
-                    <button style={{
-                      fontFamily: "'Plus Jakarta Sans',sans-serif",
-                      fontWeight: 700, fontSize: 11,
-                      letterSpacing: ".18em", textTransform: "uppercase",
-                      color: "#111111",
-                      background: "transparent",
-                      border: "1.5px solid rgba(0,0,0,0.35)",
-                      borderRadius: 100, padding: "13px 38px",
-                      cursor: "pointer",
-                      transition: "background .3s, border-color .3s",
-                    }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = "rgba(0,0,0,0.06)";
-                        e.currentTarget.style.borderColor = "rgba(0,0,0,0.60)";
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = "transparent";
-                        e.currentTarget.style.borderColor = "rgba(0,0,0,0.35)";
-                      }}
+                <div style={{ marginTop:36 }}>
+                  <a href="/contact" style={{ textDecoration:"none" }}>
+                    <button
+                      style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:11, letterSpacing:".18em", textTransform:"uppercase", color:textColor, background:"transparent", border:`1.5px solid ${dividerColor}`, borderRadius:100, padding:"13px 38px", cursor:"pointer", transition:"background .3s, border-color .3s" }}
+                      onMouseEnter={e => { e.currentTarget.style.background = s.dark ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = s.dark ? "rgba(0,0,0,0.50)" : "rgba(255,255,255,0.60)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = dividerColor; }}
                     >
                       Devenir partenaire →
                     </button>
@@ -312,7 +268,7 @@ export default function Partenariats() {
             </div>
 
             {i === 0 && (
-              <div className="scene__hint--dark">
+              <div className="scene__hint scene__hint--dark">
                 <i /><span>Défilez vers le bas</span>
               </div>
             )}
