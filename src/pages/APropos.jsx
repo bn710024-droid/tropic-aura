@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
-//  À PROPOS — images bg cover (no fixed) + overlay 0.3 + RAF
+//  À PROPOS — même mécanique que Home :
+//  bg-layer fixe + interpolation couleur en RAF + fade-in contenu
 // ============================================================
 
 const SECTIONS = [
@@ -16,8 +17,6 @@ const SECTIONS = [
       "Tropic-Aura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
       "Nous invitons nos partenaires à participer à cette nouvelle dynamique : construire des connexions durables, révéler la véritable valeur des origines africaines et contribuer à une chaîne d'approvisionnement plus équitable, plus moderne et plus performante.",
     ],
-    side: "left",
-    dark: false,
   },
   {
     id:    "mission",
@@ -28,8 +27,6 @@ const SECTIONS = [
       "Nous développons des partenariats durables entre producteurs, stations de conditionnement, acteurs logistiques et importateurs internationaux afin de faciliter l'accès à des produits tropicaux de qualité tout en créant davantage de valeur à l'origine.",
       "Chaque collaboration représente une opportunité de bâtir ensemble un commerce plus efficace, plus transparent et plus bénéfique pour l'ensemble des acteurs de la chaîne de valeur.",
     ],
-    side: "right",
-    dark: false,
   },
   {
     id:    "vision",
@@ -41,8 +38,6 @@ const SECTIONS = [
       "Nous voulons participer à la construction d'une nouvelle génération de marques africaines capables d'inspirer confiance, de créer de la valeur et de représenter l'excellence des régions tropicales sur la scène internationale.",
       "Nous recherchons des partenaires qui partagent cette ambition : faire émerger une nouvelle référence du commerce international fondée sur la qualité, l'innovation et une vision à long terme.",
     ],
-    side: "left",
-    dark: false,
   },
   {
     id:    "avenir",
@@ -54,13 +49,18 @@ const SECTIONS = [
       "Tropic-Aura entend contribuer à cette transformation aux côtés de producteurs, d'acheteurs et d'acteurs engagés qui souhaitent participer à l'émergence d'une Afrique plus visible, plus compétitive et plus influente sur les marchés mondiaux.",
     ],
     quote: "L'avenir ne se construit pas seul. Il se construit ensemble.",
-    side: "right",
-    dark: true,
   },
 ];
 
+const hexToRgb = (h) => {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
+
 // ============================================================
 export default function APropos() {
+  const bgRef       = useRef(null);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const revealed    = useRef(new Set());
@@ -77,6 +77,7 @@ export default function APropos() {
     lenisRef.current = lenis;
 
     let rafId;
+    const lerp     = (a, b, t) => Math.round(a + (b - a) * t);
     const easeOut  = (t) => 1 - (1 - t) * (1 - t);
     const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
@@ -84,6 +85,17 @@ export default function APropos() {
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
+      // ── couleur de fond interpolée (identique Home) ──
+      const prog = scroll / H;
+      const ci   = Math.min(last, Math.floor(prog));
+      const ft   = Math.min(1, Math.max(0, prog - ci));
+      const ca   = COLORS[ci];
+      const cb   = COLORS[Math.min(last, ci + 1)];
+      if (bgRef.current) {
+        bgRef.current.style.backgroundColor =
+          `rgb(${lerp(ca[0],cb[0],ft)},${lerp(ca[1],cb[1],ft)},${lerp(ca[2],cb[2],ft)})`;
+      }
+
       // ── fade-in contenu (révèle une fois) ──
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
@@ -96,19 +108,15 @@ export default function APropos() {
         if (e >= 0.999) revealed.current.add(j);
       });
 
-      // ── nav dots — couleur selon section claire/sombre ──
-      const active     = Math.min(last, Math.max(0, Math.round(scroll / H)));
-      const darkSec    = SECTIONS[active]?.dark ?? true;
-      const dotOn      = darkSec ? "rgba(255,255,255,0.95)"  : "rgba(26,26,26,0.85)";
-      const dotOff     = darkSec ? "rgba(255,255,255,0.32)"  : "rgba(26,26,26,0.25)";
-      const dotShadow  = darkSec ? "0 0 0 2px rgba(255,255,255,0.18)" : "0 0 0 2px rgba(0,0,0,0.08)";
+      // ── nav dots ──
+      const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
       dotRefs.current.forEach((dot, j) => {
         if (!dot) return;
         const on = j === active;
         dot.style.width      = on ? "9px" : "6px";
         dot.style.height     = on ? "9px" : "6px";
-        dot.style.background = on ? dotOn  : dotOff;
-        dot.style.boxShadow  = on ? dotShadow : "none";
+        dot.style.background = on ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.32)";
+        dot.style.boxShadow  = on ? "0 0 0 2px rgba(255,255,255,0.18)" : "none";
       });
     };
 
@@ -142,38 +150,20 @@ export default function APropos() {
 
   return (
     <>
-      {/* ── Header ── */}
-      <header style={{
-        position: "fixed", top: 0, left: 0, right: 0,
-        zIndex: 200, height: 66,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(20px,5vw,48px)",
-        pointerEvents: "none",
-        background: "rgba(255,255,255,0.72)",
-        backdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
-      }}>
-        <span style={{
-          fontFamily: "'Plus Jakarta Sans',sans-serif",
-          fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
-          color: "#1A1A1A",
-        }}>
-          TROPICAURA
-        </span>
-        <a href="/" style={{ pointerEvents: "auto", textDecoration: "none" }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center",
-            fontFamily: "'Plus Jakarta Sans',sans-serif",
-            fontWeight: 700, fontSize: 13, letterSpacing: ".10em",
-            textTransform: "uppercase", color: "#1A1A1A",
-            background: "rgba(0,0,0,0.06)",
-            border: "1.5px solid rgba(0,0,0,0.18)",
-            borderRadius: 100, padding: "5px 18px", cursor: "pointer",
-          }}>
-            ← Accueil
+      {/* ── Header fantôme transparent (comme Home) ── */}
+      <header className="ghost" style={{ zIndex: 200 }}>
+        <span className="ghost__logo">TROPICAURA</span>
+        <a href="/" style={{ textDecoration: "none" }}>
+          <span className="ghost__contact">
+            <span className="ghost__contact-label">← Accueil</span>
+            <span className="ghost__contact-arrow"><span>→</span></span>
           </span>
         </a>
       </header>
+
+      {/* ── Fond interpolé + couche de profondeur ── */}
+      <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-depth" />
 
       {/* ── Nav dots ── */}
       <nav style={{
@@ -202,106 +192,77 @@ export default function APropos() {
       </nav>
 
       {/* ── Sections ── */}
-      {SECTIONS.map((s, i) => {
-        const isRight   = s.side === "right";
-        const titleCol  = s.dark ? "#fff"                    : "#1A1A1A";
-        const labelCol  = s.dark ? "rgba(255,255,255,0.58)" : "rgba(0,0,0,0.52)";
-        const paraCol   = s.dark ? "rgba(255,255,255,0.88)" : "rgba(0,0,0,0.78)";
-        const quoteShadow = s.dark ? "0 1px 8px rgba(0,0,0,0.30)" : "none";
-        return (
-          <section
-            key={s.id}
-            data-index={i}
-            className="scene"
+      {SECTIONS.map((s, i) => (
+        <section key={s.id} data-index={i} className="scene">
+          <div
+            ref={(el) => (contentRefs.current[i] = el)}
+            className="scene__content"
             style={{
-              backgroundColor: s.bg,
-              justifyContent: isRight ? "flex-end" : "flex-start",
-              paddingTop: "80px",
-              paddingBottom: "40px",
+              opacity:   i === 0 ? 1 : 0,
+              transform: i === 0 ? "translateY(0)" : "translateY(28px)",
             }}
           >
-            {/* Overlay uniquement sur sections sombres */}
-            {s.dark && (
-              <div aria-hidden="true" style={{
-                position: "absolute", inset: 0, zIndex: 2,
-                background: "rgba(0,0,0,0.22)",
-                pointerEvents: "none",
-              }} />
+            <span style={{
+              display: "block",
+              fontFamily: "'Plus Jakarta Sans',sans-serif",
+              fontSize: 10, fontWeight: 700,
+              letterSpacing: ".24em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.62)", marginBottom: 14,
+            }}>
+              {s.label}
+            </span>
+
+            <h1 style={{
+              fontFamily: "'Plus Jakarta Sans',sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(32px, 3.6vw, 52px)",
+              lineHeight: 1.08, letterSpacing: "-.03em",
+              color: "#fff",
+              textShadow: "0 4px 32px rgba(0,0,0,0.28)",
+              margin: "0 0 14px",
+            }}>
+              {s.title}
+            </h1>
+
+            <div style={{
+              width: 34, height: 3, background: "rgba(255,255,255,0.55)",
+              borderRadius: 2, margin: "0 0 18px",
+            }} />
+
+            {s.paras.map((p, j) => (
+              <p key={j} style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif",
+                fontSize: "clamp(14px, 1.3vw, 16px)",
+                lineHeight: 1.72, fontWeight: 400,
+                color: "rgba(255,255,255,0.88)",
+                textShadow: "0 1px 8px rgba(0,0,0,0.22)",
+                margin: j < s.paras.length - 1 ? "0 0 12px" : "0",
+              }}>
+                {p}
+              </p>
+            ))}
+
+            {s.quote && (
+              <p style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif",
+                fontSize: "clamp(14px, 1.3vw, 16px)",
+                lineHeight: 1.72, fontWeight: 700,
+                color: "#fff",
+                textShadow: "0 1px 8px rgba(0,0,0,0.28)",
+                margin: "16px 0 0",
+              }}>
+                {s.quote}
+              </p>
             )}
+          </div>
 
-            {/* Contenu texte */}
-            <div
-              ref={(el) => (contentRefs.current[i] = el)}
-              className="scene__content"
-              style={{
-                paddingLeft:  isRight ? 16                      : "clamp(24px,7vw,96px)",
-                paddingRight: isRight ? "clamp(24px,7vw,96px)" : 16,
-                maxWidth: "min(480px, 46vw)",
-                textAlign: "left",
-                opacity:   i === 0 ? 1 : 0,
-                transform: i === 0 ? "translateY(0)" : "translateY(28px)",
-              }}
-            >
-              <span style={{
-                display: "block",
-                fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontSize: 10, fontWeight: 700,
-                letterSpacing: ".24em", textTransform: "uppercase",
-                color: labelCol, marginBottom: 14,
-              }}>
-                {s.label}
-              </span>
-
-              <h1 style={{
-                fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontWeight: 800,
-                fontSize: "clamp(32px, 3.6vw, 48px)",
-                lineHeight: 1.08, letterSpacing: "-.03em",
-                color: titleCol,
-                margin: "0 0 14px",
-              }}>
-                {s.title}
-              </h1>
-
-              <div style={{
-                width: 34, height: 3, background: "#D4A017",
-                borderRadius: 2, margin: "0 0 18px",
-              }} />
-
-              {s.paras.map((p, j) => (
-                <p key={j} style={{
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: "clamp(13px, 1.15vw, 15px)",
-                  lineHeight: 1.68, fontWeight: 400,
-                  color: paraCol,
-                  margin: j < s.paras.length - 1 ? "0 0 10px" : "0",
-                }}>
-                  {p}
-                </p>
-              ))}
-
-              {s.quote && (
-                <p style={{
-                  fontFamily: "'Plus Jakarta Sans',sans-serif",
-                  fontSize: "clamp(14px, 1.3vw, 16px)",
-                  lineHeight: 1.72, fontWeight: 700,
-                  color: titleCol,
-                  textShadow: quoteShadow,
-                  margin: "14px 0 0",
-                }}>
-                  {s.quote}
-                </p>
-              )}
+          {i === 0 && (
+            <div className="scene__hint">
+              <i /><span>Défilez vers le bas</span>
             </div>
-
-            {i === 0 && (
-              <div className={`scene__hint${!s.dark ? " scene__hint--dark" : ""}`}>
-                <i /><span>Défilez vers le bas</span>
-              </div>
-            )}
-          </section>
-        );
-      })}
+          )}
+        </section>
+      ))}
     </>
   );
 }
