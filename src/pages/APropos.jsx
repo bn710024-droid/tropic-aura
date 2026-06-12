@@ -2,13 +2,13 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
-//  À PROPOS — RAF + bg-layer interpolé · 4 couleurs · 0 image
+//  À PROPOS — images bg cover (no fixed) + overlay 0.3 + RAF
 // ============================================================
 
 const SECTIONS = [
   {
     id:    "conviction",
-    bg:    "#C08B10",
+    img:   "/about/about-conviction.png",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
     paras: [
@@ -20,7 +20,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
-    bg:    "#4E8F6A",
+    img:   "/about/about-mission.png",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
     paras: [
@@ -31,7 +31,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
-    bg:    "#8272BC",
+    img:   "/about/about-vision.png",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
     paras: [
@@ -43,7 +43,7 @@ const SECTIONS = [
   },
   {
     id:    "avenir",
-    bg:    "#1B434E",
+    img:   "/about/about-avenir.png",
     label: "04 — NOTRE AVENIR",
     title: "Notre avenir",
     paras: [
@@ -51,19 +51,12 @@ const SECTIONS = [
       "Tropic-Aura entend contribuer à cette transformation aux côtés de producteurs, d'acheteurs et d'acteurs engagés qui souhaitent participer à l'émergence d'une Afrique plus visible, plus compétitive et plus influente sur les marchés mondiaux.",
     ],
     quote: "L'avenir ne se construit pas seul. Il se construit ensemble.",
-    side: "left",
+    side: "right",
   },
 ];
 
-const hexToRgb = (h) => {
-  const n = parseInt(h.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-};
-const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
-
 // ============================================================
 export default function APropos() {
-  const bgRef       = useRef(null);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const revealed    = useRef(new Set());
@@ -80,25 +73,13 @@ export default function APropos() {
     lenisRef.current = lenis;
 
     let rafId;
-    const lerp    = (a, b, t) => Math.round(a + (b - a) * t);
-    const easeOut = (t) => 1 - (1 - t) * (1 - t);
-    const last    = SECTIONS.length - 1;
+    const easeOut  = (t) => 1 - (1 - t) * (1 - t);
+    const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
     const onResize = () => { lastScroll = -99999; };
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
-      // ── bg-layer interpolé ──
-      const prog = scroll / H;
-      const i  = Math.min(last, Math.floor(prog));
-      const ft = Math.min(1, Math.max(0, prog - i));
-      const a  = COLORS[i];
-      const b  = COLORS[Math.min(last, i + 1)];
-      if (bgRef.current) {
-        bgRef.current.style.backgroundColor =
-          `rgb(${lerp(a[0],b[0],ft)},${lerp(a[1],b[1],ft)},${lerp(a[2],b[2],ft)})`;
-      }
-
       // ── fade-in contenu (révèle une fois) ──
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
@@ -164,7 +145,7 @@ export default function APropos() {
         <span style={{
           fontFamily: "'Plus Jakarta Sans',sans-serif",
           fontWeight: 800, fontSize: 19, letterSpacing: ".04em",
-          color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.35)",
+          color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,0.4)",
         }}>
           TROPICAURA
         </span>
@@ -184,11 +165,6 @@ export default function APropos() {
         </a>
       </header>
 
-      {/* ── Fond interpolé + profondeur ── */}
-      <div className="bg-layer" ref={bgRef}
-           style={{ backgroundColor: SECTIONS[0].bg }} />
-      <div className="bg-depth" />
-
       {/* ── Nav dots ── */}
       <nav style={{
         position: "fixed",
@@ -205,8 +181,7 @@ export default function APropos() {
             onClick={() => scrollTo(i)}
             title={s.title}
             style={{
-              width: 6, height: 6,
-              borderRadius: "50%",
+              width: 6, height: 6, borderRadius: "50%",
               background: "rgba(255,255,255,0.32)",
               border: "none", cursor: "pointer", padding: 0,
               transition: "width .25s, height .25s, background .25s, box-shadow .25s",
@@ -224,8 +199,24 @@ export default function APropos() {
             key={s.id}
             data-index={i}
             className="scene"
-            style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}
+            style={{
+              backgroundImage:    `url(${s.img})`,
+              backgroundSize:     "cover",
+              backgroundPosition: "center",
+              backgroundRepeat:   "no-repeat",
+              justifyContent: isRight ? "flex-end" : "flex-start",
+              paddingTop: "120px",
+              overflow: "hidden",
+            }}
           >
+            {/* Overlay uniforme rgba(0,0,0,0.3) */}
+            <div aria-hidden="true" style={{
+              position: "absolute", inset: 0, zIndex: 2,
+              background: "rgba(0,0,0,0.30)",
+              pointerEvents: "none",
+            }} />
+
+            {/* Contenu texte */}
             <div
               ref={(el) => (contentRefs.current[i] = el)}
               className="scene__content"
@@ -243,7 +234,7 @@ export default function APropos() {
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontSize: 10, fontWeight: 700,
                 letterSpacing: ".24em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.58)", marginBottom: 14,
+                color: "rgba(255,255,255,0.62)", marginBottom: 14,
               }}>
                 {s.label}
               </span>
@@ -252,20 +243,17 @@ export default function APropos() {
                 fontFamily: "'Plus Jakarta Sans',sans-serif",
                 fontWeight: 800,
                 fontSize: "clamp(46px, 5.6vw, 72px)",
-                lineHeight: 1.04,
-                letterSpacing: "-.03em",
+                lineHeight: 1.04, letterSpacing: "-.03em",
                 color: "#fff",
-                textShadow: "0 6px 40px rgba(0,0,0,0.22)",
+                textShadow: "0 4px 32px rgba(0,0,0,0.35)",
                 margin: "0 0 18px",
               }}>
                 {s.title}
               </h1>
 
               <div style={{
-                width: 38, height: 3,
-                background: "#D4A017",
-                borderRadius: 2,
-                margin: "0 0 26px",
+                width: 38, height: 3, background: "#D4A017",
+                borderRadius: 2, margin: "0 0 26px",
               }} />
 
               {s.paras.map((p, j) => (
@@ -273,8 +261,8 @@ export default function APropos() {
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: "clamp(14px, 1.3vw, 16px)",
                   lineHeight: 1.72, fontWeight: 400,
-                  color: "rgba(255,255,255,0.88)",
-                  textShadow: "0 1px 8px rgba(0,0,0,0.18)",
+                  color: "rgba(255,255,255,0.90)",
+                  textShadow: "0 1px 8px rgba(0,0,0,0.30)",
                   margin: j < s.paras.length - 1 ? "0 0 14px" : "0",
                 }}>
                   {p}
@@ -287,6 +275,7 @@ export default function APropos() {
                   fontSize: "clamp(14px, 1.3vw, 16px)",
                   lineHeight: 1.72, fontWeight: 700,
                   color: "#fff",
+                  textShadow: "0 1px 8px rgba(0,0,0,0.30)",
                   margin: "14px 0 0",
                 }}>
                   {s.quote}
