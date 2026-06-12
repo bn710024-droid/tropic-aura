@@ -8,6 +8,7 @@ import Lenis from "lenis";
 const SECTIONS = [
   {
     id:    "conviction",
+    bg:    "#C08B10",
     img:   "/about/about-conviction.png",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
@@ -20,6 +21,7 @@ const SECTIONS = [
   },
   {
     id:    "mission",
+    bg:    "#4E8F6A",
     img:   "/about/about-mission.png",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
@@ -31,6 +33,7 @@ const SECTIONS = [
   },
   {
     id:    "vision",
+    bg:    "#8272BC",
     img:   "/about/about-vision.png",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
@@ -43,6 +46,7 @@ const SECTIONS = [
   },
   {
     id:    "avenir",
+    bg:    "#1B434E",
     img:   "/about/about-avenir.png",
     label: "04 — NOTRE AVENIR",
     title: "Notre avenir",
@@ -200,9 +204,10 @@ export default function APropos() {
             data-index={i}
             className="scene"
             style={{
+              backgroundColor:    s.bg,
               backgroundImage:    `url(${s.img})`,
-              backgroundSize:     "cover",
-              backgroundPosition: "center",
+              backgroundSize:     "55% auto",
+              backgroundPosition: isRight ? "left center" : "right center",
               backgroundRepeat:   "no-repeat",
               justifyContent: isRight ? "flex-end" : "flex-start",
               paddingTop: "80px",
