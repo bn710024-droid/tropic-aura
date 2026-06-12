@@ -10,6 +10,7 @@ const SECTIONS = [
   {
     id:    "conviction",
     bg:    "#C08B10",
+    side:  "left",
     label: "01 — NOTRE CONVICTION",
     title: "Notre conviction",
     paras: [
@@ -21,6 +22,7 @@ const SECTIONS = [
   {
     id:    "mission",
     bg:    "#4E8F6A",
+    side:  "right",
     label: "02 — NOTRE MISSION",
     title: "Notre mission",
     paras: [
@@ -31,6 +33,7 @@ const SECTIONS = [
   {
     id:    "vision",
     bg:    "#8272BC",
+    side:  "left",
     label: "03 — NOTRE VISION",
     title: "Notre vision",
     paras: [
@@ -42,6 +45,7 @@ const SECTIONS = [
   {
     id:    "avenir",
     bg:    "#1B434E",
+    side:  "right",
     label: "04 — NOTRE AVENIR",
     title: "Notre avenir",
     paras: [
@@ -192,14 +196,20 @@ export default function APropos() {
       </nav>
 
       {/* ── Sections ── */}
-      {SECTIONS.map((s, i) => (
-        <section key={s.id} data-index={i} className="scene">
+      {SECTIONS.map((s, i) => {
+        const isRight = s.side === "right";
+        return (
+        <section key={s.id} data-index={i} className="scene" style={{
+          justifyContent: isRight ? "flex-end" : "flex-start",
+        }}>
           <div
             ref={(el) => (contentRefs.current[i] = el)}
             className="scene__content"
             style={{
-              opacity:   i === 0 ? 1 : 0,
-              transform: i === 0 ? "translateY(0)" : "translateY(28px)",
+              opacity:      i === 0 ? 1 : 0,
+              transform:    i === 0 ? "translateY(0)" : "translateY(28px)",
+              paddingLeft:  isRight ? 16 : "clamp(24px,7vw,96px)",
+              paddingRight: isRight ? "clamp(24px,7vw,96px)" : 16,
             }}
           >
             <span style={{
@@ -262,7 +272,8 @@ export default function APropos() {
             </div>
           )}
         </section>
-      ))}
+        );
+      })}
     </>
   );
 }
