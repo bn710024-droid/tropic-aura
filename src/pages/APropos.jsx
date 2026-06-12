@@ -157,12 +157,6 @@ export default function APropos() {
       {/* ── Header fantôme transparent (comme Home) ── */}
       <header className="ghost" style={{ zIndex: 200 }}>
         <span className="ghost__logo">TROPICAURA</span>
-        <a href="/" style={{ textDecoration: "none" }}>
-          <span className="ghost__contact">
-            <span className="ghost__contact-label">← Accueil</span>
-            <span className="ghost__contact-arrow"><span>→</span></span>
-          </span>
-        </a>
       </header>
 
       {/* ── Fond interpolé + couche de profondeur ── */}

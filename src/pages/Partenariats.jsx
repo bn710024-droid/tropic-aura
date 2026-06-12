@@ -175,11 +175,6 @@ export default function Partenariats() {
         <a href="/" style={{ pointerEvents:"auto", textDecoration:"none", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:"#1A1A1A" }}>
           TROPICAURA
         </a>
-        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
-          <span style={{ display:"inline-block", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:12, letterSpacing:".12em", textTransform:"uppercase", color:"#1A1A1A", background:"rgba(0,0,0,0.05)", border:"1.5px solid rgba(0,0,0,0.16)", borderRadius:100, padding:"7px 20px", cursor:"pointer" }}>
-            ← Accueil
-          </span>
-        </a>
       </header>
 
       {/* ── Couches de gradient (DOM order = z-order) ── */}

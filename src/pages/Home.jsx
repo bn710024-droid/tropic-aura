@@ -262,10 +262,6 @@ export default function Home() {
       {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
       <header className="ghost">
         <span className="ghost__logo">TROPIC-AURA</span>
-        <button className="ghost__contact" onClick={() => goTo(SECTIONS.length - 1)}>
-          <span className="ghost__contact-label">Contact</span>
-          <span className="ghost__contact-arrow"><span>→</span></span>
-        </button>
       </header>
 
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
