@@ -162,6 +162,11 @@ export default function Partenariats() {
 
   return (
     <>
+      {/* Pulse léger des dots de navigation (opacity 0.5 → 1, en boucle) */}
+      <style>{`
+        @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+      `}</style>
+
       {/* ── Header frosted glass ── */}
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 66,
@@ -195,7 +200,7 @@ export default function Partenariats() {
             ref={(el) => (dotRefs.current[i] = el)}
             onClick={() => scrollTo(i)}
             title={s.title}
-            style={{ width:6, height:6, borderRadius:"50%", background:"rgba(0,0,0,0.20)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block" }}
+            style={{ width:6, height:6, borderRadius:"50%", background:"rgba(0,0,0,0.20)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
           />
         ))}
       </nav>
