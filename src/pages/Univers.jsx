@@ -2,8 +2,20 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import FallingText from "../components/FallingText";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Phrases motivations + couleurs (vert / doré)
+const MOTIVATIONS = [
+  "Excellence n'est jamais accidentelle",
+  "Chaque détail compte",
+  "Qualité sans compromis",
+  "Innovation permanente",
+  "Rejoignez-nous",
+  "Vision long terme",
+];
+const MOTIV_COLORS = ["#0E9F6E", "#C9A84C"];
 
 // ============================================================
 //  NOTRE UNIVERS — même mécanique que Home / À Propos :
@@ -199,6 +211,9 @@ export default function Univers() {
       {/* ── Fond interpolé + couche de profondeur ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
+
+      {/* ── Cascade de textes motivations (derrière le contenu) ── */}
+      <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} interval={3000} fall={4} />
 
       {/* ── Nav dots ── */}
       <nav style={{
