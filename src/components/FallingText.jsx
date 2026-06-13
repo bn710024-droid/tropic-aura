@@ -67,24 +67,25 @@ export default function FallingText({
       const el = document.createElement("div");
       el.style.cssText =
         `position:absolute; top:-72px; left:${left}%; opacity:0;` +
-        `display:inline-flex; align-items:center; gap:9px;` +
-        `padding:9px 17px; white-space:nowrap; pointer-events:none;` +
+        `display:inline-flex; align-items:center; gap:10px;` +
+        `padding:11px 20px; white-space:nowrap; pointer-events:none;` +
         `border-radius:${pill ? "999px" : "12px"};` +
-        `border:1px solid rgba(${c},0.55);` +
-        `background:rgba(${c},0.10);` +
-        `box-shadow:0 8px 30px rgba(0,0,0,0.16), inset 0 0 0 1px rgba(255,255,255,0.04);` +
+        `border:1.5px solid rgba(${c},0.85);` +
+        `background:rgba(${c},0.20);` +
+        `box-shadow:0 10px 34px rgba(0,0,0,0.22), 0 0 22px rgba(${c},0.30), inset 0 0 0 1px rgba(255,255,255,0.05);` +
         `backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);` +
         `will-change:transform,opacity;`;
       el.innerHTML =
         `<span style="display:inline-flex; color:${color}">` +
-          `<svg width="15" height="15" viewBox="0 0 24 24" style="display:block">${glyph}</svg>` +
+          `<svg width="17" height="17" viewBox="0 0 24 24" style="display:block">${glyph}</svg>` +
         `</span>` +
-        `<span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; ` +
-          `font-size:18px; letter-spacing:.01em; color:${color}">${phrase}</span>`;
+        `<span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; ` +
+          `font-size:20px; letter-spacing:.01em; color:${color}; ` +
+          `text-shadow:0 1px 10px rgba(0,0,0,0.25)">${phrase}</span>`;
       layer.appendChild(el);
 
       const tl = gsap.timeline({ onComplete: () => el.remove() });
-      tl.to(el, { opacity: 0.7, duration: 0.7, ease: "power1.out" }, 0);
+      tl.to(el, { opacity: 0.95, duration: 0.6, ease: "power1.out" }, 0);
       tl.to(el, {
         y: window.innerHeight + 140,
         x: drift,

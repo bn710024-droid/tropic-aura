@@ -213,7 +213,7 @@ export default function Univers() {
       <div className="bg-depth" />
 
       {/* ── Cascade de textes motivations (derrière le contenu) ── */}
-      <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} interval={3000} fall={4} />
+      <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} interval={1700} fall={4} />
 
       {/* ── Nav dots ── */}
       <nav style={{
