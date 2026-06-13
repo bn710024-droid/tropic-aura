@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ============================================================
 //  NOTRE UNIVERS — même mécanique que Home / À Propos :
@@ -152,9 +156,32 @@ export default function Univers() {
     update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
+    // ── fade-in des paragraphes au scroll (GSAP ScrollTrigger) ──
+    // chaque <p> : opacity 0→1 sur 0.8s, décalage 0.2s entre paragraphes.
+    lenis.on("scroll", ScrollTrigger.update);
+    const triggers = [];
+    contentRefs.current.forEach((content) => {
+      if (!content) return;
+      const paras = content.querySelectorAll("p");
+      if (!paras.length) return;
+      gsap.set(paras, { opacity: 0 });
+      const st = ScrollTrigger.create({
+        trigger: content,
+        start: "top 80%",
+        once: true,
+        onEnter: () => gsap.to(paras, {
+          opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out",
+        }),
+      });
+      triggers.push(st);
+    });
+    ScrollTrigger.refresh();
+
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
+      lenis.off("scroll", ScrollTrigger.update);
+      triggers.forEach((t) => t.kill());
       lenis.destroy();
     };
   }, []);
