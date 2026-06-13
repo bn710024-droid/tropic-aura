@@ -135,15 +135,22 @@ export default function Univers() {
       }
 
       // ── fade-in contenu (révèle une fois) ──
+      // Fenêtre qui se termine avant le centrage → la dernière section
+      // (non dépassable au scroll) se révèle bien à 100 %.
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
         if (!el || revealed.current.has(j)) return;
-        const enter    = j === 0 ? -H * 0.5 : j * H - H * 0.08;
-        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.28)));
+        const enter    = j * H - H * 0.60;
+        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
+        if (e >= 0.999) {
+          el.style.opacity   = "1";
+          el.style.transform = "none";
+          revealed.current.add(j);
+          return;
+        }
         el.style.opacity   = e.toFixed(3);
-        el.style.transform = `translateY(${(28 * (1 - e)).toFixed(1)}px)`;
-        if (e >= 0.999) revealed.current.add(j);
+        el.style.transform = `translateY(${Math.round(28 * (1 - e))}px)`;
       });
 
       // ── nav dots ──

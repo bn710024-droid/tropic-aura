@@ -127,15 +127,24 @@ export default function Partenariats() {
       });
 
       // ── fade-in contenu (une seule fois) ──
+      // La fenêtre de révélation se termine AVANT que la section soit
+      // centrée → garantit que même la dernière section (qu'on ne peut
+      // pas dépasser au scroll) se révèle à 100 %.
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
         if (!el || revealed.current.has(j)) return;
-        const enter    = j === 0 ? -H * 0.5 : j * H - H * 0.08;
-        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.28)));
+        const enter    = j * H - H * 0.60;
+        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
-        el.style.opacity   = e.toFixed(3);
-        el.style.transform = `translateY(${(24 * (1 - e)).toFixed(1)}px)`;
-        if (e >= 0.999) revealed.current.add(j);
+        if (e >= 0.999) {
+          // figé net : on retire le transform (un translateY fractionnaire flouterait le texte)
+          el.style.opacity   = "1";
+          el.style.transform = "none";
+          revealed.current.add(j);
+        } else {
+          el.style.opacity   = e.toFixed(3);
+          el.style.transform = `translateY(${Math.round(24 * (1 - e))}px)`;
+        }
       });
 
       // ── nav dots (couleur adaptée à la section active) ──
