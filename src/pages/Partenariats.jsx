@@ -178,15 +178,13 @@ export default function Partenariats() {
         @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
       `}</style>
 
-      {/* ── Header frosted glass ── */}
+      {/* ── Header transparent (logo seul) ── */}
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 66,
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "0 clamp(20px,5vw,48px)",
         pointerEvents: "none",
-        background: "rgba(255,255,255,0.55)",
-        backdropFilter: "blur(14px)",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
+        background: "transparent",
       }}>
         <a href="/" style={{ pointerEvents:"auto", textDecoration:"none", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:"#1A1A1A" }}>
           TROPICAURA
