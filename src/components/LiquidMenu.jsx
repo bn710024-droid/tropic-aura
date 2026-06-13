@@ -114,18 +114,18 @@ export default function LiquidMenu() {
     bar2Ref.current.style.backgroundColor = "#fff";
 
     // Cercle s'étend du coin sup-droit → plein écran
-    tweenRadius(0, center.current.full, 0.70, easeOut, null);
+    tweenRadius(0, center.current.full, 1.15, easeOut, null);
 
     // Liens en cascade (démarrent pendant que le cercle finit son expansion)
     allItems.forEach((el, i) =>
-      after(500 + i * 90, () => {
-        el.style.transition = "opacity .42s ease, transform .42s ease";
+      after(780 + i * 120, () => {
+        el.style.transition = "opacity .55s ease, transform .55s ease";
         el.style.opacity    = "1";
         el.style.transform  = "translateY(0)";
       })
     );
 
-    after(500 + allItems.length * 90 + 420, () => { isBusy.current = false; });
+    after(780 + allItems.length * 120 + 550, () => { isBusy.current = false; });
   }, [killAll, measure, setClip, after, tweenRadius]);
 
   // ── FERMETURE ─────────────────────────────────────────────
@@ -147,14 +147,14 @@ export default function LiquidMenu() {
     const allItems = [...itemRefs.current.filter(Boolean)];
     if (footerRef.current) allItems.push(footerRef.current);
     allItems.forEach((el, i) => {
-      el.style.transition = `opacity .16s ease ${i * 30}ms, transform .16s ease ${i * 30}ms`;
+      el.style.transition = `opacity .22s ease ${i * 40}ms, transform .22s ease ${i * 40}ms`;
       el.style.opacity    = "0";
       el.style.transform  = "translateY(-20px)";
     });
 
     // Cercle se rétracte vers le coin sup-droit
-    after(150, () =>
-      tweenRadius(center.current.full, 0, 0.55, easeIn, () => {
+    after(220, () =>
+      tweenRadius(center.current.full, 0, 0.85, easeIn, () => {
         overlayRef.current.style.pointerEvents = "none";
         isBusy.current = false;
         onDone?.();
