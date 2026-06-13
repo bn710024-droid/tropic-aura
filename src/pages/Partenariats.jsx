@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import FallingText from "../components/FallingText";
+import IMAGES from "../images";
 
 // ============================================================
 //  PARTENARIATS — gradients par section, crossfade au scroll
@@ -16,6 +17,16 @@ const VALEURS = [
   "Valeur partagée",
 ];
 const VALEUR_COLORS = ["#E8D5C4", "#C9A84C"];
+
+// Fruits uniques en fin de paragraphe (sans répétition — 1 par paragraphe)
+const PARA_FRUITS = [
+  IMAGES.orange, IMAGES.fraises, IMAGES.coco,
+  IMAGES.melonJaune, IMAGES.papaye, IMAGES.banane,
+  IMAGES.fruitPassion, IMAGES.ananas, IMAGES.melonVert,
+  IMAGES.mangue, IMAGES.avocat, IMAGES.pasteque,
+  IMAGES.myrtilles, IMAGES.citronVert, IMAGES.citronJaune,
+  IMAGES.papayeCoupe,
+];
 
 const SECTIONS = [
   {
@@ -171,6 +182,8 @@ export default function Partenariats() {
   const scrollTo = (i) =>
     lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
 
+  let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
+
   return (
     <>
       {/* Pulse léger des dots de navigation (opacity 0.5 → 1, en boucle) */}
@@ -257,11 +270,26 @@ export default function Partenariats() {
               <div style={{ width:32, height:1, background:dividerColor, margin:"0 0 20px" }} />
 
               {/* Paragraphes */}
-              {s.paragraphs.map((p, pi) => (
-                <p key={pi} style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:"clamp(13px,1.1vw,15px)", lineHeight:1.80, fontWeight:400, color:paraColor, margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0" }}>
-                  {p}
-                </p>
-              ))}
+              {s.paragraphs.map((p, pi) => {
+                const fruit = PARA_FRUITS[fruitIdx % PARA_FRUITS.length];
+                fruitIdx++;
+                return (
+                  <p key={pi} style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:"clamp(13px,1.1vw,15px)", lineHeight:1.80, fontWeight:400, color:paraColor, margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0" }}>
+                    {p}{" "}
+                    <img
+                      src={fruit}
+                      alt=""
+                      aria-hidden="true"
+                      style={{
+                        height: "1.6em", width: "auto",
+                        verticalAlign: "-0.45em",
+                        marginLeft: 4, display: "inline-block",
+                        filter: "drop-shadow(0 3px 7px rgba(0,0,0,0.28))",
+                      }}
+                    />
+                  </p>
+                );
+              })}
 
               {/* Bouton CTA */}
               {s.hasButton && (
