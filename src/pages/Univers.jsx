@@ -1,0 +1,265 @@
+import { useEffect, useRef } from "react";
+import Lenis from "lenis";
+
+// ============================================================
+//  NOTRE UNIVERS — même mécanique que Home / À Propos :
+//  bg-layer fixe + interpolation couleur en RAF + fade-in contenu
+//  5 sections, une couleur par section.
+//  (textes provisoires — à remplacer)
+// ============================================================
+
+const SECTIONS = [
+  {
+    id:    "mangue",
+    bg:    "#FFB703",
+    side:  "left",
+    label: "01 — MANGUE DORÉE",
+    title: "Mangue dorée.",
+    paras: [
+      "Texte à venir.",
+    ],
+  },
+  {
+    id:    "ocean",
+    bg:    "#219EBC",
+    side:  "right",
+    label: "02 — OCÉAN ATLANTIQUE",
+    title: "Océan Atlantique.",
+    paras: [
+      "Texte à venir.",
+    ],
+  },
+  {
+    id:    "canopee",
+    bg:    "#2A9D8F",
+    side:  "left",
+    label: "03 — CANOPÉE TROPICALE",
+    title: "Canopée tropicale.",
+    paras: [
+      "Texte à venir.",
+    ],
+  },
+  {
+    id:    "terre",
+    bg:    "#E76F51",
+    side:  "right",
+    label: "04 — TERRE ROUGE AFRICAINE",
+    title: "Terre rouge africaine.",
+    paras: [
+      "Texte à venir.",
+    ],
+  },
+  {
+    id:    "violet",
+    bg:    "#6A4C93",
+    side:  "left",
+    label: "05 — VIOLET INTERNATIONAL PREMIUM",
+    title: "Violet international premium.",
+    paras: [
+      "Texte à venir.",
+    ],
+  },
+];
+
+const hexToRgb = (h) => {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
+
+// ============================================================
+export default function Univers() {
+  const bgRef       = useRef(null);
+  const contentRefs = useRef([]);
+  const dotRefs     = useRef([]);
+  const revealed    = useRef(new Set());
+  const lenisRef    = useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+    lenisRef.current = lenis;
+
+    let rafId;
+    const lerp     = (a, b, t) => Math.round(a + (b - a) * t);
+    const easeOut  = (t) => 1 - (1 - t) * (1 - t);
+    const last     = SECTIONS.length - 1;
+    let lastScroll = -99999;
+    const onResize = () => { lastScroll = -99999; };
+    window.addEventListener("resize", onResize, { passive: true });
+
+    const update = (scroll, H) => {
+      // ── couleur de fond interpolée ──
+      const prog = scroll / H;
+      const ci   = Math.min(last, Math.floor(prog));
+      const ft   = Math.min(1, Math.max(0, prog - ci));
+      const ca   = COLORS[ci];
+      const cb   = COLORS[Math.min(last, ci + 1)];
+      if (bgRef.current) {
+        bgRef.current.style.backgroundColor =
+          `rgb(${lerp(ca[0],cb[0],ft)},${lerp(ca[1],cb[1],ft)},${lerp(ca[2],cb[2],ft)})`;
+      }
+
+      // ── fade-in contenu (révèle une fois) ──
+      SECTIONS.forEach((_, j) => {
+        const el = contentRefs.current[j];
+        if (!el || revealed.current.has(j)) return;
+        const enter    = j === 0 ? -H * 0.5 : j * H - H * 0.08;
+        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.28)));
+        const e        = easeOut(progress);
+        el.style.opacity   = e.toFixed(3);
+        el.style.transform = `translateY(${(28 * (1 - e)).toFixed(1)}px)`;
+        if (e >= 0.999) revealed.current.add(j);
+      });
+
+      // ── nav dots ──
+      const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
+      dotRefs.current.forEach((dot, j) => {
+        if (!dot) return;
+        const on = j === active;
+        dot.style.width      = on ? "9px" : "6px";
+        dot.style.height     = on ? "9px" : "6px";
+        dot.style.background = on ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.32)";
+        dot.style.boxShadow  = on ? "0 0 0 2px rgba(255,255,255,0.18)" : "none";
+      });
+    };
+
+    const readScroll = () => {
+      const s = lenis.animatedScroll;
+      return Number.isFinite(s) ? s : (window.scrollY || 0);
+    };
+
+    const raf = (time) => {
+      lenis.raf(time);
+      const scroll = readScroll();
+      if (Math.abs(scroll - lastScroll) > 0.04) {
+        lastScroll = scroll;
+        update(scroll, window.innerHeight || 1);
+      }
+      rafId = requestAnimationFrame(raf);
+    };
+
+    update(0, window.innerHeight || 1);
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+      lenis.destroy();
+    };
+  }, []);
+
+  const scrollTo = (i) =>
+    lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
+
+  return (
+    <>
+      {/* ── Header fantôme transparent ── */}
+      <header className="ghost" style={{ zIndex: 200 }}>
+        <span className="ghost__logo">TROPICAURA</span>
+      </header>
+
+      {/* ── Fond interpolé + couche de profondeur ── */}
+      <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-depth" />
+
+      {/* ── Nav dots ── */}
+      <nav style={{
+        position: "fixed",
+        right: "clamp(14px,2vw,28px)",
+        top: "50%", transform: "translateY(-50%)",
+        zIndex: 150,
+        display: "flex", flexDirection: "column", gap: 12,
+        pointerEvents: "auto",
+      }}>
+        {SECTIONS.map((s, i) => (
+          <button
+            key={s.id}
+            ref={(el) => (dotRefs.current[i] = el)}
+            onClick={() => scrollTo(i)}
+            title={s.title}
+            style={{
+              width: 6, height: 6, borderRadius: "50%",
+              background: "rgba(255,255,255,0.32)",
+              border: "none", cursor: "pointer", padding: 0,
+              transition: "width .25s, height .25s, background .25s, box-shadow .25s",
+              display: "block",
+            }}
+          />
+        ))}
+      </nav>
+
+      {/* ── Sections ── */}
+      {SECTIONS.map((s, i) => {
+        const isRight = s.side === "right";
+        return (
+        <section key={s.id} data-index={i} className="scene" style={{
+          justifyContent: isRight ? "flex-end" : "flex-start",
+        }}>
+          <div
+            ref={(el) => (contentRefs.current[i] = el)}
+            className="scene__content"
+            style={{
+              opacity:      i === 0 ? 1 : 0,
+              transform:    i === 0 ? "translateY(0)" : "translateY(28px)",
+              paddingLeft:  isRight ? 16 : "clamp(24px,7vw,96px)",
+              paddingRight: isRight ? "clamp(24px,7vw,96px)" : 16,
+            }}
+          >
+            <span style={{
+              display: "block",
+              fontFamily: "'Plus Jakarta Sans',sans-serif",
+              fontSize: 10, fontWeight: 700,
+              letterSpacing: ".24em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.62)", marginBottom: 14,
+            }}>
+              {s.label}
+            </span>
+
+            <h1 style={{
+              fontFamily: "'Plus Jakarta Sans',sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(32px, 3.6vw, 52px)",
+              lineHeight: 1.08, letterSpacing: "-.03em",
+              color: "#fff",
+              textShadow: "0 4px 32px rgba(0,0,0,0.28)",
+              margin: "0 0 14px",
+            }}>
+              {s.title}
+            </h1>
+
+            <div style={{
+              width: 34, height: 3, background: "rgba(255,255,255,0.55)",
+              borderRadius: 2, margin: "0 0 18px",
+            }} />
+
+            {s.paras.map((p, j) => (
+              <p key={j} style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif",
+                fontSize: "clamp(14px, 1.3vw, 16px)",
+                lineHeight: 1.72, fontWeight: 400,
+                color: "rgba(255,255,255,0.88)",
+                textShadow: "0 1px 8px rgba(0,0,0,0.22)",
+                margin: j < s.paras.length - 1 ? "0 0 12px" : "0",
+              }}>
+                {p}
+              </p>
+            ))}
+          </div>
+
+          {i === 0 && (
+            <div className="scene__hint">
+              <i /><span>Défilez vers le bas</span>
+            </div>
+          )}
+        </section>
+        );
+      })}
+    </>
+  );
+}
