@@ -117,7 +117,7 @@ const SECTIONS = [
     title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
     desc: "Tropic-Aura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
     cta: "Découvrir nos engagements",
-    link: "/about",
+    link: "/univers",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
