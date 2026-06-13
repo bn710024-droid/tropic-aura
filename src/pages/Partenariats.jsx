@@ -1,10 +1,21 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import FallingText from "../components/FallingText";
 
 // ============================================================
 //  PARTENARIATS — gradients par section, crossfade au scroll
 //  5 calques bg-layer empilés en DOM order (dernier = dessus)
 // ============================================================
+
+// Phrases valeurs + couleurs (beige / doré)
+const VALEURS = [
+  "Confiance durable",
+  "Transparence totale",
+  "Relations équitables",
+  "Croissance ensemble",
+  "Valeur partagée",
+];
+const VALEUR_COLORS = ["#E8D5C4", "#C9A84C"];
 
 const SECTIONS = [
   {
@@ -191,6 +202,9 @@ export default function Partenariats() {
           style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
         />
       ))}
+
+      {/* ── Cascade de textes valeurs (derrière le contenu) ── */}
+      <FallingText phrases={VALEURS} colors={VALEUR_COLORS} interval={3000} fall={4} />
 
       {/* ── Nav dots ── */}
       <nav style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
