@@ -95,6 +95,7 @@ const hexToRgb = (h) => {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 };
 const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
+const SIDES  = SECTIONS.map((s) => s.side);   // côté du texte par section
 
 // ============================================================
 export default function Univers() {
@@ -230,7 +231,7 @@ export default function Univers() {
       <div className="bg-depth" />
 
       {/* ── Cascade de textes motivations (derrière le contenu) ── */}
-      <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} interval={1700} fall={4} />
+      <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} sides={SIDES} interval={1700} fall={4} />
 
       {/* ── Nav dots ── */}
       <nav style={{

@@ -41,6 +41,7 @@ export default function FallingText({
   colors,
   interval = 3000,
   fall = 4,
+  sides,            // optionnel : ["left"|"right", ...] par section → chips à l'opposé du texte
 }) {
   const layerRef = useRef(null);
 
@@ -124,8 +125,18 @@ export default function FallingText({
       const glyph = GLYPHS[(Math.random() * GLYPHS.length) | 0];
       const c     = rgb(color);
       const pill  = Math.random() < 0.5;
-      const left  = 8 + Math.random() * 72;
       const drift = (Math.random() - 0.5) * 50;
+
+      // Position horizontale : à l'opposé du texte de la section active.
+      let left;
+      if (sides && sides.length) {
+        const H   = window.innerHeight || 1;
+        const idx = Math.min(sides.length - 1, Math.max(0, Math.round((window.scrollY || 0) / H)));
+        // texte à gauche → chips à droite ; texte à droite → chips à gauche
+        left = sides[idx] === "left" ? 54 + Math.random() * 24 : 8 + Math.random() * 24;
+      } else {
+        left = 8 + Math.random() * 72;
+      }
 
       const el = document.createElement("div");
       el._color = color;
@@ -171,7 +182,7 @@ export default function FallingText({
       layer.innerHTML = "";
       chips.clear();
     };
-  }, [phrases, colors, interval, fall]);
+  }, [phrases, colors, interval, fall, sides]);
 
   return (
     <div

@@ -86,6 +86,7 @@ const SECTIONS = [
 ];
 
 const N = SECTIONS.length;
+const SIDES = SECTIONS.map((s) => s.side);   // côté du texte par section
 
 // ============================================================
 export default function Partenariats() {
@@ -224,7 +225,7 @@ export default function Partenariats() {
       ))}
 
       {/* ── Cascade de textes valeurs (derrière le contenu) ── */}
-      <FallingText phrases={VALEURS} colors={VALEUR_COLORS} interval={1700} fall={4} />
+      <FallingText phrases={VALEURS} colors={VALEUR_COLORS} sides={SIDES} interval={1700} fall={4} />
 
       {/* ── Nav dots ── */}
       <nav style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
