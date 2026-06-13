@@ -132,20 +132,20 @@ export default function FallingText({
       el._c     = c;
       el.style.cssText =
         `position:absolute; top:-72px; left:${left}%; opacity:0;` +
-        `display:inline-flex; align-items:center; gap:10px;` +
-        `padding:11px 20px; white-space:nowrap; pointer-events:none;` +
-        `border-radius:${pill ? "999px" : "12px"};` +
+        `display:inline-flex; align-items:center; gap:7px;` +
+        `padding:7px 14px; white-space:nowrap; pointer-events:none;` +
+        `border-radius:${pill ? "999px" : "10px"};` +
         `border:1.5px solid rgba(${c},0.95);` +
         `background:rgba(14,14,16,0.72);` +
-        `box-shadow:0 10px 34px rgba(0,0,0,0.30), 0 0 22px rgba(${c},0.35), inset 0 0 0 1px rgba(255,255,255,0.06);` +
+        `box-shadow:0 8px 26px rgba(0,0,0,0.30), 0 0 18px rgba(${c},0.35), inset 0 0 0 1px rgba(255,255,255,0.06);` +
         `backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);` +
         `will-change:transform,opacity;`;
       el.innerHTML =
         `<span style="display:inline-flex; color:${color}">` +
-          `<svg width="17" height="17" viewBox="0 0 24 24" style="display:block">${glyph}</svg>` +
+          `<svg width="13" height="13" viewBox="0 0 24 24" style="display:block">${glyph}</svg>` +
         `</span>` +
-        `<span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; ` +
-          `font-size:20px; letter-spacing:.01em; color:#FFFFFF; ` +
+        `<span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; ` +
+          `font-size:14px; letter-spacing:.01em; color:#FFFFFF; ` +
           `text-shadow:0 1px 8px rgba(0,0,0,0.4)">${phrase}</span>`;
       layer.appendChild(el);
       chips.add(el);
