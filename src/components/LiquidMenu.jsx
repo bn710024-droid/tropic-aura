@@ -1,36 +1,41 @@
 import { useRef, useCallback } from "react";
 
 // ============================================================
-//  LIQUID CURVE MENU — style Combilo
+//  LIQUID MENU — plein écran éditorial premium (Tropic-Aura)
 //
-//  Animation 100% RAF natif (même technique que Lenis) :
-//  aucune dépendance externe → fonctionne dans tous les contextes.
+//  Inspiré de Combilo, sans le copier : colonne image immersive
+//  à gauche (~40%), navigation aérée à droite. Fond noir profond,
+//  révélé par un cercle qui grandit depuis le bouton (coin sup-droit).
 //
-//  Principe : un panneau noir révélé par un CERCLE qui grandit
-//  depuis le coin supérieur droit (le bouton). La frontière
-//  page / panneau est un arc de cercle qui s'étend radialement
-//  jusqu'à recouvrir tout l'écran.
-//
-//  Ouverture :
-//    0ms        : bouton → croix ×
-//    0–700ms    : cercle s'étend du coin sup-droit → plein écran
-//    500–840ms  : liens en cascade (stagger 90ms)
-//  Fermeture :
-//    0–150ms    : contenus s'effacent
-//    150–700ms  : cercle se rétracte vers le coin sup-droit
+//  Animation 100% RAF natif — aucune dépendance externe.
 // ============================================================
 
-const LINKS = [
-  { label: "Accueil",       sub: "page d'accueil",       href: "/"             },
-  { label: "À Propos",      sub: "notre histoire",        href: "/about"        },
-  { label: "Notre Univers", sub: "la palette tropicale",  href: "/univers"      },
-  { label: "Partenariats",  sub: "rejoindre le réseau",   href: "/partenariats" },
-  { label: "Contact",       sub: "travailler ensemble",   href: "/contact"      },
+// Arborescence. Une rubrique peut porter des sous-liens (children).
+const NAV = [
+  { label: "Accueil",       href: "/"             },
+  { label: "À Propos",      href: "/about"        },
+  { label: "Notre Univers", href: "/univers"      },
+  { label: "Partenariats",  href: "/partenariats" },
+  {
+    label: "Contact", href: "/contact",
+    children: [
+      { label: "Nous contacter",         href: "/contact"      },
+      { label: "Demande de partenariat", href: "/partenariats" },
+    ],
+  },
 ];
 
+// Aplati en lignes animables (main + sub), dans l'ordre de lecture.
+const ROWS = [];
+NAV.forEach((n) => {
+  ROWS.push({ kind: "main", label: n.label, href: n.href });
+  (n.children || []).forEach((c) =>
+    ROWS.push({ kind: "sub", label: c.label, href: c.href }));
+});
+
 // Easings
-const easeOut = (t) => 1 - Math.pow(1 - t, 3);          // décélération douce (ouverture)
-const easeIn  = (t) => t * t * t;                        // accélération (fermeture)
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const easeIn  = (t) => t * t * t;
 
 // ============================================================
 export default function LiquidMenu() {
@@ -38,6 +43,8 @@ export default function LiquidMenu() {
   const btnRef     = useRef(null);
   const bar1Ref    = useRef(null);
   const bar2Ref    = useRef(null);
+  const imgWrapRef = useRef(null);
+  const imgRef     = useRef(null);
   const itemRefs   = useRef([]);
   const footerRef  = useRef(null);
   const isOpen     = useRef(false);
@@ -56,14 +63,12 @@ export default function LiquidMenu() {
     tids.current.push(setTimeout(fn, ms));
   }, []);
 
-  // Origine du cercle = centre du bouton ; rayon plein = distance au coin opposé
   const measure = useCallback(() => {
     const r = btnRef.current.getBoundingClientRect();
     const x = r.left + r.width / 2;
     const y = r.top + r.height / 2;
     const W = window.innerWidth;
     const H = window.innerHeight;
-    // coin le plus éloigné (en bas à gauche depuis un bouton en haut à droite)
     const full = Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) * 1.04;
     center.current = { x, y, full };
   }, []);
@@ -74,7 +79,6 @@ export default function LiquidMenu() {
       `circle(${radius.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`;
   }, []);
 
-  // Tween du rayon du cercle
   const tweenRadius = useCallback((from, to, dur, ease, onDone) => {
     const t0 = performance.now();
     const step = (now) => {
@@ -97,14 +101,22 @@ export default function LiquidMenu() {
     overlayRef.current.style.pointerEvents = "auto";
     setClip(0);
 
-    // Items : reset silencieux
-    const allItems = [...itemRefs.current.filter(Boolean)];
-    if (footerRef.current) allItems.push(footerRef.current);
-    allItems.forEach((el) => {
+    // Reset items + image (silencieux)
+    const items = [...itemRefs.current.filter(Boolean)];
+    if (footerRef.current) items.push(footerRef.current);
+    items.forEach((el) => {
       el.style.transition = "none";
       el.style.opacity    = "0";
-      el.style.transform  = "translateY(36px)";
+      el.style.transform  = "translateY(34px)";
     });
+    if (imgWrapRef.current) {
+      imgWrapRef.current.style.transition = "none";
+      imgWrapRef.current.style.opacity    = "0";
+    }
+    if (imgRef.current) {
+      imgRef.current.style.transition = "none";
+      imgRef.current.style.transform  = "scale(1.16)";
+    }
 
     // Bouton → croix ×
     btnRef.current.style.backgroundColor  = "rgba(255,255,255,0.08)";
@@ -114,19 +126,31 @@ export default function LiquidMenu() {
     bar2Ref.current.style.transform       = "translateY(-4.5px) rotate(-45deg)";
     bar2Ref.current.style.backgroundColor = "#fff";
 
-    // Cercle s'étend du coin sup-droit → plein écran
-    tweenRadius(0, center.current.full, 1.15, easeOut, null);
+    // Cercle s'étend → plein écran
+    tweenRadius(0, center.current.full, 1.10, easeOut, null);
 
-    // Liens en cascade (démarrent pendant que le cercle finit son expansion)
-    allItems.forEach((el, i) =>
-      after(780 + i * 120, () => {
-        el.style.transition = "opacity .55s ease, transform .55s ease";
+    // Image immersive : fondu + très léger dézoom
+    after(360, () => {
+      if (imgWrapRef.current) {
+        imgWrapRef.current.style.transition = "opacity .9s ease";
+        imgWrapRef.current.style.opacity    = "1";
+      }
+      if (imgRef.current) {
+        imgRef.current.style.transition = "transform 1.3s cubic-bezier(.22,1,.36,1)";
+        imgRef.current.style.transform  = "scale(1)";
+      }
+    });
+
+    // Navigation en cascade
+    items.forEach((el, i) =>
+      after(560 + i * 85, () => {
+        el.style.transition = "opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1)";
         el.style.opacity    = "1";
         el.style.transform  = "translateY(0)";
       })
     );
 
-    after(780 + allItems.length * 120 + 550, () => { isBusy.current = false; });
+    after(560 + items.length * 85 + 520, () => { isBusy.current = false; });
   }, [killAll, measure, setClip, after, tweenRadius]);
 
   // ── FERMETURE ─────────────────────────────────────────────
@@ -144,18 +168,22 @@ export default function LiquidMenu() {
     bar2Ref.current.style.transform       = "none";
     bar2Ref.current.style.backgroundColor = "#111";
 
-    // Contenus s'effacent rapidement
-    const allItems = [...itemRefs.current.filter(Boolean)];
-    if (footerRef.current) allItems.push(footerRef.current);
-    allItems.forEach((el, i) => {
-      el.style.transition = `opacity .22s ease ${i * 40}ms, transform .22s ease ${i * 40}ms`;
+    // Contenus s'effacent
+    const items = [...itemRefs.current.filter(Boolean)];
+    if (footerRef.current) items.push(footerRef.current);
+    items.forEach((el, i) => {
+      el.style.transition = `opacity .2s ease ${i * 26}ms, transform .2s ease ${i * 26}ms`;
       el.style.opacity    = "0";
-      el.style.transform  = "translateY(-20px)";
+      el.style.transform  = "translateY(-18px)";
     });
+    if (imgWrapRef.current) {
+      imgWrapRef.current.style.transition = "opacity .26s ease";
+      imgWrapRef.current.style.opacity    = "0";
+    }
 
     // Cercle se rétracte vers le coin sup-droit
-    after(220, () =>
-      tweenRadius(center.current.full, 0, 0.85, easeIn, () => {
+    after(210, () =>
+      tweenRadius(center.current.full, 0, 0.82, easeIn, () => {
         overlayRef.current.style.pointerEvents = "none";
         isBusy.current = false;
         onDone?.();
@@ -166,8 +194,18 @@ export default function LiquidMenu() {
   const goTo   = useCallback((href) => { close(() => { window.location.href = href; }); }, [close]);
   const toggle = useCallback(() => { if (isOpen.current) close(); else open(); }, [open, close]);
 
+  let ri = 0; // index plat pour les refs d'animation
+
   return (
     <>
+      {/* Responsive : masque l'image sous 820px, nav pleine largeur */}
+      <style>{`
+        @media (max-width: 820px){
+          .lm-img  { display: none !important; }
+          .lm-nav  { width: 100% !important; padding-left: clamp(28px,9vw,72px) !important; }
+        }
+      `}</style>
+
       {/* ── Bouton déclencheur ─────────────────────────────── */}
       <button
         ref={btnRef}
@@ -191,98 +229,141 @@ export default function LiquidMenu() {
         }}
       >
         <div ref={bar1Ref} style={{
-          width: 18, height: 1.5,
-          backgroundColor: "#111",
-          borderRadius: 2,
+          width: 18, height: 1.5, backgroundColor: "#111", borderRadius: 2,
           transformOrigin: "center",
           transition: "transform .28s cubic-bezier(.76,0,.24,1), background-color .28s",
           pointerEvents: "none",
         }} />
         <div ref={bar2Ref} style={{
-          width: 18, height: 1.5,
-          backgroundColor: "#111",
-          borderRadius: 2,
+          width: 18, height: 1.5, backgroundColor: "#111", borderRadius: 2,
           transformOrigin: "center",
           transition: "transform .28s cubic-bezier(.76,0,.24,1), background-color .28s",
           pointerEvents: "none",
         }} />
       </button>
 
-      {/* ── Overlay plein écran (révélé par cercle expansif) ── */}
+      {/* ── Overlay plein écran (révélé par cercle) ─────────── */}
       <div
         ref={overlayRef}
         style={{
           position: "fixed", inset: 0, zIndex: 600,
           pointerEvents: "none", overflow: "hidden",
-          backgroundColor: "#111111",
+          backgroundColor: "#0A0A0A",
           clipPath: "circle(0px at 100% 0%)",
+          display: "flex",
         }}
       >
-        {/* Contenu du menu */}
-        <div style={{
-          position: "relative", zIndex: 1, height: "100%",
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "clamp(80px,12vh,120px) clamp(48px,10vw,120px)",
-        }}>
-          <nav>
-            {LINKS.map((link, i) => (
+        {/* ── Colonne image immersive (gauche, ~40%) ── */}
+        <div
+          className="lm-img"
+          ref={imgWrapRef}
+          style={{
+            position: "relative",
+            width: "40%", height: "100%",
+            overflow: "hidden",
+            opacity: 0,
+            flexShrink: 0,
+          }}
+        >
+          <img
+            ref={imgRef}
+            src="/menu-visual.jpg"
+            alt=""
+            aria-hidden="true"
+            onMouseEnter={() => { if (imgRef.current) imgRef.current.style.transform = "scale(1.05)"; }}
+            onMouseLeave={() => { if (imgRef.current) imgRef.current.style.transform = "scale(1)"; }}
+            style={{
+              width: "100%", height: "100%",
+              objectFit: "cover", objectPosition: "center",
+              transform: "scale(1.16)",
+              transition: "transform .9s cubic-bezier(.22,1,.36,1)",
+              filter: "brightness(0.92) saturate(1.05)",
+              display: "block",
+            }}
+          />
+          {/* Dégradé pour fondre l'image dans le noir à droite */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(90deg, rgba(10,10,10,0) 55%, rgba(10,10,10,0.55) 85%, #0A0A0A 100%)",
+            pointerEvents: "none",
+          }} />
+          {/* Légère vignette bas pour la profondeur */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.28) 100%)",
+            pointerEvents: "none",
+          }} />
+        </div>
+
+        {/* ── Colonne navigation (droite) ── */}
+        <nav
+          className="lm-nav"
+          style={{
+            flex: 1, height: "100%",
+            display: "flex", flexDirection: "column", justifyContent: "center",
+            padding: "clamp(80px,12vh,120px) clamp(48px,7vw,110px)",
+          }}
+        >
+          {ROWS.map((row) => {
+            const idx = ri++;
+            const isMain = row.kind === "main";
+            return (
               <div
-                key={link.href}
-                ref={(el) => (itemRefs.current[i] = el)}
-                style={{ opacity: 0, transform: "translateY(36px)", willChange: "transform,opacity", marginBottom: "clamp(2px,1vh,12px)" }}
+                key={row.label + idx}
+                ref={(el) => (itemRefs.current[idx] = el)}
+                style={{
+                  opacity: 0, transform: "translateY(34px)",
+                  willChange: "transform,opacity",
+                  marginBottom: isMain ? "clamp(4px,1.1vh,14px)" : "2px",
+                  marginTop: row.kind === "sub" ? 0 : undefined,
+                }}
               >
                 <button
-                  onClick={() => goTo(link.href)}
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}
-                  onMouseEnter={(e) => { e.currentTarget.firstChild.style.color = "rgba(255,255,255,0.28)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.firstChild.style.color = "#fff"; }}
+                  onClick={() => goTo(row.href)}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = isMain ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.85)"; e.currentTarget.style.transform = "translateX(8px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = isMain ? "#fff" : "rgba(255,255,255,0.42)"; e.currentTarget.style.transform = "translateX(0)"; }}
+                  style={{
+                    background: "none", border: "none", cursor: "pointer",
+                    padding: 0, textAlign: "left",
+                    display: "block",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    color: isMain ? "#fff" : "rgba(255,255,255,0.42)",
+                    fontWeight: isMain ? 800 : 500,
+                    fontSize: isMain ? "clamp(30px, 4vw, 60px)" : "clamp(12px, 1vw, 15px)",
+                    letterSpacing: isMain ? "-.03em" : ".04em",
+                    lineHeight: isMain ? 1.08 : 1.6,
+                    marginLeft: isMain ? 0 : "clamp(2px,0.6vw,8px)",
+                    transition: "color .25s ease, transform .35s cubic-bezier(.22,1,.36,1)",
+                    userSelect: "none",
+                  }}
                 >
-                  <span style={{
-                    display: "block",
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontWeight: 800,
-                    fontSize: "clamp(36px, 6.5vw, 88px)",
-                    letterSpacing: "-.035em", lineHeight: 1.0,
-                    color: "#fff", transition: "color .15s", userSelect: "none",
-                  }}>
-                    {link.label}
-                  </span>
-                  <span style={{
-                    display: "block",
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontWeight: 400,
-                    fontSize: "clamp(9px, 0.8vw, 12px)",
-                    letterSpacing: ".20em", textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.28)", userSelect: "none", marginTop: 3,
-                  }}>
-                    {link.sub}
-                  </span>
+                  {row.label}
                 </button>
               </div>
-            ))}
-          </nav>
+            );
+          })}
 
           {/* Pied du menu */}
           <div
             ref={footerRef}
             style={{
-              opacity: 0, transform: "translateY(36px)",
+              opacity: 0, transform: "translateY(34px)",
               willChange: "transform,opacity",
-              marginTop: "clamp(28px,4vh,52px)",
+              marginTop: "clamp(30px,5vh,58px)",
               display: "flex", alignItems: "center", gap: 18,
             }}
           >
-            <div style={{ width: 24, height: 1, background: "rgba(255,255,255,0.15)" }} />
+            <div style={{ width: 26, height: 1, background: "rgba(255,255,255,0.16)" }} />
             <span style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: 10, fontWeight: 500,
-              letterSpacing: ".22em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.25)",
+              letterSpacing: ".24em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.26)",
             }}>
               TROPIC-AURA · Commerce Tropical d'Excellence
             </span>
           </div>
-        </div>
+        </nav>
       </div>
     </>
   );
