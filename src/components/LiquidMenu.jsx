@@ -23,6 +23,7 @@ import { useRef, useCallback } from "react";
 const LINKS = [
   { label: "Accueil",       sub: "page d'accueil",       href: "/"             },
   { label: "À Propos",      sub: "notre histoire",        href: "/about"        },
+  { label: "Notre Univers", sub: "la palette tropicale",  href: "/univers"      },
   { label: "Partenariats",  sub: "rejoindre le réseau",   href: "/partenariats" },
   { label: "Contact",       sub: "travailler ensemble",   href: "/contact"      },
 ];
