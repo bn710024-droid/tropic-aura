@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FallingText from "../components/FallingText";
+import IMAGES from "../images";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,13 @@ const MOTIVATIONS = [
   "Vision long terme",
 ];
 const MOTIV_COLORS = ["#0E9F6E", "#C9A84C"];
+
+// Fruits uniques en fin de paragraphe (sans répétition — 1 par paragraphe)
+const PARA_FRUITS = [
+  IMAGES.mangue, IMAGES.ananas, IMAGES.papaye, IMAGES.orange,
+  IMAGES.banane, IMAGES.coco, IMAGES.fruitPassion, IMAGES.fraises,
+  IMAGES.melonVert, IMAGES.melonJaune, IMAGES.pasteque, IMAGES.avocat,
+];
 
 // ============================================================
 //  NOTRE UNIVERS — même mécanique que Home / À Propos :
@@ -201,6 +209,8 @@ export default function Univers() {
   const scrollTo = (i) =>
     lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
 
+  let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
+
   return (
     <>
       {/* ── Header fantôme transparent ── */}
@@ -285,18 +295,33 @@ export default function Univers() {
               borderRadius: 2, margin: "0 0 18px",
             }} />
 
-            {s.paras.map((p, j) => (
-              <p key={j} style={{
-                fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontSize: "clamp(14px, 1.3vw, 16px)",
-                lineHeight: 1.72, fontWeight: 400,
-                color: "rgba(255,255,255,0.88)",
-                textShadow: "0 1px 8px rgba(0,0,0,0.22)",
-                margin: j < s.paras.length - 1 ? "0 0 12px" : "0",
-              }}>
-                {p}
-              </p>
-            ))}
+            {s.paras.map((p, j) => {
+              const fruit = PARA_FRUITS[fruitIdx % PARA_FRUITS.length];
+              fruitIdx++;
+              return (
+                <p key={j} style={{
+                  fontFamily: "'Plus Jakarta Sans',sans-serif",
+                  fontSize: "clamp(14px, 1.3vw, 16px)",
+                  lineHeight: 1.72, fontWeight: 400,
+                  color: "rgba(255,255,255,0.88)",
+                  textShadow: "0 1px 8px rgba(0,0,0,0.22)",
+                  margin: j < s.paras.length - 1 ? "0 0 12px" : "0",
+                }}>
+                  {p}{" "}
+                  <img
+                    src={fruit}
+                    alt=""
+                    aria-hidden="true"
+                    style={{
+                      height: "1.6em", width: "auto",
+                      verticalAlign: "-0.45em",
+                      marginLeft: 4, display: "inline-block",
+                      filter: "drop-shadow(0 3px 7px rgba(0,0,0,0.28))",
+                    }}
+                  />
+                </p>
+              );
+            })}
           </div>
 
           {i === 0 && (
