@@ -65,23 +65,25 @@ export default function FallingText({
       const drift = (Math.random() - 0.5) * 50;     // dérive horizontale ±25 px
 
       const el = document.createElement("div");
+      // Verre SOMBRE + texte blanc → lisible sur n'importe quel fond.
+      // La couleur d'accent ne sert qu'à la bordure et au glyphe.
       el.style.cssText =
         `position:absolute; top:-72px; left:${left}%; opacity:0;` +
         `display:inline-flex; align-items:center; gap:10px;` +
         `padding:11px 20px; white-space:nowrap; pointer-events:none;` +
         `border-radius:${pill ? "999px" : "12px"};` +
-        `border:1.5px solid rgba(${c},0.85);` +
-        `background:rgba(${c},0.20);` +
-        `box-shadow:0 10px 34px rgba(0,0,0,0.22), 0 0 22px rgba(${c},0.30), inset 0 0 0 1px rgba(255,255,255,0.05);` +
-        `backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);` +
+        `border:1.5px solid rgba(${c},0.95);` +
+        `background:rgba(14,14,16,0.72);` +
+        `box-shadow:0 10px 34px rgba(0,0,0,0.30), 0 0 22px rgba(${c},0.35), inset 0 0 0 1px rgba(255,255,255,0.06);` +
+        `backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);` +
         `will-change:transform,opacity;`;
       el.innerHTML =
         `<span style="display:inline-flex; color:${color}">` +
           `<svg width="17" height="17" viewBox="0 0 24 24" style="display:block">${glyph}</svg>` +
         `</span>` +
         `<span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; ` +
-          `font-size:20px; letter-spacing:.01em; color:${color}; ` +
-          `text-shadow:0 1px 10px rgba(0,0,0,0.25)">${phrase}</span>`;
+          `font-size:20px; letter-spacing:.01em; color:#FFFFFF; ` +
+          `text-shadow:0 1px 8px rgba(0,0,0,0.4)">${phrase}</span>`;
       layer.appendChild(el);
 
       const tl = gsap.timeline({ onComplete: () => el.remove() });
