@@ -236,7 +236,7 @@ export default function Partenariats() {
         const textColor    = s.dark ? "#111111"              : "#FFFFFF";
         const labelColor   = s.dark ? "rgba(0,0,0,0.40)"    : "rgba(255,255,255,0.62)";
         const dividerColor = s.dark ? "rgba(0,0,0,0.18)"    : "rgba(255,255,255,0.35)";
-        const paraColor    = s.dark ? "rgba(0,0,0,0.62)"    : "rgba(255,255,255,0.82)";
+        const paraColor    = s.dark ? "rgba(0,0,0,0.82)"    : "rgba(255,255,255,0.95)";
 
         return (
           <section key={s.id} data-index={i} className="scene" style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}>
