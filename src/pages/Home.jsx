@@ -114,9 +114,9 @@ const SECTIONS = [
   },
   {
     id: "vision", bg: "#C9912B",
-    title: "Au-delà des Marchés d'Aujourd'hui.",
-    desc: "Tropicaura regarde au-delà du simple mouvement de produits. Notre ambition est de contribuer à un avenir où l'agriculture africaine est reconnue pour son excellence, son professionnalisme et sa capacité à rivaliser sur les marchés les plus exigeants du monde.",
-    cta: "Notre Engagement",
+    title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
+    desc: "Tropic-Aura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
+    cta: "Découvrir nos engagements",
     link: "/about",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
