@@ -4,13 +4,20 @@ import { useRef, useCallback } from "react";
 //  LIQUID CURVE MENU — style Combilo
 //
 //  Animation 100% RAF natif (même technique que Lenis) :
-//  aucune dépendance GSAP → fonctionne dans tous les contextes.
+//  aucune dépendance externe → fonctionne dans tous les contextes.
 //
-//  Timeline d'ouverture :
-//    0ms        : bouton → croix × (CSS transition)
-//   50ms–470ms  : vague concave balaie depuis le coin sup-droit
-//  440ms–720ms  : vague s'aplatit → noir plein écran
-//  580ms–840ms  : liens en cascade (stagger 90ms)
+//  Principe : un panneau noir révélé par un CERCLE qui grandit
+//  depuis le coin supérieur droit (le bouton). La frontière
+//  page / panneau est un arc de cercle qui s'étend radialement
+//  jusqu'à recouvrir tout l'écran.
+//
+//  Ouverture :
+//    0ms        : bouton → croix ×
+//    0–700ms    : cercle s'étend du coin sup-droit → plein écran
+//    500–840ms  : liens en cascade (stagger 90ms)
+//  Fermeture :
+//    0–150ms    : contenus s'effacent
+//    150–700ms  : cercle se rétracte vers le coin sup-droit
 // ============================================================
 
 const LINKS = [
@@ -20,38 +27,13 @@ const LINKS = [
   { label: "Contact",       sub: "travailler ensemble",   href: "/contact"      },
 ];
 
-// Coordonnées numériques pour le path SVG (viewBox 0 0 100 100)
-// Structure fixe : M x y  L x y  L x y  C x y x y x y  Z
-//                 [0 1]  [2 3]  [4 5]  [6 7] [8 9] [10 11]
-const N_CLOSED = [0,0, 100,0, 100,0,   100,0,   0,0,   0,0  ];
-
-// OUVERTURE — arche concave : les deux bords restent mi-hauteur (~62),
-// le centre plonge jusqu'en bas grâce aux points de contrôle à y=100.
-// → "rideau lourd attiré par la gravité, bords ancrés plus haut"
-// Centre à t=0.5 : y ≈ 0.125×62 + 0.375×100 + 0.375×100 + 0.125×62 ≈ 90
-const N_WAVE   = [0,0, 100,0, 100,62, 100,100, 0,100, 0,62 ];
-
-// FERMETURE — dôme convexe : le centre est aspiré vers le haut en premier,
-// les bords latéraux restent bas. Physique inverse de l'ouverture.
-// → "effet ventouse / aspiration vers le coin supérieur"
-// Centre à t=0.5 : y ≈ 0.125×78 + 0.375×24 + 0.375×24 + 0.125×78 ≈ 37
-const N_WAVE_C = [0,0, 100,0, 100,78, 100,24,  0,24,  0,78 ];
-
-const N_FULL   = [0,0, 100,0, 100,100, 100,100, 0,100, 0,100];
-
-// Easing
-const eio3  = (t) => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
-const eout2 = (t) => 1 - (1-t)*(1-t);
-const ein2  = (t) => t*t;
-
-const lerp  = (a, b, t) => a + (b - a) * t;
-const buildPath = (n) =>
-  `M ${n[0]} ${n[1]} L ${n[2]} ${n[3]} L ${n[4]} ${n[5]} C ${n[6]} ${n[7]} ${n[8]} ${n[9]} ${n[10]} ${n[11]} Z`;
+// Easings
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);          // décélération douce (ouverture)
+const easeIn  = (t) => t * t * t;                        // accélération (fermeture)
 
 // ============================================================
 export default function LiquidMenu() {
   const overlayRef = useRef(null);
-  const pathRef    = useRef(null);
   const btnRef     = useRef(null);
   const bar1Ref    = useRef(null);
   const bar2Ref    = useRef(null);
@@ -60,7 +42,8 @@ export default function LiquidMenu() {
   const isOpen     = useRef(false);
   const isBusy     = useRef(false);
   const rafId      = useRef(null);
-  const tids       = useRef([]);   // setTimeout ids
+  const tids       = useRef([]);
+  const center     = useRef({ x: 0, y: 0, full: 0 });
 
   const killAll = useCallback(() => {
     if (rafId.current) { cancelAnimationFrame(rafId.current); rafId.current = null; }
@@ -72,19 +55,35 @@ export default function LiquidMenu() {
     tids.current.push(setTimeout(fn, ms));
   }, []);
 
-  // Tween path de `from` vers `to` en `dur` secondes avec easing `ease`
-  const tweenPath = useCallback((from, to, dur, ease, onDone) => {
+  // Origine du cercle = centre du bouton ; rayon plein = distance au coin opposé
+  const measure = useCallback(() => {
+    const r = btnRef.current.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    // coin le plus éloigné (en bas à gauche depuis un bouton en haut à droite)
+    const full = Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) * 1.04;
+    center.current = { x, y, full };
+  }, []);
+
+  const setClip = useCallback((radius) => {
+    const { x, y } = center.current;
+    overlayRef.current.style.clipPath =
+      `circle(${radius.toFixed(1)}px at ${x.toFixed(1)}px ${y.toFixed(1)}px)`;
+  }, []);
+
+  // Tween du rayon du cercle
+  const tweenRadius = useCallback((from, to, dur, ease, onDone) => {
     const t0 = performance.now();
     const step = (now) => {
       const t = Math.min(1, (now - t0) / (dur * 1000));
-      const e = ease(t);
-      const n = from.map((v, i) => lerp(v, to[i], e));
-      pathRef.current?.setAttribute("d", buildPath(n));
+      setClip(from + (to - from) * ease(t));
       if (t < 1) rafId.current = requestAnimationFrame(step);
       else { rafId.current = null; onDone?.(); }
     };
     rafId.current = requestAnimationFrame(step);
-  }, []);
+  }, [setClip]);
 
   // ── OUVERTURE ─────────────────────────────────────────────
   const open = useCallback(() => {
@@ -92,9 +91,10 @@ export default function LiquidMenu() {
     isBusy.current = true;
     isOpen.current = true;
     killAll();
+    measure();
 
     overlayRef.current.style.pointerEvents = "auto";
-    pathRef.current?.setAttribute("d", buildPath(N_CLOSED));
+    setClip(0);
 
     // Items : reset silencieux
     const allItems = [...itemRefs.current.filter(Boolean)];
@@ -105,7 +105,7 @@ export default function LiquidMenu() {
       el.style.transform  = "translateY(36px)";
     });
 
-    // Bouton → croix × (CSS transition)
+    // Bouton → croix ×
     btnRef.current.style.backgroundColor  = "rgba(255,255,255,0.08)";
     btnRef.current.style.borderColor      = "rgba(255,255,255,0.22)";
     bar1Ref.current.style.transform       = "translateY(4.5px) rotate(45deg)";
@@ -113,25 +113,20 @@ export default function LiquidMenu() {
     bar2Ref.current.style.transform       = "translateY(-4.5px) rotate(-45deg)";
     bar2Ref.current.style.backgroundColor = "#fff";
 
-    // Phase 1 — vague (50ms → 470ms)
-    after(50, () =>
-      tweenPath(N_CLOSED, N_WAVE, 0.42, eio3, () =>
-        // Phase 2 — aplatissement (470ms → 750ms)
-        tweenPath(N_WAVE, N_FULL, 0.28, eout2, null)
-      )
-    );
+    // Cercle s'étend du coin sup-droit → plein écran
+    tweenRadius(0, center.current.full, 0.70, easeOut, null);
 
-    // Phase 3 — liens en cascade
+    // Liens en cascade (démarrent pendant que le cercle finit son expansion)
     allItems.forEach((el, i) =>
-      after(580 + i * 90, () => {
-        el.style.transition = "opacity .38s ease, transform .38s ease";
+      after(500 + i * 90, () => {
+        el.style.transition = "opacity .42s ease, transform .42s ease";
         el.style.opacity    = "1";
         el.style.transform  = "translateY(0)";
       })
     );
 
-    after(580 + allItems.length * 90 + 400, () => { isBusy.current = false; });
-  }, [killAll, after, tweenPath]);
+    after(500 + allItems.length * 90 + 420, () => { isBusy.current = false; });
+  }, [killAll, measure, setClip, after, tweenRadius]);
 
   // ── FERMETURE ─────────────────────────────────────────────
   const close = useCallback((onDone) => {
@@ -148,26 +143,24 @@ export default function LiquidMenu() {
     bar2Ref.current.style.transform       = "none";
     bar2Ref.current.style.backgroundColor = "#111";
 
-    // Liens disparaissent
+    // Contenus s'effacent rapidement
     const allItems = [...itemRefs.current.filter(Boolean)];
     if (footerRef.current) allItems.push(footerRef.current);
     allItems.forEach((el, i) => {
-      el.style.transition = `opacity .20s ease ${i * 40}ms, transform .20s ease ${i * 40}ms`;
+      el.style.transition = `opacity .16s ease ${i * 30}ms, transform .16s ease ${i * 30}ms`;
       el.style.opacity    = "0";
-      el.style.transform  = "translateY(-24px)";
+      el.style.transform  = "translateY(-20px)";
     });
 
-    // Plein écran → dôme convexe (aspiration) → fermé
+    // Cercle se rétracte vers le coin sup-droit
     after(150, () =>
-      tweenPath(N_FULL, N_WAVE_C, 0.24, ein2, () =>
-        tweenPath(N_WAVE_C, N_CLOSED, 0.36, eio3, () => {
-          overlayRef.current.style.pointerEvents = "none";
-          isBusy.current = false;
-          onDone?.();
-        })
-      )
+      tweenRadius(center.current.full, 0, 0.55, easeIn, () => {
+        overlayRef.current.style.pointerEvents = "none";
+        isBusy.current = false;
+        onDone?.();
+      })
     );
-  }, [killAll, after, tweenPath]);
+  }, [killAll, after, tweenRadius]);
 
   const goTo   = useCallback((href) => { close(() => { window.location.href = href; }); }, [close]);
   const toggle = useCallback(() => { if (isOpen.current) close(); else open(); }, [open, close]);
@@ -214,21 +207,16 @@ export default function LiquidMenu() {
         }} />
       </button>
 
-      {/* ── Overlay plein écran ─────────────────────────────── */}
+      {/* ── Overlay plein écran (révélé par cercle expansif) ── */}
       <div
         ref={overlayRef}
-        style={{ position: "fixed", inset: 0, zIndex: 600, pointerEvents: "none", overflow: "hidden" }}
+        style={{
+          position: "fixed", inset: 0, zIndex: 600,
+          pointerEvents: "none", overflow: "hidden",
+          backgroundColor: "#111111",
+          clipPath: "circle(0px at 100% 0%)",
+        }}
       >
-        {/* Forme SVG animée (fond noir liquide) */}
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
-        >
-          <path ref={pathRef} d={buildPath(N_CLOSED)} fill="#111111" />
-        </svg>
-
         {/* Contenu du menu */}
         <div style={{
           position: "relative", zIndex: 1, height: "100%",
