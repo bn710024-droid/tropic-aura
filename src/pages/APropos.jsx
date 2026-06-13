@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import FallingFruits from "../components/FallingFruits";
 
 // ============================================================
 //  À PROPOS — même mécanique que Home :
@@ -162,6 +163,9 @@ export default function APropos() {
       {/* ── Fond interpolé + couche de profondeur ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
+
+      {/* ── Pluie de fruits décorative (derrière le texte) ── */}
+      <FallingFruits />
 
       {/* ── Nav dots ── */}
       <nav style={{
