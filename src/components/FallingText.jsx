@@ -6,13 +6,13 @@ import { gsap } from "gsap";
 //  tombent en boucle. Ambiance décorative derrière le contenu
 //  (z-index 0, au-dessus du fond, sous .scene en z-index 1).
 //
-//  Chaque phrase est posée dans une capsule en verre dépoli :
-//  bordure colorée, fond teinté translucide, glyphe SVG en tête.
+//  Chaque phrase est posée dans une capsule en verre sombre :
+//  texte blanc lisible sur tout fond, bordure + glyphe colorés.
 //
-//  • 1 chip toutes les `interval` ms (défaut 3 s)
-//  • chute en `fall` s (défaut 4 s), fondu d'entrée puis fondu en bas
-//  • opacité 70 %, texte font-weight 600 / 18 px
-//  • couleur + glyphe + forme tirés au hasard
+//  Interaction : quand la souris passe à proximité d'un chip,
+//  il scintille (gerbe d'étincelles SVG + halo qui pulse). Les
+//  chips étant derrière le contenu, on détecte la PROXIMITÉ du
+//  curseur (mousemove global) plutôt qu'un :hover classique.
 //
 //  Props : phrases (string[]), colors (string[]), interval, fall
 // ============================================================
@@ -25,15 +25,16 @@ const rgb = (hex) => {
 
 // Glyphes SVG (fill = currentColor → prend la couleur du chip)
 const GLYPHS = [
-  // étincelle / 4 branches
   '<path d="M12 2l2.1 6.4 6.4 2.1-6.4 2.1L12 19l-2.1-6.4L3.5 10.5l6.4-2.1z" fill="currentColor"/>',
-  // feuille
   '<path d="M5 19C5 11 11 5.5 19 5c0 8-6 13.5-14 14z" fill="currentColor"/><path d="M7 17C10 13 13 11 17 9" stroke="rgba(255,255,255,.35)" stroke-width="1" fill="none"/>',
-  // losange
   '<path d="M12 3l6 9-6 9-6-9z" fill="currentColor"/>',
-  // point
   '<circle cx="12" cy="12" r="5.5" fill="currentColor"/>',
 ];
+
+// Étincelle (4 branches) pour les gerbes
+const SPARK = '<path d="M12 0l2.4 8.2L22 12l-7.6 3.8L12 24l-2.4-8.2L2 12l7.6-3.8z" fill="currentColor"/>';
+
+const HOVER_RADIUS = 85; // px : distance curseur → centre du chip
 
 export default function FallingText({
   phrases,
@@ -48,9 +49,71 @@ export default function FallingText({
     if (!layer || !phrases?.length) return;
 
     let alive = true;
-    let pi = 0;                       // index séquentiel → boucle sur les phrases
+    let pi = 0;
     const timers = [];
+    const chips = new Set();             // chips actifs (pour la proximité souris)
 
+    // ── gerbe d'étincelles à (cx, cy) ──
+    const burst = (cx, cy, color) => {
+      const n = 7;
+      for (let k = 0; k < n; k++) {
+        const s = document.createElement("div");
+        const ang  = Math.random() * Math.PI * 2;
+        const dist = 16 + Math.random() * 38;
+        const size = 8 + Math.random() * 9;
+        s.style.cssText =
+          `position:absolute; left:${cx}px; top:${cy}px;` +
+          `width:${size}px; height:${size}px; color:${color};` +
+          `pointer-events:none; will-change:transform,opacity;` +
+          `transform:translate(-50%,-50%) scale(0); opacity:0;` +
+          `filter:drop-shadow(0 0 5px ${color});`;
+        s.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 24 24" style="display:block">${SPARK}</svg>`;
+        layer.appendChild(s);
+
+        const tx = Math.cos(ang) * dist;
+        const ty = Math.sin(ang) * dist - 10;
+        gsap.timeline({ onComplete: () => s.remove() })
+          .to(s, { scale: 1, opacity: 1, duration: 0.18, ease: "power2.out" }, 0)
+          .to(s, { x: tx, y: ty, rotation: (Math.random() - 0.5) * 200, duration: 0.65, ease: "power2.out" }, 0)
+          .to(s, { scale: 0, opacity: 0, duration: 0.42, ease: "power2.in" }, 0.25);
+      }
+    };
+
+    // ── déclenche le scintillement d'un chip (avec cooldown) ──
+    const scintillate = (el) => {
+      if (el._cool) return;
+      el._cool = true;
+      timers.push(setTimeout(() => { el._cool = false; }, 950));
+
+      const r = el.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, el._color);
+
+      // halo qui pulse + léger gonflement
+      gsap.to(el, {
+        boxShadow: `0 10px 34px rgba(0,0,0,0.30), 0 0 38px rgba(${el._c},0.85), inset 0 0 0 1px rgba(255,255,255,0.12)`,
+        duration: 0.22, yoyo: true, repeat: 1, ease: "power2.out",
+      });
+      gsap.to(el, { scale: 1.14, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" });
+    };
+
+    // ── souris : proximité (throttlé via rAF) ──
+    let mx = -9999, my = -9999, queued = false;
+    const scan = () => {
+      queued = false;
+      chips.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const dx = mx - (r.left + r.width / 2);
+        const dy = my - (r.top + r.height / 2);
+        if (dx * dx + dy * dy < HOVER_RADIUS * HOVER_RADIUS) scintillate(el);
+      });
+    };
+    const onMove = (e) => {
+      mx = e.clientX; my = e.clientY;
+      if (!queued) { queued = true; requestAnimationFrame(scan); }
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+
+    // ── spawn d'un chip ──
     const spawn = () => {
       if (!alive) return;
 
@@ -60,13 +123,13 @@ export default function FallingText({
       const color = colors[(Math.random() * colors.length) | 0];
       const glyph = GLYPHS[(Math.random() * GLYPHS.length) | 0];
       const c     = rgb(color);
-      const pill  = Math.random() < 0.5;            // capsule ou tag arrondi
-      const left  = 8 + Math.random() * 72;         // 8%–80%
-      const drift = (Math.random() - 0.5) * 50;     // dérive horizontale ±25 px
+      const pill  = Math.random() < 0.5;
+      const left  = 8 + Math.random() * 72;
+      const drift = (Math.random() - 0.5) * 50;
 
       const el = document.createElement("div");
-      // Verre SOMBRE + texte blanc → lisible sur n'importe quel fond.
-      // La couleur d'accent ne sert qu'à la bordure et au glyphe.
+      el._color = color;
+      el._c     = c;
       el.style.cssText =
         `position:absolute; top:-72px; left:${left}%; opacity:0;` +
         `display:inline-flex; align-items:center; gap:10px;` +
@@ -85,16 +148,12 @@ export default function FallingText({
           `font-size:20px; letter-spacing:.01em; color:#FFFFFF; ` +
           `text-shadow:0 1px 8px rgba(0,0,0,0.4)">${phrase}</span>`;
       layer.appendChild(el);
+      chips.add(el);
 
-      const tl = gsap.timeline({ onComplete: () => el.remove() });
-      tl.to(el, { opacity: 0.95, duration: 0.6, ease: "power1.out" }, 0);
-      tl.to(el, {
-        y: window.innerHeight + 140,
-        x: drift,
-        duration: fall,
-        ease: "none",
-      }, 0);
-      tl.to(el, { opacity: 0, duration: 1.0, ease: "power1.in" }, fall - 1.0);
+      gsap.timeline({ onComplete: () => { chips.delete(el); el.remove(); } })
+        .to(el, { opacity: 0.95, duration: 0.6, ease: "power1.out" }, 0)
+        .to(el, { y: window.innerHeight + 140, x: drift, duration: fall, ease: "none" }, 0)
+        .to(el, { opacity: 0, duration: 1.0, ease: "power1.in" }, fall - 1.0);
     };
 
     const loop = () => {
@@ -102,14 +161,15 @@ export default function FallingText({
       spawn();
       timers.push(setTimeout(loop, interval));
     };
-
-    timers.push(setTimeout(loop, 600));            // léger délai initial
+    timers.push(setTimeout(loop, 600));
 
     return () => {
       alive = false;
       timers.forEach(clearTimeout);
+      window.removeEventListener("mousemove", onMove);
       gsap.killTweensOf(layer.querySelectorAll("div"));
       layer.innerHTML = "";
+      chips.clear();
     };
   }, [phrases, colors, interval, fall]);
 
