@@ -12,15 +12,15 @@ import { useRef, useCallback } from "react";
 
 // Arborescence. Une rubrique peut porter des sous-liens (children).
 const NAV = [
-  { label: "Accueil",       href: "/"             },
-  { label: "À Propos",      href: "/about"        },
-  { label: "Notre Univers", href: "/univers"      },
-  { label: "Partenariats",  href: "/partenariats" },
+  { label: "Accueil",       href: "/",             img: "/menu-accueil.jpg"      },
+  { label: "À Propos",      href: "/about",        img: "/menu-apropos.jpg"      },
+  { label: "Notre Univers", href: "/univers",      img: "/menu-univers.jpg"      },
+  { label: "Partenariats",  href: "/partenariats", img: "/menu-partenariats.jpg" },
   {
-    label: "Contact", href: "/contact",
+    label: "Contact", href: "/contact", img: "/menu-contact.jpg",
     children: [
-      { label: "Nous contacter",         href: "/contact"      },
-      { label: "Demande de partenariat", href: "/partenariats" },
+      { label: "Nous contacter",         href: "/contact",      img: "/menu-contact.jpg"      },
+      { label: "Demande de partenariat", href: "/partenariats", img: "/menu-partenariats.jpg" },
     ],
   },
 ];
@@ -28,10 +28,12 @@ const NAV = [
 // Aplati en lignes animables (main + sub), dans l'ordre de lecture.
 const ROWS = [];
 NAV.forEach((n) => {
-  ROWS.push({ kind: "main", label: n.label, href: n.href });
+  ROWS.push({ kind: "main", label: n.label, href: n.href, img: n.img });
   (n.children || []).forEach((c) =>
-    ROWS.push({ kind: "sub", label: c.label, href: c.href }));
+    ROWS.push({ kind: "sub", label: c.label, href: c.href, img: c.img }));
 });
+
+const DEFAULT_IMG = NAV[0].img; // image affichée à l'ouverture (Accueil)
 
 // Easings
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -44,7 +46,9 @@ export default function LiquidMenu() {
   const bar1Ref    = useRef(null);
   const bar2Ref    = useRef(null);
   const imgWrapRef = useRef(null);
-  const imgRef     = useRef(null);
+  const imgARef    = useRef(null);   // deux calques pour le crossfade au survol
+  const imgBRef    = useRef(null);
+  const activeImg  = useRef(0);      // calque actuellement visible (0 = A, 1 = B)
   const itemRefs   = useRef([]);
   const footerRef  = useRef(null);
   const isOpen     = useRef(false);
@@ -61,6 +65,20 @@ export default function LiquidMenu() {
 
   const after = useCallback((ms, fn) => {
     tids.current.push(setTimeout(fn, ms));
+  }, []);
+
+  // Crossfade entre les deux calques d'image (changement au survol)
+  const setImage = useCallback((src) => {
+    if (!src) return;
+    const a = imgARef.current, b = imgBRef.current;
+    if (!a || !b) return;
+    const cur = activeImg.current === 0 ? a : b;
+    const nxt = activeImg.current === 0 ? b : a;
+    if (cur.getAttribute("src") === src) return;   // déjà affichée
+    nxt.src = src;
+    nxt.style.opacity = "1";
+    cur.style.opacity = "0";
+    activeImg.current = activeImg.current === 0 ? 1 : 0;
   }, []);
 
   const measure = useCallback(() => {
@@ -113,10 +131,15 @@ export default function LiquidMenu() {
       imgWrapRef.current.style.transition = "none";
       imgWrapRef.current.style.opacity    = "0";
     }
-    if (imgRef.current) {
-      imgRef.current.style.transition = "none";
-      imgRef.current.style.transform  = "scale(1.16)";
-    }
+    // Image par défaut (Accueil) sur le calque A, calque B masqué
+    activeImg.current = 0;
+    [imgARef.current, imgBRef.current].forEach((im, k) => {
+      if (!im) return;
+      im.style.transition = "none";
+      im.style.transform  = "scale(1.16)";
+      im.style.opacity    = k === 0 ? "1" : "0";
+    });
+    if (imgARef.current) imgARef.current.src = DEFAULT_IMG;
 
     // Bouton → croix ×
     btnRef.current.style.backgroundColor  = "rgba(255,255,255,0.08)";
@@ -129,16 +152,17 @@ export default function LiquidMenu() {
     // Cercle s'étend → plein écran
     tweenRadius(0, center.current.full, 1.10, easeOut, null);
 
-    // Image immersive : fondu + très léger dézoom
+    // Image immersive : fondu + très léger dézoom (sur les deux calques)
     after(360, () => {
       if (imgWrapRef.current) {
         imgWrapRef.current.style.transition = "opacity .9s ease";
         imgWrapRef.current.style.opacity    = "1";
       }
-      if (imgRef.current) {
-        imgRef.current.style.transition = "transform 1.3s cubic-bezier(.22,1,.36,1)";
-        imgRef.current.style.transform  = "scale(1)";
-      }
+      [imgARef.current, imgBRef.current].forEach((im) => {
+        if (!im) return;
+        im.style.transition = "transform 1.3s cubic-bezier(.22,1,.36,1), opacity .45s ease";
+        im.style.transform  = "scale(1)";
+      });
     });
 
     // Navigation en cascade
@@ -265,22 +289,25 @@ export default function LiquidMenu() {
             flexShrink: 0,
           }}
         >
-          <img
-            ref={imgRef}
-            src="/menu-visual.jpg"
-            alt=""
-            aria-hidden="true"
-            onMouseEnter={() => { if (imgRef.current) imgRef.current.style.transform = "scale(1.05)"; }}
-            onMouseLeave={() => { if (imgRef.current) imgRef.current.style.transform = "scale(1)"; }}
-            style={{
-              width: "100%", height: "100%",
-              objectFit: "cover", objectPosition: "center",
-              transform: "scale(1.16)",
-              transition: "transform .9s cubic-bezier(.22,1,.36,1)",
-              filter: "brightness(0.92) saturate(1.05)",
-              display: "block",
-            }}
-          />
+          {[imgARef, imgBRef].map((ref, k) => (
+            <img
+              key={k}
+              ref={ref}
+              src={k === 0 ? DEFAULT_IMG : undefined}
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: "absolute", inset: 0,
+                width: "100%", height: "100%",
+                objectFit: "cover", objectPosition: "center",
+                transform: "scale(1.16)",
+                transition: "transform .9s cubic-bezier(.22,1,.36,1), opacity .45s ease",
+                filter: "brightness(0.92) saturate(1.05)",
+                display: "block",
+                opacity: k === 0 ? 1 : 0,
+              }}
+            />
+          ))}
           {/* Dégradé pour fondre l'image dans le noir à droite */}
           <div style={{
             position: "absolute", inset: 0,
@@ -320,7 +347,7 @@ export default function LiquidMenu() {
               >
                 <button
                   onClick={() => goTo(row.href)}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = isMain ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.85)"; e.currentTarget.style.transform = "translateX(8px)"; }}
+                  onMouseEnter={(e) => { setImage(row.img); e.currentTarget.style.color = isMain ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.85)"; e.currentTarget.style.transform = "translateX(8px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = isMain ? "#fff" : "rgba(255,255,255,0.42)"; e.currentTarget.style.transform = "translateX(0)"; }}
                   style={{
                     background: "none", border: "none", cursor: "pointer",
