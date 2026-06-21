@@ -53,7 +53,7 @@ export default function Footer() {
   };
 
   return (
-    <footer style={{ position: "relative", zIndex: 10, background: "#09120A", overflow: "hidden" }}>
+    <footer style={{ position: "relative", zIndex: 10, background: "transparent", overflow: "hidden" }}>
       <style>{`
         .ft-info { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: clamp(32px,5vw,80px); }
         @media (max-width: 820px){
@@ -63,6 +63,17 @@ export default function Footer() {
           .ft-info { grid-template-columns: 1fr !important; }
         }
       `}</style>
+
+      {/* Fond : transparent en haut → #09120A. Sur les pages à fond fixe
+         (accueil, etc.), la couleur de la page transparaît et se fond
+         dans le footer → même logique de transition couleur que le site. */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+        background: "linear-gradient(180deg, rgba(9,18,10,0) 0%, rgba(9,18,10,0.6) 22vh, #09120A 48vh)",
+      }} />
+
+      {/* Contenu au-dessus du dégradé */}
+      <div style={{ position: "relative", zIndex: 1 }}>
 
       {/* ── Couche 1 : déclaration éditoriale (écran plein → s'intègre
              au rythme de scroll « un écran à la fois ») ── */}
@@ -172,6 +183,8 @@ export default function Footer() {
           </span>
         </div>
       </div>
+
+      </div>{/* fin contenu */}
     </footer>
   );
 }
