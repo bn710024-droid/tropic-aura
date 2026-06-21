@@ -43,43 +43,49 @@ const SECTIONS = [
     desc: "Chair orangée et fondante, douceur tropicale. Une fraîcheur solaire à chaque tranche.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
+  {
+    type: "product", id: "banane", side: "left", bg: "#6B4E12",
+    png: "/png/prod-banane.png", collection: "SIGNATURE", num: "05", name: "Banane",
+    desc: "Douce et nourrissante, mûrissement maîtrisé. Un classique tropical d'une régularité irréprochable.",
+    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+  },
 
   // ── Saison ──
   {
-    type: "product", id: "melon", side: "left", bg: "#5E5226",
-    png: IMAGES.melonJaune, collection: "SAISON", num: "05", name: "Melon",
+    type: "product", id: "melon", side: "right", bg: "#5E5226",
+    png: IMAGES.melonJaune, collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "pasteque", side: "right", bg: "#5A2630",
-    png: "/png/prod-pasteque.png", collection: "SAISON", num: "06", name: "Pastèque",
+    type: "product", id: "pasteque", side: "left", bg: "#5A2630",
+    png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Désaltérante, rouge éclatante et croquante. L'essence rafraîchissante de l'été.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "citron-vert", side: "left", bg: "#36511E",
-    png: "/png/prod-citron-vert.png", collection: "SAISON", num: "07", name: "Citron vert",
+    type: "product", id: "citron-vert", side: "right", bg: "#36511E",
+    png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
     desc: "Acidité vive et zeste aromatique. Le relief qui réveille chaque préparation.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "citron-jaune", side: "right", bg: "#6B5A14",
-    png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "08", name: "Citron jaune",
+    type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
+    png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
     desc: "Équilibre acidulé, peau parfumée. Une fraîcheur franche et lumineuse.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
 
   // ── Spécialités ──
   {
-    type: "product", id: "gombo", side: "left", bg: "#243318",
-    png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "09", name: "Gombo",
+    type: "product", id: "gombo", side: "right", bg: "#243318",
+    png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
     desc: "Tendre et frais, prisé des cuisines du monde. Une spécialité maraîchère d'exception.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "piment", side: "right", bg: "#2E4A1C",
-    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "10", name: "Piment vert",
+    type: "product", id: "piment", side: "left", bg: "#2E4A1C",
+    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piment vert",
     desc: "Piquant frais et vert intense. Le caractère des terroirs tropicaux.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
