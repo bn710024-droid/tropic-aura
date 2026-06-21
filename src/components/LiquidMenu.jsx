@@ -91,15 +91,17 @@ export default function LiquidMenu() {
     tids.current.push(setTimeout(fn, ms));
   }, []);
 
-  // Crossfade entre les deux calques d'image
+  // Crossfade entre les deux calques d'image (fonds CSS → pas de bouton
+  // "recherche visuelle" du navigateur, qui n'apparaît que sur les <img>)
   const setImage = useCallback((src) => {
     if (!src) return;
     const a = imgARef.current, b = imgBRef.current;
     if (!a || !b) return;
     const cur = activeImg.current === 0 ? a : b;
     const nxt = activeImg.current === 0 ? b : a;
-    if (cur.getAttribute("src") === src) return;
-    nxt.src = src;
+    if (cur.dataset.src === src) return;
+    nxt.style.backgroundImage = `url("${src}")`;
+    nxt.dataset.src = src;
     nxt.style.opacity = "1";
     cur.style.opacity = "0";
     activeImg.current = activeImg.current === 0 ? 1 : 0;
@@ -161,7 +163,10 @@ export default function LiquidMenu() {
       im.style.transform  = "scale(1.16)";
       im.style.opacity    = k === 0 ? "1" : "0";
     });
-    if (imgARef.current) imgARef.current.src = DEFAULT_IMG;
+    if (imgARef.current) {
+      imgARef.current.style.backgroundImage = `url("${DEFAULT_IMG}")`;
+      imgARef.current.dataset.src = DEFAULT_IMG;
+    }
 
     // Bouton : grille → croix ×
     btnRef.current.style.backgroundColor = "rgba(255,255,255,0.08)";
@@ -313,20 +318,19 @@ export default function LiquidMenu() {
           }}
         >
           {[imgARef, imgBRef].map((ref, k) => (
-            <img
+            <div
               key={k}
               ref={ref}
-              src={k === 0 ? DEFAULT_IMG : undefined}
-              alt=""
               aria-hidden="true"
+              data-src={k === 0 ? DEFAULT_IMG : undefined}
               style={{
                 position: "absolute", inset: 0,
                 width: "100%", height: "100%",
-                objectFit: "cover", objectPosition: "center",
+                backgroundImage: k === 0 ? `url("${DEFAULT_IMG}")` : "none",
+                backgroundSize: "cover", backgroundPosition: "center",
                 transform: "scale(1.16)",
                 transition: "transform .9s cubic-bezier(.22,1,.36,1), opacity .45s ease",
                 filter: "brightness(0.92) saturate(1.05)",
-                display: "block",
                 opacity: k === 0 ? 1 : 0,
               }}
             />
