@@ -66,15 +66,14 @@ export default function Footer() {
 
       {/* ── Couche 1 : déclaration éditoriale ── */}
       <div style={{
-        minHeight: "82vh", display: "flex", flexDirection: "column",
-        justifyContent: "center",
-        padding: "clamp(110px,16vh,180px) clamp(24px,8vw,140px) clamp(70px,10vh,120px)",
+        display: "flex", flexDirection: "column", justifyContent: "center",
+        padding: "clamp(90px,13vh,150px) clamp(24px,8vw,140px) clamp(60px,8vh,90px)",
       }}>
         <h2 ref={reveal} style={{
           ...r0(0),
           fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
-          fontSize: "clamp(40px, 8.5vw, 120px)", lineHeight: 1.02,
-          letterSpacing: "-.04em", color: "#fff", margin: 0, maxWidth: 1100,
+          fontSize: "clamp(30px, 5vw, 72px)", lineHeight: 1.06,
+          letterSpacing: "-.035em", color: "#fff", margin: 0, maxWidth: 900,
         }}>
           Connecting Exceptional Origins With Exceptional Partners.
         </h2>
