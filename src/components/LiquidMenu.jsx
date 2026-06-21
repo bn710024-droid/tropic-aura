@@ -67,8 +67,8 @@ const easeIn  = (t) => t * t * t;
 export default function LiquidMenu() {
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);
-  const bar1Ref    = useRef(null);
-  const bar2Ref    = useRef(null);
+  const gridRef    = useRef(null);   // grille 2×2 (état fermé)
+  const crossRef   = useRef(null);   // croix × (état ouvert)
   const imgWrapRef = useRef(null);
   const imgARef    = useRef(null);
   const imgBRef    = useRef(null);
@@ -163,13 +163,11 @@ export default function LiquidMenu() {
     });
     if (imgARef.current) imgARef.current.src = DEFAULT_IMG;
 
-    // Bouton → croix ×
-    btnRef.current.style.backgroundColor  = "rgba(255,255,255,0.08)";
-    btnRef.current.style.borderColor      = "rgba(255,255,255,0.22)";
-    bar1Ref.current.style.transform       = "translateY(4.5px) rotate(45deg)";
-    bar1Ref.current.style.backgroundColor = "#fff";
-    bar2Ref.current.style.transform       = "translateY(-4.5px) rotate(-45deg)";
-    bar2Ref.current.style.backgroundColor = "#fff";
+    // Bouton : grille → croix ×
+    btnRef.current.style.backgroundColor = "rgba(255,255,255,0.08)";
+    btnRef.current.style.borderColor     = "rgba(255,255,255,0.22)";
+    if (gridRef.current)  { gridRef.current.style.opacity = "0"; gridRef.current.style.transform = "scale(.6)"; }
+    if (crossRef.current) { crossRef.current.style.opacity = "1"; crossRef.current.style.transform = "scale(1)"; }
 
     tweenRadius(0, center.current.full, 1.10, easeOut, null);
 
@@ -203,12 +201,10 @@ export default function LiquidMenu() {
     isOpen.current = false;
     killAll();
 
-    btnRef.current.style.backgroundColor  = "rgba(0,0,0,0.08)";
-    btnRef.current.style.borderColor      = "rgba(0,0,0,0.16)";
-    bar1Ref.current.style.transform       = "none";
-    bar1Ref.current.style.backgroundColor = "#111";
-    bar2Ref.current.style.transform       = "none";
-    bar2Ref.current.style.backgroundColor = "#111";
+    btnRef.current.style.backgroundColor = "rgba(0,0,0,0.08)";
+    btnRef.current.style.borderColor     = "rgba(0,0,0,0.16)";
+    if (crossRef.current) { crossRef.current.style.opacity = "0"; crossRef.current.style.transform = "scale(.6)"; }
+    if (gridRef.current)  { gridRef.current.style.opacity = "1"; gridRef.current.style.transform = "scale(1)"; }
 
     const items = [...itemRefs.current.filter(Boolean)];
     if (footerRef.current) items.push(footerRef.current);
@@ -261,26 +257,38 @@ export default function LiquidMenu() {
           backgroundColor: "rgba(0,0,0,0.08)",
           border: "1.5px solid rgba(0,0,0,0.16)",
           cursor: "pointer",
-          display: "flex", flexDirection: "column",
+          display: "flex",
           alignItems: "center", justifyContent: "center",
-          gap: 7, padding: 0,
+          padding: 0,
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           transition: "background-color .28s, border-color .28s",
         }}
       >
-        <div ref={bar1Ref} style={{
-          width: 18, height: 1.5, backgroundColor: "#111", borderRadius: 2,
-          transformOrigin: "center",
-          transition: "transform .28s cubic-bezier(.76,0,.24,1), background-color .28s",
+        {/* Grille 2×2 (fermé) */}
+        <div ref={gridRef} style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 4,
+          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
           pointerEvents: "none",
-        }} />
-        <div ref={bar2Ref} style={{
-          width: 18, height: 1.5, backgroundColor: "#111", borderRadius: 2,
-          transformOrigin: "center",
-          transition: "transform .28s cubic-bezier(.76,0,.24,1), background-color .28s",
+        }}>
+          {[0, 1, 2, 3].map((i) => (
+            <span key={i} style={{ width: 6, height: 6, borderRadius: 2, backgroundColor: "#111", display: "block" }} />
+          ))}
+        </div>
+
+        {/* Croix × (ouvert) */}
+        <div ref={crossRef} style={{
+          position: "absolute", inset: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          opacity: 0, transform: "scale(.6)",
+          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
           pointerEvents: "none",
-        }} />
+        }}>
+          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(45deg)" }} />
+          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(-45deg)" }} />
+        </div>
       </button>
 
       {/* ── Overlay plein écran (révélé par cercle) ─────────── */}
