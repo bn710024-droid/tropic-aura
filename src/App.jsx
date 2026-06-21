@@ -5,6 +5,7 @@ import Univers      from "./pages/Univers";
 import Produits     from "./pages/Produits";
 import Contact      from "./pages/Contact";
 import LiquidMenu   from "./components/LiquidMenu";
+import Footer       from "./components/Footer";
 import "./styles/global.css";
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <>
       <Page />
+      <Footer />
       <LiquidMenu />
     </>
   );
