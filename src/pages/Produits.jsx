@@ -37,7 +37,7 @@ const SECTIONS = [
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "papaye", side: "right", bg: "#7A3514", glow: "#FFC641",
+    type: "product", id: "papaye", side: "right", bg: "#7A3514",
     png: "/png/prod-papaye.png", collection: "SIGNATURE", num: "04", name: "Papaye",
     desc: "Chair orangée et fondante, douceur tropicale. Une fraîcheur solaire à chaque tranche.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
@@ -57,7 +57,7 @@ const SECTIONS = [
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "pasteque", side: "left", bg: "#5A2630", glow: "#DA5652",
+    type: "product", id: "pasteque", side: "left", bg: "#5A2630",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Désaltérante, rouge éclatante et croquante. L'essence rafraîchissante de l'été.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
