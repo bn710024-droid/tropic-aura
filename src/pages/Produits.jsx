@@ -21,25 +21,25 @@ const SECTIONS = [
   // ── Signature ──
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
-    png: IMAGES.mangue, collection: "SIGNATURE", num: "01", name: "Mangue Keitt",
+    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Keitt",
     desc: "Chair généreuse et peu fibreuse, sucre équilibré. Le calibre et la régularité d'une mangue pensée pour l'export.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Mars – Septembre", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
-    png: IMAGES.avocat, collection: "SIGNATURE", num: "02", name: "Avocat",
+    png: "/png/prod-avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
     desc: "Onctuosité dense, maturation maîtrisée. Une texture beurrée recherchée par les marchés les plus exigeants.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "ananas", side: "left", bg: "#6B5214",
-    png: IMAGES.ananas, collection: "SIGNATURE", num: "03", name: "Ananas",
+    png: "/png/prod-ananas.png", collection: "SIGNATURE", num: "03", name: "Ananas",
     desc: "Parfum intense, chair juteuse et sucrée. La signature aromatique des tropiques.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "papaye", side: "right", bg: "#7A3514",
-    png: IMAGES.papaye, collection: "SIGNATURE", num: "04", name: "Papaye",
+    png: "/png/prod-papaye.png", collection: "SIGNATURE", num: "04", name: "Papaye",
     desc: "Chair orangée et fondante, douceur tropicale. Une fraîcheur solaire à chaque tranche.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
@@ -53,19 +53,19 @@ const SECTIONS = [
   },
   {
     type: "product", id: "pasteque", side: "right", bg: "#5A2630",
-    png: IMAGES.pastequeTranche, collection: "SAISON", num: "06", name: "Pastèque",
+    png: "/png/prod-pasteque.png", collection: "SAISON", num: "06", name: "Pastèque",
     desc: "Désaltérante, rouge éclatante et croquante. L'essence rafraîchissante de l'été.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "left", bg: "#36511E",
-    png: IMAGES.citronVert, collection: "SAISON", num: "07", name: "Citron vert",
+    png: "/png/prod-citron-vert.png", collection: "SAISON", num: "07", name: "Citron vert",
     desc: "Acidité vive et zeste aromatique. Le relief qui réveille chaque préparation.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "right", bg: "#6B5A14",
-    png: IMAGES.citronJaune, collection: "SAISON", num: "08", name: "Citron jaune",
+    png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "08", name: "Citron jaune",
     desc: "Équilibre acidulé, peau parfumée. Une fraîcheur franche et lumineuse.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
@@ -73,13 +73,13 @@ const SECTIONS = [
   // ── Spécialités ──
   {
     type: "product", id: "gombo", side: "left", bg: "#243318",
-    png: IMAGES.gombo, collection: "SPÉCIALITÉS", num: "09", name: "Gombo",
+    png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "09", name: "Gombo",
     desc: "Tendre et frais, prisé des cuisines du monde. Une spécialité maraîchère d'exception.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "right", bg: "#2E4A1C",
-    png: null, photo: "/prod-piment-PLACEHOLDER.jpg", collection: "SPÉCIALITÉS", num: "10", name: "Piment vert",
+    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "10", name: "Piment vert",
     desc: "Piquant frais et vert intense. Le caractère des terroirs tropicaux.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
