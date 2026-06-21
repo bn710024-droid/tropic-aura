@@ -14,6 +14,7 @@ import { useRef, useCallback } from "react";
 const NAV = [
   { label: "Accueil",       href: "/",             img: "/menu-accueil.jpg"      },
   { label: "À Propos",      href: "/about",        img: "/menu-apropos.jpg"      },
+  { label: "Produits",      href: "/produits",     img: "/menu-produits.jpg"     },
   { label: "Partenariats",  href: "/partenariats", img: "/menu-partenariats.jpg" },
   { label: "Notre Univers", href: "/univers",      img: "/menu-univers.jpg"      },
   {
