@@ -64,8 +64,10 @@ export default function Footer() {
         }
       `}</style>
 
-      {/* ── Couche 1 : déclaration éditoriale ── */}
+      {/* ── Couche 1 : déclaration éditoriale (écran plein → s'intègre
+             au rythme de scroll « un écran à la fois ») ── */}
       <div style={{
+        minHeight: "100vh", boxSizing: "border-box",
         display: "flex", flexDirection: "column", justifyContent: "center",
         padding: "clamp(90px,13vh,150px) clamp(24px,8vw,140px) clamp(60px,8vh,90px)",
       }}>
