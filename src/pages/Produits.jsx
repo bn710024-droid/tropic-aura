@@ -26,7 +26,7 @@ const SECTIONS = [
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
-    png: "/png/avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
+    png: "/png/prod-avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
     desc: "Onctuosité dense, maturation maîtrisée. Une texture beurrée recherchée par les marchés les plus exigeants.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
@@ -52,7 +52,7 @@ const SECTIONS = [
   // ── Saison ──
   {
     type: "product", id: "melon", side: "right", bg: "#5E5226",
-    png: "/png/melon-jaune.png", collection: "SAISON", num: "06", name: "Melon",
+    png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
