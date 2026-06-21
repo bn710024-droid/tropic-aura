@@ -52,7 +52,7 @@ const SECTIONS = [
   // ── Saison ──
   {
     type: "product", id: "melon", side: "right", bg: "#5E5226",
-    png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
+    png: "/png/melon-jaune.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
@@ -253,14 +253,18 @@ export default function Produits() {
                     filter: "blur(6px)",
                   }} />
                 )}
-                <img
-                  src={s.png}
-                  alt={s.name}
+                {/* Fond CSS (pas un <img>) → pas de bouton "recherche visuelle" du navigateur */}
+                <div
                   className="prod-float"
+                  role="img"
+                  aria-label={s.name}
                   style={{
                     position: "relative", zIndex: 1,
-                    width: "112%", maxWidth: "112%", maxHeight: "100%",
-                    objectFit: "contain",
+                    width: "112%", height: "100%",
+                    backgroundImage: `url("${s.png}")`,
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
                     filter: "drop-shadow(0 36px 46px rgba(0,0,0,0.48))",
                     animationDelay: `${(i % 3) * -1.6}s`,
                   }}
