@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import IMAGES from "../images";
 
 // ============================================================
 //  PRODUITS — « La Collection »
@@ -38,7 +37,7 @@ const SECTIONS = [
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "papaye", side: "right", bg: "#7A3514",
+    type: "product", id: "papaye", side: "right", bg: "#7A3514", glow: "#FFC641",
     png: "/png/prod-papaye.png", collection: "SIGNATURE", num: "04", name: "Papaye",
     desc: "Chair orangée et fondante, douceur tropicale. Une fraîcheur solaire à chaque tranche.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
@@ -53,12 +52,12 @@ const SECTIONS = [
   // ── Saison ──
   {
     type: "product", id: "melon", side: "right", bg: "#5E5226",
-    png: IMAGES.melonJaune, collection: "SAISON", num: "06", name: "Melon",
+    png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "pasteque", side: "left", bg: "#5A2630",
+    type: "product", id: "pasteque", side: "left", bg: "#5A2630", glow: "#DA5652",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Désaltérante, rouge éclatante et croquante. L'essence rafraîchissante de l'été.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
@@ -246,24 +245,26 @@ export default function Produits() {
             >
               {/* Fruit détouré flottant (dépasse du cadre, ombre douce) */}
               <div className="prod-photo">
-                {s.png ? (
-                  <img
-                    src={s.png}
-                    alt={s.name}
-                    className="prod-float"
-                    style={{
-                      width: "112%", maxWidth: "112%", maxHeight: "100%",
-                      objectFit: "contain",
-                      filter: "drop-shadow(0 36px 46px rgba(0,0,0,0.48))",
-                      animationDelay: `${(i % 3) * -1.6}s`,
-                    }}
-                  />
-                ) : (
-                  // Piment vert : placeholder (pas de PNG détouré) — à remplacer
-                  <div style={{ width: "100%", height: "100%", borderRadius: 10, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.08)" }}>
-                    <img src={s.photo} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
+                {/* Halo lumineux (couleur du fond photo) → masque le halo de détourage */}
+                {s.glow && (
+                  <div aria-hidden="true" style={{
+                    position: "absolute", inset: "2% 4%", zIndex: 0, pointerEvents: "none",
+                    background: `radial-gradient(closest-side, ${s.glow}E6 0%, ${s.glow}99 44%, ${s.glow}00 78%)`,
+                    filter: "blur(6px)",
+                  }} />
                 )}
+                <img
+                  src={s.png}
+                  alt={s.name}
+                  className="prod-float"
+                  style={{
+                    position: "relative", zIndex: 1,
+                    width: "112%", maxWidth: "112%", maxHeight: "100%",
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 36px 46px rgba(0,0,0,0.48))",
+                    animationDelay: `${(i % 3) * -1.6}s`,
+                  }}
+                />
               </div>
 
               {/* Texte éditorial */}
