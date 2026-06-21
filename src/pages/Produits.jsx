@@ -26,7 +26,7 @@ const SECTIONS = [
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
-    png: "/png/prod-avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
+    png: "/png/avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
     desc: "Onctuosité dense, maturation maîtrisée. Une texture beurrée recherchée par les marchés les plus exigeants.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
