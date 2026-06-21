@@ -206,8 +206,8 @@ export default function LiquidMenu() {
     isOpen.current = false;
     killAll();
 
-    btnRef.current.style.backgroundColor = "rgba(0,0,0,0.08)";
-    btnRef.current.style.borderColor     = "rgba(0,0,0,0.16)";
+    btnRef.current.style.backgroundColor = "rgba(0,0,0,0.30)";
+    btnRef.current.style.borderColor     = "rgba(255,255,255,0.28)";
     if (crossRef.current) { crossRef.current.style.opacity = "0"; crossRef.current.style.transform = "scale(.6)"; }
     if (gridRef.current)  { gridRef.current.style.opacity = "1"; gridRef.current.style.transform = "scale(1)"; }
 
@@ -259,8 +259,8 @@ export default function LiquidMenu() {
           zIndex: 700,
           width: 46, height: 46,
           borderRadius: "50%",
-          backgroundColor: "rgba(0,0,0,0.08)",
-          border: "1.5px solid rgba(0,0,0,0.16)",
+          backgroundColor: "rgba(0,0,0,0.30)",
+          border: "1.5px solid rgba(255,255,255,0.28)",
           cursor: "pointer",
           display: "flex",
           alignItems: "center", justifyContent: "center",
@@ -279,7 +279,7 @@ export default function LiquidMenu() {
           pointerEvents: "none",
         }}>
           {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ width: 6, height: 6, borderRadius: 2, backgroundColor: "#111", display: "block" }} />
+            <span key={i} style={{ width: 6, height: 6, borderRadius: 2, backgroundColor: "#fff", display: "block" }} />
           ))}
         </div>
 
