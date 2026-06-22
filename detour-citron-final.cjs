@@ -2,7 +2,6 @@
 const sharp = require("sharp");
 const path  = require("path");
 
-// Source portrait 512x679, fond gris uniforme ~(186,192,196)
 const SRC = "C:/Users/HP/Downloads/prod-citron jaune2.png.jpeg";
 const OUT = path.join(__dirname, "public/png/prod-citron-jaune.png");
 
@@ -12,13 +11,22 @@ async function run() {
   const px = raw.data;
   console.log("Source:", width, "x", height);
 
-  // Supprimer le badge HD (x:430-490, y:8-30) → peindre en gris fond
+  // ─── Étape 0 : Supprimer badge HD et surface blanche du bas ────────────────
   const bgGrey = [185, 191, 197];
-  for (let y = 0; y < 80; y++) {
-    for (let x = 420; x < width; x++) {
-      if (x >= width || y >= height) continue;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
       const idx = (y * width + x) * channels;
-      px[idx] = bgGrey[0]; px[idx+1] = bgGrey[1]; px[idx+2] = bgGrey[2];
+      const r=px[idx], g=px[idx+1], b=px[idx+2];
+      const mn=Math.min(r,g,b), mx=Math.max(r,g,b);
+      const s = mx > 0 ? (mx - mn) / mx : 0;
+      const lum = (r + g + b) / 3;
+      // Badge HD : coin supérieur droit
+      const isBadge = (y < 80 && x >= 420);
+      // Surface blanche/crème du bas de la composition (sat<0.22, lum>185, y>60%)
+      const isWhiteBase = (y > height * 0.60 && s < 0.22 && lum > 185);
+      if (isBadge || isWhiteBase) {
+        px[idx]=bgGrey[0]; px[idx+1]=bgGrey[1]; px[idx+2]=bgGrey[2];
+      }
     }
   }
 
@@ -30,8 +38,7 @@ async function run() {
     return mx > 0 ? (mx - mn) / mx : 0;
   };
 
-  // ─── Étape 1 : Graines ─────────────────────────────────────────────────────
-  // Jaune citron = haute saturation (sat > 0.28)
+  // ─── Étape 1 : Graines (jaune citron vif) ─────────────────────────────────
   const SEED_SAT = 0.28;
   for (let i = 0; i < N; i++) {
     const idx = i * channels;
@@ -40,14 +47,13 @@ async function run() {
   }
   console.log("Graines:", fruitMask.reduce((s,v)=>s+v, 0));
 
-  // ─── Étape 2 : Expansion ───────────────────────────────────────────────────
-  // Inclut bord de peau et chair pâle adjacents au fruit
+  // ─── Étape 2 : Expansion BFS ───────────────────────────────────────────────
   const EXPAND_SAT = 0.12;
   const queue = []; let head = 0;
   for (let i = 0; i < N; i++) { if (fruitMask[i]) queue.push(i); }
   while (head < queue.length) {
     const i = queue[head++];
-    const x = i%width, y = Math.floor(i/width);
+    const x = i % width, y = Math.floor(i / width);
     for (const [dy,dx] of [[-1,0],[1,0],[0,-1],[0,1]]) {
       const ny=y+dy, nx=x+dx;
       if (ny<0||ny>=height||nx<0||nx>=width) continue;
@@ -61,7 +67,7 @@ async function run() {
   }
   console.log("Après expansion:", fruitMask.reduce((s,v)=>s+v, 0));
 
-  // ─── Étape 3 : Bouche-trous ────────────────────────────────────────────────
+  // ─── Étape 3 : Flood depuis les bords ──────────────────────────────────────
   const bgReach = new Uint8Array(N);
   const bgQ = []; let bgHead = 0;
   const seedBg = (x,y) => {
@@ -83,29 +89,20 @@ async function run() {
   }
 
   // ─── Étape 4 : Alpha ───────────────────────────────────────────────────────
+  // Hole-fill uniquement si coloré (sat>0.12) ou sombre (lum<160)
+  // → exclut surface blanche/crème enfermée sous les citrons
   for (let i=0;i<N;i++) {
-    px[i*channels+3] = (fruitMask[i]||!bgReach[i]) ? 255 : 0;
-  }
-
-  // Efface chirurgicalement le reflet crème du bas
-  // sat<0.22 et lum>165 dans le bas → surface réfléchissante du citron, pas chair
-  // + fade 72%→84% pour nettoyer le reste
-  for (let y=0;y<height;y++) {
-    const fy = y/height;
-    for (let x=0;x<width;x++) {
-      const idx=(y*width+x)*channels;
-      if (px[idx+3] === 0) continue;
-      const r=px[idx],g=px[idx+1],b=px[idx+2];
-      const lum=(r+g+b)/3;
-      const s=sat(r,g,b);
-      if (fy > 0.65 && s < 0.22 && lum > 165) {
-        px[idx+3]=0; continue;
-      }
-      if (fy >= 0.84) { px[idx+3]=0; continue; }
-      if (fy >= 0.72) {
-        const mult = 1 - (fy - 0.72) / (0.84 - 0.72);
-        px[idx+3]=Math.round(px[idx+3]*mult);
-      }
+    const idx=i*channels;
+    const r=px[idx], g=px[idx+1], b=px[idx+2];
+    const s=sat(r,g,b);
+    const lum=(r+g+b)/3;
+    if (fruitMask[i]) {
+      px[idx+3]=255;
+    } else if (bgReach[i]) {
+      px[idx+3]=0;
+    } else {
+      // Région enfermée : ne remplir que si colorée ou sombre (pas surface blanche)
+      px[idx+3] = (s > 0.12 || lum < 160) ? 255 : 0;
     }
   }
 
