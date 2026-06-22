@@ -51,7 +51,7 @@ const SECTIONS = [
 
   // ── Saison ──
   {
-    type: "product", id: "melon", side: "right", bg: "#1A1428",
+    type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
@@ -265,7 +265,7 @@ export default function Produits() {
                     backgroundSize: "contain",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    filter: "drop-shadow(0 36px 46px rgba(0,0,0,0.48))",
+                    filter: s.shadow || "drop-shadow(0 36px 46px rgba(0,0,0,0.48))",
                     animationDelay: `${(i % 3) * -1.6}s`,
                   }}
                 />
