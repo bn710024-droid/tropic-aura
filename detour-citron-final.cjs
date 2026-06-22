@@ -87,15 +87,24 @@ async function run() {
     px[i*channels+3] = (fruitMask[i]||!bgReach[i]) ? 255 : 0;
   }
 
-  // Efface délicatement le reflet blanc en bas (fade 80%→90%)
+  // Efface chirurgicalement les pixels quasi-blancs dans le bas (sat<0.15, lum>190)
+  // puis fade doux 78%→90% pour le reste
   for (let y=0;y<height;y++) {
     const fy = y/height;
-    let mult = 1;
-    if (fy >= 0.90) mult = 0;
-    else if (fy >= 0.80) mult = 1 - (fy - 0.80) / (0.90 - 0.80);
-    if (mult < 1) {
-      for (let x=0;x<width;x++) {
-        const idx=(y*width+x)*channels;
+    for (let x=0;x<width;x++) {
+      const idx=(y*width+x)*channels;
+      if (px[idx+3] === 0) continue;
+      const r=px[idx],g=px[idx+1],b=px[idx+2];
+      const lum=(r+g+b)/3;
+      const s=sat(r,g,b);
+      // Supprime pixels blancs/gris pâles dans le bas de l'image
+      if (fy > 0.70 && s < 0.15 && lum > 190) {
+        px[idx+3]=0; continue;
+      }
+      // Fade doux 78%→90%
+      if (fy >= 0.90) { px[idx+3]=0; continue; }
+      if (fy >= 0.78) {
+        const mult = 1 - (fy - 0.78) / (0.90 - 0.78);
         px[idx+3]=Math.round(px[idx+3]*mult);
       }
     }
