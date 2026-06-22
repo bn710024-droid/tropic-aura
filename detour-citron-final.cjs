@@ -87,8 +87,9 @@ async function run() {
     px[i*channels+3] = (fruitMask[i]||!bgReach[i]) ? 255 : 0;
   }
 
-  // Efface chirurgicalement les pixels quasi-blancs dans le bas (sat<0.15, lum>190)
-  // puis fade doux 78%→90% pour le reste
+  // Efface chirurgicalement le reflet crème du bas
+  // sat<0.22 et lum>165 dans le bas → surface réfléchissante du citron, pas chair
+  // + fade 72%→84% pour nettoyer le reste
   for (let y=0;y<height;y++) {
     const fy = y/height;
     for (let x=0;x<width;x++) {
@@ -97,14 +98,12 @@ async function run() {
       const r=px[idx],g=px[idx+1],b=px[idx+2];
       const lum=(r+g+b)/3;
       const s=sat(r,g,b);
-      // Supprime pixels blancs/gris pâles dans le bas de l'image
-      if (fy > 0.70 && s < 0.15 && lum > 190) {
+      if (fy > 0.65 && s < 0.22 && lum > 165) {
         px[idx+3]=0; continue;
       }
-      // Fade doux 78%→90%
-      if (fy >= 0.90) { px[idx+3]=0; continue; }
-      if (fy >= 0.78) {
-        const mult = 1 - (fy - 0.78) / (0.90 - 0.78);
+      if (fy >= 0.84) { px[idx+3]=0; continue; }
+      if (fy >= 0.72) {
+        const mult = 1 - (fy - 0.72) / (0.84 - 0.72);
         px[idx+3]=Math.round(px[idx+3]*mult);
       }
     }
