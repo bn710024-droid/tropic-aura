@@ -43,7 +43,7 @@ const SECTIONS = [
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
-    type: "product", id: "banane", side: "left", bg: "#6B4E12",
+    type: "product", id: "banane", side: "left", bg: "#0E2418",
     png: "/png/prod-banane.png", collection: "SIGNATURE", num: "05", name: "Banane",
     desc: "Douce et nourrissante, mûrissement maîtrisé. Un classique tropical d'une régularité irréprochable.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
