@@ -94,6 +94,18 @@ async function run() {
     px[i*channels+3] = (fruitMask[i] || !bgReach[i]) ? 255 : 0;
   }
 
+  // Fade bas 81%→88% : efface l'ombre orange + bas du citron en douceur
+  for (let y=0;y<height;y++) {
+    const fy=y/height;
+    if (fy < 0.81) continue;
+    const mult = Math.max(0, 1-(fy-0.81)/(0.88-0.81));
+    if (mult === 1) continue;
+    for (let x=0;x<width;x++) {
+      const idx=(y*width+x)*channels;
+      px[idx+3]=Math.round(px[idx+3]*mult);
+    }
+  }
+
   let op=0,tr=0,sm=0;
   for (let i=0;i<N;i++) { const a=px[i*channels+3]; if(a<5)tr++; else if(a>250)op++; else sm++; }
   console.log(`opaque:${op} transparent:${tr} semi:${sm}`);
