@@ -87,12 +87,12 @@ async function run() {
     px[i*channels+3] = (fruitMask[i]||!bgReach[i]) ? 255 : 0;
   }
 
-  // Efface délicatement le reflet blanc en bas (fade 88%→96%)
+  // Efface délicatement le reflet blanc en bas (fade 80%→90%)
   for (let y=0;y<height;y++) {
     const fy = y/height;
     let mult = 1;
-    if (fy >= 0.96) mult = 0;
-    else if (fy >= 0.88) mult = 1 - (fy - 0.88) / (0.96 - 0.88);
+    if (fy >= 0.90) mult = 0;
+    else if (fy >= 0.80) mult = 1 - (fy - 0.80) / (0.90 - 0.80);
     if (mult < 1) {
       for (let x=0;x<width;x++) {
         const idx=(y*width+x)*channels;
