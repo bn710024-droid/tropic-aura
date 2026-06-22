@@ -51,7 +51,7 @@ const SECTIONS = [
 
   // ── Saison ──
   {
-    type: "product", id: "melon", side: "right", bg: "#5E5226",
+    type: "product", id: "melon", side: "right", bg: "#1A1428",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
