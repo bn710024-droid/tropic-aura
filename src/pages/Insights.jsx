@@ -14,6 +14,7 @@ const ARTICLES = [
     readTime: "7 min",
     date: "Juin 2026",
     img: "/menu-apropos.jpg",
+    href: "/insights/senegal-origine-strategique",
   },
   {
     category: "Maîtrise de l'Export",
@@ -147,6 +148,7 @@ export default function Insights() {
           cursor: pointer;
         }
         .ins-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.09); }
+        a.ins-row { text-decoration: none; color: inherit; display: grid; }
         .ins-row-img {
           width: 132px; height: 112px; border-radius: 4px;
           background-size: cover; background-position: center;
@@ -292,8 +294,10 @@ export default function Insights() {
           <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom:28 }}>À la une</span>
 
           <div id="analyses">
-            {ARTICLES.map((a, i) => (
-              <article key={i} ref={reveal} className="ins-row" style={r(i * 0.06)}>
+            {ARTICLES.map((a, i) => {
+              const Tag = a.href ? "a" : "article";
+              return (
+              <Tag key={i} ref={reveal} className="ins-row" style={r(i * 0.06)} {...(a.href ? { href: a.href } : {})}>
                 {/* Thumbnail */}
                 <div
                   className="ins-row-img"
@@ -310,8 +314,9 @@ export default function Insights() {
                   <span style={{ display:"block" }}>{a.readTime} de lecture</span>
                   <span style={{ display:"block", marginTop:4 }}>{a.date}</span>
                 </div>
-              </article>
-            ))}
+              </Tag>
+              );
+            })}
           </div>
 
           {/* Voir toutes */}
