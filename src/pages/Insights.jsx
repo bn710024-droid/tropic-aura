@@ -9,41 +9,41 @@ import Lenis from "lenis";
 const ARTICLES = [
   {
     category: "Marchés",
-    title: "Pourquoi le Sénégal devient une origine stratégique pour les produits tropicaux",
-    desc: "Le principal exportateur de l'Ouest de l'Afrique redéfinit discrètement la manière dont les importateurs européens s'approvisionnent en mangues, avocats et produits d'exception.",
+    title: "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux",
+    desc: "Position géographique, accès maritime, saisonnalité complémentaire et amélioration des infrastructures créent de nouvelles opportunités pour les importateurs à la recherche de partenaires fiables.",
     readTime: "7 min",
     date: "Juin 2026",
     img: "/menu-apropos.jpg",
   },
   {
-    category: "Maîtrise de l'export",
+    category: "Maîtrise de l'Export",
     title: "FOB, CFR, CIF : les Incoterms essentiels pour l'export de produits frais",
-    desc: "Choisir le bon Incoterm n'est pas une simple formalité — pour les produits périssables, cela détermine qui supporte le risque pendant la phase la plus critique du transport.",
+    desc: "Pour les produits périssables, le choix d'un Incoterm influence directement les risques, les responsabilités et la maîtrise logistique. Comprendre les différences permet de sécuriser les opérations et d'éviter les erreurs coûteuses.",
     readTime: "5 min",
     date: "Mai 2026",
     img: "/menu-produits.jpg",
   },
   {
-    category: "Chaîne d'approvisionnement",
+    category: "Supply Chain",
     title: "Construire des chaînes d'approvisionnement fiables entre l'Afrique et l'Europe",
-    desc: "La fiabilité se construit en plusieurs couches : producteurs certifiés, manutention post-récolte rigoureuse, chaîne du froid constante et documentation conforme aux standards de l'UE.",
+    desc: "La fiabilité ne repose pas sur un seul acteur. Elle résulte de la coordination entre producteurs, stations de conditionnement, transitaires, transporteurs et acheteurs.",
     readTime: "6 min",
     date: "Avril 2026",
     img: "/menu-univers.jpg",
   },
   {
-    category: "Connaissance produit",
-    title: "Mangue Kent vs Keitt : les variétés qui définissent la saison",
-    desc: "Deux variétés, deux profils, une même exigence de qualité. Comprendre leurs différences pour mieux planifier vos approvisionnements.",
-    readTime: "4 min",
+    category: "Partenariats",
+    title: "Ce que les importateurs européens attendent réellement de leurs fournisseurs",
+    desc: "Prix compétitifs, qualité constante, réactivité et transparence : les critères de sélection évoluent rapidement. Comprendre les attentes des acheteurs permet de construire des relations commerciales durables.",
+    readTime: "5 min",
     date: "Mars 2026",
     img: "/menu-partenariats.jpg",
   },
   {
-    category: "Logistique",
-    title: "Port de Dakar : porte d'entrée vers les marchés européens pour les fruits frais",
-    desc: "Infrastructure, connexions maritimes, délais, compétitivité : comment Dakar s'impose comme un hub stratégique pour l'exportation de produits frais.",
-    readTime: "4 min",
+    category: "Développement des Filières",
+    title: "Producteurs et exportateurs : construire ensemble une filière compétitive",
+    desc: "Les marchés internationaux récompensent les filières capables de travailler collectivement. Lorsque producteurs, conditionneurs et exportateurs avancent dans la même direction, ils créent davantage de valeur pour l'ensemble de l'écosystème.",
+    readTime: "6 min",
     date: "Février 2026",
     img: "/menu-contact.jpg",
   },
@@ -222,7 +222,7 @@ export default function Insights() {
                 lineHeight:1.15, letterSpacing:"-.025em",
                 color:WHITE, margin:0,
               }}>
-                Comprendre les dynamiques qui façonnent le commerce tropical de demain.
+                Les analyses qui éclairent le commerce tropical international.
               </h1>
               <p ref={reveal} style={{
                 ...r(0.13),
@@ -230,8 +230,8 @@ export default function Insights() {
                 fontSize:"clamp(12px, .95vw, 13.5px)", lineHeight:1.75,
                 color:MUTED, margin:"18px 0 0",
               }}>
-                Analyses de marché, expertise export, logistique internationale et
-                opportunités reliant l'Afrique aux marchés les plus exigeants du monde.
+                Marchés européens, stratégies d'approvisionnement, logistique export
+                et développement de filières tropicales performantes.
               </p>
             </div>
 
