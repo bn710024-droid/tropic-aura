@@ -5,7 +5,8 @@ import Univers      from "./pages/Univers";
 import Produits     from "./pages/Produits";
 import Contact      from "./pages/Contact";
 import Insights        from "./pages/Insights";
-import InsightSenegal from "./pages/InsightSenegal";
+import InsightSenegal      from "./pages/InsightSenegal";
+import InsightPartenariats from "./pages/InsightPartenariats";
 import LiquidMenu   from "./components/LiquidMenu";
 import Footer       from "./components/Footer";
 import "./styles/global.css";
@@ -20,6 +21,7 @@ export default function App() {
   else if (path === "/contact")                                  Page = Contact;
   else if (path === "/insights")                                              Page = Insights;
   else if (path === "/insights/senegal-origine-strategique")                 Page = InsightSenegal;
+  else if (path === "/insights/fournisseur-stable-opportuniste")             Page = InsightPartenariats;
 
   const isArticle = path.startsWith("/insights/");
 
