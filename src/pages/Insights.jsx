@@ -102,9 +102,9 @@ export default function Insights() {
         .ins-left { position: sticky; top: 0; height: 100vh; overflow: hidden; }
         .ins-left-bg {
           position: absolute; inset: 0;
-          background-image: url("/menu-accueil.jpg");
-          background-size: cover; background-position: center;
-          filter: brightness(0.32) saturate(0.65);
+          background-image: url("/insights-leaf.png");
+          background-size: cover; background-position: center left;
+          filter: brightness(0.75) saturate(0.85);
         }
         .ins-left-overlay {
           position: absolute; inset: 0;
