@@ -135,7 +135,7 @@ export default function Footer() {
           <div>
             <span style={colLabel}>Navigation</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
-              {[["Products", "/produits"], ["About", "/about"], ["Contact", "/contact"]].map(([l, h]) => (
+              {[["Products", "/produits"], ["About", "/about"], ["Insights", "/insights"], ["Contact", "/contact"]].map(([l, h]) => (
                 <a key={l} href={h} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{l}</a>
               ))}
             </div>

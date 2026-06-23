@@ -48,6 +48,13 @@ const COLUMNS = [
       ],
     },
     {
+      label: "Insights", href: "/insights", img: "/menu-visual.jpg",
+      subs: [
+        { label: "Market Intelligence", href: "/insights" },
+        { label: "Export Knowledge",    href: "/insights" },
+      ],
+    },
+    {
       label: "Contact", href: "/contact", img: "/menu-contact.jpg",
       subs: [
         { label: "Nous contacter",         href: "/contact"      },
