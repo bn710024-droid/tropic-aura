@@ -103,8 +103,8 @@ export default function Insights() {
         .ins-left-bg {
           position: absolute; inset: 0;
           background-image: url("/insights-leaf.png");
-          background-size: cover; background-position: center left;
-          filter: brightness(0.75) saturate(0.85);
+          background-size: cover; background-position: center center;
+          filter: brightness(0.88) saturate(0.80);
         }
         .ins-left-overlay {
           position: absolute; inset: 0;
@@ -218,8 +218,8 @@ export default function Insights() {
               <h1 ref={reveal} style={{
                 ...r(0.07),
                 fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800,
-                fontSize:"clamp(24px, 2.6vw, 38px)",
-                lineHeight:1.11, letterSpacing:"-.03em",
+                fontSize:"clamp(19px, 1.85vw, 28px)",
+                lineHeight:1.15, letterSpacing:"-.025em",
                 color:WHITE, margin:0,
               }}>
                 Comprendre les dynamiques qui façonnent le commerce tropical de demain.
