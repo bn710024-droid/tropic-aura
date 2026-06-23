@@ -71,8 +71,36 @@ export default function InsightPartenariats() {
         }
         .art-back:hover { color: rgba(255,255,255,0.80); }
         .art-hero {
-          max-width: 860px; margin: 0 auto;
-          padding: 122px clamp(24px,6vw,80px) 60px; box-sizing: border-box;
+          position: relative; min-height: 90vh;
+          display: flex; flex-direction: column; justify-content: flex-end;
+          overflow: hidden;
+        }
+        .art-hero-bg {
+          position: absolute; inset: 0;
+          background-image: url("/fonds-insights.png");
+          background-size: cover; background-position: center 20%;
+        }
+        .art-hero-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(9,15,10,0.06) 0%,
+            rgba(9,15,10,0.28) 38%,
+            rgba(9,15,10,0.80) 66%,
+            rgba(9,15,10,0.97) 86%,
+            rgba(9,15,10,1) 100%
+          );
+        }
+        .art-hero-content {
+          position: relative; z-index: 2;
+          max-width: 860px; margin: 0 auto; width: 100%;
+          padding: 0 clamp(24px,6vw,80px) 60px;
+          box-sizing: border-box;
+        }
+        .art-hero-rule {
+          position: relative; z-index: 2;
+          height: 1px; background: rgba(255,255,255,0.12);
+          margin: 0 clamp(24px,6vw,80px);
         }
         .art-body {
           max-width: 720px; margin: 0 auto;
@@ -168,30 +196,32 @@ export default function InsightPartenariats() {
 
       {/* ══ Hero ══ */}
       <header className="art-hero">
-        <div ref={reveal} style={r(0)}>
+        <div className="art-hero-bg" />
+        <div className="art-hero-overlay" />
+        <div className="art-hero-content" ref={reveal} style={r(0)}>
           <span style={{ ...lbl, marginBottom: 20 }}>Partenariats</span>
           <h1 style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
-            fontSize: "clamp(26px,3.2vw,46px)", lineHeight: 1.07,
+            fontSize: "clamp(28px,3.4vw,52px)", lineHeight: 1.05,
             letterSpacing: "-.04em", color: WHITE,
-            margin: "14px 0 30px", maxWidth: 780,
+            margin: "14px 0 32px", maxWidth: 820,
           }}>
             Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest
           </h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             {[["Tropic-Aura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
-                {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.18)" }} />}
+                {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }} />}
                 <span style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: 11.5, fontWeight: bold ? 600 : 400,
-                  letterSpacing: ".06em", color: "rgba(255,255,255,0.38)",
+                  letterSpacing: ".06em", color: "rgba(255,255,255,0.50)",
                 }}>{txt}</span>
               </span>
             ))}
           </div>
         </div>
-        <div style={{ height: 1, background: "rgba(255,255,255,0.10)", marginTop: 40 }} />
+        <div className="art-hero-rule" />
       </header>
 
       {/* ══ Corps ══ */}

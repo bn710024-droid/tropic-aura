@@ -107,9 +107,36 @@ export default function InsightSenegal() {
 
         /* ── Hero ── */
         .art-hero {
-          max-width: 860px; margin: 0 auto;
-          padding: 122px clamp(24px,6vw,80px) 60px;
+          position: relative; min-height: 90vh;
+          display: flex; flex-direction: column; justify-content: flex-end;
+          overflow: hidden;
+        }
+        .art-hero-bg {
+          position: absolute; inset: 0;
+          background-image: url("/fonds-insights.png");
+          background-size: cover; background-position: center 20%;
+        }
+        .art-hero-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(9,15,10,0.06) 0%,
+            rgba(9,15,10,0.28) 38%,
+            rgba(9,15,10,0.80) 66%,
+            rgba(9,15,10,0.97) 86%,
+            rgba(9,15,10,1) 100%
+          );
+        }
+        .art-hero-content {
+          position: relative; z-index: 2;
+          max-width: 860px; margin: 0 auto; width: 100%;
+          padding: 0 clamp(24px,6vw,80px) 60px;
           box-sizing: border-box;
+        }
+        .art-hero-rule {
+          position: relative; z-index: 2;
+          height: 1px; background: rgba(255,255,255,0.12);
+          margin: 0 clamp(24px,6vw,80px);
         }
 
         /* ── Reading column ── */
@@ -222,32 +249,32 @@ export default function InsightSenegal() {
 
       {/* ══ Hero ══ */}
       <header className="art-hero">
-        <div ref={reveal} style={r(0)}>
+        <div className="art-hero-bg" />
+        <div className="art-hero-overlay" />
+        <div className="art-hero-content" ref={reveal} style={r(0)}>
           <span style={{ ...lbl, marginBottom: 20 }}>Marchés</span>
           <h1 style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
-            fontSize: "clamp(28px,3.4vw,50px)", lineHeight: 1.07,
+            fontSize: "clamp(30px,3.6vw,56px)", lineHeight: 1.05,
             letterSpacing: "-.04em", color: WHITE,
-            margin: "14px 0 30px", maxWidth: 780,
+            margin: "14px 0 32px", maxWidth: 820,
           }}>
             Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux
           </h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             {[["Tropic-Aura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
-                {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.18)" }} />}
+                {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }} />}
                 <span style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: 11.5, fontWeight: bold ? 600 : 400,
-                  letterSpacing: ".06em", color: "rgba(255,255,255,0.38)",
-                }}>
-                  {txt}
-                </span>
+                  letterSpacing: ".06em", color: "rgba(255,255,255,0.50)",
+                }}>{txt}</span>
               </span>
             ))}
           </div>
         </div>
-        <div style={{ height: 1, background: "rgba(255,255,255,0.10)", marginTop: 40 }} />
+        <div className="art-hero-rule" />
       </header>
 
       {/* ══ Corps ══ */}
