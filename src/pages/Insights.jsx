@@ -10,41 +10,41 @@ import Lenis from "lenis";
 
 const FEATURED = [
   {
-    category: "Market Insights",
-    title: "Why Senegal Is Becoming a Strategic Origin for Tropical Produce",
-    desc: "West Africa's leading exporter is quietly reshaping how European importers source mangoes, avocados and specialty produce. Here's what's driving the shift.",
+    category: "Analyses de marché",
+    title: "Pourquoi le Sénégal s'impose comme une origine stratégique pour les fruits tropicaux",
+    desc: "Premier exportateur d'Afrique de l'Ouest, le Sénégal redessine silencieusement les stratégies d'approvisionnement des importateurs européens. Voici ce qui motive ce changement.",
     readTime: "7 min",
-    date: "June 2026",
+    date: "Juin 2026",
     img: "/menu-apropos.jpg",
   },
   {
-    category: "Export Knowledge",
-    title: "Understanding FOB and CIF for Fresh Produce Exports",
-    desc: "Choosing the right Incoterm isn't just paperwork — for perishables, it determines who bears risk during the most critical phase of the journey.",
+    category: "Maîtrise de l'export",
+    title: "FOB, CFR, CIF : les Incoterms essentiels pour l'export de produits frais",
+    desc: "Choisir le bon Incoterm n'est pas une simple formalité — pour les produits périssables, il détermine qui supporte le risque pendant la phase la plus critique du transport.",
     readTime: "5 min",
-    date: "May 2026",
+    date: "Mai 2026",
     img: "/menu-produits.jpg",
   },
   {
-    category: "Supply Chain",
-    title: "Building Reliable Supply Chains Between Africa and Europe",
-    desc: "Reliability is built in layers: certified producers, rigorous post-harvest handling, consistent cold chain and documentation that meets EU standards.",
+    category: "Chaîne d'approvisionnement",
+    title: "Construire des chaînes d'approvisionnement fiables entre l'Afrique et l'Europe",
+    desc: "La fiabilité se construit par couches : producteurs certifiés, gestion post-récolte rigoureuse, chaîne du froid constante et documentation conforme aux normes européennes.",
     readTime: "6 min",
-    date: "April 2026",
+    date: "Avril 2026",
     img: "/menu-partenariats.jpg",
   },
 ];
 
 const ARTICLES = [
-  { category: "Product Knowledge",  title: "Mango Kent vs Keitt: The Varieties That Define the Season",             readTime: "4 min", date: "June 2026"     },
-  { category: "Compliance",         title: "GlobalG.A.P. Certification: What European Importers Actually Require",  readTime: "5 min", date: "May 2026"      },
-  { category: "Origins",            title: "The Niayes Region: West Africa's Most Productive Agricultural Belt",    readTime: "6 min", date: "April 2026"    },
-  { category: "Market Insights",    title: "Avocado Hass from West Africa: A Growing Market Opportunity",           readTime: "4 min", date: "March 2026"    },
-  { category: "Supply Chain",       title: "Cold Chain Management for Tropical Exports: A Practical Overview",       readTime: "7 min", date: "March 2026"    },
-  { category: "Export Knowledge",   title: "How to Structure a FOB Contract for Perishable Goods",                  readTime: "5 min", date: "February 2026" },
-  { category: "Logistics",          title: "Port of Dakar: Gateway to European Markets for Fresh Produce",          readTime: "4 min", date: "February 2026" },
-  { category: "Planning",           title: "Tropical Fruit Seasons: Planning Your Africa Sourcing Calendar",         readTime: "6 min", date: "January 2026"  },
-  { category: "Partnerships",       title: "Building Long-Term Trust with African Producers",                        readTime: "5 min", date: "January 2026"  },
+  { category: "Connaissance produit",        title: "Mangue Kent vs Keitt : les variétés qui définissent la campagne",                               readTime: "4 min", date: "Juin 2026"    },
+  { category: "Conformité & Réglementation", title: "Certification GlobalG.A.P. : ce que les importateurs européens exigent réellement",             readTime: "5 min", date: "Mai 2026"     },
+  { category: "Origines",                    title: "La zone des Niayes : le grenier maraîcher de l'Afrique de l'Ouest",                             readTime: "6 min", date: "Avril 2026"   },
+  { category: "Analyses de marché",          title: "Avocat Hass d'Afrique de l'Ouest : une opportunité de marché en plein essor",                   readTime: "4 min", date: "Mars 2026"    },
+  { category: "Chaîne d'approvisionnement",  title: "Gestion de la chaîne du froid pour l'export tropical : guide pratique",                         readTime: "7 min", date: "Mars 2026"    },
+  { category: "Maîtrise de l'export",        title: "Comment structurer un contrat FOB pour des produits périssables",                               readTime: "5 min", date: "Février 2026" },
+  { category: "Logistique",                  title: "Port Autonome de Dakar : porte d'entrée vers les marchés européens du frais",                   readTime: "4 min", date: "Février 2026" },
+  { category: "Planification",               title: "Saisonnalité des fruits tropicaux : organiser son calendrier d'approvisionnement depuis l'Afrique", readTime: "6 min", date: "Janvier 2026" },
+  { category: "Partenariats",                title: "Bâtir une relation de confiance durable avec les producteurs africains",                         readTime: "5 min", date: "Janvier 2026" },
 ];
 
 const TOTAL = FEATURED.length + ARTICLES.length;
@@ -136,7 +136,7 @@ export default function Insights() {
               lineHeight: 0.95, letterSpacing: "-.04em",
               color: INK, margin: "0 0 28px",
             }}>
-              Perspectives on<br />Tropical Trade.
+              Perspectives sur<br />le Commerce Tropical.
             </h1>
             <p ref={reveal} style={{
               ...r(0.16),
@@ -144,17 +144,17 @@ export default function Insights() {
               fontSize: "clamp(14px, 1.1vw, 16px)", lineHeight: 1.78,
               fontWeight: 400, color: "rgba(0,0,0,0.50)", margin: 0, maxWidth: 460,
             }}>
-              Market intelligence, export knowledge, supply chain insights
-              and opportunities connecting Africa with Europe.
+              Veille marchés, maîtrise de l'export, logistique des chaînes
+              d'approvisionnement et opportunités entre l'Afrique et l'Europe.
             </p>
           </div>
 
           {/* Droite — métadonnées */}
           <div className="ins-hero-right" ref={reveal} style={{ ...r(0.22), textAlign: "right", flexShrink: 0, paddingBottom: 4 }}>
             <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(44px,5.5vw,72px)", fontWeight: 800, letterSpacing: "-.04em", color: INK, lineHeight: 1 }}>{TOTAL}</span>
-            <span style={{ ...lbl, marginBottom: 24, textAlign: "right" }}>Articles published</span>
+            <span style={{ ...lbl, marginBottom: 24, textAlign: "right" }}>Articles publiés</span>
             <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(24px,3vw,40px)", fontWeight: 800, letterSpacing: "-.03em", color: INK, lineHeight: 1 }}>5 min</span>
-            <span style={{ ...lbl, textAlign: "right" }}>Average reading time</span>
+            <span style={{ ...lbl, textAlign: "right" }}>Temps de lecture moyen</span>
           </div>
         </div>
 
@@ -162,7 +162,7 @@ export default function Insights() {
         <div ref={reveal} style={{ ...r(0.26), marginTop: 52, display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ width: 36, height: 1, background: "rgba(0,0,0,0.20)" }} />
           <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: ".20em", textTransform: "uppercase", color: MUTED }}>
-            Explore Articles
+            Explorer les articles
           </span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
             <path d="M6 1.5V10.5M6 10.5L2.5 7M6 10.5L9.5 7" stroke="rgba(0,0,0,0.42)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -175,7 +175,7 @@ export default function Insights() {
 
       {/* ── FEATURED ── */}
       <section style={{ padding: "clamp(56px,8vh,96px) clamp(24px,8vw,140px)" }}>
-        <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom: 36 }}>Featured</span>
+        <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom: 36 }}>À la une</span>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {FEATURED.map((a, i) => (
@@ -217,7 +217,7 @@ export default function Insights() {
                   </p>
                 </div>
                 <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 14 }}>
-                  <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11.5, fontWeight: 500, letterSpacing: ".06em", color: MUTED }}>{a.readTime} read</span>
+                  <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11.5, fontWeight: 500, letterSpacing: ".06em", color: MUTED }}>{a.readTime} de lecture</span>
                   <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(0,0,0,0.20)" }} />
                   <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11.5, fontWeight: 500, letterSpacing: ".06em", color: MUTED }}>{a.date}</span>
                 </div>
@@ -233,7 +233,7 @@ export default function Insights() {
       {/* ── ALL ARTICLES ── */}
       <section style={{ padding: "clamp(56px,8vh,96px) clamp(24px,8vw,140px)" }}>
         <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom: 44 }}>
-          All Articles — {TOTAL}
+          Tous les articles — {TOTAL}
         </span>
 
         <div style={{ maxWidth: 1100 }}>
@@ -259,7 +259,7 @@ export default function Insights() {
       {/* Signature footer */}
       <div style={{ padding: "clamp(32px,4vh,48px) clamp(24px,8vw,140px)", display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(0,0,0,0.09)" }}>
         <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(0,0,0,0.30)" }}>
-          Tropic-Aura · Market Intelligence
+          Tropic-Aura · Veille &amp; Expertise
         </span>
         <a href="/contact" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(0,0,0,0.45)", textDecoration: "none", borderBottom: "1px solid rgba(0,0,0,0.20)", paddingBottom: 2, transition: "color .25s, border-color .25s" }}
           onMouseEnter={e => { e.currentTarget.style.color = INK; e.currentTarget.style.borderColor = "rgba(0,0,0,0.60)"; }}
