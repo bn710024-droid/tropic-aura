@@ -354,12 +354,6 @@ export default function Produits() {
 
               {/* Texte éditorial */}
               <div className="prod-text" style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-                  <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".22em", color: "rgba(255,255,255,0.55)" }}>{s.num}</span>
-                  <div style={{ width: 1, height: 22, background: "rgba(255,255,255,0.30)" }} />
-                  <span style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".22em", color: "rgba(255,255,255,0.55)" }}>{s.collection}</span>
-                </div>
-
                 <h2 className="prod-name" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, lineHeight: 1.04, letterSpacing: "-.03em", color: "#fff", margin: "0 0 18px", textShadow: "0 4px 30px rgba(0,0,0,0.30)" }}>{s.name}</h2>
 
                 <div style={{ width: 36, height: 2, background: "rgba(255,255,255,0.5)", margin: "0 0 22px", borderRadius: 2 }} />
