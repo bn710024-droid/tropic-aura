@@ -250,6 +250,7 @@ export default function Produits() {
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
                       filter: "drop-shadow(0 30px 44px rgba(0,0,0,0.44))",
+                      mixBlendMode: "multiply",
                       animationDelay: "-1.2s",
                     }}
                   />
