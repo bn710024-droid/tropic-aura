@@ -236,23 +236,32 @@ export default function Produits() {
                 className="prod-row"
                 style={{ opacity: 0, transform: "translateY(30px)", flexDirection: "row" }}
               >
-                {/* Image flottante */}
-                <div className="prod-photo">
-                  <div
-                    className="prod-float"
-                    role="img"
-                    aria-label="Assortiment de fruits"
-                    style={{
-                      position: "relative", zIndex: 1,
-                      width: "112%", height: "100%",
-                      backgroundImage: `url("${s.png}")`,
-                      backgroundSize: "contain",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      filter: "drop-shadow(0 30px 44px rgba(0,0,0,0.44))",
-                      animationDelay: "-1.2s",
-                    }}
-                  />
+                {/* Fruits arrangés comme la home */}
+                <div className="prod-photo" style={{ position: "relative", overflow: "visible" }}>
+                  {/* Ananas — star central */}
+                  <img src="/png/ananas.png" alt="" className="prod-float" style={{
+                    position: "absolute", width: "68%", bottom: "10%", left: "18%",
+                    filter: "drop-shadow(0 24px 36px rgba(0,0,0,0.50))",
+                    animationDelay: "-1.0s",
+                  }} />
+                  {/* Orange — haut droite */}
+                  <img src="/png/orange.png" alt="" className="prod-float" style={{
+                    position: "absolute", width: "36%", top: "4%", right: "2%",
+                    filter: "drop-shadow(0 16px 24px rgba(0,0,0,0.40))",
+                    animationDelay: "-2.4s",
+                  }} />
+                  {/* Papaye — bas gauche */}
+                  <img src="/png/papaye.png" alt="" className="prod-float" style={{
+                    position: "absolute", width: "32%", bottom: "8%", left: "2%",
+                    filter: "drop-shadow(0 14px 20px rgba(0,0,0,0.38))",
+                    animationDelay: "-0.6s",
+                  }} />
+                  {/* Mangue — haut gauche */}
+                  <img src="/png/mangue.png" alt="" className="prod-float" style={{
+                    position: "absolute", width: "30%", top: "10%", left: "6%",
+                    filter: "drop-shadow(0 12px 18px rgba(0,0,0,0.35))",
+                    animationDelay: "-3.1s",
+                  }} />
                 </div>
 
                 {/* Texte */}
