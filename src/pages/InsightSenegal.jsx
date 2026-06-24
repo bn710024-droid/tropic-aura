@@ -239,6 +239,26 @@ export default function InsightSenegal() {
           white-space: nowrap; padding: 0 20px; transition: color .25s;
         }
         .art-sep-link:hover { color: rgba(255,255,255,0.72); }
+
+        /* ── Outro ── */
+        .art-outro {
+          position: relative; height: 38vh; overflow: hidden;
+        }
+        .art-outro-bg {
+          position: absolute; inset: 0;
+          background-image: url("/fonds-insights.png");
+          background-size: cover; background-position: center bottom;
+        }
+        .art-outro-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(9,15,10,1) 0%,
+            rgba(9,15,10,0.72) 28%,
+            rgba(9,15,10,0.22) 65%,
+            rgba(9,15,10,0.0) 100%
+          );
+        }
       `}</style>
 
       {/* ══ Nav fixe ══ */}
@@ -473,6 +493,12 @@ export default function InsightSenegal() {
         <div className="art-sep-line" />
         <a href="/insights" className="art-sep-link">← Toutes les analyses</a>
         <div className="art-sep-line" />
+      </div>
+
+      {/* ══ Outro orangé ══ */}
+      <div className="art-outro">
+        <div className="art-outro-bg" />
+        <div className="art-outro-overlay" />
       </div>
 
     </div>
