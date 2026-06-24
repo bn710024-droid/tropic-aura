@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
@@ -23,7 +23,7 @@ export default function NotreHistoire() {
           Un partenaire stratégique,<br />ancré dans le terroir.
         </h1>
         <p className="ta-page-intro" style={{ maxWidth: 620 }}>
-          Tropic-Aura B.C. est née d'une conviction : l'Afrique de l'Ouest produit certains des meilleurs
+          Tropicaura B.C. est née d'une conviction : l'Afrique de l'Ouest produit certains des meilleurs
           fruits et légumes du monde, et mérite un accès direct et équitable aux marchés européens.
           Nous assurons la liaison au sein de la filière des produits frais, du producteur à l'acheteur final,
           en garantissant qualité, régularité et transparence à chaque étape.

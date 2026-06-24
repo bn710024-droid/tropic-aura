@@ -202,7 +202,7 @@ export default function Produits() {
       `}</style>
 
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">TROPICAURA</span>
+        <span className="ghost__logo">Tropicaura</span>
       </header>
 
       {/* Fond interpolé + gradient subtil « ressenti » */}

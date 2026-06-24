@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // ============================================================
@@ -18,7 +18,7 @@ export default function Header({ scrolled = false }) {
       <header className={`ta-header ${scrolled ? "scr" : ""}`}>
         <Link to="/" className="ta-logo">
           <span className="ta-logo-i">{LOGO}</span>
-          <span className="ta-logo-t">Tropic-Aura</span>
+          <span className="ta-logo-t">Tropicaura</span>
         </Link>
         <nav className="ta-nav">
           <Link className="ta-nl" to="/gamme/fruits-exotiques">Fruits</Link>
@@ -36,7 +36,7 @@ export default function Header({ scrolled = false }) {
         <div className="ta-mtop">
           <Link to="/" className="ta-logo" onClick={() => setOpen(false)}>
             <span className="ta-logo-i">{LOGO}</span>
-            <span className="ta-logo-t">Tropic-Aura</span>
+            <span className="ta-logo-t">Tropicaura</span>
           </Link>
           <button className="ta-mclose" aria-label="Fermer" onClick={() => setOpen(false)}>✕</button>
         </div>
@@ -47,7 +47,7 @@ export default function Header({ scrolled = false }) {
           <Link className="ta-ml" to="/gamme/primeurs-afrique" onClick={() => setOpen(false)}>Primeurs</Link>
           <Link className="ta-ml" to="/notre-histoire" onClick={() => setOpen(false)}>À propos</Link>
         </div>
-        <div className="ta-mfoot">Tropic-Aura B.C. · Export Premium · Dakar, Sénégal</div>
+        <div className="ta-mfoot">Tropicaura B.C. · Export Premium · Dakar, Sénégal</div>
       </div>
     </>
   );

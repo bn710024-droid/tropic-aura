@@ -1,5 +1,5 @@
-// ============================================================
-//  TROPIC-AURA — Fruits détourés (PNG transparent)
+﻿// ============================================================
+//  Tropicaura — Fruits détourés (PNG transparent)
 //  Servis depuis public/png/ — un fruit par fichier, fond transparent.
 // ============================================================
 const png = (f) => `/png/${f}`;

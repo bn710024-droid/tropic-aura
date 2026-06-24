@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 
 // ============================================================
 //  FOOTER — « L'épilogue »
@@ -121,7 +121,7 @@ export default function Footer() {
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
               fontSize: 22, letterSpacing: ".04em", color: "#fff", display: "block", marginBottom: 16,
             }}>
-              TROPIC-AURA
+              Tropicaura
             </span>
             <p style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, lineHeight: 1.7,
@@ -179,7 +179,7 @@ export default function Footer() {
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
             letterSpacing: ".10em", color: "rgba(255,255,255,0.28)",
           }}>
-            © 2026 Tropic-Aura B.C.
+            © 2026 Tropicaura B.C.
           </span>
         </div>
       </div>

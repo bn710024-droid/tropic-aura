@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { IMAGES } from "../images";
 
@@ -115,7 +115,7 @@ const SECTIONS = [
   {
     id: "vision", bg: "#C9912B",
     title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
-    desc: "Tropic-Aura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
+    desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
     cta: "Découvrir nos engagements",
     link: "/univers",
     items: build(LAYOUTS[4], [
@@ -261,7 +261,7 @@ export default function Home() {
     <>
       {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
       <header className="ghost">
-        <span className="ghost__logo">TROPIC-AURA</span>
+        <span className="ghost__logo">Tropicaura</span>
       </header>
 
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}

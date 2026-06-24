@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
@@ -122,7 +122,7 @@ export default function Contact() {
           mixBlendMode: "difference", pointerEvents: "none",
         }}
       >
-        TROPICAURA
+        Tropicaura
       </span>
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
@@ -273,7 +273,7 @@ export default function Contact() {
             fontSize: 11, fontWeight: 700, letterSpacing: ".26em",
             textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: 48,
           }}>
-            Pourquoi Tropic-Aura
+            Pourquoi Tropicaura
           </span>
 
           <div className="ct-pill">
@@ -301,7 +301,7 @@ export default function Contact() {
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 500,
               letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
             }}>
-              TROPIC-AURA · Commerce Tropical d'Excellence
+              Tropicaura · Commerce Tropical d'Excellence
             </span>
           </div>
         </div>

@@ -1,7 +1,7 @@
-import { useRef, useCallback } from "react";
+﻿import { useRef, useCallback } from "react";
 
 // ============================================================
-//  LIQUID MENU — plein écran éditorial premium (Tropic-Aura)
+//  LIQUID MENU — plein écran éditorial premium (Tropicaura)
 //
 //  Image immersive à gauche (~40%) + navigation en DEUX colonnes
 //  à droite : rubriques principales + sous-liens (style Combilo).
@@ -445,7 +445,7 @@ export default function LiquidMenu() {
               letterSpacing: ".24em", textTransform: "uppercase",
               color: "rgba(255,255,255,0.26)",
             }}>
-              TROPIC-AURA · Commerce Tropical d'Excellence
+              Tropicaura · Commerce Tropical d'Excellence
             </span>
           </div>
         </nav>

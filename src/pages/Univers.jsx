@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -41,7 +41,7 @@ const SECTIONS = [
     title: "L'excellence n'est jamais accidentelle.",
     paras: [
       "Chaque produit destiné aux marchés internationaux doit répondre à des exigences élevées de sélection, de préparation et de conformité.",
-      "Tropic-Aura s'engage à promouvoir une approche fondée sur la rigueur, la constance et l'amélioration continue afin de répondre aux attentes des acheteurs les plus exigeants.",
+      "Tropicaura s'engage à promouvoir une approche fondée sur la rigueur, la constance et l'amélioration continue afin de répondre aux attentes des acheteurs les plus exigeants.",
     ],
   },
   {
@@ -223,7 +223,7 @@ export default function Univers() {
     <>
       {/* ── Header fantôme transparent ── */}
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">TROPICAURA</span>
+        <span className="ghost__logo">Tropicaura</span>
       </header>
 
       {/* ── Fond interpolé + couche de profondeur ── */}

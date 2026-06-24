@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import FallingText from "../components/FallingText";
 import IMAGES from "../images";
@@ -36,7 +36,7 @@ const SECTIONS = [
     title: "Des fondations construites sur la confiance.",
     paragraphs: [
       "Chaque partenariat durable repose sur des fondations solides.",
-      "Chez Tropic-Aura, nous croyons que le commerce international ne se résume pas à l'échange de produits. Il repose avant tout sur la confiance, la transparence et une vision commune du long terme.",
+      "Chez Tropicaura, nous croyons que le commerce international ne se résume pas à l'échange de produits. Il repose avant tout sur la confiance, la transparence et une vision commune du long terme.",
       "Nous ne recherchons pas des opportunités ponctuelles. Nous construisons des relations capables de grandir, d'évoluer et de créer de la valeur sur le long terme.",
     ],
   },
@@ -47,7 +47,7 @@ const SECTIONS = [
     title: "Un réseau qui dépasse les frontières.",
     paragraphs: [
       "Derrière chaque réussite commerciale se trouve un réseau de partenaires engagés.",
-      "Tropic-Aura développe des relations stratégiques à travers les principales régions tropicales d'Afrique, en connectant producteurs, stations de conditionnement, partenaires logistiques, distributeurs et acheteurs internationaux autour d'un objectif commun : l'excellence.",
+      "Tropicaura développe des relations stratégiques à travers les principales régions tropicales d'Afrique, en connectant producteurs, stations de conditionnement, partenaires logistiques, distributeurs et acheteurs internationaux autour d'un objectif commun : l'excellence.",
       "Chaque connexion renforce l'écosystème. Chaque partenariat ouvre de nouvelles opportunités.",
     ],
   },
@@ -58,7 +58,7 @@ const SECTIONS = [
     title: "Révéler le potentiel des terroirs tropicaux.",
     paragraphs: [
       "Certaines des opportunités agricoles les plus prometteuses au monde se trouvent dans les régions tropicales africaines.",
-      "Tropic-Aura contribue à un avenir où ces territoires sont reconnus pour leur richesse naturelle, leur professionnalisme, leur capacité d'innovation et leur aptitude à répondre aux standards les plus exigeants du commerce mondial.",
+      "Tropicaura contribue à un avenir où ces territoires sont reconnus pour leur richesse naturelle, leur professionnalisme, leur capacité d'innovation et leur aptitude à répondre aux standards les plus exigeants du commerce mondial.",
       "Notre ambition est simple : transformer le potentiel en opportunités concrètes et créer de la valeur durable pour l'ensemble des acteurs de la chaîne.",
     ],
   },
@@ -69,7 +69,7 @@ const SECTIONS = [
     title: "Construire l'avenir ensemble.",
     paragraphs: [
       "Nous croyons que l'avenir du commerce tropical sera porté par des partenariats solides, une vision partagée et une collaboration durable.",
-      "Tropic-Aura construit un écosystème dans lequel chaque acteur contribue à une réussite collective.",
+      "Tropicaura construit un écosystème dans lequel chaque acteur contribue à une réussite collective.",
       "Nous ne voulons pas simplement développer des relations commerciales. Nous souhaitons bâtir des alliances stratégiques capables d'accompagner la prochaine génération du commerce agricole international.",
     ],
   },
@@ -79,7 +79,7 @@ const SECTIONS = [
     dark: true,
     title: "Rejoignez un réseau qui façonne l'avenir du commerce tropical.",
     paragraphs: [
-      "Les plus grandes opportunités naissent lorsque des partenaires ambitieux avancent dans la même direction. Que vous soyez producteur, importateur, distributeur ou partenaire logistique, Tropic-Aura souhaite collaborer avec des acteurs qui partagent une même exigence de qualité et de création de valeur.",
+      "Les plus grandes opportunités naissent lorsque des partenaires ambitieux avancent dans la même direction. Que vous soyez producteur, importateur, distributeur ou partenaire logistique, Tropicaura souhaite collaborer avec des acteurs qui partagent une même exigence de qualité et de création de valeur.",
     ],
     hasButton: true,
   },
@@ -210,7 +210,7 @@ export default function Partenariats() {
         background: "transparent",
       }}>
         <a href="/" style={{ pointerEvents:"auto", textDecoration:"none", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:"#1A1A1A" }}>
-          TROPICAURA
+          Tropicaura
         </a>
       </header>
 

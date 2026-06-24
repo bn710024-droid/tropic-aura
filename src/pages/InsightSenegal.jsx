@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 const GOLD  = "#C9A84C";
@@ -183,7 +183,7 @@ export default function InsightSenegal() {
           border-radius: 1px; background: ${GOLD};
         }
 
-        /* ── Tropic-Aura aside ── */
+        /* ── Tropicaura aside ── */
         .ta-block {
           margin: 48px 0; padding: 28px 32px;
           border-left: 3px solid ${GOLD};
@@ -290,7 +290,7 @@ export default function InsightSenegal() {
 
       {/* ══ Nav fixe ══ */}
       <nav className="art-nav">
-        <a href="/" className="art-brand">TROPIC-AURA</a>
+        <a href="/" className="art-brand">Tropicaura</a>
         <a href="/insights" className="art-back">← Retour aux analyses</a>
       </nav>
 
@@ -309,7 +309,7 @@ export default function InsightSenegal() {
             Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux
           </h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            {[["Tropic-Aura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
+            {[["Tropicaura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
                 {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }} />}
                 <span style={{
@@ -448,15 +448,15 @@ export default function InsightSenegal() {
           commercial crédible sur le long terme.
         </p>
 
-        {/* ══ Perspective Tropic-Aura ══ */}
+        {/* ══ Perspective Tropicaura ══ */}
         <div ref={reveal} className="ta-block" style={r(0.04)}>
-          <span className="ta-label">Perspective Tropic-Aura</span>
+          <span className="ta-label">Perspective Tropicaura</span>
           <p className="ta-p">
             Cette évolution s'appuie également sur l'émergence de sociétés capables de connecter
             efficacement les producteurs locaux aux exigences des marchés internationaux.
           </p>
           <p className="ta-p">
-            Chez Tropic-Aura, nous croyons que la valeur ne réside pas uniquement dans le produit
+            Chez Tropicaura, nous croyons que la valeur ne réside pas uniquement dans le produit
             lui-même, mais dans la qualité de l'exécution, la transparence des échanges et la
             capacité à construire des relations durables entre les différents acteurs de la chaîne
             d'approvisionnement.
@@ -497,7 +497,7 @@ export default function InsightSenegal() {
             favorable à des partenariats durables.
           </p>
           <p className="art-p">
-            Chez Tropic-Aura, nous sommes convaincus que l'avenir du commerce tropical repose sur
+            Chez Tropicaura, nous sommes convaincus que l'avenir du commerce tropical repose sur
             des relations solides entre producteurs, exportateurs, logisticiens et importateurs.
           </p>
           <p className="art-p">

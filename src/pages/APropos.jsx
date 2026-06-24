@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import FallingFruits from "../components/FallingFruits";
 
@@ -16,7 +16,7 @@ const SECTIONS = [
     title: "Notre conviction",
     paras: [
       "Nous croyons que les terroirs tropicaux africains comptent parmi les plus remarquables au monde. Pourtant, leur potentiel reste encore insuffisamment valorisé sur les marchés internationaux.",
-      "Tropic-Aura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
+      "Tropicaura est née de la volonté de créer un lien plus direct, plus transparent et plus ambitieux entre ces origines d'exception et les acheteurs les plus exigeants.",
       "Nous invitons nos partenaires à participer à cette nouvelle dynamique : construire des connexions durables, révéler la véritable valeur des origines africaines et contribuer à une chaîne d'approvisionnement plus équitable, plus moderne et plus performante.",
     ],
   },
@@ -51,7 +51,7 @@ const SECTIONS = [
     title: "Notre avenir",
     paras: [
       "Nous imaginons un futur où les produits tropicaux africains seront recherchés non seulement pour leur qualité naturelle, mais aussi pour les standards d'excellence, de professionnalisme et d'innovation qui les accompagnent.",
-      "Tropic-Aura entend contribuer à cette transformation aux côtés de producteurs, d'acheteurs et d'acteurs engagés qui souhaitent participer à l'émergence d'une Afrique plus visible, plus compétitive et plus influente sur les marchés mondiaux.",
+      "Tropicaura entend contribuer à cette transformation aux côtés de producteurs, d'acheteurs et d'acteurs engagés qui souhaitent participer à l'émergence d'une Afrique plus visible, plus compétitive et plus influente sur les marchés mondiaux.",
     ],
     quote: "L'avenir ne se construit pas seul. Il se construit ensemble.",
   },
@@ -164,7 +164,7 @@ export default function APropos() {
     <>
       {/* ── Header fantôme transparent (comme Home) ── */}
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">TROPICAURA</span>
+        <span className="ghost__logo">Tropicaura</span>
       </header>
 
       {/* ── Fond interpolé + couche de profondeur ── */}

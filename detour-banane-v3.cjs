@@ -1,0 +1,73 @@
+"use strict";
+const sharp = require("sharp");
+const path  = require("path");
+
+const SRC = "C:/Users/HP/Downloads/prod-BABAN jaune.png";
+const OUT = path.join(__dirname, "public/png/prod-banane.png");
+
+function dist(r1,g1,b1,r2,g2,b2){ return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2); }
+
+async function run() {
+  const raw = await sharp(SRC).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width, height, channels } = raw.info;
+  const px = raw.data;
+  console.log("Source:", width, "x", height);
+
+  // Étape 1 : flood-fill conservateur depuis les bords (floodT=62)
+  // → n'entre pas dans la chair même la plus claire
+  const floodT  = 62;
+  const bgMask  = new Uint8Array(width * height);
+  const visited = new Uint8Array(width * height);
+  const queue   = [];
+  let head = 0;
+
+  const seed = (x, y) => {
+    const i = y * width + x;
+    if (visited[i]) return;
+    visited[i] = 1;
+    if (dist(px[i*channels], px[i*channels+1], px[i*channels+2], 255, 255, 255) < floodT) {
+      bgMask[i] = 1; queue.push(i);
+    }
+  };
+  for (let x = 0; x < width; x++) { seed(x, 0); seed(x, height-1); }
+  for (let y = 0; y < height; y++) { seed(0, y); seed(width-1, y); }
+  while (head < queue.length) {
+    const i = queue[head++];
+    const x = i % width, y = Math.floor(i / width);
+    for (const [dy,dx] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+      const ny=y+dy, nx=x+dx;
+      if (ny>=0&&ny<height&&nx>=0&&nx<width) {
+        const ni=ny*width+nx;
+        if (!visited[ni]) {
+          visited[ni]=1;
+          if (dist(px[ni*channels],px[ni*channels+1],px[ni*channels+2],255,255,255)<floodT) {
+            bgMask[ni]=1; queue.push(ni);
+          }
+        }
+      }
+    }
+  }
+  console.log(`Flood : ${bgMask.reduce((s,v)=>s+v,0)} px fond`);
+
+  // Étape 2 : dilatation 2px du masque de fond
+  // → grignote 2px dans la silhouette du fruit pour tuer les halos de bord
+  const bgD = new Uint8Array(bgMask);
+  const R   = 2;
+  for (let y=0;y<height;y++) for (let x=0;x<width;x++) {
+    if (!bgMask[y*width+x]) continue;
+    for (let dy=-R;dy<=R;dy++) for (let dx=-R;dx<=R;dx++) {
+      const ny=y+dy, nx=x+dx;
+      if (ny>=0&&ny<height&&nx>=0&&nx<width) bgD[ny*width+nx]=1;
+    }
+  }
+  console.log(`Après dilatation 2px : ${bgD.reduce((s,v)=>s+v,0)} px fond`);
+
+  // Appliquer : fond dilaté → alpha 0, fruit → alpha 255
+  for (let i=0;i<width*height;i++) px[i*channels+3] = bgD[i] ? 0 : 255;
+
+  await sharp(px, { raw: { width, height, channels } })
+    .png({ compressionLevel: 9 })
+    .toFile(OUT);
+  console.log("Done →", OUT);
+}
+run().catch(console.error);

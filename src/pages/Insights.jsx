@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 // ============================================================
@@ -180,7 +180,7 @@ export default function Insights() {
 
       {/* Logo */}
       <span style={{ position:"fixed", top:20, left:"clamp(20px,5vw,48px)", zIndex:200, fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:WHITE, pointerEvents:"none" }}>
-        TROPIC-AURA
+        Tropicaura
       </span>
 
       <div className="ins-wrap">
@@ -261,7 +261,7 @@ export default function Insights() {
 
             {/* Signature */}
             <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:9, fontWeight:600, letterSpacing:".20em", textTransform:"uppercase", color:"rgba(255,255,255,0.22)" }}>
-              Tropic-Aura · Commerce Tropical d'Excellence
+              Tropicaura · Commerce Tropical d'Excellence
             </span>
           </div>
         </div>

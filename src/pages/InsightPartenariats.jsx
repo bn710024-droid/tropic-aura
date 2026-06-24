@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 const GOLD  = "#C9A84C";
@@ -237,7 +237,7 @@ export default function InsightPartenariats() {
 
       {/* ══ Nav ══ */}
       <nav className="art-nav">
-        <a href="/" className="art-brand">TROPIC-AURA</a>
+        <a href="/" className="art-brand">Tropicaura</a>
         <a href="/insights" className="art-back">← Retour aux analyses</a>
       </nav>
 
@@ -256,7 +256,7 @@ export default function InsightPartenariats() {
             Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest
           </h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            {[["Tropic-Aura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
+            {[["Tropicaura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
                 {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }} />}
                 <span style={{
@@ -393,11 +393,11 @@ export default function InsightPartenariats() {
           de différenciation aussi important que le produit lui-même.
         </p>
 
-        {/* ══ Perspective Tropic-Aura ══ */}
+        {/* ══ Perspective Tropicaura ══ */}
         <div ref={reveal} className="ta-block" style={r(0.04)}>
-          <span className="ta-label">Perspective Tropic-Aura</span>
+          <span className="ta-label">Perspective Tropicaura</span>
           <p className="ta-p">
-            Chez Tropic-Aura, nous croyons que les partenariats durables se construisent autour
+            Chez Tropicaura, nous croyons que les partenariats durables se construisent autour
             d'une idée simple : créer de la valeur pour l'ensemble des acteurs de la chaîne
             d'approvisionnement.
           </p>
