@@ -54,25 +54,25 @@ const SECTIONS = [
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
     png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
     desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
     png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
     desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
 
   // ── Spécialités ──
@@ -80,13 +80,13 @@ const SECTIONS = [
     type: "product", id: "gombo", side: "right", bg: "#243318",
     png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
     desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
-    meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
     png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piment vert",
     desc: "Couleur intense, fraîcheur maîtrisée et sélection rigoureuse. Un produit de caractère destiné aux marchés à forte demande.",
-    meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
 
   // ── Besoin spécifique ──
