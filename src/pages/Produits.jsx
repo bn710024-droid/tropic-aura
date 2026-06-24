@@ -21,31 +21,31 @@ const SECTIONS = [
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
     png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Keitt",
-    desc: "Chair généreuse et peu fibreuse, sucre équilibré. Le calibre et la régularité d'une mangue pensée pour l'export.",
+    desc: "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Mars – Septembre", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
     png: "/png/prod-avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
-    desc: "Onctuosité dense, maturation maîtrisée. Une texture beurrée recherchée par les marchés les plus exigeants.",
+    desc: "Maturation maîtrisée, texture crémeuse et qualité régulière. Sélectionné pour répondre aux exigences des chaînes d'approvisionnement internationales.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "ananas", side: "left", bg: "#6B5214",
     png: "/png/prod-ananas.png", collection: "SIGNATURE", num: "03", name: "Ananas",
-    desc: "Parfum intense, chair juteuse et sucrée. La signature aromatique des tropiques.",
+    desc: "Chair juteuse, profil aromatique intense et présentation soignée. Un produit tropical reconnu pour sa valeur ajoutée sur les marchés premium.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "papaye", side: "right", bg: "#7A3514",
     png: "/png/prod-papaye.png", collection: "SIGNATURE", num: "04", name: "Papaye",
-    desc: "Chair orangée et fondante, douceur tropicale. Une fraîcheur solaire à chaque tranche.",
+    desc: "Couleur éclatante, saveur équilibrée et qualité constante. Une référence tropicale adaptée aux circuits spécialisés et aux marchés exigeants.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "banane", side: "left", bg: "#0E2418",
     png: "/png/prod-banane.png", collection: "SIGNATURE", num: "05", name: "Banane",
-    desc: "Douce et nourrissante, mûrissement maîtrisé. Un classique tropical d'une régularité irréprochable.",
+    desc: "Régularité des volumes, qualité homogène et gestion maîtrisée de la maturité. Un produit essentiel du commerce international.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
 
@@ -53,25 +53,25 @@ const SECTIONS = [
   {
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
-    desc: "Parfum délicat, chair fondante et sucrée. La gourmandise de la pleine saison.",
+    desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
-    desc: "Désaltérante, rouge éclatante et croquante. L'essence rafraîchissante de l'été.",
+    desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
     png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
-    desc: "Acidité vive et zeste aromatique. Le relief qui réveille chaque préparation.",
+    desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
     png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
-    desc: "Équilibre acidulé, peau parfumée. Une fraîcheur franche et lumineuse.",
+    desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
 
@@ -79,13 +79,13 @@ const SECTIONS = [
   {
     type: "product", id: "gombo", side: "right", bg: "#243318",
     png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
-    desc: "Tendre et frais, prisé des cuisines du monde. Une spécialité maraîchère d'exception.",
+    desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
     png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piment vert",
-    desc: "Piquant frais et vert intense. Le caractère des terroirs tropicaux.",
+    desc: "Couleur intense, fraîcheur maîtrisée et sélection rigoureuse. Un produit de caractère destiné aux marchés à forte demande.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
 
