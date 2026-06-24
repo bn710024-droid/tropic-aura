@@ -236,32 +236,23 @@ export default function Produits() {
                 className="prod-row"
                 style={{ opacity: 0, transform: "translateY(30px)", flexDirection: "row" }}
               >
-                {/* Fruits arrangés comme la home */}
-                <div className="prod-photo" style={{ position: "relative", overflow: "visible" }}>
-                  {/* Ananas — star central */}
-                  <img src="/png/ananas.png" alt="" className="prod-float" style={{
-                    position: "absolute", width: "68%", bottom: "10%", left: "18%",
-                    filter: "drop-shadow(0 24px 36px rgba(0,0,0,0.50))",
-                    animationDelay: "-1.0s",
-                  }} />
-                  {/* Orange — haut droite */}
-                  <img src="/png/orange.png" alt="" className="prod-float" style={{
-                    position: "absolute", width: "36%", top: "4%", right: "2%",
-                    filter: "drop-shadow(0 16px 24px rgba(0,0,0,0.40))",
-                    animationDelay: "-2.4s",
-                  }} />
-                  {/* Papaye — bas gauche */}
-                  <img src="/png/papaye.png" alt="" className="prod-float" style={{
-                    position: "absolute", width: "32%", bottom: "8%", left: "2%",
-                    filter: "drop-shadow(0 14px 20px rgba(0,0,0,0.38))",
-                    animationDelay: "-0.6s",
-                  }} />
-                  {/* Mangue — haut gauche */}
-                  <img src="/png/mangue.png" alt="" className="prod-float" style={{
-                    position: "absolute", width: "30%", top: "10%", left: "6%",
-                    filter: "drop-shadow(0 12px 18px rgba(0,0,0,0.35))",
-                    animationDelay: "-3.1s",
-                  }} />
+                {/* Image flottante */}
+                <div className="prod-photo">
+                  <div
+                    className="prod-float"
+                    role="img"
+                    aria-label="Assortiment de fruits"
+                    style={{
+                      position: "relative", zIndex: 1,
+                      width: "112%", height: "100%",
+                      backgroundImage: `url("${s.png}")`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      filter: "drop-shadow(0 30px 44px rgba(0,0,0,0.44))",
+                      animationDelay: "-1.2s",
+                    }}
+                  />
                 </div>
 
                 {/* Texte */}
@@ -302,22 +293,10 @@ export default function Produits() {
                   }}>
                     Produit spécifique. Solution sur mesure.
                   </p>
-                  <a
-                    href="/contact"
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 10,
-                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12,
-                      fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase",
-                      color: "#fff", textDecoration: "none",
-                      border: "1px solid rgba(255,255,255,0.38)",
-                      padding: "14px 28px", borderRadius: 2,
-                      transition: "background .25s, border-color .25s",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.70)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.38)"; }}
-                  >
-                    Discutons de votre projet <span style={{ fontSize: 15 }}>→</span>
-                  </a>
+                  <button className="scene__cta" onClick={() => window.location.href = "/contact"}>
+                    <span className="cta-label">Discutons de votre projet</span>
+                    <span className="cta-arrow"><span>→</span></span>
+                  </button>
                 </div>
               </div>
             </section>
