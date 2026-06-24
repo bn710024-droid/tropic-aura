@@ -88,6 +88,12 @@ const SECTIONS = [
     desc: "Piquant frais et vert intense. Le caractère des terroirs tropicaux.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Saison", "Standard": "Export Premium" },
   },
+
+  // ── Besoin spécifique ──
+  {
+    type: "besoin", id: "besoin", bg: "#080F0A",
+    png: "/multifruits.png",
+  },
 ];
 
 const hexToRgb = (h) => {
@@ -222,6 +228,93 @@ export default function Produits() {
 
       {/* Scènes */}
       {SECTIONS.map((s, i) => {
+        if (s.type === "besoin") {
+          return (
+            <section key={s.id} className="scene" style={{ justifyContent: "center" }}>
+              <div
+                ref={(el) => (contentRefs.current[i] = el)}
+                className="prod-row"
+                style={{ opacity: 0, transform: "translateY(30px)", flexDirection: "row" }}
+              >
+                {/* Image flottante */}
+                <div className="prod-photo">
+                  <div
+                    className="prod-float"
+                    role="img"
+                    aria-label="Assortiment de fruits"
+                    style={{
+                      position: "relative", zIndex: 1,
+                      width: "112%", height: "100%",
+                      backgroundImage: `url("${s.png}")`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      filter: "drop-shadow(0 30px 44px rgba(0,0,0,0.44))",
+                      animationDelay: "-1.2s",
+                    }}
+                  />
+                </div>
+
+                {/* Texte */}
+                <div className="prod-text" style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{
+                    display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: 11, fontWeight: 700, letterSpacing: ".30em",
+                    textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: 20,
+                  }}>
+                    Besoin Spécifique
+                  </span>
+                  <h2 style={{
+                    fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
+                    fontSize: "clamp(26px,3.2vw,46px)", lineHeight: 1.08,
+                    letterSpacing: "-.03em", color: "#fff", margin: "0 0 20px", maxWidth: 500,
+                  }}>
+                    Vous recherchez un produit qui ne figure pas dans notre collection ?
+                  </h2>
+                  <div style={{ width: 36, height: 2, background: "rgba(255,255,255,0.5)", margin: "0 0 24px", borderRadius: 2 }} />
+                  <p style={{
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: "clamp(14px,1.2vw,16px)", lineHeight: 1.78,
+                    color: "rgba(255,255,255,0.78)", margin: "0 0 16px", maxWidth: 480,
+                  }}>
+                    Grâce à notre réseau de producteurs et de partenaires agricoles en Afrique de l'Ouest, nous pouvons accompagner des demandes spécifiques selon vos besoins.
+                  </p>
+                  <p style={{
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: "clamp(14px,1.2vw,16px)", lineHeight: 1.78,
+                    color: "rgba(255,255,255,0.78)", margin: "0 0 28px", maxWidth: 480,
+                  }}>
+                    Produit particulier, programme saisonnier ou sourcing sur mesure : nous étudions chaque projet avec attention afin d'identifier la solution la plus adaptée à votre marché.
+                  </p>
+                  <p style={{
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: "clamp(14px,1.15vw,16px)", fontWeight: 700,
+                    color: "#fff", margin: "0 0 36px", letterSpacing: "-.01em",
+                  }}>
+                    Produit spécifique. Solution sur mesure.
+                  </p>
+                  <a
+                    href="/contact"
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 10,
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12,
+                      fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase",
+                      color: "#fff", textDecoration: "none",
+                      border: "1px solid rgba(255,255,255,0.38)",
+                      padding: "14px 28px", borderRadius: 2,
+                      transition: "background .25s, border-color .25s",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.70)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.38)"; }}
+                  >
+                    Discutons de votre projet <span style={{ fontSize: 15 }}>→</span>
+                  </a>
+                </div>
+              </div>
+            </section>
+          );
+        }
+
         if (s.type === "intro") {
           return (
             <section key={s.id} className="scene" style={{ justifyContent: "center" }}>
