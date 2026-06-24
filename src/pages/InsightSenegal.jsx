@@ -242,7 +242,9 @@ export default function InsightSenegal() {
 
         /* ── Outro ── */
         .art-outro {
-          position: relative; height: 38vh; overflow: hidden;
+          position: relative; min-height: 62vh; overflow: hidden;
+          display: flex; flex-direction: column;
+          justify-content: center; align-items: center;
         }
         .art-outro-bg {
           position: absolute; inset: 0;
@@ -254,11 +256,36 @@ export default function InsightSenegal() {
           background: linear-gradient(
             180deg,
             rgba(9,15,10,1) 0%,
-            rgba(9,15,10,0.72) 28%,
-            rgba(9,15,10,0.22) 65%,
+            rgba(9,15,10,0.60) 22%,
+            rgba(9,15,10,0.38) 50%,
+            rgba(9,15,10,0.18) 78%,
             rgba(9,15,10,0.0) 100%
           );
         }
+        .art-outro-content {
+          position: relative; z-index: 2;
+          max-width: 680px; width: 100%;
+          padding: 0 clamp(24px,6vw,80px);
+          box-sizing: border-box; text-align: center;
+        }
+        .art-outro-quote {
+          font-family: 'Plus Jakarta Sans',sans-serif;
+          font-size: clamp(17px,1.55vw,23px); font-weight: 600; font-style: italic;
+          color: rgba(255,255,255,0.93); line-height: 1.55; letter-spacing: -.015em;
+          margin: 0 0 44px;
+          text-shadow: 0 2px 24px rgba(9,15,10,0.60);
+        }
+        .art-outro-nav {
+          display: flex; align-items: center; gap: 0; width: 100%;
+        }
+        .art-outro-line { flex: 1; height: 1px; background: rgba(255,255,255,0.20); }
+        .art-outro-link {
+          font-family: 'Plus Jakarta Sans',sans-serif; font-size: 9px; font-weight: 700;
+          letter-spacing: .20em; text-transform: uppercase;
+          color: rgba(255,255,255,0.50); text-decoration: none;
+          white-space: nowrap; padding: 0 20px; transition: color .25s;
+        }
+        .art-outro-link:hover { color: rgba(255,255,255,0.90); }
       `}</style>
 
       {/* ══ Nav fixe ══ */}
@@ -478,27 +505,25 @@ export default function InsightSenegal() {
             chaîne d'approvisionnement plus fiable, plus transparente et plus performante entre
             l'Afrique et l'Europe.
           </p>
-          <div className="art-quote">
-            <p className="art-quote-text">
-              Les meilleures opportunités naissent lorsque les bons partenaires avancent dans la
-              même direction.
-            </p>
-          </div>
         </div>
 
       </div>
 
-      {/* ══ Séparateur bas ══ */}
-      <div className="art-sep">
-        <div className="art-sep-line" />
-        <a href="/insights" className="art-sep-link">← Toutes les analyses</a>
-        <div className="art-sep-line" />
-      </div>
-
-      {/* ══ Outro orangé ══ */}
+      {/* ══ Outro — citation + image ══ */}
       <div className="art-outro">
         <div className="art-outro-bg" />
         <div className="art-outro-overlay" />
+        <div className="art-outro-content">
+          <p className="art-outro-quote">
+            Les meilleures opportunités naissent lorsque les bons partenaires avancent dans la
+            même direction.
+          </p>
+          <div className="art-outro-nav">
+            <div className="art-outro-line" />
+            <a href="/insights" className="art-outro-link">← Toutes les analyses</a>
+            <div className="art-outro-line" />
+          </div>
+        </div>
       </div>
 
     </div>
