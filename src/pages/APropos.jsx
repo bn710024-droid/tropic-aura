@@ -164,7 +164,7 @@ export default function APropos() {
     <>
       {/* ── Header fantôme transparent (comme Home) ── */}
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">Tropicaura</span>
+        <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
       </header>
 
       {/* ── Fond interpolé + couche de profondeur ── */}

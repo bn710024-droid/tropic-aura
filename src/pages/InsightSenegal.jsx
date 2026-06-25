@@ -290,7 +290,7 @@ export default function InsightSenegal() {
 
       {/* ══ Nav fixe ══ */}
       <nav className="art-nav">
-        <a href="/" className="art-brand">Tropicaura</a>
+        <a href="/" className="art-brand"><img src="/logo.png" alt="Tropicaura" style={{ height: 32, display: "block" }} /></a>
         <a href="/insights" className="art-back">← Retour aux analyses</a>
       </nav>
 

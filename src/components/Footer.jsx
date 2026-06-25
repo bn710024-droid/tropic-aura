@@ -117,12 +117,7 @@ export default function Footer() {
         <div className="ft-info" ref={reveal} style={r0(0)}>
           {/* Marque */}
           <div>
-            <span style={{
-              fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
-              fontSize: 22, letterSpacing: ".04em", color: "#fff", display: "block", marginBottom: 16,
-            }}>
-              Tropicaura
-            </span>
+            <img src="/logo.png" alt="Tropicaura" style={{ height: 40, display: "block", marginBottom: 16 }} />
             <p style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, lineHeight: 1.7,
               fontWeight: 400, color: "rgba(255,255,255,0.45)", margin: 0, maxWidth: 240,

@@ -209,8 +209,8 @@ export default function Partenariats() {
         pointerEvents: "none",
         background: "transparent",
       }}>
-        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:"#1A1A1A" }}>
-          Tropicaura
+        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
+          <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
         </a>
       </header>
 

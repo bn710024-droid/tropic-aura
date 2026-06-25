@@ -179,8 +179,8 @@ export default function Insights() {
       `}</style>
 
       {/* Logo */}
-      <span style={{ position:"fixed", top:20, left:"clamp(20px,5vw,48px)", zIndex:200, fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:18, letterSpacing:".04em", color:WHITE, pointerEvents:"none" }}>
-        Tropicaura
+      <span style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, pointerEvents:"none" }}>
+        <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
       </span>
 
       <div className="ins-wrap">
