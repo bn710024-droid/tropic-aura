@@ -10,7 +10,7 @@ html, body { width: 100%; }
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #09120A;
+  background: #0E9F6E;   /* couleur hero — visible si bg-layer manque un frame */
   overflow-x: hidden;
 }
 
@@ -53,14 +53,15 @@ body::-webkit-scrollbar { display: none; }
 .scene {
   position: relative;
   z-index: 1;
-  height: 100vh;
+  min-height: 100vh;    /* fallback navigateurs anciens */
+  min-height: 100dvh;   /* dynamic viewport height — exclut la chrome Safari */
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;   /* contenu aligné à gauche (style Combilo) */
-  /* visible : les fruits peuvent naître/mourir à travers les bords
-     du viewport (l'opacité scrub gère le fondu), pas de coupe nette. */
+  justify-content: flex-start;
   overflow: visible;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* ---------- PLUIE DE PRODUITS ---------- */
@@ -350,9 +351,22 @@ body::-webkit-scrollbar { display: none; }
   }
   .ghost img { mix-blend-mode: screen; }
 
+  /* Scroll-snap natif iOS (Lenis désactivé sur mobile) */
+  html {
+    height: 100dvh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  body {
+    height: 100dvh;
+    overflow-y: hidden;  /* body ne scroll plus — html est le seul scroll container */
+  }
+
   /* Contenu pleine largeur — fruits débordent autour (style Combilo) */
   .scene__content {
     max-width: 100% !important;
+    padding-top: calc(50px + env(safe-area-inset-top, 0px));
     padding-left: 20px;
     padding-right: 20px;
   }

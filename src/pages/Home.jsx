@@ -156,13 +156,13 @@ export default function Home() {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -230,12 +230,13 @@ export default function Home() {
     };
 
     const readScroll = () => {
+      if (!lenis) return window.scrollY || 0;
       const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);  // garde anti-NaN/undefined
+      return Number.isFinite(s) ? s : (window.scrollY || 0);
     };
 
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
       // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
       if (Math.abs(scroll - lastScroll) > 0.04) {
@@ -253,13 +254,15 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.destroy();
+      if (lenis) lenis.destroy();
     };
   }, []);
 
   const goTo = (i) => {
     const target = scenesRef.current[Math.min(i, SECTIONS.length - 1)];
-    if (target && lenisRef.current) lenisRef.current.scrollTo(target);
+    if (!target) return;
+    if (lenisRef.current) lenisRef.current.scrollTo(target);
+    else target.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
