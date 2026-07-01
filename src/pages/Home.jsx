@@ -69,6 +69,7 @@ const build = (layout, imgs) => {
 const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
+    mobileBg: "#0F2419",
     title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
     desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
     cta: "Découvrir Notre Vision",
@@ -77,9 +78,14 @@ const SECTIONS = [
       IMAGES.ananas,
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
+    fruitsMobile: [
+      { src: "/png/avocat.png",      position: { top: "8%",    left: "-12%"  }, size: "50vw", rotation:  15, blur:  0, opacity: 1.0,  zIndex: 3 },
+      { src: "/png/citron-vert.png", position: { bottom: "10%", right: "-15%" }, size: "40vw", rotation: -10, blur: 14, opacity: 0.6,  zIndex: 1 },
+    ],
   },
   {
     id: "origins", bg: "#E8631C",
+    mobileBg: "#4A2810",
     title: "Le Potentiel de l'Afrique. Livré Autrement.",
     desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
     cta: "Découvrir Notre Histoire",
@@ -89,9 +95,15 @@ const SECTIONS = [
       IMAGES.orange, IMAGES.papayeCoupe, IMAGES.fruitPassion,
       IMAGES.mangue, IMAGES.orange, IMAGES.papaye,
     ]),
+    fruitsMobile: [
+      { src: "/png/ananas.png",  position: { bottom: "-8%",  right: "-18%" }, size: "55vw", rotation:   8, blur:  0, opacity: 1.0,  zIndex: 3 },
+      { src: "/png/mangue.png",  position: { top: "18%",     right: "-8%"  }, size: "32vw", rotation: -15, blur: 14, opacity: 0.5,  zIndex: 1 },
+      { src: "/png/papaye.png",  position: { bottom: "30%",  left: "-18%"  }, size: "38vw", rotation: -25, blur: 14, opacity: 0.55, zIndex: 1 },
+    ],
   },
   {
     id: "products", bg: "#F3B500",
+    mobileBg: "#0F1A24",
     title: "Sélectionnés pour les Marchés Exigeants.",
     desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
     cta: "Explorer nos Produits",
@@ -100,9 +112,14 @@ const SECTIONS = [
       IMAGES.ananas,
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
+    fruitsMobile: [
+      { src: "/png/orange.png",       position: { top: "12%",   right: "-12%" }, size: "45vw", rotation:  20, blur:  0, opacity: 1.0, zIndex: 3 },
+      { src: "/png/citron-jaune.png", position: { bottom: "8%", left: "-10%"  }, size: "28vw", rotation: -10, blur: 14, opacity: 0.5, zIndex: 1 },
+    ],
   },
   {
     id: "partnerships", bg: "#1B7A3D",
+    mobileBg: "#3B0F18",
     title: "Plus que des Transactions.",
     desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
     cta: "Notre Approche Partenariale",
@@ -111,9 +128,14 @@ const SECTIONS = [
       IMAGES.avocat,
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
+    fruitsMobile: [
+      { src: "/png/fraises.png",    position: { bottom: "-12%", left: "50%"   }, size: "68vw", rotation:   0, blur:  0, opacity: 1.0, zIndex: 1, extraTransform: "translateX(-50%)" },
+      { src: "/png/citron-vert.png", position: { top: "12%",   right: "-15%"  }, size: "30vw", rotation: -20, blur: 14, opacity: 0.4, zIndex: 1 },
+    ],
   },
   {
     id: "vision", bg: "#C9912B",
+    mobileBg: "#52290B",
     title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
     desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
     cta: "Découvrir nos engagements",
@@ -122,9 +144,14 @@ const SECTIONS = [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
     ]),
+    fruitsMobile: [
+      { src: "/png/papaye-coupee.png", position: { top: "-10%",    right: "-12%" }, size: "50vw", rotation:  25, blur:  0, opacity: 1.0,  zIndex: 3 },
+      { src: "/png/avocat.png",        position: { bottom: "15%",  left: "-15%"  }, size: "42vw", rotation: -20, blur: 14, opacity: 0.55, zIndex: 1 },
+    ],
   },
   {
     id: "contact", bg: "#0D9488",
+    mobileBg: "#0A1F14",
     title: "Créons de Nouvelles Opportunités.",
     desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
     cta: "Nous Contacter",
@@ -133,6 +160,10 @@ const SECTIONS = [
       IMAGES.papayeCoupe,
       IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.melonJaune, IMAGES.papaye,
     ]),
+    fruitsMobile: [
+      { src: "/png/orange.png",  position: { bottom: "-8%", right: "-8%"  }, size: "52vw", rotation:  10, blur:  0, opacity: 1.0, zIndex: 3 },
+      { src: "/png/fraises.png", position: { bottom: "18%", right: "22%"  }, size: "28vw", rotation:  45, blur: 14, opacity: 0.5, zIndex: 1 },
+    ],
   },
 ];
 
@@ -156,13 +187,13 @@ export default function Home() {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -225,12 +256,13 @@ export default function Home() {
     };
 
     const readScroll = () => {
+      if (!lenis) return window.scrollY || 0;
       const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);  // garde anti-NaN/undefined
+      return Number.isFinite(s) ? s : (window.scrollY || 0);
     };
 
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
       // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
       if (Math.abs(scroll - lastScroll) > 0.04) {
@@ -248,13 +280,15 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.destroy();
+      if (lenis) lenis.destroy();
     };
   }, []);
 
   const goTo = (i) => {
     const target = scenesRef.current[Math.min(i, SECTIONS.length - 1)];
-    if (target && lenisRef.current) lenisRef.current.scrollTo(target);
+    if (!target) return;
+    if (lenisRef.current) lenisRef.current.scrollTo(target);
+    else target.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -274,6 +308,7 @@ export default function Home() {
           data-index={i}
           ref={(el) => (scenesRef.current[i] = el)}
           className="scene"
+          style={{ '--mobile-bg': s.mobileBg }}
         >
           <div className="rain">
             {s.items.map((it, j) => (
@@ -307,6 +342,34 @@ export default function Home() {
                 />
               </div>
             ))}
+          </div>
+
+          {/* Fruits mobile — statiques, cachés sur desktop */}
+          <div className="rain-mobile">
+            {s.fruitsMobile.map((fruit, j) => {
+              const transforms = [
+                fruit.extraTransform,
+                fruit.rotation != null ? `rotate(${fruit.rotation}deg)` : null,
+              ].filter(Boolean).join(' ');
+              return (
+                <img
+                  key={j}
+                  className="scene__fruit"
+                  src={fruit.src}
+                  alt=""
+                  loading={i === 0 ? "eager" : "lazy"}
+                  draggable={false}
+                  style={{
+                    ...fruit.position,
+                    width: fruit.size,
+                    transform: transforms || undefined,
+                    filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
+                    opacity: fruit.opacity ?? 1,
+                    zIndex: fruit.zIndex ?? 1,
+                  }}
+                />
+              );
+            })}
           </div>
 
           <div className="scene__content">
