@@ -358,10 +358,6 @@ body::-webkit-scrollbar { display: none; }
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
   }
-  body {
-    height: 100dvh;
-    overflow-y: hidden;  /* body ne scroll plus — html est le seul scroll container */
-  }
 
   /* Contenu pleine largeur — fruits débordent autour (style Combilo) */
   .scene__content {
