@@ -217,10 +217,25 @@ export default function Home() {
         const fade = 1 - Math.min(1, Math.max(0, (av - 0.5) / 0.5));
         const e = easeOut(fade);
         el.style.opacity = e.toFixed(3);
-        // scale très subtil (les tailles sont déjà fixées par la compo) :
-        // la vedette reste grande et nette, ne rétrécit quasiment pas.
+
+        // ── Mobile : remap positions + scale adaptatif par taille ──
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) {
+          const x = +ds.x;
+          // Compresse la range [0,100] → [8,84] : couvre tout le viewport
+          // sans débord, et met des fruits des deux côtés de l'écran.
+          const mx = 8 + x * 0.76;
+          el.style.left       = mx + '%';
+          el.style.marginLeft = (-size / 2) + 'px';
+        }
+        // Facteur d'échelle : les géants (≥350px) sont réduits sur mobile,
+        // les petits fruits restent à taille normale (voire légèrement agrandis).
+        const scaleF = isMobile
+          ? (size >= 350 ? 0.52 : size >= 200 ? 0.78 : 1.05)
+          : 1;
+
         el.style.transform =
-          `translateY(${parY.toFixed(1)}px) scale(${(0.86 + 0.14 * e).toFixed(3)}) rotate(${baseR}deg)`;
+          `translateY(${parY.toFixed(1)}px) scale(${((0.86 + 0.14 * e) * scaleF).toFixed(3)}) rotate(${baseR}deg)`;
       }
     };
 
@@ -235,14 +250,14 @@ export default function Home() {
       // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
-        update(scroll, window.innerHeight || 1);
+        update(scroll, document.documentElement.clientHeight || window.innerHeight || 1);
       }
       rafId = requestAnimationFrame(raf);
     };
 
     // 1er rendu forcé : les fruits reçoivent leur opacité dès le montage,
     // sans dépendre de l'état initial de Lenis.
-    update(0, window.innerHeight || 1);
+    update(0, document.documentElement.clientHeight || window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
@@ -282,6 +297,7 @@ export default function Home() {
                 className="cell"
                 ref={(el) => (fruitsRef.current[OFFSETS[i] + j] = el)}
                 data-i={i}
+                data-x={it.x}
                 data-y={it.y}
                 data-size={it.size}
                 data-r={it.r}

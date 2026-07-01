@@ -233,6 +233,20 @@ export default function InsightPartenariats() {
           white-space: nowrap; padding: 0 20px; transition: color .25s;
         }
         .art-outro-link:hover { color: rgba(255,255,255,0.90); }
+
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+          .art-nav { padding: 0 16px; height: 52px; }
+          .art-back { max-width: 44%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+          .art-hero { min-height: 68vh; }
+          .art-hero-content { padding: 0 16px 36px; }
+          .art-hero-rule { margin: 0 16px; }
+          .art-body { padding: 0 16px 60px; }
+          .art-sep { padding: 0 16px 36px; }
+          .ta-block { padding: 18px 16px; }
+          .art-outro { min-height: 44vh; }
+          .art-outro-content { padding: 0 16px; }
+        }
       `}</style>
 
       {/* ══ Nav ══ */}
