@@ -174,12 +174,12 @@ export default function Partenariats() {
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
-        update(scroll, document.documentElement.clientHeight || window.innerHeight || 1);
+        update(scroll, window.innerHeight || 1);
       }
       rafId = requestAnimationFrame(raf);
     };
 
-    update(0, document.documentElement.clientHeight || window.innerHeight || 1);
+    update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
@@ -190,7 +190,7 @@ export default function Partenariats() {
   }, []);
 
   const scrollTo = (i) =>
-    lenisRef.current?.scrollTo(i * document.documentElement.clientHeight || window.innerHeight, { duration: 1.2 });
+    lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
 
   let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
 

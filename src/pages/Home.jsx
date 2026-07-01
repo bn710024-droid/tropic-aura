@@ -156,13 +156,13 @@ export default function Home() {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-    const lenis = isDesktop ? new Lenis({
+    const lenis = new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
-    }) : null;
+      touchMultiplier: 1.5,
+    });
     lenisRef.current = lenis;
 
     let rafId;
@@ -217,52 +217,44 @@ export default function Home() {
         const fade = 1 - Math.min(1, Math.max(0, (av - 0.5) / 0.5));
         const e = easeOut(fade);
         el.style.opacity = e.toFixed(3);
-
-        // Fruits débordent aux bords de l'écran (style Combilo — overflow intentionnel)
-        const isMobile = window.innerWidth < 768;
-        const scaleF = isMobile
-          ? (size >= 350 ? 0.55 : size >= 200 ? 0.88 : 1.15)
-          : 1;
-
+        // scale très subtil (les tailles sont déjà fixées par la compo) :
+        // la vedette reste grande et nette, ne rétrécit quasiment pas.
         el.style.transform =
-          `translateY(${parY.toFixed(1)}px) scale(${((0.86 + 0.14 * e) * scaleF).toFixed(3)}) rotate(${baseR}deg)`;
+          `translateY(${parY.toFixed(1)}px) scale(${(0.86 + 0.14 * e).toFixed(3)}) rotate(${baseR}deg)`;
       }
     };
 
     const readScroll = () => {
-      if (!lenis) return window.scrollY || 0;
       const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      return Number.isFinite(s) ? s : (window.scrollY || 0);  // garde anti-NaN/undefined
     };
 
     const raf = (time) => {
-      if (lenis) lenis.raf(time);
+      lenis.raf(time);
       const scroll = readScroll();
       // court-circuit : scroll immobile → on ne touche à rien (stabilité totale)
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
-        update(scroll, document.documentElement.clientHeight || window.innerHeight || 1);
+        update(scroll, window.innerHeight || 1);
       }
       rafId = requestAnimationFrame(raf);
     };
 
     // 1er rendu forcé : les fruits reçoivent leur opacité dès le montage,
     // sans dépendre de l'état initial de Lenis.
-    update(0, document.documentElement.clientHeight || window.innerHeight || 1);
+    update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      if (lenis) lenis.destroy();
+      lenis.destroy();
     };
   }, []);
 
   const goTo = (i) => {
     const target = scenesRef.current[Math.min(i, SECTIONS.length - 1)];
-    if (!target) return;
-    if (lenisRef.current) lenisRef.current.scrollTo(target);
-    else target.scrollIntoView({ behavior: 'smooth' });
+    if (target && lenisRef.current) lenisRef.current.scrollTo(target);
   };
 
   return (
@@ -281,7 +273,7 @@ export default function Home() {
           key={s.id}
           data-index={i}
           ref={(el) => (scenesRef.current[i] = el)}
-          className="scene scene--home"
+          className="scene"
         >
           <div className="rain">
             {s.items.map((it, j) => (
@@ -290,7 +282,6 @@ export default function Home() {
                 className="cell"
                 ref={(el) => (fruitsRef.current[OFFSETS[i] + j] = el)}
                 data-i={i}
-                data-x={it.x}
                 data-y={it.y}
                 data-size={it.size}
                 data-r={it.r}
