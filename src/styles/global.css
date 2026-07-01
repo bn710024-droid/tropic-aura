@@ -350,38 +350,43 @@ body::-webkit-scrollbar { display: none; }
   }
   .ghost img { mix-blend-mode: screen; }
 
-  /* Home : contenu en bas, fruits remplissent le haut (style Combilo) */
-  .scene--home { align-items: flex-end; }
-  .scene--home .scene__content { padding-bottom: clamp(52px, 9vh, 76px); }
-
+  /* Contenu pleine largeur — fruits débordent autour (style Combilo) */
   .scene__content {
     max-width: 100% !important;
-    padding-left: clamp(20px, 6vw, 40px);
-    padding-right: clamp(20px, 6vw, 40px);
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  /* Titre grand sur mobile — présence Combilo */
+  /* Titre grand et impactant */
   .scene__title {
-    font-size: clamp(28px, 8vw, 44px);
-    line-height: 1.05;
-    margin-bottom: 10px;
+    font-size: clamp(30px, 9vw, 50px);
+    line-height: 1.0;
+    margin-bottom: 14px;
   }
 
   .scene__desc {
-    font-size: 13px;
-    line-height: 1.6;
-    max-width: 88%;
-    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 100%;
+    margin: 0 0 24px;
   }
 
-  /* Bouton CTA : vert solide + flèche toujours ouverte */
+  /* Bouton pleine largeur vert solide — style Combilo exact */
   .scene__cta {
-    background: rgba(31, 166, 55, 0.90);
-    border-color: rgba(255, 255, 255, 0.20);
-    padding: 8px 8px 8px 18px;
+    display: flex;
+    width: 100%;
+    background: #1FA637;
+    border-color: transparent;
+    padding: 12px 12px 12px 24px;
+  }
+  .cta-label {
+    flex: 1;
+    font-size: 13px;
+    letter-spacing: .08em;
   }
   .cta-arrow {
-    width: 36px !important;
+    width: 44px !important;
+    height: 44px !important;
     margin-left: 8px !important;
   }
   .cta-arrow > span {
@@ -394,6 +399,5 @@ body::-webkit-scrollbar { display: none; }
 }
 
 @media (max-width: 480px) {
-  .scene__title { font-size: clamp(24px, 7.5vw, 36px); }
-  .cta-label { font-size: 12px; letter-spacing: .08em; }
+  .scene__title { font-size: clamp(26px, 8vw, 40px); }
 }
