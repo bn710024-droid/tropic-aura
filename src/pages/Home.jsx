@@ -218,20 +218,10 @@ export default function Home() {
         const e = easeOut(fade);
         el.style.opacity = e.toFixed(3);
 
-        // ── Mobile : remap positions + scale adaptatif par taille ──
+        // Fruits débordent aux bords de l'écran (style Combilo — overflow intentionnel)
         const isMobile = window.innerWidth < 768;
-        if (isMobile) {
-          const x = +ds.x;
-          // Compresse la range [0,100] → [8,84] : couvre tout le viewport
-          // sans débord, et met des fruits des deux côtés de l'écran.
-          const mx = 8 + x * 0.76;
-          el.style.left       = mx + '%';
-          el.style.marginLeft = (-size / 2) + 'px';
-        }
-        // Facteur d'échelle : les géants (≥350px) sont réduits sur mobile,
-        // les petits fruits restent à taille normale (voire légèrement agrandis).
         const scaleF = isMobile
-          ? (size >= 350 ? 0.52 : size >= 200 ? 0.78 : 1.05)
+          ? (size >= 350 ? 0.55 : size >= 200 ? 0.88 : 1.15)
           : 1;
 
         el.style.transform =
@@ -288,7 +278,7 @@ export default function Home() {
           key={s.id}
           data-index={i}
           ref={(el) => (scenesRef.current[i] = el)}
-          className="scene"
+          className="scene scene--home"
         >
           <div className="rain">
             {s.items.map((it, j) => (
