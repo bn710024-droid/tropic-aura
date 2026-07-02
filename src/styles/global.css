@@ -382,6 +382,8 @@ body::-webkit-scrollbar { display: none; }
     padding: calc(56px + env(safe-area-inset-top, 0px)) 24px 40px 24px;
     box-sizing: border-box;
     background: var(--mobile-bg, #0F2419);
+    scroll-snap-align: start;   /* point d'ancrage — restaure le snap */
+    scroll-snap-stop: always;   /* une section à la fois, pas de saut */
   }
 
   /* Fruits desktop — cachés */
