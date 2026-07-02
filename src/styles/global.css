@@ -342,6 +342,9 @@ body::-webkit-scrollbar { display: none; }
   border-bottom-color: rgba(0, 0, 0, .55);
 }
 
+/* Couche fruits mobile — masquée hors mobile (évite la fuite desktop) */
+.rain-mobile { display: none; }
+
 /* ============================================================
    MOBILE ≤768px — scroll natif + snap mandatory
    bg-layer masqué, mobileBg par section via --mobile-bg
