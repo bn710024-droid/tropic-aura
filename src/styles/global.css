@@ -362,11 +362,12 @@ body::-webkit-scrollbar { display: none; }
 
   /* body : flow normal, aucun overflow propre */
   body {
-    background: #0F2419; /* section 1 — évite le flash au rubber-band scroll */
+    background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
   }
 
-  /* Masquer l'interpolation de couleur desktop */
-  .bg-layer,
+  /* .bg-layer réactivé : porte l'interpolation continue de couleur
+     (même mécanisme que desktop, piloté par window.scrollY natif).
+     .bg-depth reste masqué — hors périmètre de cette passe. */
   .bg-depth { display: none; }
 
   /* ── Section plein écran ── */
@@ -381,10 +382,16 @@ body::-webkit-scrollbar { display: none; }
     align-items: flex-start;
     padding: calc(56px + env(safe-area-inset-top, 0px)) 24px 40px 24px;
     box-sizing: border-box;
-    background: var(--mobile-bg, #0F2419);
+    background: transparent;   /* laisse .bg-layer (interpolation continue) transparaître */
     scroll-snap-align: start;   /* point d'ancrage — restaure le snap */
     scroll-snap-stop: always;   /* une section à la fois, pas de saut */
   }
+
+  /* Halo/vignette par section retiré (H2 confirmé) : chaque .scene::before
+     était indépendant et clippé à sa propre boîte, créant une coupure nette
+     à la frontière entre deux sections pendant le glissement — alors que
+     .bg-layer, lui, est unique et continu. Le fondu de couleur global suffit. */
+  .scene::before { display: none; }
 
   /* Fruits desktop — cachés */
   .rain { display: none; }
@@ -403,11 +410,46 @@ body::-webkit-scrollbar { display: none; }
     height: auto;
   }
 
-  /* ── Contenu texte (z:2 entre fruits z:1 et z:3) ── */
+  /* ── Profondeur 4 couches (modèle Combilo) ──
+     z:1 bokeh lointain · z:2 nets (focus) · z:3 texte · z:4 premier plan.
+     Chute continue par translateY (compositor-friendly), vitesse par couche :
+     bokeh la plus lente → premier plan la plus rapide = parallaxe. */
+  .fwrap {
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    will-change: transform;
+    animation-name: fruitFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .fwrap--bokeh { z-index: 1; }
+  .fwrap--net   { z-index: 2; }
+  .fwrap--front { z-index: 4; }
+
+  .fwrap img { display: block; height: auto; }
+
+  /* Rotation lente sur les fruits nets uniquement */
+  .fwrap--net img {
+    animation-name: fruitSpin;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes fruitFall {
+    from { transform: translateY(-25vh); }
+    to   { transform: translateY(125vh); }
+  }
+  @keyframes fruitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ── Contenu texte (z:3 — au-dessus bokeh z:1 et nets z:2, sous le premier plan z:4) ── */
   .scene__content {
     position: relative;
-    z-index: 2;
-    max-width: 100%;
+    z-index: 3;
+    max-width: 66%;   /* couloir droit libre pour la cascade de fruits */
     padding-left: 0;
     padding-right: 0;
     display: flex;
@@ -427,7 +469,7 @@ body::-webkit-scrollbar { display: none; }
     overflow-wrap: break-word;
     hyphens: auto;
     margin: 0;
-    text-shadow: none;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, .30);  /* lisibilité sur fonds vifs */
   }
 
   /* ── Description ── */
@@ -437,7 +479,7 @@ body::-webkit-scrollbar { display: none; }
     color: rgba(255, 255, 255, 0.88);
     max-width: 100%;
     margin: 0;
-    text-shadow: none;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .25);  /* lisibilité sur fonds vifs */
   }
 
   /* ── CTA pleine largeur — style Combilo ── */
@@ -501,4 +543,10 @@ body::-webkit-scrollbar { display: none; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }
+}
+
+/* Accessibilité : tout figé aux positions de repos si mouvement réduit */
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .fwrap, .fwrap img { animation: none !important; }
+  .fwrap { transform: translateY(var(--rest, 40vh)); }
 }

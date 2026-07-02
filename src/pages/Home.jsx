@@ -69,7 +69,7 @@ const build = (layout, imgs) => {
 const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
-    mobileBg: "#0F2419",
+    mobileBg: "#0E9F6E",
     title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
     desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
     cta: "Découvrir Notre Vision",
@@ -79,13 +79,28 @@ const SECTIONS = [
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
     fruitsMobile: [
-      { src: "/png/avocat.png",      position: { top: "8%",    left: "-12%"  }, size: "50vw", rotation:  15, blur:  0, opacity: 1.0,  zIndex: 3 },
-      { src: "/png/citron-vert.png", position: { bottom: "10%", right: "-15%" }, size: "40vw", rotation: -10, blur: 14, opacity: 0.6,  zIndex: 1 },
+      // ── Couche 4 : premier plan extrême (z:4) — gros, flous 4-5px, passent DEVANT le texte
+      { layer: "front", src: "/png/ananas.png",           left: "6%",  size: 150, blur: 4, opacity: 0.80, fallDur: "30s", fallDelay: "-4s",  rest: "8vh"  },
+      { layer: "front", src: "/png/avocat.png",           left: "62%", size: 130, blur: 5, opacity: 0.78, fallDur: "34s", fallDelay: "-18s", rest: "55vh" },
+      { layer: "front", src: "/png/pasteque-tranche.png", left: "32%", size: 112, blur: 4, opacity: 0.85, fallDur: "32s", fallDelay: "-27s", rest: "78vh" },
+      // ── Couche 3 : milieu net (z:2) — sujets de lecture, rotation lente, left ≥ 56% (jamais sur le titre)
+      { layer: "net", src: "/png/orange.png",        left: "64%", size: 84, blur: 0, opacity: 1, fallDur: "44s", fallDelay: "-6s",  rotDur: "12s", rest: "12vh" },
+      { layer: "net", src: "/png/mangue.png",        left: "78%", size: 92, blur: 0, opacity: 1, fallDur: "48s", fallDelay: "-22s", rotDur: "14s", rest: "38vh" },
+      { layer: "net", src: "/png/fruit-passion.png", left: "58%", size: 62, blur: 0, opacity: 1, fallDur: "46s", fallDelay: "-33s", rotDur: "10s", rest: "64vh" },
+      { layer: "net", src: "/png/fraises.png",       left: "85%", size: 70, blur: 0, opacity: 1, fallDur: "42s", fallDelay: "-14s", rotDur: "13s", rest: "82vh" },
+      // ── Couche 2 : bokeh lointain (z:1) — petits, très flous, derrière le texte
+      { layer: "bokeh", src: "/png/citron-vert.png",   left: "12%", size: 40, blur: 12, opacity: 0.40, fallDur: "60s", fallDelay: "-8s",  rotate: -12, rest: "6vh"  },
+      { layer: "bokeh", src: "/png/papaye.png",        left: "30%", size: 44, blur: 12, opacity: 0.38, fallDur: "64s", fallDelay: "-25s", rotate: 18,  rest: "20vh" },
+      { layer: "bokeh", src: "/png/myrtilles.png",     left: "48%", size: 34, blur: 10, opacity: 0.45, fallDur: "58s", fallDelay: "-41s", rotate: 0,   rest: "34vh" },
+      { layer: "bokeh", src: "/png/citron-jaune.png",  left: "72%", size: 30, blur: 14, opacity: 0.35, fallDur: "66s", fallDelay: "-15s", rotate: 24,  rest: "48vh" },
+      { layer: "bokeh", src: "/png/banane.png",        left: "20%", size: 46, blur: 13, opacity: 0.32, fallDur: "62s", fallDelay: "-50s", rotate: -30, rest: "62vh" },
+      { layer: "bokeh", src: "/png/coco.png",          left: "88%", size: 36, blur: 11, opacity: 0.42, fallDur: "56s", fallDelay: "-30s", rotate: 10,  rest: "76vh" },
+      { layer: "bokeh", src: "/png/papaye-coupee.png", left: "40%", size: 42, blur: 12, opacity: 0.40, fallDur: "60s", fallDelay: "-46s", rotate: -20, rest: "90vh" },
     ],
   },
   {
     id: "origins", bg: "#E8631C",
-    mobileBg: "#4A2810",
+    mobileBg: "#E8631C",
     title: "Le Potentiel de l'Afrique. Livré Autrement.",
     desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
     cta: "Découvrir Notre Histoire",
@@ -103,7 +118,7 @@ const SECTIONS = [
   },
   {
     id: "products", bg: "#F3B500",
-    mobileBg: "#0F1A24",
+    mobileBg: "#F3B500",
     title: "Sélectionnés pour les Marchés Exigeants.",
     desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
     cta: "Explorer nos Produits",
@@ -119,7 +134,7 @@ const SECTIONS = [
   },
   {
     id: "partnerships", bg: "#1B7A3D",
-    mobileBg: "#3B0F18",
+    mobileBg: "#1B7A3D",
     title: "Plus que des Transactions.",
     desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
     cta: "Notre Approche Partenariale",
@@ -135,7 +150,7 @@ const SECTIONS = [
   },
   {
     id: "vision", bg: "#C9912B",
-    mobileBg: "#52290B",
+    mobileBg: "#C9912B",
     title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
     desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
     cta: "Découvrir nos engagements",
@@ -151,7 +166,7 @@ const SECTIONS = [
   },
   {
     id: "contact", bg: "#0D9488",
-    mobileBg: "#0A1F14",
+    mobileBg: "#0D9488",
     title: "Créons de Nouvelles Opportunités.",
     desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
     cta: "Nous Contacter",
@@ -344,9 +359,37 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Fruits mobile — statiques, cachés sur desktop */}
+          {/* Fruits mobile — 4 couches animées (hero) ou format simple (autres sections) */}
           <div className="rain-mobile">
             {s.fruitsMobile.map((fruit, j) => {
+              if (fruit.layer) {
+                return (
+                  <div
+                    key={j}
+                    className={`fwrap fwrap--${fruit.layer}`}
+                    style={{
+                      left: fruit.left,
+                      "--rest": fruit.rest,
+                      animationDuration: fruit.fallDur,
+                      animationDelay: fruit.fallDelay,
+                    }}
+                  >
+                    <img
+                      src={fruit.src}
+                      alt=""
+                      loading={i === 0 ? "eager" : "lazy"}
+                      draggable={false}
+                      style={{
+                        width: fruit.size,
+                        filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
+                        opacity: fruit.opacity ?? 1,
+                        transform: fruit.rotate ? `rotate(${fruit.rotate}deg)` : undefined,
+                        animationDuration: fruit.rotDur,
+                      }}
+                    />
+                  </div>
+                );
+              }
               const transforms = [
                 fruit.extraTransform,
                 fruit.rotation != null ? `rotate(${fruit.rotation}deg)` : null,
