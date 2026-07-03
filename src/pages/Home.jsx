@@ -80,23 +80,20 @@ const SECTIONS = [
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
     fruitsMobile: [
-      // ── Couche 4 : premier plan extrême (z:4) — gros, flous 4-5px, passent DEVANT le texte
-      { layer: "front", src: "/png/ananas.png",           left: "6%",  size: 150, blur: 4, opacity: 0.80, fallDur: "30s", fallDelay: "-4s",  rest: "8vh"  },
-      { layer: "front", src: "/png/avocat.png",           left: "62%", size: 130, blur: 5, opacity: 0.78, fallDur: "34s", fallDelay: "-18s", rest: "55vh" },
-      { layer: "front", src: "/png/pasteque-tranche.png", left: "32%", size: 112, blur: 4, opacity: 0.85, fallDur: "32s", fallDelay: "-27s", rest: "78vh" },
-      // ── Couche 3 : milieu net (z:2) — sujets de lecture, rotation lente, left ≥ 56% (jamais sur le titre)
-      { layer: "net", src: "/png/orange.png",        left: "64%", size: 84, blur: 0, opacity: 1, fallDur: "44s", fallDelay: "-6s",  rotDur: "12s", rest: "12vh" },
-      { layer: "net", src: "/png/mangue.png",        left: "78%", size: 92, blur: 0, opacity: 1, fallDur: "48s", fallDelay: "-22s", rotDur: "14s", rest: "38vh" },
-      { layer: "net", src: "/png/fruit-passion.png", left: "58%", size: 62, blur: 0, opacity: 1, fallDur: "46s", fallDelay: "-33s", rotDur: "10s", rest: "64vh" },
-      { layer: "net", src: "/png/fraises.png",       left: "85%", size: 70, blur: 0, opacity: 1, fallDur: "42s", fallDelay: "-14s", rotDur: "13s", rest: "82vh" },
-      // ── Couche 2 : bokeh lointain (z:1) — petits, très flous, derrière le texte
-      { layer: "bokeh", src: "/png/citron-vert.png",   left: "12%", size: 40, blur: 12, opacity: 0.40, fallDur: "60s", fallDelay: "-8s",  rotate: -12, rest: "6vh"  },
-      { layer: "bokeh", src: "/png/papaye.png",        left: "30%", size: 44, blur: 12, opacity: 0.38, fallDur: "64s", fallDelay: "-25s", rotate: 18,  rest: "20vh" },
-      { layer: "bokeh", src: "/png/myrtilles.png",     left: "48%", size: 34, blur: 10, opacity: 0.45, fallDur: "58s", fallDelay: "-41s", rotate: 0,   rest: "34vh" },
-      { layer: "bokeh", src: "/png/citron-jaune.png",  left: "72%", size: 30, blur: 14, opacity: 0.35, fallDur: "66s", fallDelay: "-15s", rotate: 24,  rest: "48vh" },
-      { layer: "bokeh", src: "/png/banane.png",        left: "20%", size: 46, blur: 13, opacity: 0.32, fallDur: "62s", fallDelay: "-50s", rotate: -30, rest: "62vh" },
-      { layer: "bokeh", src: "/png/coco.png",          left: "88%", size: 36, blur: 11, opacity: 0.42, fallDur: "56s", fallDelay: "-30s", rotate: 10,  rest: "76vh" },
-      { layer: "bokeh", src: "/png/papaye-coupee.png", left: "40%", size: 42, blur: 12, opacity: 0.40, fallDur: "60s", fallDelay: "-46s", rotate: -20, rest: "90vh" },
+      // Modèle 4 couches Combilo — fruits FIXES, aucune animation.
+      // Total aligné sur le nombre de fruits du hero desktop (8 = LAYOUTS[0] : 6 + 2 fillers)
+      // Layer4 bokeh lointain (blur30/op.20/95px/z1) — 2
+      { layer: "L4", src: "/png/fruit-passion.png", blur: 30, opacity: 0.20, size: 95, top: "2%",  left: "58%" },
+      { layer: "L4", src: "/png/melon-vert.png",    blur: 30, opacity: 0.20, size: 95, top: "80%", left: "70%" },
+      // Layer3 arrière-plan moyen (blur15/op.45/70px/z2) — 2
+      { layer: "L3", src: "/png/citron-jaune.png",  blur: 15, opacity: 0.45, size: 70, top: "6%",  left: "8%"  },
+      { layer: "L3", src: "/png/papaye-coupee.png", blur: 15, opacity: 0.45, size: 70, top: "88%", left: "46%" },
+      // Layer2 plan intermédiaire (blur6/op.75/55px/z3) — 2
+      { layer: "L2", src: "/png/pasteque-tranche.png", blur: 6, opacity: 0.75, size: 55, top: "14%", left: "66%" },
+      { layer: "L2", src: "/png/coco.png",             blur: 6, opacity: 0.75, size: 55, top: "74%", left: "20%" },
+      // Layer1 premier plan net (blur0/op1/50px/z5) — 2, jamais sur le titre (left≥56% ou top≥72%)
+      { layer: "L1", src: "/png/ananas.png", blur: 0, opacity: 1, size: 50, top: "8%",  left: "74%" },
+      { layer: "L1", src: "/png/papaye.png", blur: 0, opacity: 1, size: 50, top: "76%", left: "30%" },
     ],
   },
   {
@@ -112,11 +109,7 @@ const SECTIONS = [
       IMAGES.orange, IMAGES.papayeCoupe, IMAGES.fruitPassion,
       IMAGES.mangue, IMAGES.orange, IMAGES.papaye,
     ]),
-    fruitsMobile: [
-      { src: "/png/ananas.png",  position: { bottom: "-8%",  right: "-18%" }, size: "55vw", rotation:   8, blur:  0, opacity: 1.0,  zIndex: 3 },
-      { src: "/png/mangue.png",  position: { top: "18%",     right: "-8%"  }, size: "32vw", rotation: -15, blur: 14, opacity: 0.5,  zIndex: 1 },
-      { src: "/png/papaye.png",  position: { bottom: "30%",  left: "-18%"  }, size: "38vw", rotation: -25, blur: 14, opacity: 0.55, zIndex: 1 },
-    ],
+    fruitsMobile: [],
   },
   {
     id: "products", bg: "#F3B500",
@@ -130,10 +123,7 @@ const SECTIONS = [
       IMAGES.ananas,
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
-    fruitsMobile: [
-      { src: "/png/orange.png",       position: { top: "12%",   right: "-12%" }, size: "45vw", rotation:  20, blur:  0, opacity: 1.0, zIndex: 3 },
-      { src: "/png/citron-jaune.png", position: { bottom: "8%", left: "-10%"  }, size: "28vw", rotation: -10, blur: 14, opacity: 0.5, zIndex: 1 },
-    ],
+    fruitsMobile: [],
   },
   {
     id: "partnerships", bg: "#1B7A3D",
@@ -147,10 +137,7 @@ const SECTIONS = [
       IMAGES.avocat,
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
-    fruitsMobile: [
-      { src: "/png/fraises.png",    position: { bottom: "-12%", left: "50%"   }, size: "68vw", rotation:   0, blur:  0, opacity: 1.0, zIndex: 1, extraTransform: "translateX(-50%)" },
-      { src: "/png/citron-vert.png", position: { top: "12%",   right: "-15%"  }, size: "30vw", rotation: -20, blur: 14, opacity: 0.4, zIndex: 1 },
-    ],
+    fruitsMobile: [],
   },
   {
     id: "vision", bg: "#C9912B",
@@ -165,10 +152,7 @@ const SECTIONS = [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
     ]),
-    fruitsMobile: [
-      { src: "/png/papaye-coupee.png", position: { top: "-10%",    right: "-12%" }, size: "50vw", rotation:  25, blur:  0, opacity: 1.0,  zIndex: 3 },
-      { src: "/png/avocat.png",        position: { bottom: "15%",  left: "-15%"  }, size: "42vw", rotation: -20, blur: 14, opacity: 0.55, zIndex: 1 },
-    ],
+    fruitsMobile: [],
   },
   {
     id: "contact", bg: "#0D9488",
@@ -182,10 +166,7 @@ const SECTIONS = [
       IMAGES.papayeCoupe,
       IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.melonJaune, IMAGES.papaye,
     ]),
-    fruitsMobile: [
-      { src: "/png/orange.png",  position: { bottom: "-8%", right: "-8%"  }, size: "52vw", rotation:  10, blur:  0, opacity: 1.0, zIndex: 3 },
-      { src: "/png/fraises.png", position: { bottom: "18%", right: "22%"  }, size: "28vw", rotation:  45, blur: 14, opacity: 0.5, zIndex: 1 },
-    ],
+    fruitsMobile: [],
   },
 ];
 
@@ -366,35 +347,26 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Fruits mobile — 4 couches animées (hero) ou format simple (autres sections) */}
+          {/* Fruits mobile — 4 couches FIXES (hero) ou format simple (autres sections) */}
           <div className="rain-mobile">
             {s.fruitsMobile.map((fruit, j) => {
               if (fruit.layer) {
                 return (
-                  <div
+                  <img
                     key={j}
-                    className={`fwrap fwrap--${fruit.layer}`}
+                    className={`mfruit mfruit-${fruit.layer}`}
+                    src={fruit.src}
+                    alt=""
+                    loading={i === 0 ? "eager" : "lazy"}
+                    draggable={false}
                     style={{
+                      top: fruit.top,
                       left: fruit.left,
-                      "--rest": fruit.rest,
-                      animationDuration: fruit.fallDur,
-                      animationDelay: fruit.fallDelay,
+                      width: fruit.size,
+                      filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
+                      opacity: fruit.opacity ?? 1,
                     }}
-                  >
-                    <img
-                      src={fruit.src}
-                      alt=""
-                      loading={i === 0 ? "eager" : "lazy"}
-                      draggable={false}
-                      style={{
-                        width: fruit.size,
-                        filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
-                        opacity: fruit.opacity ?? 1,
-                        transform: fruit.rotate ? `rotate(${fruit.rotate}deg)` : undefined,
-                        animationDuration: fruit.rotDur,
-                      }}
-                    />
-                  </div>
+                  />
                 );
               }
               const transforms = [
