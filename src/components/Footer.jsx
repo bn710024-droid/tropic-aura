@@ -122,7 +122,8 @@ export default function Footer() {
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, lineHeight: 1.7,
               fontWeight: 400, color: "rgba(255,255,255,0.45)", margin: 0, maxWidth: 240,
             }}>
-              Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.
+              <span className="only-desktop">Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.</span>
+              <span className="only-mobile">Export premium depuis le Sénégal vers les marchés internationaux.</span>
             </p>
           </div>
 
