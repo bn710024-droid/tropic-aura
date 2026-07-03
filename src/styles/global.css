@@ -345,6 +345,9 @@ body::-webkit-scrollbar { display: none; }
 /* Couche fruits mobile — masquée hors mobile (évite la fuite desktop) */
 .rain-mobile { display: none; }
 
+/* Variantes de texte desktop / mobile — bascule CSS pure, sans JS ni resize listener */
+.only-mobile { display: none; }
+
 /* ============================================================
    MOBILE ≤768px — scroll natif + snap mandatory
    bg-layer masqué, mobileBg par section via --mobile-bg
@@ -404,6 +407,16 @@ body::-webkit-scrollbar { display: none; }
     pointer-events: none;
   }
 
+  /* ============================================================
+     ISOLATION TEMPORAIRE — passe typographie, fruits masqués
+     Pour désactiver : supprime cette règle (fruits reviennent)
+     ============================================================ */
+  .rain-mobile { display: none; }
+
+  /* Variantes de texte : bascule desktop → mobile */
+  .only-desktop { display: none; }
+  .only-mobile { display: inline; }
+
   .scene__fruit {
     position: absolute;
     pointer-events: none;
@@ -445,78 +458,81 @@ body::-webkit-scrollbar { display: none; }
     to   { transform: rotate(360deg); }
   }
 
-  /* ── Contenu texte (z:3 — au-dessus bokeh z:1 et nets z:2, sous le premier plan z:4) ── */
+  /* ── Contenu texte (z:3 — au-dessus bokeh z:1 et nets z:2, sous le premier plan z:4) ──
+     Largeur ~30ch : lecture confortable, laisse un couloir libre pour les fruits.
+     gap +20-30% vs l'ancien 3dvh flat, pour une respiration générale. */
   .scene__content {
     position: relative;
     z-index: 3;
-    max-width: 66%;   /* couloir droit libre pour la cascade de fruits */
+    max-width: 30ch;
     padding-left: 0;
     padding-right: 0;
     display: flex;
     flex-direction: column;
-    gap: 3dvh;
+    gap: 2.6dvh;
     pointer-events: auto;
   }
 
-  /* ── Titre ── */
+  /* ── Titre — réduit d'environ 35% vs la version précédente ── */
   .scene__title {
-    font-size: clamp(28px, 8.5vw, 42px);
-    line-height: 1.1;
+    font-size: clamp(18px, 5.5vw, 27px);
+    line-height: 1.08;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.02em;
     word-break: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
-    margin: 0;
+    margin: 0 0 0.8dvh;   /* +30% vs le gap général : respiration titre → paragraphe */
     text-shadow: 0 4px 24px rgba(0, 0, 0, .30);  /* lisibilité sur fonds vifs */
   }
 
   /* ── Description ── */
   .scene__desc {
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.55;
     color: rgba(255, 255, 255, 0.88);
     max-width: 100%;
     margin: 0;
     text-shadow: 0 2px 12px rgba(0, 0, 0, .25);  /* lisibilité sur fonds vifs */
   }
 
-  /* ── CTA pleine largeur — style Combilo ── */
+  /* ── CTA pleine largeur — pilule verte pleine, style Combilo exact
+     (texte à gauche, flèche à droite, pas de cercle séparé) ── */
   .scene__cta {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 18px 24px;
-    background: #00A859;
+    padding: 16px 14px 16px 26px;
+    background: #1FA637;
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: none;
     border-radius: 999px;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.08em;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     box-sizing: border-box;
     cursor: pointer;
     overflow: visible;
-    gap: 0;
-    box-shadow: none;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .18);
   }
 
   .cta-label {
     flex: 1;
-    font-size: 14px;
-    letter-spacing: 0.08em;
+    font-size: 15px;
+    letter-spacing: 0.02em;
     color: #ffffff;
   }
 
-  /* Cercle desktop → flèche simple visible */
+  /* Flèche simple, pas de cercle */
   .cta-arrow {
     position: static !important;
     width: auto !important;
     height: auto !important;
-    margin-left: 8px !important;
+    margin-left: 0 !important;   /* espacement géré par le gap du parent */
     background: transparent !important;
     border-radius: 0 !important;
     display: flex;
@@ -528,18 +544,20 @@ body::-webkit-scrollbar { display: none; }
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-    font-size: 18px;
+    font-size: 16px;
     min-width: unset;
   }
 
-  /* ── Header ghost : backdrop-filter + safe-area ── */
+  /* ── Header ghost — compact : hauteur et logo réduits ── */
   .ghost {
     height: auto;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 12px 20px;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px 16px;
     background: rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
+
+  .ghost img { height: 26px !important; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }
