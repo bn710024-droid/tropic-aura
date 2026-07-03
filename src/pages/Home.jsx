@@ -1,6 +1,7 @@
-﻿import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { IMAGES } from "../images";
+import { getDestinationColor } from "../lib/destinationColors";
 
 // ============================================================
 //  HOME — animation organique pilotée 100% par rAF
@@ -74,6 +75,7 @@ const SECTIONS = [
     desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
     mobileDesc: "Nous connectons les meilleurs produits tropicaux d'Afrique aux marchés internationaux grâce à une sélection exigeante et des partenariats durables.",
     cta: "Découvrir Notre Vision",
+    mobileCta: "Découvrir",
     link: "/about",
     items: build(LAYOUTS[0], [
       IMAGES.ananas,
@@ -103,6 +105,7 @@ const SECTIONS = [
     desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
     mobileDesc: "Nous valorisons les meilleures origines tropicales d'Afrique en les reliant aux marchés où la qualité et la confiance font la différence.",
     cta: "Découvrir Notre Histoire",
+    mobileCta: "Découvrir",
     link: "/about",
     items: build(LAYOUTS[1], [
       IMAGES.mangue,
@@ -118,6 +121,7 @@ const SECTIONS = [
     desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
     mobileDesc: "Chaque produit est sélectionné pour répondre aux standards des marchés internationaux en matière de qualité, de régularité et de fiabilité.",
     cta: "Explorer nos Produits",
+    mobileCta: "Découvrir",
     link: "/products",
     items: build(LAYOUTS[2], [
       IMAGES.ananas,
@@ -132,6 +136,7 @@ const SECTIONS = [
     desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
     mobileDesc: "Nous développons des partenariats durables entre producteurs, logisticiens et acheteurs internationaux pour créer une valeur partagée.",
     cta: "Notre Approche Partenariale",
+    mobileCta: "Découvrir",
     link: "/partnerships",
     items: build(LAYOUTS[3], [
       IMAGES.avocat,
@@ -147,6 +152,7 @@ const SECTIONS = [
     desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
     mobileDesc: "Nous collaborons avec des entreprises qui partagent notre exigence de qualité, de transparence et de performance sur le long terme.",
     cta: "Découvrir nos engagements",
+    mobileCta: "Découvrir",
     link: "/univers",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
@@ -161,6 +167,7 @@ const SECTIONS = [
     desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
     mobileDesc: "Discutons de vos besoins et construisons ensemble un partenariat durable autour des produits tropicaux africains.",
     cta: "Nous Contacter",
+    mobileCta: "Découvrir",
     link: "/contact",
     items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,
@@ -188,6 +195,7 @@ export default function Home() {
   const scenesRef = useRef([]);
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
   const lenisRef = useRef(null);
+  const [morphTarget, setMorphTarget] = useState(null);
 
   useEffect(() => {
     const isDesktop = window.matchMedia('(min-width: 769px)').matches;
@@ -294,6 +302,36 @@ export default function Home() {
     else target.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Morph du CTA (mobile ET desktop) vers plein écran au tap, avant navigation.
+  // Couleur du voile dérivée du fond de la page de destination (getDestinationColor).
+  // prefers-reduced-motion : navigation immédiate, aucun morph.
+  const handleCtaClick = (e, href, fallbackIndex) => {
+    if (!href) { goTo(fallbackIndex); return; }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      window.location.href = href;
+      return;
+    }
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const color = getDestinationColor(href, isMobile);
+
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    setMorphTarget({
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+      color,
+    });
+    requestAnimationFrame(() => { btn.classList.add('is-tapping'); });
+    setTimeout(() => { window.location.href = href; }, 500);
+    setTimeout(() => setMorphTarget(null), 700);
+  };
+
   return (
     <>
       {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
@@ -305,10 +343,25 @@ export default function Home() {
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
 
+      {/* Voile de morph CTA mobile — un seul, position/couleur pilotées par morphTarget */}
+      {morphTarget && (
+        <div
+          className="cta-morph"
+          style={{
+            top: morphTarget.top,
+            left: morphTarget.left,
+            width: morphTarget.width,
+            height: morphTarget.height,
+            backgroundColor: morphTarget.color,
+          }}
+        />
+      )}
+
       {SECTIONS.map((s, i) => (
         <section
           key={s.id}
           data-index={i}
+          data-id={s.id}
           ref={(el) => (scenesRef.current[i] = el)}
           className="scene"
           style={{ '--mobile-bg': s.mobileBg }}
@@ -403,8 +456,14 @@ export default function Home() {
               <span className="only-desktop">{s.desc}</span>
               <span className="only-mobile">{s.mobileDesc || s.desc}</span>
             </p>
-            <button className="scene__cta" onClick={() => s.link ? window.location.href = s.link : goTo(i + 1)}>
-              <span className="cta-label">{s.cta}</span>
+            <button
+              className="scene__cta"
+              onClick={(e) => handleCtaClick(e, s.link, i + 1)}
+            >
+              <span className="cta-label">
+                <span className="only-desktop">{s.cta}</span>
+                <span className="only-mobile">{s.mobileCta}</span>
+              </span>
               <span className="cta-arrow"><span>→</span></span>
             </button>
           </div>
