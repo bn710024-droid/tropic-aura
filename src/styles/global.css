@@ -407,12 +407,6 @@ body::-webkit-scrollbar { display: none; }
     pointer-events: none;
   }
 
-  /* ============================================================
-     ISOLATION TEMPORAIRE — passe typographie, fruits masqués
-     Pour désactiver : supprime cette règle (fruits reviennent)
-     ============================================================ */
-  .rain-mobile { display: none; }
-
   /* Variantes de texte : bascule desktop → mobile */
   .only-desktop { display: none; }
   .only-mobile { display: inline; }
@@ -423,47 +417,28 @@ body::-webkit-scrollbar { display: none; }
     height: auto;
   }
 
-  /* ── Profondeur 4 couches (modèle Combilo) ──
-     z:1 bokeh lointain · z:2 nets (focus) · z:3 texte · z:4 premier plan.
-     Chute continue par translateY (compositor-friendly), vitesse par couche :
-     bokeh la plus lente → premier plan la plus rapide = parallaxe. */
-  .fwrap {
+  /* ── Profondeur 4 couches (modèle Combilo) — fruits FIXES, aucune animation ──
+     z:1 L4 bokeh lointain · z:2 L3 arrière-plan moyen · z:3 L2 intermédiaire ·
+     z:4 texte · z:5 L1 premier plan net. */
+  .mfruit {
     position: absolute;
-    top: 0;
     pointer-events: none;
-    will-change: transform;
-    animation-name: fruitFall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    display: block;
+    height: auto;
+    animation: none;
+    transition: none;
   }
-  .fwrap--bokeh { z-index: 1; }
-  .fwrap--net   { z-index: 2; }
-  .fwrap--front { z-index: 4; }
+  .mfruit-L4 { z-index: 1; }
+  .mfruit-L3 { z-index: 2; }
+  .mfruit-L2 { z-index: 3; }
+  .mfruit-L1 { z-index: 5; }
 
-  .fwrap img { display: block; height: auto; }
-
-  /* Rotation lente sur les fruits nets uniquement */
-  .fwrap--net img {
-    animation-name: fruitSpin;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes fruitFall {
-    from { transform: translateY(-25vh); }
-    to   { transform: translateY(125vh); }
-  }
-  @keyframes fruitSpin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
-
-  /* ── Contenu texte (z:3 — au-dessus bokeh z:1 et nets z:2, sous le premier plan z:4) ──
+  /* ── Contenu texte (z:4 — au-dessus des layers L4/L3/L2, sous L1 premier plan) ──
      Largeur ~30ch : lecture confortable, laisse un couloir libre pour les fruits.
      gap +20-30% vs l'ancien 3dvh flat, pour une respiration générale. */
   .scene__content {
     position: relative;
-    z-index: 3;
+    z-index: 4;
     max-width: 30ch;
     padding-left: 0;
     padding-right: 0;
@@ -561,10 +536,4 @@ body::-webkit-scrollbar { display: none; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }
-}
-
-/* Accessibilité : tout figé aux positions de repos si mouvement réduit */
-@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
-  .fwrap, .fwrap img { animation: none !important; }
-  .fwrap { transform: translateY(var(--rest, 40vh)); }
 }
