@@ -72,6 +72,7 @@ const SECTIONS = [
     mobileBg: "#0E9F6E",
     title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
     desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
+    mobileDesc: "Nous connectons les meilleurs produits tropicaux d'Afrique aux marchés internationaux grâce à une sélection exigeante et des partenariats durables.",
     cta: "Découvrir Notre Vision",
     link: "/about",
     items: build(LAYOUTS[0], [
@@ -103,6 +104,7 @@ const SECTIONS = [
     mobileBg: "#E8631C",
     title: "Le Potentiel de l'Afrique. Livré Autrement.",
     desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
+    mobileDesc: "Nous valorisons les meilleures origines tropicales d'Afrique en les reliant aux marchés où la qualité et la confiance font la différence.",
     cta: "Découvrir Notre Histoire",
     link: "/about",
     items: build(LAYOUTS[1], [
@@ -121,6 +123,7 @@ const SECTIONS = [
     mobileBg: "#F3B500",
     title: "Sélectionnés pour les Marchés Exigeants.",
     desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
+    mobileDesc: "Chaque produit est sélectionné pour répondre aux standards des marchés internationaux en matière de qualité, de régularité et de fiabilité.",
     cta: "Explorer nos Produits",
     link: "/products",
     items: build(LAYOUTS[2], [
@@ -137,6 +140,7 @@ const SECTIONS = [
     mobileBg: "#1B7A3D",
     title: "Plus que des Transactions.",
     desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
+    mobileDesc: "Nous développons des partenariats durables entre producteurs, logisticiens et acheteurs internationaux pour créer une valeur partagée.",
     cta: "Notre Approche Partenariale",
     link: "/partnerships",
     items: build(LAYOUTS[3], [
@@ -152,7 +156,9 @@ const SECTIONS = [
     id: "vision", bg: "#C9912B",
     mobileBg: "#C9912B",
     title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
+    mobileTitle: "L'avenir se construit avec les bons partenaires.",
     desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
+    mobileDesc: "Nous collaborons avec des entreprises qui partagent notre exigence de qualité, de transparence et de performance sur le long terme.",
     cta: "Découvrir nos engagements",
     link: "/univers",
     items: build(LAYOUTS[4], [
@@ -169,6 +175,7 @@ const SECTIONS = [
     mobileBg: "#0D9488",
     title: "Créons de Nouvelles Opportunités.",
     desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
+    mobileDesc: "Discutons de vos besoins et construisons ensemble un partenariat durable autour des produits tropicaux africains.",
     cta: "Nous Contacter",
     link: "/contact",
     items: build(LAYOUTS[5], [
@@ -416,8 +423,14 @@ export default function Home() {
           </div>
 
           <div className="scene__content">
-            <h1 className="scene__title">{s.title}</h1>
-            <p className="scene__desc">{s.desc}</p>
+            <h1 className="scene__title">
+              <span className="only-desktop">{s.title}</span>
+              <span className="only-mobile">{s.mobileTitle || s.title}</span>
+            </h1>
+            <p className="scene__desc">
+              <span className="only-desktop">{s.desc}</span>
+              <span className="only-mobile">{s.mobileDesc || s.desc}</span>
+            </p>
             <button className="scene__cta" onClick={() => s.link ? window.location.href = s.link : goTo(i + 1)}>
               <span className="cta-label">{s.cta}</span>
               <span className="cta-arrow"><span>→</span></span>
