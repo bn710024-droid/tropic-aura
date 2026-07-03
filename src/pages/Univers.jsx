@@ -32,6 +32,8 @@ const PARA_FRUITS = [
 //  (textes provisoires — à remplacer)
 // ============================================================
 
+export const PAGE_ENTRY_COLOR = { desktop: "#FFB703", mobile: "#FFB703" };
+
 const SECTIONS = [
   {
     id:    "qualite",

@@ -28,6 +28,8 @@ const PARA_FRUITS = [
   IMAGES.papayeCoupe,
 ];
 
+export const PAGE_ENTRY_COLOR = { desktop: "#D9C08D", mobile: "#D9C08D" };  // stop moyen du dégradé #E1CCA0 → #D1B57A
+
 const SECTIONS = [
   {
     id: "fondations", num: "01", surtitre: "FONDATIONS", side: "left",

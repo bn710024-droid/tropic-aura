@@ -11,6 +11,8 @@ import Lenis from "lenis";
 //  ⚠️ Coordonnées provisoires — à remplacer par les vraies.
 // ============================================================
 
+export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
+
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 00 000 00 00";
 

@@ -10,6 +10,8 @@ import Lenis from "lenis";
 //  Mobile-first. Apparitions douces au scroll.
 // ============================================================
 
+export const PAGE_ENTRY_COLOR = { desktop: "#0E100E", mobile: "#0E100E" };
+
 const SECTIONS = [
   {
     type: "intro", id: "cover", bg: "#0E100E",

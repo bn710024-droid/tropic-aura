@@ -7,6 +7,8 @@ import FallingFruits from "../components/FallingFruits";
 //  bg-layer fixe + interpolation couleur en RAF + fade-in contenu
 // ============================================================
 
+export const PAGE_ENTRY_COLOR = { desktop: "#C08B10", mobile: "#C08B10" };
+
 const SECTIONS = [
   {
     id:    "conviction",
