@@ -250,6 +250,9 @@ export default function Home() {
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
   const lenisRef = useRef(null);
   const fruitsLayerRef = useRef(null);  // calque fruits mobile global (parallaxe)
+  const wrapperRef = useRef(null);  // wrapper de scroll dédié mobile — html/body sont figés (overflow:hidden),
+                                     // c'est CE div qui défile réellement, garantissant que .fruits-layer-mobile
+                                     // (fixed, hors du wrapper) reste ancré au vrai viewport sans ambiguïté WebKit.
   const [morphTarget, setMorphTarget] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null); // DEBUG TEMPORAIRE — à retirer une fois le bug isolé
   const debugLastUpdateRef = useRef(0); // throttle des re-renders du badge debug (~5/s)
@@ -264,7 +267,12 @@ export default function Home() {
     const applyParallax = () => {
       const layer = fruitsLayerRef.current;
       if (!layer) return;
-      const scroll = window.scrollY || document.documentElement.scrollTop || 0;
+      const wrapper = wrapperRef.current;
+      // Sur mobile, le wrapper dédié est le vrai scroller (html/body sont figés) ;
+      // sur desktop il est display:contents (jamais scrollable) → fallback window.
+      const scroll = (wrapper && wrapper.scrollHeight > wrapper.clientHeight)
+        ? wrapper.scrollTop
+        : (window.scrollY || document.documentElement.scrollTop || 0);
       const y = -scroll * 0.5;
       layer.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
       // DEBUG TEMPORAIRE — throttlé pour ne pas spammer les re-renders
@@ -278,12 +286,15 @@ export default function Home() {
         });
       }
     };
+    const wrapperEl = wrapperRef.current;
     window.addEventListener('scroll', applyParallax, { passive: true, capture: true });
     document.addEventListener('scroll', applyParallax, { passive: true, capture: true });
+    if (wrapperEl) wrapperEl.addEventListener('scroll', applyParallax, { passive: true });
     applyParallax();
     return () => {
       window.removeEventListener('scroll', applyParallax, { capture: true });
       document.removeEventListener('scroll', applyParallax, { capture: true });
+      if (wrapperEl) wrapperEl.removeEventListener('scroll', applyParallax);
     };
   }, []);
 
@@ -378,9 +389,15 @@ export default function Home() {
     };
 
     const readScroll = () => {
-      if (!lenis) return window.scrollY || 0;
-      const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      if (lenis) {
+        const s = lenis.animatedScroll;
+        return Number.isFinite(s) ? s : (window.scrollY || 0);
+      }
+      // Mobile (pas de Lenis) : le wrapper dédié est le vrai scroller depuis que
+      // html/body sont figés (overflow:hidden) — window.scrollY resterait bloqué à 0.
+      const wrapper = wrapperRef.current;
+      if (wrapper && wrapper.scrollHeight > wrapper.clientHeight) return wrapper.scrollTop;
+      return window.scrollY || 0;
     };
 
     const raf = (time) => {
@@ -506,6 +523,11 @@ export default function Home() {
         />
       )}
 
+      {/* Wrapper de scroll dédié mobile — html/body figés (overflow:hidden), c'est CE
+          div qui défile. Sur desktop : display:contents (no-op total, aucune box créée,
+          Lenis/scroll document inchangés). Objectif : .fruits-layer-mobile (fixed, hors
+          de ce wrapper) n'a plus aucune ambiguïté avec un scroller racine WebKit. */}
+      <div className="mobile-scroll-wrapper" ref={wrapperRef}>
       {SECTIONS.map((s, i) => (
         <section
           key={s.id}
@@ -578,6 +600,7 @@ export default function Home() {
           )}
         </section>
       ))}
+      </div>
     </>
   );
 }

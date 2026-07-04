@@ -25,6 +25,10 @@ body::-webkit-scrollbar { display: none; }
 
 ::selection { background: rgba(255,255,255,.3); }
 
+/* ---------- WRAPPER DE SCROLL DÉDIÉ (mobile uniquement — voir media query) ----------
+   Desktop : display:contents = aucune box, aucun impact sur le flow/scroll/Lenis. */
+.mobile-scroll-wrapper { display: contents; }
+
 /* ---------- CALQUE DE FOND FIXE (couleur interpolée) ---------- */
 .bg-layer {
   position: fixed;
@@ -354,23 +358,34 @@ body::-webkit-scrollbar { display: none; }
    ============================================================ */
 @media (max-width: 768px) {
 
-  /* ── Scroll container unique : html ── */
+  /* ── html/body : figés. Le scroll réel se fait dans .mobile-scroll-wrapper ──
+     Architecture "wrapper de scroll dédié" (pattern Combilo) : plus html/body ne
+     scrollent, plus aucun WebKit ne peut confondre le scroller racine avec le
+     containing block d'un position:fixed. .fruits-layer-mobile (fixed, hors du
+     wrapper) est de fait ancré au vrai viewport, sans ambiguïté possible. */
   html {
     height: 100dvh;
-    overflow-y: scroll;
-    /* -webkit-overflow-scrolling: touch retiré : propriété legacy (iOS ≤12) qui,
-       posée sur le scroller racine, est la cause documentée classique du bug
-       "position:fixed suit le scroll au lieu de rester fixe au viewport" sur
-       WebKit — exactement le symptôme observé (ratio 1:1). Le momentum-scroll
-       est natif sur tout overflow:scroll depuis iOS 13, donc aucune perte de
-       fonctionnalité en la retirant. */
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
+    overflow: hidden;
   }
 
-  /* body : flow normal, aucun overflow propre */
+  /* body : figé aussi, garde sa couleur de fallback (rubber-band du wrapper) */
   body {
+    height: 100dvh;
+    overflow: hidden;
     background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
+  }
+
+  /* ── Wrapper de scroll dédié — le VRAI scroller mobile ──
+     display:contents hors mobile (voir règle de base plus haut) : aucun impact
+     desktop, Lenis/scroll document inchangés. */
+  .mobile-scroll-wrapper {
+    display: block;
+    height: 100dvh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: auto; /* PAS "touch" — c'est la propriété fautive retirée de html */
   }
 
   /* .bg-layer porte l'interpolation continue de couleur (même mécanisme que
