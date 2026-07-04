@@ -271,7 +271,11 @@ export default function Home() {
       const now = performance.now();
       if (now - debugLastUpdateRef.current > 150) {
         debugLastUpdateRef.current = now;
-        setDebugInfo({ src: 'scroll-event', scrollY: Math.round(scroll), y: Math.round(y) });
+        const cs = getComputedStyle(layer);
+        setDebugInfo({
+          src: 'scroll-event', scrollY: Math.round(scroll), y: Math.round(y),
+          appliedPos: cs.position, appliedTransform: cs.transform,
+        });
       }
     };
     window.addEventListener('scroll', applyParallax, { passive: true, capture: true });
@@ -332,7 +336,11 @@ export default function Home() {
         const now = performance.now();
         if (now - debugLastUpdateRef.current > 150) {
           debugLastUpdateRef.current = now;
-          setDebugInfo({ src: 'raf', scrollY: Math.round(scroll), y: Math.round(y) });
+          const cs = getComputedStyle(fruitsLayerRef.current);
+          setDebugInfo({
+            src: 'raf', scrollY: Math.round(scroll), y: Math.round(y),
+            appliedPos: cs.position, appliedTransform: cs.transform,
+          });
         }
       }
 
@@ -457,7 +465,7 @@ export default function Home() {
           font: '11px/1.4 monospace', padding: '6px 10px', borderRadius: 6,
           pointerEvents: 'none', whiteSpace: 'pre',
         }}>
-          {`DEBUG src=${debugInfo.src}\nscrollY=${debugInfo.scrollY}  y=${debugInfo.y}`}
+          {`DEBUG src=${debugInfo.src}\nscrollY=${debugInfo.scrollY}  y(calc)=${debugInfo.y}\npos=${debugInfo.appliedPos}\ntransform=${debugInfo.appliedTransform}`}
         </div>
       )}
 

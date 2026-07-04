@@ -358,7 +358,12 @@ body::-webkit-scrollbar { display: none; }
   html {
     height: 100dvh;
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    /* -webkit-overflow-scrolling: touch retiré : propriété legacy (iOS ≤12) qui,
+       posée sur le scroller racine, est la cause documentée classique du bug
+       "position:fixed suit le scroll au lieu de rester fixe au viewport" sur
+       WebKit — exactement le symptôme observé (ratio 1:1). Le momentum-scroll
+       est natif sur tout overflow:scroll depuis iOS 13, donc aucune perte de
+       fonctionnalité en la retirant. */
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
   }
@@ -380,6 +385,7 @@ body::-webkit-scrollbar { display: none; }
     min-height: unset;
     width: 100vw;
     z-index: 10;   /* EXPLICITE : textes/CTA au-dessus du calque fruits (z:1) — règle Combilo */
+    isolation: isolate;   /* stacking context bulletproof — le rang z-index 10 vs 1 ne dépend d'aucun autre ancêtre */
     overflow: clip; /* clip les fruits débordants SANS créer de scroll container */
     display: flex;
     flex-direction: column;
@@ -420,8 +426,14 @@ body::-webkit-scrollbar { display: none; }
     position: fixed;
     inset: 0;
     z-index: 1;
+    isolation: isolate;   /* confine ce calque à son propre contexte d'empilement */
     pointer-events: none;
     will-change: transform;
+    /* promotion GPU dès le premier paint (avant toute écriture JS) — sur certaines
+       versions de WebKit, will-change seul ne suffit pas à garantir une couche de
+       composition dédiée pour un position:fixed avant le premier scroll. */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
