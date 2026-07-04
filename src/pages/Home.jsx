@@ -252,6 +252,31 @@ export default function Home() {
   const fruitsLayerRef = useRef(null);  // calque fruits mobile global (parallaxe)
   const [morphTarget, setMorphTarget] = useState(null);
 
+  // Filet de sécurité pour la parallaxe mobile : sur iOS Safari, requestAnimationFrame
+  // peut être retardé pendant un geste de scroll tactile actif (le thread principal
+  // priorise le scroll natif) — la rAF seule peut donc sembler "figée" pendant le
+  // glissement du doigt. On ajoute ici un vrai listener 'scroll' natif, qui lui se
+  // déclenche par le mécanisme natif du navigateur, en parallèle de la rAF (qui reste
+  // utile pour le fondu couleur). Les deux calculent la même valeur, redondance sans
+  // risque. translate3d (pas translateY) force une couche GPU dédiée pour le repaint.
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobile) return;
+    const applyParallax = () => {
+      const layer = fruitsLayerRef.current;
+      if (!layer) return;
+      const scroll = window.scrollY || document.documentElement.scrollTop || 0;
+      layer.style.transform = `translate3d(0, ${(-scroll * 0.5).toFixed(1)}px, 0)`;
+    };
+    window.addEventListener('scroll', applyParallax, { passive: true, capture: true });
+    document.addEventListener('scroll', applyParallax, { passive: true, capture: true });
+    applyParallax();
+    return () => {
+      window.removeEventListener('scroll', applyParallax, { capture: true });
+      document.removeEventListener('scroll', applyParallax, { capture: true });
+    };
+  }, []);
+
   useEffect(() => {
     const isDesktop = window.matchMedia('(min-width: 769px)').matches;
     const lenis = isDesktop ? new Lenis({
@@ -294,7 +319,7 @@ export default function Home() {
       //    Fonction PURE du scroll → figé au repos, aucune inertie temporelle.
       //    !lenis = mobile (desktop a lenis ; le calque y est display:none de toute façon).
       if (!lenis && fruitsLayerRef.current) {
-        fruitsLayerRef.current.style.transform = `translateY(${(-scroll * 0.5).toFixed(1)}px)`;
+        fruitsLayerRef.current.style.transform = `translate3d(0, ${(-scroll * 0.5).toFixed(1)}px, 0)`;
       }
 
       // chaque fruit : scale / opacity / position = fonction PURE du scroll

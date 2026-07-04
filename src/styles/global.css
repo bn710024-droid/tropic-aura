@@ -407,11 +407,14 @@ body::-webkit-scrollbar { display: none; }
 
   /* ── Calque fruits mobile GLOBAL — un seul pour tout le site ──
      position:fixed, hors des .scene (enfant direct du wrapper Home).
-     Parallaxe inverse pilotée par la boucle rAF de Home.jsx (lecture window.scrollY,
-     même chemin fiable que le fondu couleur) : transform translateY(-scrollY*0.75).
-     Fonction PURE du scroll (figé au repos, aucune inertie). Un event 'scroll' sur
-     window ne se déclenche pas ici (html est le conteneur de scroll) — d'où la rAF.
-     z-index entre bg-layer(0) et .scene(1). */
+     Parallaxe inverse : transform translate3d(0, -scrollY*0.5, 0), ratio Combilo.
+     Deux déclencheurs redondants (voir Home.jsx) : la boucle rAF (fiable, même
+     chemin que le fondu couleur) + un vrai listener 'scroll' natif en filet de
+     sécurité — sur iOS Safari, rAF peut être retardée pendant un geste de scroll
+     tactile actif (le thread principal priorise le scroll natif), le listener
+     'scroll' natif ne l'est pas. Fonction PURE du scroll, aucune inertie propre.
+     translate3d (pas translateY) force une couche GPU dédiée pour un repaint fiable
+     de l'élément fixed pendant le scroll. z-index entre bg-layer(0) et .scene(10). */
   .fruits-layer-mobile {
     display: block;
     position: fixed;
@@ -419,6 +422,8 @@ body::-webkit-scrollbar { display: none; }
     z-index: 1;
     pointer-events: none;
     will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .global-fruit {
