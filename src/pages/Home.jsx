@@ -253,15 +253,12 @@ export default function Home() {
   const [morphTarget, setMorphTarget] = useState(null);
 
   // Filet de sécurité pour la parallaxe mobile : sur iOS Safari, requestAnimationFrame
-  // peut être retardé pendant un geste de scroll tactile actif (le thread principal
-  // priorise le scroll natif) — la rAF seule peut donc sembler "figée" pendant le
-  // glissement du doigt. On ajoute ici un vrai listener 'scroll' natif, qui lui se
-  // déclenche par le mécanisme natif du navigateur, en parallèle de la rAF (qui reste
-  // utile pour le fondu couleur). Les deux calculent la même valeur, redondance sans
-  // risque. translate3d (pas translateY) force une couche GPU dédiée pour le repaint.
+  // peut être retardé pendant un geste de scroll tactile actif — un vrai listener
+  // 'scroll' natif ne l'est pas. Toujours posé (pas de check isMobile au montage : un
+  // redimensionnement/toggle responsive SANS rechargement laisserait ce check figé sur
+  // sa valeur de montage — écrire un transform sur .fruits-layer-mobile ne coûte rien
+  // et n'a aucun effet visuel sur desktop, où le calque est display:none via CSS).
   useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (!isMobile) return;
     const applyParallax = () => {
       const layer = fruitsLayerRef.current;
       if (!layer) return;
@@ -315,10 +312,11 @@ export default function Home() {
 
       // ── PARALLAXE MOBILE : calque fruits global glisse à 50% de la vitesse du
       //    contenu (ratio 0.5, Combilo exact). Piloté par CETTE boucle rAF (lecture window.scrollY
-      //    fiable — même chemin que le fondu couleur), pas par un event scroll aveugle.
+      //    fiable — même chemin que le fondu couleur), en redondance du listener natif.
       //    Fonction PURE du scroll → figé au repos, aucune inertie temporelle.
-      //    !lenis = mobile (desktop a lenis ; le calque y est display:none de toute façon).
-      if (!lenis && fruitsLayerRef.current) {
+      //    Écrit toujours (pas de gate figée sur "lenis" au montage — le calque est
+      //    display:none via CSS sur desktop, écrire dessus est un no-op visuel).
+      if (fruitsLayerRef.current) {
         fruitsLayerRef.current.style.transform = `translate3d(0, ${(-scroll * 0.5).toFixed(1)}px, 0)`;
       }
 
