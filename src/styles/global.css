@@ -342,8 +342,8 @@ body::-webkit-scrollbar { display: none; }
   border-bottom-color: rgba(0, 0, 0, .55);
 }
 
-/* Couche fruits mobile — masquée hors mobile (évite la fuite desktop) */
-.rain-mobile { display: none; }
+/* Calque fruits mobile global — masqué hors mobile (évite la fuite desktop) */
+.fruits-layer-mobile { display: none; }
 
 /* Variantes de texte desktop / mobile — bascule CSS pure, sans JS ni resize listener */
 .only-mobile { display: none; }
@@ -368,16 +368,18 @@ body::-webkit-scrollbar { display: none; }
     background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
   }
 
-  /* .bg-layer réactivé : porte l'interpolation continue de couleur
-     (même mécanisme que desktop, piloté par window.scrollY natif).
-     .bg-depth reste masqué — hors périmètre de cette passe. */
-  .bg-depth { display: none; }
+  /* .bg-layer porte l'interpolation continue de couleur (même mécanisme que
+     desktop). .bg-depth (halo radial clair au centre + vignette sombre aux
+     bords) est ACTIF ici aussi : c'est l'éclairage premium façon Combilo.
+     Global et fixed → continu au scroll, aucune couture entre sections
+     (contrairement à l'ancien .scene::before par-section, resté supprimé). */
 
   /* ── Section plein écran ── */
   .scene {
     height: 100dvh;
     min-height: unset;
     width: 100vw;
+    z-index: 10;   /* EXPLICITE : textes/CTA au-dessus du calque fruits (z:1) — règle Combilo */
     overflow: clip; /* clip les fruits débordants SANS créer de scroll container */
     display: flex;
     flex-direction: column;
@@ -399,28 +401,27 @@ body::-webkit-scrollbar { display: none; }
   /* Fruits desktop — cachés */
   .rain { display: none; }
 
-  /* Fruits mobile — statiques */
-  .rain-mobile {
-    display: block;
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
   /* Variantes de texte : bascule desktop → mobile */
   .only-desktop { display: none; }
   .only-mobile { display: inline; }
 
-  .scene__fruit {
-    position: absolute;
+  /* ── Calque fruits mobile GLOBAL — un seul pour tout le site ──
+     position:fixed, hors des .scene (enfant direct du wrapper Home).
+     Parallaxe inverse pilotée par la boucle rAF de Home.jsx (lecture window.scrollY,
+     même chemin fiable que le fondu couleur) : transform translateY(-scrollY*0.75).
+     Fonction PURE du scroll (figé au repos, aucune inertie). Un event 'scroll' sur
+     window ne se déclenche pas ici (html est le conteneur de scroll) — d'où la rAF.
+     z-index entre bg-layer(0) et .scene(1). */
+  .fruits-layer-mobile {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
-    height: auto;
+    will-change: transform;
   }
 
-  /* ── Profondeur 4 couches (modèle Combilo) — fruits FIXES, aucune animation ──
-     z:1 L4 bokeh lointain · z:2 L3 arrière-plan moyen · z:3 L2 intermédiaire ·
-     z:4 texte · z:5 L1 premier plan net. */
-  .mfruit {
+  .global-fruit {
     position: absolute;
     pointer-events: none;
     display: block;
@@ -428,18 +429,16 @@ body::-webkit-scrollbar { display: none; }
     animation: none;
     transition: none;
   }
-  .mfruit-L4 { z-index: 1; }
-  .mfruit-L3 { z-index: 2; }
-  .mfruit-L2 { z-index: 3; }
-  .mfruit-L1 { z-index: 5; }
 
-  /* ── Contenu texte (z:4 — au-dessus des layers L4/L3/L2, sous L1 premier plan) ──
-     Largeur ~30ch : lecture confortable, laisse un couloir libre pour les fruits.
-     gap +20-30% vs l'ancien 3dvh flat, pour une respiration générale. */
+  /* ── Contenu texte (z:4 — au-dessus du calque fruits z:1) ──
+     Confiné à la MOITIÉ GAUCHE (bord droit ~54%) : le calque fruits vit sur la
+     droite (left ≥ 55%). Séparation horizontale stricte → aucun chevauchement
+     texte/fruit, à aucune position de scroll (parallaxe incluse).
+     48vw depuis le padding gauche de 24px (~6%) → bord droit ≈ 54% (< fruits 55%). */
   .scene__content {
     position: relative;
     z-index: 4;
-    max-width: 30ch;
+    max-width: 48vw;
     padding-left: 0;
     padding-right: 0;
     display: flex;

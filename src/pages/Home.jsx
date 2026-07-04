@@ -81,22 +81,6 @@ const SECTIONS = [
       IMAGES.ananas,
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
     ]),
-    fruitsMobile: [
-      // Modèle 4 couches Combilo — fruits FIXES, aucune animation.
-      // Total aligné sur le nombre de fruits du hero desktop (8 = LAYOUTS[0] : 6 + 2 fillers)
-      // Layer4 bokeh lointain (blur30/op.20/95px/z1) — 2
-      { layer: "L4", src: "/png/fruit-passion.png", blur: 30, opacity: 0.20, size: 95, top: "2%",  left: "58%" },
-      { layer: "L4", src: "/png/melon-vert.png",    blur: 30, opacity: 0.20, size: 95, top: "80%", left: "70%" },
-      // Layer3 arrière-plan moyen (blur15/op.45/70px/z2) — 2
-      { layer: "L3", src: "/png/citron-jaune.png",  blur: 15, opacity: 0.45, size: 70, top: "6%",  left: "8%"  },
-      { layer: "L3", src: "/png/papaye-coupee.png", blur: 15, opacity: 0.45, size: 70, top: "88%", left: "46%" },
-      // Layer2 plan intermédiaire (blur6/op.75/55px/z3) — 2
-      { layer: "L2", src: "/png/pasteque-tranche.png", blur: 6, opacity: 0.75, size: 55, top: "14%", left: "66%" },
-      { layer: "L2", src: "/png/coco.png",             blur: 6, opacity: 0.75, size: 55, top: "74%", left: "20%" },
-      // Layer1 premier plan net (blur0/op1/50px/z5) — 2, jamais sur le titre (left≥56% ou top≥72%)
-      { layer: "L1", src: "/png/ananas.png", blur: 0, opacity: 1, size: 50, top: "8%",  left: "74%" },
-      { layer: "L1", src: "/png/papaye.png", blur: 0, opacity: 1, size: 50, top: "76%", left: "30%" },
-    ],
   },
   {
     id: "origins", bg: "#E8631C",
@@ -112,7 +96,6 @@ const SECTIONS = [
       IMAGES.orange, IMAGES.papayeCoupe, IMAGES.fruitPassion,
       IMAGES.mangue, IMAGES.orange, IMAGES.papaye,
     ]),
-    fruitsMobile: [],
   },
   {
     id: "products", bg: "#F3B500",
@@ -127,7 +110,6 @@ const SECTIONS = [
       IMAGES.ananas,
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
     ]),
-    fruitsMobile: [],
   },
   {
     id: "partnerships", bg: "#1B7A3D",
@@ -142,7 +124,6 @@ const SECTIONS = [
       IMAGES.avocat,
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
     ]),
-    fruitsMobile: [],
   },
   {
     id: "vision", bg: "#C9912B",
@@ -158,7 +139,6 @@ const SECTIONS = [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
     ]),
-    fruitsMobile: [],
   },
   {
     id: "contact", bg: "#0D9488",
@@ -173,12 +153,86 @@ const SECTIONS = [
       IMAGES.papayeCoupe,
       IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.melonJaune, IMAGES.papaye,
     ]),
-    fruitsMobile: [],
   },
 ];
 
 /* Pastèque & fruits rouges (myrtilles, fraises, fruit de la passion) sont
    gardés pour le mix d'accueil — ils ressortent sur le vert du Hero. */
+
+// ---- Calque fruits mobile GLOBAL — RIVIÈRE À DROITE avec PROFONDEUR DE CHAMP ----
+// Un seul calque fixed, parallaxe ratio 0.5 (Combilo) : screenY = topVh - 0.5*scrollVh.
+// 3 plans photo : loin (26-42px, flou 3-5, estompé) · net (46-78px, focus) ·
+// proche caméra (85-130px, flou 7-10, translucide, chevauchement autorisé = passe devant).
+// Rotations aléatoires ±24°. Ordre du tableau = ordre de peinture (loin→net→proche).
+// Généré par script : X ∈ [55%,93vw], gap max 14.5vh (aucun trou), 12-17 visibles partout,
+// 0 chevauchement net/loin, 0 doublon <30vh.
+const FRUITS_GLOBAL = [
+  { src: "/png/citron-jaune.png", topVh: 11.87, left: "70.6%", size: 32, blur: 4, opacity: 0.64, rot: -2 },
+  { src: "/png/banane.png", topVh: 69.59, left: "78%", size: 39, blur: 4, opacity: 0.72, rot: 1 },
+  { src: "/png/melon-vert.png", topVh: 110.5, left: "75.4%", size: 38, blur: 3, opacity: 0.56, rot: -7 },
+  { src: "/png/melon-jaune.png", topVh: 120.92, left: "77.2%", size: 35, blur: 4, opacity: 0.56, rot: -20 },
+  { src: "/png/banane.png", topVh: 148.33, left: "79.9%", size: 30, blur: 4, opacity: 0.68, rot: 4 },
+  { src: "/png/avocat.png", topVh: 169.27, left: "67.8%", size: 27, blur: 4, opacity: 0.66, rot: 4 },
+  { src: "/png/myrtilles.png", topVh: 175.18, left: "55.4%", size: 35, blur: 3, opacity: 0.56, rot: 2 },
+  { src: "/png/banane.png", topVh: 193.61, left: "58.5%", size: 41, blur: 5, opacity: 0.69, rot: -4 },
+  { src: "/png/citron-vert.png", topVh: 222.54, left: "76.8%", size: 42, blur: 4, opacity: 0.67, rot: 9 },
+  { src: "/png/papaye.png", topVh: 230.35, left: "81.2%", size: 35, blur: 5, opacity: 0.69, rot: 13 },
+  { src: "/png/ananas.png", topVh: 273.59, left: "81.7%", size: 38, blur: 4, opacity: 0.7, rot: 4 },
+  { src: "/png/pasteque.png", topVh: 299.36, left: "63.6%", size: 34, blur: 4, opacity: 0.71, rot: 6 },
+  { src: "/png/banane.png", topVh: 303.2, left: "78%", size: 36, blur: 4, opacity: 0.58, rot: -5 },
+  { src: "/png/avocat.png", topVh: 306.59, left: "55.5%", size: 39, blur: 5, opacity: 0.63, rot: -5 },
+  { src: "/png/pasteque.png", topVh: 335.53, left: "82.3%", size: 34, blur: 4, opacity: 0.69, rot: -11 },
+  { src: "/png/citron-vert.png", topVh: 343.62, left: "84.9%", size: 29, blur: 4, opacity: 0.62, rot: 17 },
+  { src: "/png/orange.png", topVh: 345.34, left: "60.1%", size: 36, blur: 4, opacity: 0.71, rot: -2 },
+  { src: "/png/banane.png", topVh: 364.53, left: "63.1%", size: 41, blur: 4, opacity: 0.66, rot: 19 },
+  { src: "/png/coco.png", topVh: 393.1, left: "64.4%", size: 38, blur: 5, opacity: 0.61, rot: 16 },
+  { src: "/png/citron-vert.png", topVh: 399.07, left: "77.5%", size: 34, blur: 5, opacity: 0.63, rot: -1 },
+  { src: "/png/fruit-passion.png", topVh: 438.15, left: "60.8%", size: 39, blur: 4, opacity: 0.63, rot: 21 },
+  { src: "/png/papaye.png", topVh: 18.66, left: "58%", size: 50, blur: 0, opacity: 1, rot: 4 },
+  { src: "/png/avocat.png", topVh: 23.75, left: "75.4%", size: 67, blur: 0, opacity: 1, rot: 12 },
+  { src: "/png/banane.png", topVh: 36.28, left: "56.9%", size: 77, blur: 0, opacity: 1, rot: 23 },
+  { src: "/png/ananas.png", topVh: 49.57, left: "66.7%", size: 75, blur: 0, opacity: 1, rot: 3 },
+  { src: "/png/orange.png", topVh: 61.18, left: "64%", size: 66, blur: 0, opacity: 1, rot: 12 },
+  { src: "/png/myrtilles.png", topVh: 78.76, left: "63.4%", size: 49, blur: 0, opacity: 1, rot: -8 },
+  { src: "/png/ananas.png", topVh: 97.01, left: "75.2%", size: 46, blur: 0, opacity: 1, rot: -2 },
+  { src: "/png/papaye.png", topVh: 129.42, left: "70.2%", size: 48, blur: 0, opacity: 1, rot: -18 },
+  { src: "/png/citron-jaune.png", topVh: 141.95, left: "68.1%", size: 55, blur: 0, opacity: 1, rot: -11 },
+  { src: "/png/pasteque.png", topVh: 150.56, left: "56.5%", size: 68, blur: 0, opacity: 1, rot: 0 },
+  { src: "/png/melon-vert.png", topVh: 160.82, left: "73.2%", size: 74, blur: 0, opacity: 1, rot: -21 },
+  { src: "/png/orange.png", topVh: 174.61, left: "76.4%", size: 48, blur: 0, opacity: 1, rot: 18 },
+  { src: "/png/citron-vert.png", topVh: 183.81, left: "67.4%", size: 73, blur: 0, opacity: 1, rot: 8 },
+  { src: "/png/melon-jaune.png", topVh: 200.31, left: "78.4%", size: 56, blur: 0, opacity: 1, rot: -12 },
+  { src: "/png/myrtilles.png", topVh: 211.69, left: "62.5%", size: 74, blur: 0, opacity: 1, rot: 18 },
+  { src: "/png/ananas.png", topVh: 233.43, left: "58.4%", size: 60, blur: 0, opacity: 1, rot: -21 },
+  { src: "/png/mangue.png", topVh: 247.91, left: "71.8%", size: 73, blur: 0, opacity: 1, rot: 19 },
+  { src: "/png/fruit-passion.png", topVh: 259.31, left: "66.4%", size: 73, blur: 0, opacity: 1, rot: 22 },
+  { src: "/png/citron-jaune.png", topVh: 270.3, left: "55.5%", size: 66, blur: 0, opacity: 1, rot: 24 },
+  { src: "/png/coco.png", topVh: 280.93, left: "64.1%", size: 53, blur: 0, opacity: 1, rot: 20 },
+  { src: "/png/melon-vert.png", topVh: 291.09, left: "57.9%", size: 51, blur: 0, opacity: 1, rot: 22 },
+  { src: "/png/fraises.png", topVh: 314.94, left: "67.3%", size: 60, blur: 0, opacity: 1, rot: 13 },
+  { src: "/png/citron-jaune.png", topVh: 328.5, left: "55.7%", size: 75, blur: 0, opacity: 1, rot: -22 },
+  { src: "/png/mangue.png", topVh: 377.08, left: "74.4%", size: 70, blur: 0, opacity: 1, rot: -12 },
+  { src: "/png/melon-jaune.png", topVh: 405.38, left: "69.6%", size: 48, blur: 0, opacity: 1, rot: 13 },
+  { src: "/png/myrtilles.png", topVh: 416.44, left: "63.2%", size: 50, blur: 0, opacity: 1, rot: -15 },
+  { src: "/png/banane.png", topVh: 427.76, left: "57%", size: 56, blur: 0, opacity: 1, rot: -18 },
+  { src: "/png/ananas.png", topVh: 19.09, left: "61.2%", size: 97, blur: 8, opacity: 0.55, rot: 2 },
+  { src: "/png/melon-jaune.png", topVh: 43.85, left: "60.4%", size: 123, blur: 8, opacity: 0.53, rot: -7 },
+  { src: "/png/citron-vert.png", topVh: 54.51, left: "65.5%", size: 87, blur: 10, opacity: 0.52, rot: 15 },
+  { src: "/png/fruit-passion.png", topVh: 64.33, left: "57.8%", size: 103, blur: 7, opacity: 0.61, rot: 4 },
+  { src: "/png/citron-vert.png", topVh: 88.59, left: "60.5%", size: 123, blur: 8, opacity: 0.61, rot: -3 },
+  { src: "/png/mangue.png", topVh: 129.33, left: "60.3%", size: 88, blur: 7, opacity: 0.62, rot: 17 },
+  { src: "/png/citron-vert.png", topVh: 149.44, left: "62.3%", size: 110, blur: 7, opacity: 0.55, rot: 1 },
+  { src: "/png/fraises.png", topVh: 175.22, left: "60.2%", size: 112, blur: 8, opacity: 0.66, rot: -14 },
+  { src: "/png/citron-jaune.png", topVh: 202.09, left: "61.5%", size: 109, blur: 9, opacity: 0.51, rot: -16 },
+  { src: "/png/avocat.png", topVh: 257.24, left: "61.3%", size: 116, blur: 9, opacity: 0.64, rot: -7 },
+  { src: "/png/banane.png", topVh: 333.87, left: "55.8%", size: 118, blur: 8, opacity: 0.66, rot: 19 },
+  { src: "/png/fruit-passion.png", topVh: 354.66, left: "60.7%", size: 122, blur: 10, opacity: 0.61, rot: -7 },
+  { src: "/png/fraises.png", topVh: 380.98, left: "58.3%", size: 125, blur: 8, opacity: 0.59, rot: 21 },
+  { src: "/png/orange.png", topVh: 391.33, left: "60%", size: 111, blur: 8, opacity: 0.67, rot: -13 },
+  { src: "/png/papaye.png", topVh: 405.01, left: "58.1%", size: 127, blur: 10, opacity: 0.63, rot: 17 },
+  { src: "/png/ananas.png", topVh: 422.75, left: "57.4%", size: 124, blur: 8, opacity: 0.66, rot: -10 },
+  { src: "/png/coco.png", topVh: 437.54, left: "69.2%", size: 90, blur: 9, opacity: 0.64, rot: -11 },
+];
 
 const hexToRgb = (h) => {
   const n = parseInt(h.slice(1), 16);
@@ -195,6 +249,7 @@ export default function Home() {
   const scenesRef = useRef([]);
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
   const lenisRef = useRef(null);
+  const fruitsLayerRef = useRef(null);  // calque fruits mobile global (parallaxe)
   const [morphTarget, setMorphTarget] = useState(null);
 
   useEffect(() => {
@@ -231,6 +286,15 @@ export default function Home() {
       if (bgRef.current) {
         bgRef.current.style.backgroundColor =
           `rgb(${lerp(a[0], b[0], ft)},${lerp(a[1], b[1], ft)},${lerp(a[2], b[2], ft)})`;
+      }
+
+      // ── PARALLAXE MOBILE : calque fruits global glisse à 50% de la vitesse du
+      //    contenu (ratio 0.5, Combilo exact). Piloté par CETTE boucle rAF (lecture window.scrollY
+      //    fiable — même chemin que le fondu couleur), pas par un event scroll aveugle.
+      //    Fonction PURE du scroll → figé au repos, aucune inertie temporelle.
+      //    !lenis = mobile (desktop a lenis ; le calque y est display:none de toute façon).
+      if (!lenis && fruitsLayerRef.current) {
+        fruitsLayerRef.current.style.transform = `translateY(${(-scroll * 0.5).toFixed(1)}px)`;
       }
 
       // chaque fruit : scale / opacity / position = fonction PURE du scroll
@@ -343,6 +407,29 @@ export default function Home() {
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
 
+      {/* Calque fruits mobile GLOBAL — fixed, un seul pour tout le site, parallaxe
+          inverse pilotée par la boucle rAF (translateY(-scrollY*0.5)). */}
+      <div className="fruits-layer-mobile" ref={fruitsLayerRef}>
+        {FRUITS_GLOBAL.map((f, j) => (
+          <img
+            key={j}
+            className="global-fruit"
+            src={f.src}
+            alt=""
+            loading={j < 16 ? "eager" : "lazy"}
+            draggable={false}
+            style={{
+              top: `${f.topVh}vh`,
+              left: f.left,
+              width: f.size,
+              filter: f.blur ? `blur(${f.blur}px)` : undefined,
+              opacity: f.opacity ?? 1,
+              transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Voile de morph CTA mobile — un seul, position/couleur pilotées par morphTarget */}
       {morphTarget && (
         <div
@@ -398,53 +485,6 @@ export default function Home() {
                 />
               </div>
             ))}
-          </div>
-
-          {/* Fruits mobile — 4 couches FIXES (hero) ou format simple (autres sections) */}
-          <div className="rain-mobile">
-            {s.fruitsMobile.map((fruit, j) => {
-              if (fruit.layer) {
-                return (
-                  <img
-                    key={j}
-                    className={`mfruit mfruit-${fruit.layer}`}
-                    src={fruit.src}
-                    alt=""
-                    loading={i === 0 ? "eager" : "lazy"}
-                    draggable={false}
-                    style={{
-                      top: fruit.top,
-                      left: fruit.left,
-                      width: fruit.size,
-                      filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
-                      opacity: fruit.opacity ?? 1,
-                    }}
-                  />
-                );
-              }
-              const transforms = [
-                fruit.extraTransform,
-                fruit.rotation != null ? `rotate(${fruit.rotation}deg)` : null,
-              ].filter(Boolean).join(' ');
-              return (
-                <img
-                  key={j}
-                  className="scene__fruit"
-                  src={fruit.src}
-                  alt=""
-                  loading={i === 0 ? "eager" : "lazy"}
-                  draggable={false}
-                  style={{
-                    ...fruit.position,
-                    width: fruit.size,
-                    transform: transforms || undefined,
-                    filter: fruit.blur ? `blur(${fruit.blur}px)` : undefined,
-                    opacity: fruit.opacity ?? 1,
-                    zIndex: fruit.zIndex ?? 1,
-                  }}
-                />
-              );
-            })}
           </div>
 
           <div className="scene__content">
