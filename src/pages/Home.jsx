@@ -251,6 +251,8 @@ export default function Home() {
   const lenisRef = useRef(null);
   const fruitsLayerRef = useRef(null);  // calque fruits mobile global (parallaxe)
   const [morphTarget, setMorphTarget] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null); // DEBUG TEMPORAIRE — à retirer une fois le bug isolé
+  const debugLastUpdateRef = useRef(0); // throttle des re-renders du badge debug (~5/s)
 
   // Filet de sécurité pour la parallaxe mobile : sur iOS Safari, requestAnimationFrame
   // peut être retardé pendant un geste de scroll tactile actif — un vrai listener
@@ -263,7 +265,14 @@ export default function Home() {
       const layer = fruitsLayerRef.current;
       if (!layer) return;
       const scroll = window.scrollY || document.documentElement.scrollTop || 0;
-      layer.style.transform = `translate3d(0, ${(-scroll * 0.5).toFixed(1)}px, 0)`;
+      const y = -scroll * 0.5;
+      layer.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+      // DEBUG TEMPORAIRE — throttlé pour ne pas spammer les re-renders
+      const now = performance.now();
+      if (now - debugLastUpdateRef.current > 150) {
+        debugLastUpdateRef.current = now;
+        setDebugInfo({ src: 'scroll-event', scrollY: Math.round(scroll), y: Math.round(y) });
+      }
     };
     window.addEventListener('scroll', applyParallax, { passive: true, capture: true });
     document.addEventListener('scroll', applyParallax, { passive: true, capture: true });
@@ -317,7 +326,14 @@ export default function Home() {
       //    Écrit toujours (pas de gate figée sur "lenis" au montage — le calque est
       //    display:none via CSS sur desktop, écrire dessus est un no-op visuel).
       if (fruitsLayerRef.current) {
-        fruitsLayerRef.current.style.transform = `translate3d(0, ${(-scroll * 0.5).toFixed(1)}px, 0)`;
+        const y = -scroll * 0.5;
+        fruitsLayerRef.current.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        // DEBUG TEMPORAIRE — throttlé
+        const now = performance.now();
+        if (now - debugLastUpdateRef.current > 150) {
+          debugLastUpdateRef.current = now;
+          setDebugInfo({ src: 'raf', scrollY: Math.round(scroll), y: Math.round(y) });
+        }
       }
 
       // chaque fruit : scale / opacity / position = fonction PURE du scroll
@@ -429,6 +445,21 @@ export default function Home() {
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
+
+      {/* DEBUG TEMPORAIRE — à retirer une fois le mécanisme confirmé sur téléphone réel.
+          Affiche en direct scrollY et le décalage calculé, + quel mécanisme l'a écrit
+          (raf ou scroll-event), pour trancher sans ambiguïté ce que l'automatisation
+          à distance n'arrive pas à confirmer. */}
+      {debugInfo && (
+        <div style={{
+          position: 'fixed', top: 'calc(60px + env(safe-area-inset-top, 0px))', left: 8,
+          zIndex: 99999, background: 'rgba(0,0,0,0.75)', color: '#0f0',
+          font: '11px/1.4 monospace', padding: '6px 10px', borderRadius: 6,
+          pointerEvents: 'none', whiteSpace: 'pre',
+        }}>
+          {`DEBUG src=${debugInfo.src}\nscrollY=${debugInfo.scrollY}  y=${debugInfo.y}`}
+        </div>
+      )}
 
       {/* Calque fruits mobile GLOBAL — fixed, un seul pour tout le site, parallaxe
           inverse pilotée par la boucle rAF (translateY(-scrollY*0.5)). */}
