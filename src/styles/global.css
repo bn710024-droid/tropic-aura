@@ -42,11 +42,22 @@ body::-webkit-scrollbar { display: none; }
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* Éclairage Combilo (desktop) : mode de fusion `soft-light`. Le blanc
+     ILLUMINE la couleur de fond en gardant sa teinte/saturation (couleur
+     lumineuse, pas délavée) ; le noir l'ASSOMBRIT en gardant la teinte
+     (couleur profonde, pas grise) → le dégradé "dans la teinte" de Combilo.
+       1. halo lumineux central (source de lumière, légèrement sous le centre),
+       2. vignette profonde sur tous les bords → volume/3D,
+       3. bande haute assombrie (sous le header).
+     Le centre reste transparent → texte sur couleur propre, aucune tache. */
   background:
-    radial-gradient(120% 85% at 50% 32%,
-      rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 55%),
-    radial-gradient(130% 120% at 50% 105%,
-      rgba(0, 0, 0, .22), rgba(0, 0, 0, 0) 60%);
+    radial-gradient(78% 62% at 50% 47%,
+      rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 62%),
+    radial-gradient(128% 128% at 50% 45%,
+      rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .35) 74%, rgba(0, 0, 0, .78) 100%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, .38) 0%, rgba(0, 0, 0, 0) 16%);
+  mix-blend-mode: soft-light;
 }
 
 /* ---------- SECTION PLEIN ÉCRAN (flux libre) ---------- */
@@ -214,6 +225,18 @@ body::-webkit-scrollbar { display: none; }
   padding: 0 clamp(20px, 5vw, 48px);
   pointer-events: none;          /* le fond ne bloque pas le scroll */
   background: transparent;
+}
+/* Bandeau sombre façon Combilo : valeurs relevées sur leur vrai site
+   (.topbar sur combilo.nl) — height: 3em ≈ 75px, background rgba(51,51,51,.5),
+   aucun dégradé (leur CSS ne change pas ces valeurs pour mobile). */
+.ghost::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 75px;
+  background: rgba(51, 51, 51, .5);
+  z-index: -1;
+  pointer-events: none;
 }
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
