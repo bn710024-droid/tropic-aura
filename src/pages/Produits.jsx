@@ -179,12 +179,25 @@ export default function Produits() {
       rafId = requestAnimationFrame(raf);
     };
 
+    // Filet de sécurité mobile (pas de Lenis) : requestAnimationFrame est throttlé
+    // par iOS Safari pendant un geste tactile actif (doigt posé, en train de
+    // glisser) — même mécanisme documenté/corrigé sur l'accueil. Un vrai
+    // événement 'scroll' natif ne l'est pas : il garde update() synchronisé
+    // même quand rAF accumule du retard (visible surtout en remontant vite).
+    const onNativeScroll = () => {
+      if (lenis) return;
+      const scroll = window.scrollY || 0;
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+    };
+    if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
+
     update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener('scroll', onNativeScroll);
       if (lenis) lenis.destroy();
     };
   }, []);
@@ -220,8 +233,8 @@ export default function Produits() {
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
 
-      {/* Nav dots */}
-      <nav style={{
+      {/* Nav dots — desktop uniquement (voir .dots-nav dans global.css) */}
+      <nav className="dots-nav" style={{
         position: "fixed", right: "clamp(14px,2vw,28px)", top: "50%",
         transform: "translateY(-50%)", zIndex: 150,
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",

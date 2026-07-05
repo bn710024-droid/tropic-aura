@@ -190,6 +190,15 @@ export default function Univers() {
       rafId = requestAnimationFrame(raf);
     };
 
+    // Filet de sécurité mobile (pas de Lenis) : rAF est throttlé par iOS pendant
+    // un geste tactile actif — un vrai 'scroll' natif ne l'est pas.
+    const onNativeScroll = () => {
+      if (lenis) return;
+      const scroll = window.scrollY || 0;
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+    };
+    if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
+
     update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
@@ -217,6 +226,7 @@ export default function Univers() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener('scroll', onNativeScroll);
       if (lenis) lenis.off("scroll", ScrollTrigger.update);
       triggers.forEach((t) => t.kill());
       if (lenis) lenis.destroy();
@@ -244,8 +254,8 @@ export default function Univers() {
       {/* ── Cascade de textes motivations (derrière le contenu) ── */}
       <FallingText phrases={MOTIVATIONS} colors={MOTIV_COLORS} sides={SIDES} interval={1700} fall={4} />
 
-      {/* ── Nav dots ── */}
-      <nav style={{
+      {/* ── Nav dots — desktop uniquement (voir .dots-nav dans global.css) ── */}
+      <nav className="dots-nav" style={{
         position: "fixed",
         right: "clamp(14px,2vw,28px)",
         top: "50%", transform: "translateY(-50%)",

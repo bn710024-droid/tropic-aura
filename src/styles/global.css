@@ -231,6 +231,20 @@ body::-webkit-scrollbar { display: none; }
   pointer-events: none;          /* le fond ne bloque pas le scroll */
   background: transparent;
 }
+/* Bande sombre façon Combilo : un vrai bandeau assombri sous le header (pas le
+   léger lavis soft-light de .bg-depth, qui est trop subtil pour ce rôle) —
+   normal blend, s'estompe sur ~22% de la hauteur d'écran. Visible sur toutes
+   les pages (desktop + mobile), derrière le logo/menu, au-dessus du fond. */
+.ghost::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 22vh;
+  min-height: 140px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .40) 0%, rgba(0, 0, 0, 0) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -369,6 +383,11 @@ body::-webkit-scrollbar { display: none; }
    bg-layer masqué, mobileBg par section via --mobile-bg
    ============================================================ */
 @media (max-width: 768px) {
+
+  /* Points de navigation latéraux (Produits, APropos, Partenariats, Univers) :
+     desktop uniquement. !important nécessaire pour battre le display:flex
+     posé en inline style dans le JSX de chaque page. */
+  .dots-nav { display: none !important; }
 
   /* ── html/body : figés UNIQUEMENT sur la page qui a le wrapper (l'accueil) ──
      CRITIQUE : le sélecteur :has(.mobile-scroll-wrapper) restreint le gel aux
