@@ -231,17 +231,16 @@ body::-webkit-scrollbar { display: none; }
   pointer-events: none;          /* le fond ne bloque pas le scroll */
   background: transparent;
 }
-/* Bande sombre façon Combilo : un vrai bandeau assombri sous le header (pas le
-   léger lavis soft-light de .bg-depth, qui est trop subtil pour ce rôle) —
-   normal blend, s'estompe sur ~22% de la hauteur d'écran. Visible sur toutes
-   les pages (desktop + mobile), derrière le logo/menu, au-dessus du fond. */
+/* Bande sombre façon Combilo : bandeau PLAT (aucun dégradé), bord NET en bas —
+   exactement leur traitement (pas un fondu progressif). Hauteur en px FIXE,
+   volontairement identique sur mobile ET desktop (pas de vh/% qui varierait
+   selon l'écran) — même taille, même transparence, partout. */
 .ghost::before {
   content: "";
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 22vh;
-  min-height: 140px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .40) 0%, rgba(0, 0, 0, 0) 100%);
+  height: 140px;
+  background: rgba(0, 0, 0, .32);
   z-index: -1;
   pointer-events: none;
 }
