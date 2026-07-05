@@ -423,71 +423,9 @@ export default function Home() {
     };
   }, []);
 
-  // ── SNAP MOBILE façon desktop (remplace le scroll-snap CSS mandatory) ──
-  // Même sensation que Lenis sur l'ordinateur : le doigt lance un momentum natif
-  // LIBRE (aucun blocage section-par-section), puis quand le défilement s'arrête,
-  // la page se POSE en douceur sur la section la plus proche (easing cubic-out).
-  // Le CSS scroll-snap mandatory est retiré : sur iOS il se battait avec le
-  // momentum et donnait ce scroll rigide/mécanique constaté en vidéo.
-  // Desktop : le wrapper est display:contents → ne scrolle jamais → effet inerte.
-  useEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper) return;
-    let settleRaf = null;
-    let debounceId = null;
-    let animating = false;
-
-    const cancelSettle = () => {
-      if (settleRaf) cancelAnimationFrame(settleRaf);
-      settleRaf = null;
-      animating = false;
-    };
-
-    const settle = () => {
-      const H = wrapper.clientHeight || 1;
-      const max = wrapper.scrollHeight - H;
-      const from = wrapper.scrollTop;
-      const target = Math.max(0, Math.min(max, Math.round(from / H) * H));
-      if (Math.abs(target - from) < 4) return;
-      const DURATION = 750; // ms — pose "aimant" franche mais moelleuse
-      // easeOutQuint ≈ cubic-bezier(0.16,1,0.3,1) — la courbe premium signature :
-      // départ vif (l'aimant attrape), atterrissage très doux (zéro à-coup final).
-      const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
-      const t0 = performance.now();
-      animating = true;
-      const step = (now) => {
-        if (!animating) return;
-        const t = Math.min(1, (now - t0) / DURATION);
-        wrapper.scrollTop = from + (target - from) * easeOutQuint(t);
-        if (t < 1) settleRaf = requestAnimationFrame(step);
-        else animating = false;
-      };
-      settleRaf = requestAnimationFrame(step);
-    };
-
-    // Pas d'événement 'scrollend' sur iOS Safari → débounce sur 'scroll'.
-    // Les écritures de settle() déclenchent elles-mêmes 'scroll' : le flag
-    // animating les ignore pour ne pas relancer un settle en boucle.
-    const onScroll = () => {
-      if (animating) return;
-      clearTimeout(debounceId);
-      debounceId = setTimeout(settle, 100); // 100ms : l'aimant attrape plus tôt après le momentum
-    };
-    // Nouveau geste tactile pendant la pose → l'utilisateur reprend la main.
-    const onTouchStart = () => {
-      cancelSettle();
-      clearTimeout(debounceId);
-    };
-
-    wrapper.addEventListener('scroll', onScroll, { passive: true });
-    wrapper.addEventListener('touchstart', onTouchStart, { passive: true });
-    return () => {
-      cancelSettle();
-      clearTimeout(debounceId);
-      wrapper.removeEventListener('scroll', onScroll);
-      wrapper.removeEventListener('touchstart', onTouchStart);
-    };
-  }, []);
+  // Snap mobile RETIRÉ (demande utilisateur) : le défilement mobile est désormais
+  // 100% libre et naturel — momentum natif iOS, aucune pose section-par-section,
+  // plus aucun effet "escalier". (CSS scroll-snap déjà retiré côté wrapper/.scene.)
 
   const goTo = (i) => {
     const target = scenesRef.current[Math.min(i, SECTIONS.length - 1)];
