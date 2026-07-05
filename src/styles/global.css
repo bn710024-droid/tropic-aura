@@ -478,25 +478,26 @@ body::-webkit-scrollbar { display: none; }
   }
 
   /* ── Contenu texte (z:4 dans .scene z:10 — TOUJOURS au-dessus des fruits z:1-2) ──
-     Pleine largeur façon Combilo : le texte glisse PAR-DESSUS la rivière de
-     fruits, jamais l'inverse. Lisibilité : text-shadows + centre de composition
-     laissé léger (petits accents flous seulement). */
+     Dispo Combilo : texte à GAUCHE, fontaine de fruits à DROITE. Le texte occupe
+     la colonne gauche (0 → ~54%), TOUS les fruits ont leur bord GAUCHE ≥ 58% →
+     gap propre à 54-58%, aucun chevauchement possible à toute position de scroll. */
   .scene__content {
     position: relative;
     z-index: 4;
-    max-width: 84vw;
+    margin-left: 0;
+    max-width: 45vw;   /* texte fini avant ~48% ; fruits (rotation incluse) commencent à ~55% → gap propre */
     padding-left: 0;
     padding-right: 0;
     display: flex;
     flex-direction: column;
-    gap: 2.6dvh;
+    gap: 2.2dvh;
     pointer-events: auto;
   }
 
-  /* ── Titre — gabarit Combilo : gros, gras, pleine largeur ── */
+  /* ── Titre — réduit pour tenir dans la colonne de droite (texte français long) ── */
   .scene__title {
-    font-size: clamp(24px, 7.2vw, 34px);
-    line-height: 1.08;
+    font-size: clamp(19px, 5.6vw, 27px);
+    line-height: 1.1;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.02em;
@@ -523,10 +524,10 @@ body::-webkit-scrollbar { display: none; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    min-width: 180px;
-    max-width: 240px;
-    padding: 12px 28px;
+    width: 100%;              /* remplit la colonne de droite (option 2), sans déborder */
+    min-width: 0;
+    max-width: 100%;
+    padding: 12px 22px;
     background: rgba(0, 0, 0, 0.28);
     color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.45);
