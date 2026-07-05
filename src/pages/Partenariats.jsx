@@ -225,6 +225,8 @@ export default function Partenariats() {
           style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
         />
       ))}
+      {/* Éclairage Combilo (halo central + vignette, soft-light) — au-dessus des fonds */}
+      <div className="bg-depth" />
 
       {/* ── Cascade de textes valeurs (derrière le contenu) ── */}
       <FallingText phrases={VALEURS} colors={VALEUR_COLORS} sides={SIDES} interval={1700} fall={4} />

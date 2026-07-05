@@ -207,14 +207,9 @@ export default function Produits() {
         <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
       </header>
 
-      {/* Fond interpolé + gradient subtil « ressenti » */}
+      {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
-      <div style={{
-        position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
-        background:
-          "radial-gradient(130% 90% at 50% 16%, rgba(255,255,255,0.07), rgba(255,255,255,0) 55%)," +
-          "radial-gradient(120% 80% at 50% 118%, rgba(0,0,0,0.40), rgba(0,0,0,0) 60%)",
-      }} />
+      <div className="bg-depth" />
 
       {/* Nav dots */}
       <nav style={{
