@@ -411,6 +411,28 @@ export default function Home() {
       rafId = requestAnimationFrame(raf);
     };
 
+    // Filet de sécurité mobile (pas de Lenis) : sur iOS Safari, requestAnimationFrame
+    // est fortement throttlé pendant un GESTE TACTILE ACTIF (doigt posé, en train de
+    // glisser) — comportement documenté du thread principal WebKit, qui priorise le
+    // scroll natif. La boucle rAF seule accumule alors un retard visible sur TOUT ce
+    // que update() pilote (couleur de fond, fruits-layer-mobile, cellules .cell), pas
+    // seulement la parallaxe fruits (déjà couverte par son propre listener natif dans
+    // l'effet précédent). On applique ici le même principe à update() dans son
+    // ensemble : un vrai événement 'scroll' natif n'est pas soumis à ce throttle.
+    const onNativeScrollUpdate = () => {
+      if (lenis) return; // desktop : Lenis + rAF suffisent, pas de throttle tactile ici
+      const wrapper = wrapperRef.current;
+      const scroll = (wrapper && wrapper.scrollHeight > wrapper.clientHeight)
+        ? wrapper.scrollTop
+        : (window.scrollY || 0);
+      if (Math.abs(scroll - lastScroll) > 0.04) {
+        lastScroll = scroll;
+        update(scroll, window.innerHeight || 1);
+      }
+    };
+    const wrapperEl = wrapperRef.current;
+    if (wrapperEl) wrapperEl.addEventListener('scroll', onNativeScrollUpdate, { passive: true });
+
     // 1er rendu forcé : les fruits reçoivent leur opacité dès le montage,
     // sans dépendre de l'état initial de Lenis.
     update(0, window.innerHeight || 1);
@@ -419,6 +441,7 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
+      if (wrapperEl) wrapperEl.removeEventListener('scroll', onNativeScrollUpdate);
       if (lenis) lenis.destroy();
     };
   }, []);
