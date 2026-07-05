@@ -181,7 +181,7 @@ const PARALLAX_SOFT = 0.35; // plan FLOU (gros, premier plan)
 // PLAN NET — petits sujets parfaitement nets, en cadre sur les deux bords.
 const FRUITS_MID = [
   // ── bord GAUCHE (bord droit ≤ ~24%) ──
-  { src: "/png/m/orange.png",       topVh: 12,  left: "3%",  size: 58, blur: 0, opacity: 1, rot: -5 },
+  { src: "/png/m/mangue.png",       topVh: 12,  left: "3%",  size: 58, blur: 0, opacity: 1, rot: -5 },
   { src: "/png/m/fraises.png",      topVh: 40,  left: "2%",  size: 54, blur: 0, opacity: 1, rot: 8 },
   { src: "/png/m/citron-vert.png",  topVh: 72,  left: "5%",  size: 50, blur: 0, opacity: 1, rot: -12 },
   { src: "/png/m/myrtilles.png",    topVh: 96,  left: "4%",  size: 52, blur: 0, opacity: 1, rot: 6 },
@@ -195,7 +195,7 @@ const FRUITS_MID = [
   // ── bord DROITE (bord gauche ≥ ~76%) ──
   { src: "/png/m/citron-jaune.png", topVh: 6,   left: "85%", size: 52, blur: 0, opacity: 1, rot: 7 },
   { src: "/png/m/orange.png",       topVh: 34,  left: "80%", size: 56, blur: 0, opacity: 1, rot: -8 },
-  { src: "/png/m/fraises.png",      topVh: 66,  left: "86%", size: 48, blur: 0, opacity: 1, rot: 12 },
+  { src: "/png/m/mangue.png",       topVh: 66,  left: "86%", size: 48, blur: 0, opacity: 1, rot: 12 },
   { src: "/png/m/myrtilles.png",    topVh: 98,  left: "82%", size: 52, blur: 0, opacity: 1, rot: -15 },
   { src: "/png/m/citron-vert.png",  topVh: 130, left: "87%", size: 46, blur: 0, opacity: 1, rot: 5 },
   { src: "/png/m/avocat.png",       topVh: 165, left: "80%", size: 56, blur: 0, opacity: 1, rot: -18 },
@@ -207,7 +207,7 @@ const FRUITS_MID = [
   //    z:1 < texte z:10). Légèrement flous + semi-transparents → le blanc reste
   //    lisible. Ils NE SUIVENT PAS le texte : parallaxe 0.5×, ils dérivent (Combilo).
   //    topVh ≈ 49 + 50×section → tombe derrière le titre de chaque section au scroll.
-  { src: "/png/m/orange.png",       topVh: 50,  left: "46%", size: 80, blur: 4, opacity: 0.6,  rot: -8 },
+  { src: "/png/m/orange.png",       topVh: 50,  left: "46%", size: 72, blur: 7, opacity: 0.3,  rot: -8 },
   { src: "/png/m/orange.png",       topVh: 100, left: "40%", size: 72, blur: 5, opacity: 0.58, rot: 10 },
   { src: "/png/m/avocat.png",       topVh: 150, left: "52%", size: 74, blur: 4, opacity: 0.6,  rot: -12 },
   { src: "/png/m/fraises.png",      topVh: 200, left: "43%", size: 68, blur: 6, opacity: 0.56, rot: 8 },
