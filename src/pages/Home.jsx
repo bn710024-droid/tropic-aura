@@ -207,7 +207,7 @@ const FRUITS_MID = [
   //    z:1 < texte z:10). Légèrement flous + semi-transparents → le blanc reste
   //    lisible. Ils NE SUIVENT PAS le texte : parallaxe 0.5×, ils dérivent (Combilo).
   //    topVh ≈ 49 + 50×section → tombe derrière le titre de chaque section au scroll.
-  { src: "/png/mangue.png",       topVh: 50,  left: "46%", size: 80, blur: 4, opacity: 0.6,  rot: -8 },
+  { src: "/png/orange.png",       topVh: 50,  left: "46%", size: 80, blur: 4, opacity: 0.6,  rot: -8 },
   { src: "/png/orange.png",       topVh: 100, left: "40%", size: 72, blur: 5, opacity: 0.58, rot: 10 },
   { src: "/png/avocat.png",       topVh: 150, left: "52%", size: 74, blur: 4, opacity: 0.6,  rot: -12 },
   { src: "/png/fraises.png",      topVh: 200, left: "43%", size: 68, blur: 6, opacity: 0.56, rot: 8 },
@@ -228,7 +228,7 @@ const FRUITS_SOFT = [
   { src: "/png/melon-jaune.png",   topVh: 90,  left: "8%", size: 46, blur: 8,  opacity: 0.42, rot: -7 },
   { src: "/png/citron-vert.png",   topVh: 200, left: "9%", size: 44, blur: 8,  opacity: 0.42, rot: 19 },
   // ── bord DROITE ──
-  { src: "/png/mangue.png",        topVh: 34,  left: "78%", size: 74, blur: 10, opacity: 0.5,  rot: -12 },
+  { src: "/png/fraises.png",       topVh: 34,  left: "78%", size: 74, blur: 10, opacity: 0.5,  rot: -12 },
   { src: "/png/ananas.png",        topVh: 92,  left: "78%", size: 76, blur: 10, opacity: 0.5,  rot: 8 },
   { src: "/png/melon-jaune.png",   topVh: 150, left: "79%", size: 72, blur: 11, opacity: 0.5,  rot: 14 },
   { src: "/png/pasteque.png",      topVh: 208, left: "80%", size: 70, blur: 10, opacity: 0.5,  rot: -19 },
