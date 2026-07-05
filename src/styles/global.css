@@ -478,14 +478,15 @@ body::-webkit-scrollbar { display: none; }
   }
 
   /* ── Contenu texte (z:4 dans .scene z:10 — TOUJOURS au-dessus des fruits z:1-2) ──
-     Dispo Combilo : texte à GAUCHE, fontaine de fruits à DROITE. Le texte occupe
-     la colonne gauche (0 → ~54%), TOUS les fruits ont leur bord GAUCHE ≥ 58% →
-     gap propre à 54-58%, aucun chevauchement possible à toute position de scroll. */
+     Cadre naturel : texte CENTRÉ entre les deux colonnes de fruits. align-self
+     center + max-width 48vw → le texte occupe ~26-74%, les fruits nets sont
+     confinés aux bords (≤24% et ≥76%) → gap propre des deux côtés, aucun
+     chevauchement à toute position de scroll. */
   .scene__content {
     position: relative;
     z-index: 4;
-    margin-left: 0;
-    max-width: 45vw;   /* texte fini avant ~48% ; fruits (rotation incluse) commencent à ~55% → gap propre */
+    align-self: center;
+    max-width: 48vw;
     padding-left: 0;
     padding-right: 0;
     display: flex;

@@ -166,77 +166,65 @@ const SECTIONS = [
 // Rotations aléatoires ±24°. Ordre du tableau = ordre de peinture (loin→net→proche).
 // Généré par script : X ∈ [55%,93vw], gap max 14.5vh (aucun trou), 12-17 visibles partout,
 // 0 chevauchement net/loin, 0 doublon <30vh.
-// ── Composition mobile — dispo Combilo : fontaine de fruits ancrée à DROITE,
-//    texte à GAUCHE. Les positions left% ci-dessous ont été calculées par miroir
-//    (autour du centre 375px) → tous les fruits ont leur bord gauche à droite de
-//    la zone texte. Séparation vérifiée en direct : texte finit ~193px, fruits
-//    commencent ~203px sur 375px (gap ~10px, rotation incluse), zéro chevauchement.
-//    Empilement : fond (z:0) < fruits (z:1-2) < textes/CTA (z:10).
-//    FRUITS_MID  (z:1, parallaxe 0.5×)  : rivière principale — héros nets +
-//      accents, densité dégradée du bord droit vers le milieu.
-//    FRUITS_SOFT (z:2, parallaxe 0.35×) : gros fruits très flous, plus lents —
-//      profondeur de champ Combilo, collés au bord droit.
-//    Continuité : rivière unique traversant toutes les sections (aucune notion de
-//    section). Couverture verticale : mid topVh 0-345, soft topVh 0-275.
-const PARALLAX_MID = 0.5;
-const PARALLAX_SOFT = 0.35;
+// ── Composition mobile — CADRE NATUREL façon Combilo (règles 3 & 4 de l'utilisateur) ──
+//    Texte au CENTRE, fruits en CADRE sur les DEUX bords (gauche + droite).
+//    Profondeur de champ : GROS fruits = TRÈS FLOUS (premier plan hors focus, sur
+//    les bords) ; PETITS fruits = NETS (les sujets). Rivière continue, aucune
+//    notion de section. Séparation garantie par colonnes horizontales (immunes au
+//    parallaxe) : fruits nets confinés aux bandes bord-gauche (≤24%) et bord-droite
+//    (≥76%) ; le texte occupe le centre. Les gros flous peuvent déborder légèrement
+//    hors des bords EXTÉRIEURS (bokeh atmosphérique, jamais un fruit net coupé).
+//    Couverture verticale : net topVh 0-345, flou topVh 0-275.
+const PARALLAX_MID = 0.5;   // plan NET (petits sujets)
+const PARALLAX_SOFT = 0.35; // plan FLOU (gros, premier plan)
 
+// PLAN NET — petits sujets parfaitement nets, en cadre sur les deux bords.
 const FRUITS_MID = [
-  // ── bande 0-100vh ── héros nets au bord gauche, accents jusqu'au milieu
-  { src: "/png/ananas.png", topVh: 18, left: "60.7%", size: 140, blur: 0, opacity: 1, rot: 6 },
-  { src: "/png/banane.png", topVh: 60, left: "61.3%", size: 130, blur: 0, opacity: 1, rot: 22 },
-  { src: "/png/pasteque.png", topVh: 90, left: "62.5%", size: 118, blur: 0, opacity: 1, rot: 8 },
-  { src: "/png/orange.png", topVh: 30, left: "60%", size: 90, blur: 0, opacity: 1, rot: -5 },
-  { src: "/png/mangue.png", topVh: 6, left: "58.8%", size: 72, blur: 0, opacity: 1, rot: -14 },
-  { src: "/png/myrtilles.png", topVh: 82, left: "59.7%", size: 76, blur: 0, opacity: 1, rot: -9 },
-  { src: "/png/papaye.png", topVh: 44, left: "59.6%", size: 54, blur: 0, opacity: 1, rot: 11 },
-  { src: "/png/avocat.png", topVh: 70, left: "59.2%", size: 48, blur: 0, opacity: 1, rot: -19 },
-  { src: "/png/citron-jaune.png", topVh: 10, left: "59.3%", size: 40, blur: 0, opacity: 1, rot: 18 },
-  { src: "/png/coco.png", topVh: 34, left: "78.9%", size: 34, blur: 3, opacity: 0.6, rot: 15 },
-  { src: "/png/citron-vert.png", topVh: 52, left: "68%", size: 30, blur: 4, opacity: 0.5, rot: -22 },
-  { src: "/png/fruit-passion.png", topVh: 96, left: "62.5%", size: 28, blur: 3, opacity: 0.55, rot: -8 },
-  // ── bande 100-200vh ──
-  { src: "/png/citron-vert.png", topVh: 118, left: "61.8%", size: 132, blur: 0, opacity: 1, rot: 13 },
-  { src: "/png/banane.png", topVh: 175, left: "62%", size: 120, blur: 0, opacity: 1, rot: 17 },
-  { src: "/png/fraises.png", topVh: 128, left: "60.4%", size: 96, blur: 0, opacity: 1, rot: 24 },
-  { src: "/png/mangue.png", topVh: 192, left: "58.5%", size: 88, blur: 0, opacity: 1, rot: -23 },
-  { src: "/png/melon-jaune.png", topVh: 145, left: "58.1%", size: 82, blur: 0, opacity: 1, rot: -21 },
-  { src: "/png/pasteque.png", topVh: 108, left: "58.4%", size: 66, blur: 0, opacity: 1, rot: -7 },
-  { src: "/png/orange.png", topVh: 160, left: "58.1%", size: 52, blur: 0, opacity: 1, rot: 9 },
-  { src: "/png/coco.png", topVh: 150, left: "80.4%", size: 36, blur: 3, opacity: 0.6, rot: 12 },
-  { src: "/png/myrtilles.png", topVh: 112, left: "61.5%", size: 32, blur: 4, opacity: 0.55, rot: -18 },
-  { src: "/png/papaye.png", topVh: 185, left: "58.9%", size: 34, blur: 4, opacity: 0.5, rot: 6 },
-  // ── bande 200-345vh ──
-  { src: "/png/mangue.png", topVh: 218, left: "61.9%", size: 128, blur: 0, opacity: 1, rot: 16 },
-  { src: "/png/orange.png", topVh: 322, left: "64.7%", size: 110, blur: 0, opacity: 1, rot: 5 },
-  { src: "/png/fraises.png", topVh: 285, left: "62.1%", size: 112, blur: 0, opacity: 1, rot: 8 },
-  { src: "/png/avocat.png", topVh: 265, left: "61.5%", size: 92, blur: 0, opacity: 1, rot: -13 },
-  { src: "/png/ananas.png", topVh: 250, left: "59.2%", size: 78, blur: 0, opacity: 1, rot: -11 },
-  { src: "/png/myrtilles.png", topVh: 338, left: "58.3%", size: 74, blur: 0, opacity: 1, rot: 18 },
-  { src: "/png/citron-jaune.png", topVh: 300, left: "58.9%", size: 64, blur: 0, opacity: 1, rot: 14 },
-  { src: "/png/banane.png", topVh: 228, left: "59.6%", size: 54, blur: 0, opacity: 1, rot: -6 },
-  { src: "/png/melon-vert.png", topVh: 240, left: "58.8%", size: 42, blur: 0, opacity: 1, rot: 21 },
-  { src: "/png/coco.png", topVh: 210, left: "74.9%", size: 34, blur: 3, opacity: 0.6, rot: -10 },
-  { src: "/png/fruit-passion.png", topVh: 275, left: "62%", size: 30, blur: 4, opacity: 0.5, rot: 23 },
+  // ── bord GAUCHE (bord droit ≤ ~24%) ──
+  { src: "/png/orange.png",       topVh: 12,  left: "3%",  size: 58, blur: 0, opacity: 1, rot: -5 },
+  { src: "/png/fraises.png",      topVh: 40,  left: "2%",  size: 54, blur: 0, opacity: 1, rot: 8 },
+  { src: "/png/citron-vert.png",  topVh: 72,  left: "5%",  size: 50, blur: 0, opacity: 1, rot: -12 },
+  { src: "/png/myrtilles.png",    topVh: 96,  left: "4%",  size: 52, blur: 0, opacity: 1, rot: 6 },
+  { src: "/png/avocat.png",       topVh: 128, left: "3%",  size: 56, blur: 0, opacity: 1, rot: -9 },
+  { src: "/png/citron-jaune.png", topVh: 162, left: "6%",  size: 46, blur: 0, opacity: 1, rot: 14 },
+  { src: "/png/coco.png",         topVh: 196, left: "2%",  size: 54, blur: 0, opacity: 1, rot: -6 },
+  { src: "/png/orange.png",       topVh: 230, left: "5%",  size: 50, blur: 0, opacity: 1, rot: 10 },
+  { src: "/png/fraises.png",      topVh: 264, left: "3%",  size: 56, blur: 0, opacity: 1, rot: -14 },
+  { src: "/png/myrtilles.png",    topVh: 300, left: "4%",  size: 52, blur: 0, opacity: 1, rot: 18 },
+  { src: "/png/avocat.png",       topVh: 338, left: "2%",  size: 54, blur: 0, opacity: 1, rot: -4 },
+  // ── bord DROITE (bord gauche ≥ ~76%) ──
+  { src: "/png/citron-jaune.png", topVh: 6,   left: "85%", size: 52, blur: 0, opacity: 1, rot: 7 },
+  { src: "/png/orange.png",       topVh: 34,  left: "80%", size: 56, blur: 0, opacity: 1, rot: -8 },
+  { src: "/png/fraises.png",      topVh: 66,  left: "86%", size: 48, blur: 0, opacity: 1, rot: 12 },
+  { src: "/png/myrtilles.png",    topVh: 98,  left: "82%", size: 52, blur: 0, opacity: 1, rot: -15 },
+  { src: "/png/citron-vert.png",  topVh: 130, left: "87%", size: 46, blur: 0, opacity: 1, rot: 5 },
+  { src: "/png/avocat.png",       topVh: 165, left: "80%", size: 56, blur: 0, opacity: 1, rot: -18 },
+  { src: "/png/coco.png",         topVh: 205, left: "85%", size: 50, blur: 0, opacity: 1, rot: 11 },
+  { src: "/png/orange.png",       topVh: 240, left: "83%", size: 52, blur: 0, opacity: 1, rot: -6 },
+  { src: "/png/fraises.png",      topVh: 278, left: "86%", size: 48, blur: 0, opacity: 1, rot: 20 },
+  { src: "/png/myrtilles.png",    topVh: 318, left: "82%", size: 52, blur: 0, opacity: 1, rot: -10 },
 ];
 
-// Plan SOFT — sous le texte aussi (z:2), plus lent (0.35×) : profondeur de champ.
-// Gros, très flous, collés au bord gauche (bord droit ≤ 42% comme le plan mid).
+// PLAN FLOU — fruits de premier plan flous (profondeur de champ), en cadre sur
+// les deux bords, format moyen pour tenir dans les bandes latérales sans mordre
+// le texte ni sortir en sliver. Bord droit ≤ ~22% (gauche) / bord gauche ≥ ~78% (droite).
 const FRUITS_SOFT = [
-  { src: "/png/banane.png", topVh: 8, left: "61.2%", size: 138, blur: 7, opacity: 0.6, rot: 15 },
-  { src: "/png/ananas.png", topVh: 78, left: "58.5%", size: 148, blur: 7, opacity: 0.6, rot: 8 },
-  { src: "/png/mangue.png", topVh: 150, left: "59.7%", size: 140, blur: 7, opacity: 0.6, rot: 22 },
-  { src: "/png/melon-jaune.png", topVh: 110, left: "59.3%", size: 130, blur: 7, opacity: 0.6, rot: -14 },
-  { src: "/png/citron-jaune.png", topVh: 235, left: "60.8%", size: 132, blur: 7, opacity: 0.6, rot: 17 },
-  { src: "/png/pasteque.png", topVh: 165, left: "60.1%", size: 112, blur: 8, opacity: 0.55, rot: -9 },
-  { src: "/png/fraises.png", topVh: 205, left: "60.5%", size: 118, blur: 8, opacity: 0.55, rot: -21 },
-  { src: "/png/papaye.png", topVh: 180, left: "58.5%", size: 88, blur: 8, opacity: 0.6, rot: 13 },
-  { src: "/png/avocat.png", topVh: 40, left: "58.7%", size: 80, blur: 9, opacity: 0.5, rot: 24 },
-  { src: "/png/citron-vert.png", topVh: 130, left: "58.8%", size: 72, blur: 9, opacity: 0.5, rot: -19 },
-  { src: "/png/myrtilles.png", topVh: 255, left: "59.2%", size: 78, blur: 8, opacity: 0.55, rot: -7 },
-  { src: "/png/orange.png", topVh: 60, left: "58.4%", size: 66, blur: 8, opacity: 0.5, rot: -6 },
-  { src: "/png/coco.png", topVh: 95, left: "60.1%", size: 52, blur: 8, opacity: 0.55, rot: 11 },
-  { src: "/png/fruit-passion.png", topVh: 225, left: "58.7%", size: 50, blur: 9, opacity: 0.5, rot: -18 },
+  // ── bord GAUCHE ──
+  { src: "/png/banane.png",        topVh: 10,  left: "0%", size: 74, blur: 10, opacity: 0.5,  rot: 15 },
+  { src: "/png/ananas.png",        topVh: 62,  left: "1%", size: 76, blur: 10, opacity: 0.5,  rot: 8 },
+  { src: "/png/mangue.png",        topVh: 118, left: "0%", size: 72, blur: 11, opacity: 0.5,  rot: -14 },
+  { src: "/png/pasteque.png",      topVh: 175, left: "2%", size: 70, blur: 10, opacity: 0.5,  rot: -9 },
+  { src: "/png/papaye.png",        topVh: 228, left: "0%", size: 74, blur: 11, opacity: 0.5,  rot: 13 },
+  { src: "/png/melon-jaune.png",   topVh: 90,  left: "8%", size: 46, blur: 8,  opacity: 0.42, rot: -7 },
+  { src: "/png/citron-vert.png",   topVh: 200, left: "9%", size: 44, blur: 8,  opacity: 0.42, rot: 19 },
+  // ── bord DROITE ──
+  { src: "/png/mangue.png",        topVh: 34,  left: "78%", size: 74, blur: 10, opacity: 0.5,  rot: -12 },
+  { src: "/png/ananas.png",        topVh: 92,  left: "78%", size: 76, blur: 10, opacity: 0.5,  rot: 8 },
+  { src: "/png/melon-jaune.png",   topVh: 150, left: "79%", size: 72, blur: 11, opacity: 0.5,  rot: 14 },
+  { src: "/png/pasteque.png",      topVh: 208, left: "80%", size: 70, blur: 10, opacity: 0.5,  rot: -19 },
+  { src: "/png/banane.png",        topVh: 262, left: "79%", size: 72, blur: 11, opacity: 0.5,  rot: 21 },
+  { src: "/png/orange.png",        topVh: 130, left: "88%", size: 44, blur: 8,  opacity: 0.42, rot: -6 },
+  { src: "/png/fruit-passion.png", topVh: 245, left: "89%", size: 42, blur: 8,  opacity: 0.42, rot: -18 },
 ];
 
 const hexToRgb = (h) => {
