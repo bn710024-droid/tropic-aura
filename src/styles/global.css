@@ -383,13 +383,15 @@ body::-webkit-scrollbar { display: none; }
     height: 100dvh;
     overflow-y: scroll;
     overflow-x: hidden;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
+    /* Snap CSS mandatory RETIRÉ : sur iOS il se battait avec le momentum natif et
+       donnait un scroll rigide/mécanique. Remplacé par le snap JS façon desktop
+       (momentum libre + pose douce sur la section la plus proche — voir Home.jsx).
+       scroll-behavior:smooth retiré aussi : il détournerait les écritures
+       scrollTop image-par-image de l'animation de pose. */
     /* -webkit-overflow-scrolling: touch ICI est sans risque : ce wrapper n'est PAS un
        ancêtre de .fruits-layer-mobile (qui est fixed, hors du wrapper, sibling).
        L'ancien bug venait de cette propriété posée sur html, qui LUI était ancêtre
-       du calque fixed. Sur un scroller imbriqué comme celui-ci, elle aide iOS à
-       mieux honorer scroll-snap + momentum. */
+       du calque fixed. */
     -webkit-overflow-scrolling: touch;
   }
 
@@ -414,8 +416,8 @@ body::-webkit-scrollbar { display: none; }
     padding: calc(56px + env(safe-area-inset-top, 0px)) 24px 40px 24px;
     box-sizing: border-box;
     background: transparent;   /* laisse .bg-layer (interpolation continue) transparaître */
-    scroll-snap-align: start;   /* point d'ancrage — restaure le snap */
-    scroll-snap-stop: always;   /* une section à la fois, pas de saut */
+    /* scroll-snap-align/stop retirés : le snap est désormais géré en JS
+       (momentum libre + pose douce), comme la sensation Lenis du desktop. */
   }
 
   /* Halo/vignette par section retiré (H2 confirmé) : chaque .scene::before
@@ -431,9 +433,10 @@ body::-webkit-scrollbar { display: none; }
   .only-desktop { display: none; }
   .only-mobile { display: inline; }
 
-  /* ── Calque fruits mobile GLOBAL — un seul pour tout le site ──
-     position:fixed, hors des .scene (enfant direct du wrapper Home).
-     Parallaxe inverse : transform translate3d(0, -scrollY*0.5, 0), ratio Combilo.
+  /* ── Calques fruits mobile GLOBAUX — deux plans pour tout le site ──
+     position:fixed, hors du wrapper de scroll (siblings, pas descendants).
+     Plan MID (z:1, sous le texte) : parallaxe 0.5× — rivière principale.
+     Plan FRONT (z:20, sur le texte) : parallaxe 1.25× — profondeur de champ.
      Deux déclencheurs redondants (voir Home.jsx) : la boucle rAF (fiable, même
      chemin que le fondu couleur) + un vrai listener 'scroll' natif en filet de
      sécurité — sur iOS Safari, rAF peut être retardée pendant un geste de scroll
@@ -458,6 +461,12 @@ body::-webkit-scrollbar { display: none; }
     backface-visibility: hidden;
   }
 
+  /* Plan AVANT (profondeur de champ Combilo) : par-dessus texte et CTA (z:20 > scene:10).
+     pointer-events:none hérité du calque → le CTA reste tappable à travers le flou. */
+  .fruits-layer-mobile--front {
+    z-index: 20;
+  }
+
   .global-fruit {
     position: absolute;
     pointer-events: none;
@@ -467,15 +476,14 @@ body::-webkit-scrollbar { display: none; }
     transition: none;
   }
 
-  /* ── Contenu texte (z:4 — au-dessus du calque fruits z:1) ──
-     Confiné à la MOITIÉ GAUCHE (bord droit ~54%) : le calque fruits vit sur la
-     droite (left ≥ 55%). Séparation horizontale stricte → aucun chevauchement
-     texte/fruit, à aucune position de scroll (parallaxe incluse).
-     48vw depuis le padding gauche de 24px (~6%) → bord droit ≈ 54% (< fruits 55%). */
+  /* ── Contenu texte (z:4 — au-dessus du plan MID z:1, sous le plan FRONT z:20) ──
+     Pleine largeur façon Combilo : les fruits vivent SUR TOUTE la largeur et
+     chevauchent le texte (mid derrière les lettres, front flou par-dessus).
+     La lisibilité vient des text-shadows, pas d'une zone réservée. */
   .scene__content {
     position: relative;
     z-index: 4;
-    max-width: 48vw;
+    max-width: 84vw;
     padding-left: 0;
     padding-right: 0;
     display: flex;
@@ -484,9 +492,9 @@ body::-webkit-scrollbar { display: none; }
     pointer-events: auto;
   }
 
-  /* ── Titre — réduit d'environ 35% vs la version précédente ── */
+  /* ── Titre — gabarit Combilo : gros, gras, pleine largeur ── */
   .scene__title {
-    font-size: clamp(18px, 5.5vw, 27px);
+    font-size: clamp(24px, 7.2vw, 34px);
     line-height: 1.08;
     font-weight: 800;
     color: #ffffff;

@@ -166,72 +166,93 @@ const SECTIONS = [
 // Rotations aléatoires ±24°. Ordre du tableau = ordre de peinture (loin→net→proche).
 // Généré par script : X ∈ [55%,93vw], gap max 14.5vh (aucun trou), 12-17 visibles partout,
 // 0 chevauchement net/loin, 0 doublon <30vh.
-const FRUITS_GLOBAL = [
-  { src: "/png/citron-jaune.png", topVh: 11.87, left: "70.6%", size: 32, blur: 4, opacity: 0.64, rot: -2 },
-  { src: "/png/banane.png", topVh: 69.59, left: "78%", size: 39, blur: 4, opacity: 0.72, rot: 1 },
-  { src: "/png/melon-vert.png", topVh: 110.5, left: "75.4%", size: 38, blur: 3, opacity: 0.56, rot: -7 },
-  { src: "/png/melon-jaune.png", topVh: 120.92, left: "77.2%", size: 35, blur: 4, opacity: 0.56, rot: -20 },
-  { src: "/png/banane.png", topVh: 148.33, left: "79.9%", size: 30, blur: 4, opacity: 0.68, rot: 4 },
-  { src: "/png/avocat.png", topVh: 169.27, left: "67.8%", size: 27, blur: 4, opacity: 0.66, rot: 4 },
-  { src: "/png/myrtilles.png", topVh: 175.18, left: "55.4%", size: 35, blur: 3, opacity: 0.56, rot: 2 },
-  { src: "/png/banane.png", topVh: 193.61, left: "58.5%", size: 41, blur: 5, opacity: 0.69, rot: -4 },
-  { src: "/png/citron-vert.png", topVh: 222.54, left: "76.8%", size: 42, blur: 4, opacity: 0.67, rot: 9 },
-  { src: "/png/papaye.png", topVh: 230.35, left: "81.2%", size: 35, blur: 5, opacity: 0.69, rot: 13 },
-  { src: "/png/ananas.png", topVh: 273.59, left: "81.7%", size: 38, blur: 4, opacity: 0.7, rot: 4 },
-  { src: "/png/pasteque.png", topVh: 299.36, left: "63.6%", size: 34, blur: 4, opacity: 0.71, rot: 6 },
-  { src: "/png/banane.png", topVh: 303.2, left: "78%", size: 36, blur: 4, opacity: 0.58, rot: -5 },
-  { src: "/png/avocat.png", topVh: 306.59, left: "55.5%", size: 39, blur: 5, opacity: 0.63, rot: -5 },
-  { src: "/png/pasteque.png", topVh: 335.53, left: "82.3%", size: 34, blur: 4, opacity: 0.69, rot: -11 },
-  { src: "/png/citron-vert.png", topVh: 343.62, left: "84.9%", size: 29, blur: 4, opacity: 0.62, rot: 17 },
-  { src: "/png/orange.png", topVh: 345.34, left: "60.1%", size: 36, blur: 4, opacity: 0.71, rot: -2 },
-  { src: "/png/banane.png", topVh: 364.53, left: "63.1%", size: 41, blur: 4, opacity: 0.66, rot: 19 },
-  { src: "/png/coco.png", topVh: 393.1, left: "64.4%", size: 38, blur: 5, opacity: 0.61, rot: 16 },
-  { src: "/png/citron-vert.png", topVh: 399.07, left: "77.5%", size: 34, blur: 5, opacity: 0.63, rot: -1 },
-  { src: "/png/fruit-passion.png", topVh: 438.15, left: "60.8%", size: 39, blur: 4, opacity: 0.63, rot: 21 },
-  { src: "/png/papaye.png", topVh: 18.66, left: "58%", size: 50, blur: 0, opacity: 1, rot: 4 },
-  { src: "/png/avocat.png", topVh: 23.75, left: "75.4%", size: 67, blur: 0, opacity: 1, rot: 12 },
-  { src: "/png/banane.png", topVh: 36.28, left: "56.9%", size: 77, blur: 0, opacity: 1, rot: 23 },
-  { src: "/png/ananas.png", topVh: 49.57, left: "66.7%", size: 75, blur: 0, opacity: 1, rot: 3 },
-  { src: "/png/orange.png", topVh: 61.18, left: "64%", size: 66, blur: 0, opacity: 1, rot: 12 },
-  { src: "/png/myrtilles.png", topVh: 78.76, left: "63.4%", size: 49, blur: 0, opacity: 1, rot: -8 },
-  { src: "/png/ananas.png", topVh: 97.01, left: "75.2%", size: 46, blur: 0, opacity: 1, rot: -2 },
-  { src: "/png/papaye.png", topVh: 129.42, left: "70.2%", size: 48, blur: 0, opacity: 1, rot: -18 },
-  { src: "/png/citron-jaune.png", topVh: 141.95, left: "68.1%", size: 55, blur: 0, opacity: 1, rot: -11 },
-  { src: "/png/pasteque.png", topVh: 150.56, left: "56.5%", size: 68, blur: 0, opacity: 1, rot: 0 },
-  { src: "/png/melon-vert.png", topVh: 160.82, left: "73.2%", size: 74, blur: 0, opacity: 1, rot: -21 },
-  { src: "/png/orange.png", topVh: 174.61, left: "76.4%", size: 48, blur: 0, opacity: 1, rot: 18 },
-  { src: "/png/citron-vert.png", topVh: 183.81, left: "67.4%", size: 73, blur: 0, opacity: 1, rot: 8 },
-  { src: "/png/melon-jaune.png", topVh: 200.31, left: "78.4%", size: 56, blur: 0, opacity: 1, rot: -12 },
-  { src: "/png/myrtilles.png", topVh: 211.69, left: "62.5%", size: 74, blur: 0, opacity: 1, rot: 18 },
-  { src: "/png/ananas.png", topVh: 233.43, left: "58.4%", size: 60, blur: 0, opacity: 1, rot: -21 },
-  { src: "/png/mangue.png", topVh: 247.91, left: "71.8%", size: 73, blur: 0, opacity: 1, rot: 19 },
-  { src: "/png/fruit-passion.png", topVh: 259.31, left: "66.4%", size: 73, blur: 0, opacity: 1, rot: 22 },
-  { src: "/png/citron-jaune.png", topVh: 270.3, left: "55.5%", size: 66, blur: 0, opacity: 1, rot: 24 },
-  { src: "/png/coco.png", topVh: 280.93, left: "64.1%", size: 53, blur: 0, opacity: 1, rot: 20 },
-  { src: "/png/melon-vert.png", topVh: 291.09, left: "57.9%", size: 51, blur: 0, opacity: 1, rot: 22 },
-  { src: "/png/fraises.png", topVh: 314.94, left: "67.3%", size: 60, blur: 0, opacity: 1, rot: 13 },
-  { src: "/png/citron-jaune.png", topVh: 328.5, left: "55.7%", size: 75, blur: 0, opacity: 1, rot: -22 },
-  { src: "/png/mangue.png", topVh: 377.08, left: "74.4%", size: 70, blur: 0, opacity: 1, rot: -12 },
-  { src: "/png/melon-jaune.png", topVh: 405.38, left: "69.6%", size: 48, blur: 0, opacity: 1, rot: 13 },
-  { src: "/png/myrtilles.png", topVh: 416.44, left: "63.2%", size: 50, blur: 0, opacity: 1, rot: -15 },
-  { src: "/png/banane.png", topVh: 427.76, left: "57%", size: 56, blur: 0, opacity: 1, rot: -18 },
-  { src: "/png/ananas.png", topVh: 19.09, left: "61.2%", size: 97, blur: 8, opacity: 0.55, rot: 2 },
-  { src: "/png/melon-jaune.png", topVh: 43.85, left: "60.4%", size: 123, blur: 8, opacity: 0.53, rot: -7 },
-  { src: "/png/citron-vert.png", topVh: 54.51, left: "65.5%", size: 87, blur: 10, opacity: 0.52, rot: 15 },
-  { src: "/png/fruit-passion.png", topVh: 64.33, left: "57.8%", size: 103, blur: 7, opacity: 0.61, rot: 4 },
-  { src: "/png/citron-vert.png", topVh: 88.59, left: "60.5%", size: 123, blur: 8, opacity: 0.61, rot: -3 },
-  { src: "/png/mangue.png", topVh: 129.33, left: "60.3%", size: 88, blur: 7, opacity: 0.62, rot: 17 },
-  { src: "/png/citron-vert.png", topVh: 149.44, left: "62.3%", size: 110, blur: 7, opacity: 0.55, rot: 1 },
-  { src: "/png/fraises.png", topVh: 175.22, left: "60.2%", size: 112, blur: 8, opacity: 0.66, rot: -14 },
-  { src: "/png/citron-jaune.png", topVh: 202.09, left: "61.5%", size: 109, blur: 9, opacity: 0.51, rot: -16 },
-  { src: "/png/avocat.png", topVh: 257.24, left: "61.3%", size: 116, blur: 9, opacity: 0.64, rot: -7 },
-  { src: "/png/banane.png", topVh: 333.87, left: "55.8%", size: 118, blur: 8, opacity: 0.66, rot: 19 },
-  { src: "/png/fruit-passion.png", topVh: 354.66, left: "60.7%", size: 122, blur: 10, opacity: 0.61, rot: -7 },
-  { src: "/png/fraises.png", topVh: 380.98, left: "58.3%", size: 125, blur: 8, opacity: 0.59, rot: 21 },
-  { src: "/png/orange.png", topVh: 391.33, left: "60%", size: 111, blur: 8, opacity: 0.67, rot: -13 },
-  { src: "/png/papaye.png", topVh: 405.01, left: "58.1%", size: 127, blur: 10, opacity: 0.63, rot: 17 },
-  { src: "/png/ananas.png", topVh: 422.75, left: "57.4%", size: 124, blur: 8, opacity: 0.66, rot: -10 },
-  { src: "/png/coco.png", topVh: 437.54, left: "69.2%", size: 90, blur: 9, opacity: 0.64, rot: -11 },
+// ── Composition mobile façon Combilo : DEUX plans de profondeur ──
+//    FRUITS_MID  (z:1, sous le texte, parallaxe 0.5×)  : la rivière principale —
+//      héros nets + moyens nets + petits accents flous, PLEINE LARGEUR (0-95%).
+//    FRUITS_FRONT (z:20, PAR-DESSUS le texte, parallaxe 1.25×) : gros fruits très
+//      flous qui passent devant les lettres — la profondeur de champ Combilo.
+//    Couverture : le plan mid glisse à 0.5× sur 500vh de scroll → fenêtre visible
+//    [0.5S, 0.5S+100] → topVh utile 0-345. Le plan front à 1.25× → topVh 0-715.
+const PARALLAX_MID = 0.5;
+const PARALLAX_FRONT = 1.25;
+
+const FRUITS_MID = [
+  // ── bande 0-100vh (sections 1-2) ──
+  { src: "/png/ananas.png", topVh: 22, left: "8%", size: 120, blur: 0, opacity: 1, rot: 6 },
+  { src: "/png/mangue.png", topVh: 8, left: "62%", size: 100, blur: 0, opacity: 1, rot: -14 },
+  { src: "/png/papaye.png", topVh: 55, left: "78%", size: 92, blur: 0, opacity: 1, rot: 11 },
+  { src: "/png/banane.png", topVh: 68, left: "30%", size: 105, blur: 0, opacity: 1, rot: 22 },
+  { src: "/png/orange.png", topVh: 40, left: "55%", size: 80, blur: 0, opacity: 1, rot: -5 },
+  { src: "/png/citron-jaune.png", topVh: 15, left: "42%", size: 60, blur: 0, opacity: 1, rot: 18 },
+  { src: "/png/myrtilles.png", topVh: 48, left: "5%", size: 55, blur: 0, opacity: 1, rot: -9 },
+  { src: "/png/pasteque.png", topVh: 28, left: "85%", size: 70, blur: 0, opacity: 1, rot: 8 },
+  { src: "/png/avocat.png", topVh: 84, left: "18%", size: 62, blur: 0, opacity: 1, rot: -19 },
+  { src: "/png/citron-vert.png", topVh: 78, left: "70%", size: 58, blur: 0, opacity: 1, rot: 4 },
+  { src: "/png/fraises.png", topVh: 90, left: "48%", size: 64, blur: 0, opacity: 1, rot: -12 },
+  { src: "/png/coco.png", topVh: 32, left: "25%", size: 34, blur: 3, opacity: 0.6, rot: 15 },
+  { src: "/png/fruit-passion.png", topVh: 65, left: "92%", size: 30, blur: 4, opacity: 0.55, rot: -8 },
+  { src: "/png/melon-vert.png", topVh: 60, left: "60%", size: 38, blur: 3, opacity: 0.6, rot: 20 },
+  { src: "/png/citron-vert.png", topVh: 5, left: "12%", size: 28, blur: 4, opacity: 0.5, rot: -22 },
+  // ── bande 100-200vh (sections 3-4) ──
+  { src: "/png/pasteque.png", topVh: 112, left: "70%", size: 125, blur: 0, opacity: 1, rot: -7 },
+  { src: "/png/citron-vert.png", topVh: 135, left: "15%", size: 110, blur: 0, opacity: 1, rot: 13 },
+  { src: "/png/melon-jaune.png", topVh: 160, left: "45%", size: 95, blur: 0, opacity: 1, rot: -21 },
+  { src: "/png/banane.png", topVh: 178, left: "82%", size: 100, blur: 0, opacity: 1, rot: 17 },
+  { src: "/png/myrtilles.png", topVh: 190, left: "8%", size: 85, blur: 0, opacity: 1, rot: -4 },
+  { src: "/png/orange.png", topVh: 105, left: "35%", size: 65, blur: 0, opacity: 1, rot: 9 },
+  { src: "/png/avocat.png", topVh: 140, left: "90%", size: 60, blur: 0, opacity: 1, rot: -16 },
+  { src: "/png/fraises.png", topVh: 128, left: "55%", size: 68, blur: 0, opacity: 1, rot: 24 },
+  { src: "/png/ananas.png", topVh: 175, left: "28%", size: 72, blur: 0, opacity: 1, rot: -11 },
+  { src: "/png/papaye.png", topVh: 195, left: "65%", size: 58, blur: 0, opacity: 1, rot: 6 },
+  { src: "/png/citron-jaune.png", topVh: 115, left: "3%", size: 32, blur: 4, opacity: 0.55, rot: -18 },
+  { src: "/png/coco.png", topVh: 148, left: "50%", size: 36, blur: 3, opacity: 0.6, rot: 12 },
+  { src: "/png/mangue.png", topVh: 122, left: "78%", size: 40, blur: 4, opacity: 0.5, rot: -25 },
+  { src: "/png/fruit-passion.png", topVh: 158, left: "20%", size: 30, blur: 3, opacity: 0.6, rot: 19 },
+  { src: "/png/melon-vert.png", topVh: 108, left: "95%", size: 34, blur: 5, opacity: 0.5, rot: -3 },
+  // ── bande 200-300vh (sections 5-6) ──
+  { src: "/png/mangue.png", topVh: 215, left: "55%", size: 130, blur: 0, opacity: 1, rot: 16 },
+  { src: "/png/ananas.png", topVh: 238, left: "5%", size: 105, blur: 0, opacity: 1, rot: -13 },
+  { src: "/png/fraises.png", topVh: 262, left: "75%", size: 115, blur: 0, opacity: 1, rot: 8 },
+  { src: "/png/papaye.png", topVh: 285, left: "25%", size: 100, blur: 0, opacity: 1, rot: -23 },
+  { src: "/png/citron-jaune.png", topVh: 295, left: "60%", size: 90, blur: 0, opacity: 1, rot: 14 },
+  { src: "/png/banane.png", topVh: 225, left: "40%", size: 70, blur: 0, opacity: 1, rot: -6 },
+  { src: "/png/melon-vert.png", topVh: 232, left: "88%", size: 66, blur: 0, opacity: 1, rot: 21 },
+  { src: "/png/coco.png", topVh: 265, left: "12%", size: 58, blur: 0, opacity: 1, rot: -10 },
+  { src: "/png/orange.png", topVh: 258, left: "45%", size: 72, blur: 0, opacity: 1, rot: 5 },
+  { src: "/png/myrtilles.png", topVh: 240, left: "68%", size: 60, blur: 0, opacity: 1, rot: -17 },
+  { src: "/png/avocat.png", topVh: 288, left: "85%", size: 64, blur: 0, opacity: 1, rot: 25 },
+  { src: "/png/citron-vert.png", topVh: 210, left: "30%", size: 30, blur: 4, opacity: 0.55, rot: -14 },
+  { src: "/png/pasteque.png", topVh: 275, left: "95%", size: 38, blur: 3, opacity: 0.6, rot: 7 },
+  { src: "/png/fruit-passion.png", topVh: 218, left: "8%", size: 32, blur: 5, opacity: 0.5, rot: 23 },
+  { src: "/png/melon-jaune.png", topVh: 280, left: "52%", size: 36, blur: 4, opacity: 0.55, rot: -20 },
+  // ── bande 300-345vh (fin de page) ──
+  { src: "/png/coco.png", topVh: 312, left: "35%", size: 110, blur: 0, opacity: 1, rot: 12 },
+  { src: "/png/fruit-passion.png", topVh: 325, left: "68%", size: 120, blur: 0, opacity: 1, rot: -8 },
+  { src: "/png/myrtilles.png", topVh: 338, left: "10%", size: 95, blur: 0, opacity: 1, rot: 18 },
+  { src: "/png/citron-vert.png", topVh: 305, left: "50%", size: 68, blur: 0, opacity: 1, rot: -24 },
+  { src: "/png/banane.png", topVh: 318, left: "88%", size: 62, blur: 0, opacity: 1, rot: 10 },
+  { src: "/png/orange.png", topVh: 330, left: "22%", size: 58, blur: 0, opacity: 1, rot: -15 },
+  { src: "/png/fraises.png", topVh: 342, left: "78%", size: 34, blur: 4, opacity: 0.55, rot: 20 },
+  { src: "/png/ananas.png", topVh: 340, left: "42%", size: 30, blur: 3, opacity: 0.6, rot: -5 },
+];
+
+const FRUITS_FRONT = [
+  { src: "/png/banane.png", topVh: 12, left: "72%", size: 140, blur: 7, opacity: 0.6, rot: 15 },
+  { src: "/png/orange.png", topVh: 55, left: "8%", size: 110, blur: 8, opacity: 0.55, rot: -12 },
+  { src: "/png/ananas.png", topVh: 95, left: "45%", size: 155, blur: 7, opacity: 0.6, rot: 8 },
+  { src: "/png/citron-vert.png", topVh: 150, left: "85%", size: 120, blur: 9, opacity: 0.5, rot: -19 },
+  { src: "/png/mangue.png", topVh: 205, left: "15%", size: 135, blur: 7, opacity: 0.6, rot: 22 },
+  { src: "/png/myrtilles.png", topVh: 255, left: "60%", size: 100, blur: 8, opacity: 0.55, rot: -7 },
+  { src: "/png/papaye.png", topVh: 310, left: "30%", size: 150, blur: 8, opacity: 0.6, rot: 13 },
+  { src: "/png/fraises.png", topVh: 365, left: "80%", size: 125, blur: 9, opacity: 0.5, rot: -21 },
+  { src: "/png/citron-jaune.png", topVh: 420, left: "5%", size: 140, blur: 7, opacity: 0.6, rot: 17 },
+  { src: "/png/pasteque.png", topVh: 470, left: "55%", size: 160, blur: 8, opacity: 0.55, rot: -9 },
+  { src: "/png/avocat.png", topVh: 520, left: "25%", size: 115, blur: 9, opacity: 0.5, rot: 24 },
+  { src: "/png/melon-jaune.png", topVh: 570, left: "75%", size: 145, blur: 7, opacity: 0.6, rot: -14 },
+  { src: "/png/coco.png", topVh: 615, left: "12%", size: 105, blur: 8, opacity: 0.55, rot: 11 },
+  { src: "/png/fruit-passion.png", topVh: 655, left: "65%", size: 130, blur: 9, opacity: 0.5, rot: -18 },
+  { src: "/png/banane.png", topVh: 690, left: "40%", size: 120, blur: 7, opacity: 0.6, rot: 21 },
+  { src: "/png/orange.png", topVh: 705, left: "88%", size: 95, blur: 8, opacity: 0.5, rot: -6 },
 ];
 
 const hexToRgb = (h) => {
@@ -249,13 +270,12 @@ export default function Home() {
   const scenesRef = useRef([]);
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
   const lenisRef = useRef(null);
-  const fruitsLayerRef = useRef(null);  // calque fruits mobile global (parallaxe)
+  const fruitsLayerRef = useRef(null);      // plan MID : rivière principale, sous le texte (parallaxe 0.5×)
+  const fruitsFrontRef = useRef(null);      // plan FRONT : gros fruits flous par-dessus le texte (parallaxe 1.25×)
   const wrapperRef = useRef(null);  // wrapper de scroll dédié mobile — html/body sont figés (overflow:hidden),
-                                     // c'est CE div qui défile réellement, garantissant que .fruits-layer-mobile
-                                     // (fixed, hors du wrapper) reste ancré au vrai viewport sans ambiguïté WebKit.
+                                     // c'est CE div qui défile réellement, garantissant que les calques fruits
+                                     // (fixed, hors du wrapper) restent ancrés au vrai viewport sans ambiguïté WebKit.
   const [morphTarget, setMorphTarget] = useState(null);
-  const [debugInfo, setDebugInfo] = useState(null); // DEBUG TEMPORAIRE — à retirer une fois le bug isolé
-  const debugLastUpdateRef = useRef(0); // throttle des re-renders du badge debug (~5/s)
 
   // Filet de sécurité pour la parallaxe mobile : sur iOS Safari, requestAnimationFrame
   // peut être retardé pendant un geste de scroll tactile actif — un vrai listener
@@ -265,26 +285,17 @@ export default function Home() {
   // et n'a aucun effet visuel sur desktop, où le calque est display:none via CSS).
   useEffect(() => {
     const applyParallax = () => {
-      const layer = fruitsLayerRef.current;
-      if (!layer) return;
+      const mid = fruitsLayerRef.current;
+      const front = fruitsFrontRef.current;
+      if (!mid && !front) return;
       const wrapper = wrapperRef.current;
       // Sur mobile, le wrapper dédié est le vrai scroller (html/body sont figés) ;
       // sur desktop il est display:contents (jamais scrollable) → fallback window.
       const scroll = (wrapper && wrapper.scrollHeight > wrapper.clientHeight)
         ? wrapper.scrollTop
         : (window.scrollY || document.documentElement.scrollTop || 0);
-      const y = -scroll * 0.5;
-      layer.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
-      // DEBUG TEMPORAIRE — throttlé pour ne pas spammer les re-renders
-      const now = performance.now();
-      if (now - debugLastUpdateRef.current > 150) {
-        debugLastUpdateRef.current = now;
-        const cs = getComputedStyle(layer);
-        setDebugInfo({
-          src: 'scroll-event', scrollY: Math.round(scroll), y: Math.round(y),
-          appliedPos: cs.position, appliedTransform: cs.transform,
-        });
-      }
+      if (mid) mid.style.transform = `translate3d(0, ${(-scroll * PARALLAX_MID).toFixed(1)}px, 0)`;
+      if (front) front.style.transform = `translate3d(0, ${(-scroll * PARALLAX_FRONT).toFixed(1)}px, 0)`;
     };
     const wrapperEl = wrapperRef.current;
     window.addEventListener('scroll', applyParallax, { passive: true, capture: true });
@@ -341,18 +352,12 @@ export default function Home() {
       //    Écrit toujours (pas de gate figée sur "lenis" au montage — le calque est
       //    display:none via CSS sur desktop, écrire dessus est un no-op visuel).
       if (fruitsLayerRef.current) {
-        const y = -scroll * 0.5;
-        fruitsLayerRef.current.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
-        // DEBUG TEMPORAIRE — throttlé
-        const now = performance.now();
-        if (now - debugLastUpdateRef.current > 150) {
-          debugLastUpdateRef.current = now;
-          const cs = getComputedStyle(fruitsLayerRef.current);
-          setDebugInfo({
-            src: 'raf', scrollY: Math.round(scroll), y: Math.round(y),
-            appliedPos: cs.position, appliedTransform: cs.transform,
-          });
-        }
+        fruitsLayerRef.current.style.transform =
+          `translate3d(0, ${(-scroll * PARALLAX_MID).toFixed(1)}px, 0)`;
+      }
+      if (fruitsFrontRef.current) {
+        fruitsFrontRef.current.style.transform =
+          `translate3d(0, ${(-scroll * PARALLAX_FRONT).toFixed(1)}px, 0)`;
       }
 
       // chaque fruit : scale / opacity / position = fonction PURE du scroll
@@ -446,6 +451,70 @@ export default function Home() {
     };
   }, []);
 
+  // ── SNAP MOBILE façon desktop (remplace le scroll-snap CSS mandatory) ──
+  // Même sensation que Lenis sur l'ordinateur : le doigt lance un momentum natif
+  // LIBRE (aucun blocage section-par-section), puis quand le défilement s'arrête,
+  // la page se POSE en douceur sur la section la plus proche (easing cubic-out).
+  // Le CSS scroll-snap mandatory est retiré : sur iOS il se battait avec le
+  // momentum et donnait ce scroll rigide/mécanique constaté en vidéo.
+  // Desktop : le wrapper est display:contents → ne scrolle jamais → effet inerte.
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    let settleRaf = null;
+    let debounceId = null;
+    let animating = false;
+
+    const cancelSettle = () => {
+      if (settleRaf) cancelAnimationFrame(settleRaf);
+      settleRaf = null;
+      animating = false;
+    };
+
+    const settle = () => {
+      const H = wrapper.clientHeight || 1;
+      const max = wrapper.scrollHeight - H;
+      const from = wrapper.scrollTop;
+      const target = Math.max(0, Math.min(max, Math.round(from / H) * H));
+      if (Math.abs(target - from) < 2) return;
+      const DURATION = 650; // ms — pose douce, cadence proche du Lenis desktop (1.15s ease-out)
+      const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+      const t0 = performance.now();
+      animating = true;
+      const step = (now) => {
+        if (!animating) return;
+        const t = Math.min(1, (now - t0) / DURATION);
+        wrapper.scrollTop = from + (target - from) * easeOutCubic(t);
+        if (t < 1) settleRaf = requestAnimationFrame(step);
+        else animating = false;
+      };
+      settleRaf = requestAnimationFrame(step);
+    };
+
+    // Pas d'événement 'scrollend' sur iOS Safari → débounce sur 'scroll'.
+    // Les écritures de settle() déclenchent elles-mêmes 'scroll' : le flag
+    // animating les ignore pour ne pas relancer un settle en boucle.
+    const onScroll = () => {
+      if (animating) return;
+      clearTimeout(debounceId);
+      debounceId = setTimeout(settle, 140);
+    };
+    // Nouveau geste tactile pendant la pose → l'utilisateur reprend la main.
+    const onTouchStart = () => {
+      cancelSettle();
+      clearTimeout(debounceId);
+    };
+
+    wrapper.addEventListener('scroll', onScroll, { passive: true });
+    wrapper.addEventListener('touchstart', onTouchStart, { passive: true });
+    return () => {
+      cancelSettle();
+      clearTimeout(debounceId);
+      wrapper.removeEventListener('scroll', onScroll);
+      wrapper.removeEventListener('touchstart', onTouchStart);
+    };
+  }, []);
+
   const goTo = (i) => {
     const target = scenesRef.current[Math.min(i, SECTIONS.length - 1)];
     if (!target) return;
@@ -494,25 +563,10 @@ export default function Home() {
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
 
-      {/* DEBUG TEMPORAIRE — à retirer une fois le mécanisme confirmé sur téléphone réel.
-          Affiche en direct scrollY et le décalage calculé, + quel mécanisme l'a écrit
-          (raf ou scroll-event), pour trancher sans ambiguïté ce que l'automatisation
-          à distance n'arrive pas à confirmer. */}
-      {debugInfo && (
-        <div style={{
-          position: 'fixed', top: 'calc(60px + env(safe-area-inset-top, 0px))', left: 8,
-          zIndex: 99999, background: 'rgba(0,0,0,0.75)', color: '#0f0',
-          font: '11px/1.4 monospace', padding: '6px 10px', borderRadius: 6,
-          pointerEvents: 'none', whiteSpace: 'pre',
-        }}>
-          {`DEBUG src=${debugInfo.src}\nscrollY=${debugInfo.scrollY}  y(calc)=${debugInfo.y}\npos=${debugInfo.appliedPos}\ntransform=${debugInfo.appliedTransform}`}
-        </div>
-      )}
-
-      {/* Calque fruits mobile GLOBAL — fixed, un seul pour tout le site, parallaxe
-          inverse pilotée par la boucle rAF (translateY(-scrollY*0.5)). */}
+      {/* Plan MID — rivière principale pleine largeur, SOUS le texte (z:1),
+          parallaxe inverse 0.5× pilotée par la boucle rAF + listener scroll natif. */}
       <div className="fruits-layer-mobile" ref={fruitsLayerRef}>
-        {FRUITS_GLOBAL.map((f, j) => (
+        {FRUITS_MID.map((f, j) => (
           <img
             key={j}
             className="global-fruit"
@@ -526,6 +580,30 @@ export default function Home() {
               width: f.size,
               filter: f.blur ? `blur(${f.blur}px)` : undefined,
               opacity: f.opacity ?? 1,
+              transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Plan FRONT — profondeur de champ Combilo : gros fruits très flous qui
+          passent PAR-DESSUS le texte (z:20), parallaxe 1.25× (plus proche = plus
+          rapide). pointer-events:none → le CTA reste tappable à travers. */}
+      <div className="fruits-layer-mobile fruits-layer-mobile--front" ref={fruitsFrontRef}>
+        {FRUITS_FRONT.map((f, j) => (
+          <img
+            key={j}
+            className="global-fruit"
+            src={f.src}
+            alt=""
+            loading={j < 3 ? "eager" : "lazy"}
+            draggable={false}
+            style={{
+              top: `${f.topVh}vh`,
+              left: f.left,
+              width: f.size,
+              filter: `blur(${f.blur}px)`,
+              opacity: f.opacity,
               transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
             }}
           />
