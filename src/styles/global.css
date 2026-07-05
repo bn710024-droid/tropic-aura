@@ -616,13 +616,15 @@ body::-webkit-scrollbar { display: none; }
     min-width: unset;
   }
 
-  /* ── Header ghost — compact : hauteur et logo réduits ── */
+  /* ── Header ghost — compact : hauteur et logo réduits ──
+     Ancien fond flouté (rgba(0,0,0,.05) + backdrop-filter) RETIRÉ : il créait
+     un second bandeau superposé au-dessus du bandeau Combilo (.ghost::before,
+     75px), avec deux bords visibles au lieu d'un seul. Un seul bandeau reste :
+     celui qui reproduit combilo.nl. */
   .ghost {
     height: auto;
     padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px 16px;
-    background: rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: transparent;
   }
 
   .ghost img { height: 26px !important; }
