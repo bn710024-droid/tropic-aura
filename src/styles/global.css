@@ -370,18 +370,20 @@ body::-webkit-scrollbar { display: none; }
    ============================================================ */
 @media (max-width: 768px) {
 
-  /* ── html/body : figés. Le scroll réel se fait dans .mobile-scroll-wrapper ──
-     Architecture "wrapper de scroll dédié" (pattern Combilo) : plus html/body ne
-     scrollent, plus aucun WebKit ne peut confondre le scroller racine avec le
-     containing block d'un position:fixed. .fruits-layer-mobile (fixed, hors du
-     wrapper) est de fait ancré au vrai viewport, sans ambiguïté possible. */
-  html {
+  /* ── html/body : figés UNIQUEMENT sur la page qui a le wrapper (l'accueil) ──
+     CRITIQUE : le sélecteur :has(.mobile-scroll-wrapper) restreint le gel aux
+     seules pages qui possèdent réellement le wrapper de scroll dédié. Sans ça,
+     html/body seraient figés sur TOUTES les pages (CSS global) alors que seule
+     l'accueil a le wrapper → les autres pages devenaient impossibles à scroller.
+     Architecture "wrapper dédié" (pattern Combilo) : plus html/body ne scrollent
+     là où le wrapper existe → aucun WebKit ne confond le scroller racine avec le
+     containing block d'un position:fixed → .fruits-layer-mobile reste ancré. */
+  html:has(.mobile-scroll-wrapper) {
     height: 100dvh;
     overflow: hidden;
   }
 
-  /* body : figé aussi, garde sa couleur de fallback (rubber-band du wrapper) */
-  body {
+  body:has(.mobile-scroll-wrapper) {
     height: 100dvh;
     overflow: hidden;
     background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
