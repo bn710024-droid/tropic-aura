@@ -385,7 +385,12 @@ body::-webkit-scrollbar { display: none; }
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: auto; /* PAS "touch" — c'est la propriété fautive retirée de html */
+    /* -webkit-overflow-scrolling: touch ICI est sans risque : ce wrapper n'est PAS un
+       ancêtre de .fruits-layer-mobile (qui est fixed, hors du wrapper, sibling).
+       L'ancien bug venait de cette propriété posée sur html, qui LUI était ancêtre
+       du calque fixed. Sur un scroller imbriqué comme celui-ci, elle aide iOS à
+       mieux honorer scroll-snap + momentum. */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* .bg-layer porte l'interpolation continue de couleur (même mécanisme que
