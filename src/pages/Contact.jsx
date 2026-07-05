@@ -33,15 +33,17 @@ export default function Contact() {
   };
 
   useEffect(() => {
-    // Smooth scroll (cohérence avec le reste du site)
-    const lenis = new Lenis({
+    // Smooth scroll (cohérence avec le reste du site) — DESKTOP UNIQUEMENT.
+    // Sur mobile, Lenis fait "sauter" au retour vers le haut → scroll natif iOS.
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-    });
+    }) : null;
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
-    rafId = requestAnimationFrame(raf);
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     // Apparitions douces au scroll
     const io = new IntersectionObserver((entries) => {
@@ -57,7 +59,7 @@ export default function Contact() {
 
     return () => {
       cancelAnimationFrame(rafId);
-      lenis.destroy();
+      if (lenis) lenis.destroy();
       io.disconnect();
     };
   }, []);

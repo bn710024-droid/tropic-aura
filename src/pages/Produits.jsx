@@ -112,13 +112,17 @@ export default function Produits() {
   const lenisRef    = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    // Lenis (smooth-scroll) DESKTOP UNIQUEMENT. Sur mobile tactile, Lenis fait
+    // "sauter" au changement de direction (retour vers le haut) → on garde le
+    // scroll natif iOS, lu via window.scrollY dans la boucle rAF.
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -162,11 +166,14 @@ export default function Produits() {
     };
 
     const readScroll = () => {
-      const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      if (lenis) {
+        const s = lenis.animatedScroll;
+        return Number.isFinite(s) ? s : (window.scrollY || 0);
+      }
+      return window.scrollY || 0;
     };
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
       rafId = requestAnimationFrame(raf);
@@ -178,11 +185,13 @@ export default function Produits() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.destroy();
+      if (lenis) lenis.destroy();
     };
   }, []);
 
-  const scrollTo = (i) => lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
+  const scrollTo = (i) => lenisRef.current
+    ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
+    : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
   return (
     <>

@@ -108,13 +108,17 @@ export default function Univers() {
   const lenisRef    = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    // Lenis DESKTOP UNIQUEMENT (sur mobile il fait "sauter" au retour vers le
+    // haut) → scroll natif iOS sur mobile ; ScrollTrigger utilise alors le
+    // scroll natif de la fenêtre (comportement par défaut).
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -169,12 +173,15 @@ export default function Univers() {
     };
 
     const readScroll = () => {
-      const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      if (lenis) {
+        const s = lenis.animatedScroll;
+        return Number.isFinite(s) ? s : (window.scrollY || 0);
+      }
+      return window.scrollY || 0;
     };
 
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
@@ -188,7 +195,7 @@ export default function Univers() {
 
     // ── fade-in des paragraphes au scroll (GSAP ScrollTrigger) ──
     // chaque <p> : opacity 0→1 sur 0.8s, décalage 0.2s entre paragraphes.
-    lenis.on("scroll", ScrollTrigger.update);
+    if (lenis) lenis.on("scroll", ScrollTrigger.update);
     const triggers = [];
     contentRefs.current.forEach((content) => {
       if (!content) return;
@@ -210,14 +217,16 @@ export default function Univers() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.off("scroll", ScrollTrigger.update);
+      if (lenis) lenis.off("scroll", ScrollTrigger.update);
       triggers.forEach((t) => t.kill());
-      lenis.destroy();
+      if (lenis) lenis.destroy();
     };
   }, []);
 
   const scrollTo = (i) =>
-    lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
+    lenisRef.current
+      ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
+      : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
   let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
 

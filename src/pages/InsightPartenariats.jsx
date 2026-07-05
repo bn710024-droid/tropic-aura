@@ -13,10 +13,12 @@ export default function InsightPartenariats() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true });
+    // Lenis DESKTOP UNIQUEMENT (sur mobile il fait "sauter" au retour vers le haut).
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true }) : null;
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
-    rafId = requestAnimationFrame(raf);
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -29,7 +31,7 @@ export default function InsightPartenariats() {
     }, { threshold: 0.06 });
     revealRefs.current.forEach((el) => el && io.observe(el));
 
-    return () => { cancelAnimationFrame(rafId); lenis.destroy(); io.disconnect(); };
+    return () => { cancelAnimationFrame(rafId); if (lenis) lenis.destroy(); io.disconnect(); };
   }, []);
 
   const r = (delay = 0) => ({
