@@ -203,6 +203,16 @@ const FRUITS_MID = [
   { src: "/png/orange.png",       topVh: 240, left: "83%", size: 52, blur: 0, opacity: 1, rot: -6 },
   { src: "/png/fraises.png",      topVh: 278, left: "86%", size: 48, blur: 0, opacity: 1, rot: 20 },
   { src: "/png/myrtilles.png",    topVh: 318, left: "82%", size: 52, blur: 0, opacity: 1, rot: -10 },
+  // ── CENTRE — un fruit DERRIÈRE le texte par section (le texte passe par-dessus,
+  //    z:1 < texte z:10). Légèrement flous + semi-transparents → le blanc reste
+  //    lisible. Ils NE SUIVENT PAS le texte : parallaxe 0.5×, ils dérivent (Combilo).
+  //    topVh ≈ 49 + 50×section → tombe derrière le titre de chaque section au scroll.
+  { src: "/png/mangue.png",       topVh: 50,  left: "46%", size: 80, blur: 4, opacity: 0.6,  rot: -8 },
+  { src: "/png/orange.png",       topVh: 100, left: "40%", size: 72, blur: 5, opacity: 0.58, rot: 10 },
+  { src: "/png/avocat.png",       topVh: 150, left: "52%", size: 74, blur: 4, opacity: 0.6,  rot: -12 },
+  { src: "/png/fraises.png",      topVh: 200, left: "43%", size: 68, blur: 6, opacity: 0.56, rot: 8 },
+  { src: "/png/papaye.png",       topVh: 250, left: "50%", size: 78, blur: 5, opacity: 0.58, rot: -6 },
+  { src: "/png/citron-vert.png",  topVh: 300, left: "42%", size: 70, blur: 6, opacity: 0.56, rot: 14 },
 ];
 
 // PLAN FLOU — fruits de premier plan flous (profondeur de champ), en cadre sur
