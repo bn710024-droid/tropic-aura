@@ -246,11 +246,14 @@ body::-webkit-scrollbar { display: none; }
 }
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
+  /* Wordmark texte façon Combilo — remplace l'ancien logo.png (fond noir plein
+     intégré à l'image, d'où la "boîte noire" visible dans le header). */
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
-  font-size: 19px;
-  letter-spacing: .04em;
+  font-size: 21px;
+  letter-spacing: -.01em;
   color: #fff;
+  text-decoration: none;
   text-shadow: 0 2px 14px rgba(0, 0, 0, .3);
   user-select: none;
 }
@@ -627,7 +630,7 @@ body::-webkit-scrollbar { display: none; }
     background: transparent;
   }
 
-  .ghost img { height: 26px !important; }
+  .ghost__logo { font-size: 17px !important; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }

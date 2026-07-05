@@ -124,7 +124,7 @@ export default function Contact() {
           pointerEvents: "none",
         }}
       >
-        <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
+        <span className="ghost__logo">Tropicaura</span>
       </span>
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
