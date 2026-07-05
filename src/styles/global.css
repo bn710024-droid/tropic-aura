@@ -435,8 +435,9 @@ body::-webkit-scrollbar { display: none; }
 
   /* ── Calques fruits mobile GLOBAUX — deux plans pour tout le site ──
      position:fixed, hors du wrapper de scroll (siblings, pas descendants).
-     Plan MID (z:1, sous le texte) : parallaxe 0.5× — rivière principale.
-     Plan FRONT (z:20, sur le texte) : parallaxe 1.25× — profondeur de champ.
+     Plan MID  (z:1, sous le texte) : parallaxe 0.5×  — rivière principale.
+     Plan SOFT (z:2, sous le texte) : parallaxe 0.35× — profondeur de champ.
+     Empilement complet : fond (0) < fruits (1-2) < textes/CTA (10).
      Deux déclencheurs redondants (voir Home.jsx) : la boucle rAF (fiable, même
      chemin que le fondu couleur) + un vrai listener 'scroll' natif en filet de
      sécurité — sur iOS Safari, rAF peut être retardée pendant un geste de scroll
@@ -461,10 +462,10 @@ body::-webkit-scrollbar { display: none; }
     backface-visibility: hidden;
   }
 
-  /* Plan AVANT (profondeur de champ Combilo) : par-dessus texte et CTA (z:20 > scene:10).
-     pointer-events:none hérité du calque → le CTA reste tappable à travers le flou. */
-  .fruits-layer-mobile--front {
-    z-index: 20;
+  /* Plan SOFT (profondeur de champ) : SOUS le texte comme tout fruit (z:2 < scene:10),
+     juste au-dessus du plan mid (z:1). Aucun fruit ne masque jamais texte ou CTA. */
+  .fruits-layer-mobile--soft {
+    z-index: 2;
   }
 
   .global-fruit {
@@ -476,10 +477,10 @@ body::-webkit-scrollbar { display: none; }
     transition: none;
   }
 
-  /* ── Contenu texte (z:4 — au-dessus du plan MID z:1, sous le plan FRONT z:20) ──
-     Pleine largeur façon Combilo : les fruits vivent SUR TOUTE la largeur et
-     chevauchent le texte (mid derrière les lettres, front flou par-dessus).
-     La lisibilité vient des text-shadows, pas d'une zone réservée. */
+  /* ── Contenu texte (z:4 dans .scene z:10 — TOUJOURS au-dessus des fruits z:1-2) ──
+     Pleine largeur façon Combilo : le texte glisse PAR-DESSUS la rivière de
+     fruits, jamais l'inverse. Lisibilité : text-shadows + centre de composition
+     laissé léger (petits accents flous seulement). */
   .scene__content {
     position: relative;
     z-index: 4;
