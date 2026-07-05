@@ -180,7 +180,7 @@ export default function Insights() {
 
       {/* Logo */}
       <span style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, pointerEvents:"none" }}>
-        <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
+        <span className="ghost__logo">Tropicaura</span>
       </span>
 
       <div className="ins-wrap">

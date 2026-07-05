@@ -261,7 +261,7 @@ export default function Home() {
     <>
       {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
       <header className="ghost">
-        <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
+        <span className="ghost__logo">Tropicaura</span>
       </header>
 
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}

@@ -210,7 +210,7 @@ export default function Partenariats() {
         background: "transparent",
       }}>
         <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
-          <img src="/logo.png" alt="Tropicaura" style={{ height: 36, display: "block" }} />
+          <span className="ghost__logo">Tropicaura</span>
         </a>
       </header>
 
