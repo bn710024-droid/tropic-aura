@@ -495,22 +495,10 @@ body::-webkit-scrollbar { display: none; }
     pointer-events: auto;
   }
 
-  /* Voile sombre feutré derrière le bloc de texte (au-dessus des fruits z:1-2,
-     sous le texte). Garantit que le blanc se détache toujours, même si un fruit
-     passe derrière — le dégradé radial est doux, aucune boîte visible. */
-  .scene__content::before {
-    content: "";
-    position: absolute;
-    inset: -6dvh -18vw;   /* déborde largement le texte → transition invisible */
-    z-index: -1;
-    background: radial-gradient(
-      ellipse 80% 75% at 40% 45%,
-      rgba(0, 0, 0, 0.34) 0%,
-      rgba(0, 0, 0, 0.22) 42%,
-      rgba(0, 0, 0, 0) 72%
-    );
-    pointer-events: none;
-  }
+  /* Voile sombre localisé RETIRÉ : sur un fond uni il se voyait comme une tache
+     brunâtre/noirâtre derrière le texte. Dans cette compo (fruits sur les bords,
+     pas derrière le texte), la lisibilité est assurée par les seules ombres
+     portées ci-dessous — elles collent aux lettres et ne salissent pas le fond. */
 
   /* ── Titre — massif & percutant (gabarit Combilo) : Poppins très gras, leading
      serré, léger tracking négatif ── */
