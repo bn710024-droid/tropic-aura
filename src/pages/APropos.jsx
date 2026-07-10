@@ -147,22 +147,23 @@ export default function APropos() {
 
     const update = (scroll, H, elapsed) => {
       // ── Unité de section : desktop = section épinglée (sticky) + palier fixe
-      // de la hauteur d'un écran avant de céder la place à la suivante → la
-      // photo a enfin le temps d'être vue posée, nette, dans son cadre. Sur
-      // mobile, wrapper non épinglé (voir CSS) → unité inchangée (H), aucune
-      // régression sur le calage déjà validé du rendu mobile.
-      const SU = isDesktop ? 2 * H : H;
+      // avant de céder la place à la suivante → la photo a le temps d'être vue
+      // posée, nette, dans son cadre, sans pour autant allonger trop le scroll.
+      // Sur mobile, wrapper non épinglé (voir CSS) → unité inchangée (H),
+      // aucune régression sur le calage déjà validé du rendu mobile.
+      const SU = isDesktop ? 1.5 * H : H;
+      const DWELL = SU - H; // durée du palier fixe (0 sur mobile)
       const wrapTop = (i) => i * SU;
       const entranceStart = (i) => wrapTop(i) - H;
-      const dwellEnd = (i) => wrapTop(i) + H;
+      const dwellEnd = (i) => wrapTop(i) + DWELL;
 
       // ── Fond : glisse en continu forêt → ivoire → noir → ivoire → noir → ivoire ──
       const prog = scroll / SU;
       const ci = Math.min(last, Math.floor(prog));
       const localInSU = scroll - ci * SU;
       const ft = isDesktop
-        ? clamp01((localInSU - H) / H) // couleur stable pendant le palier fixe, fondu pendant la sortie
-        : clamp01(prog - ci);          // mobile : formule d'origine, inchangée
+        ? clamp01((localInSU - DWELL) / H) // couleur stable pendant le palier fixe, fondu pendant la sortie
+        : clamp01(prog - ci);              // mobile : formule d'origine, inchangée
       const ca = COLORS[ci];
       const cb = COLORS[Math.min(last, ci + 1)];
       const bgR = lerp(ca[0], cb[0], ft), bgG = lerp(ca[1], cb[1], ft), bgB = lerp(ca[2], cb[2], ft);
@@ -397,7 +398,7 @@ export default function APropos() {
   return (
     <>
       <style>{`
-        .vision-chapter-wrap { position: relative; height: 200vh; }
+        .vision-chapter-wrap { position: relative; height: 150vh; }
         .vision-chapter { position: sticky; top: 0; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: visible; }
         .vision-text-col { width: 46%; min-width: 340px; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(28px, 6vw, 96px); box-sizing: border-box; }
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
