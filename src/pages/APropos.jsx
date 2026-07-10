@@ -24,7 +24,6 @@ const SECTIONS = [
     title: "Construire davantage qu'une entreprise d'export.",
     desc: "Notre ambition est de créer une chaîne de valeur durable reliant les producteurs africains aux marchés internationaux.",
     hint: "Défiler pour découvrir",
-    photoLabel: "Photo champ / verger",
   },
   {
     id: "aujourdhui", num: "02", kicker: "AUJOURD'HUI", bg: "#F2E9D8", dark: false,
@@ -37,7 +36,6 @@ const SECTIONS = [
       "Documentation export",
       "Logistique internationale",
     ],
-    photoLabel: "Photo conditionnement / équipe",
   },
 ];
 
@@ -228,6 +226,8 @@ export default function APropos() {
         .vision-text-col { width: 46%; min-width: 340px; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(28px, 6vw, 96px); box-sizing: border-box; }
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
         .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, opacity; }
+        .vision-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .vision-photo-wash { position: absolute; inset: 0; pointer-events: none; }
         .vision-num { font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; letter-spacing: .04em; color: ${GOLD}; }
         .vision-kicker { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
         .vision-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(30px, 3.1vw, 46px); line-height: 1.14; letter-spacing: -.01em; margin: 18px 0 20px; }
@@ -291,13 +291,12 @@ export default function APropos() {
           <div
             className="vision-photo-frame"
             ref={s1PhotoRef}
-            style={{
-              opacity: 0,
-              background: "linear-gradient(155deg, #1D3F2C 0%, #0E2015 100%)",
-              border: `1px solid rgba(201,168,76,0.35)`,
-            }}
+            style={{ opacity: 0, border: `1px solid rgba(201,168,76,0.35)` }}
           >
-            <PlaceholderLabel text={SECTIONS[0].photoLabel} gold={GOLD} light />
+            <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
+            <div className="vision-photo-wash" style={{
+              background: "linear-gradient(155deg, rgba(18,42,30,0.32) 0%, rgba(14,32,21,0.55) 100%)",
+            }} />
           </div>
         </div>
         <div className="vision-hint" ref={s1HintRef} style={{ opacity: 0, color: "rgba(242,233,216,0.75)" }}>
@@ -333,37 +332,15 @@ export default function APropos() {
           <div
             className="vision-photo-frame"
             ref={s2PhotoRef}
-            style={{
-              opacity: 0,
-              background: "linear-gradient(155deg, #E4D6B6 0%, #C9B489 100%)",
-              border: `1px solid rgba(23,48,31,0.18)`,
-            }}
+            style={{ opacity: 0, border: `1px solid rgba(23,48,31,0.18)` }}
           >
-            <PlaceholderLabel text={SECTIONS[1].photoLabel} gold={GOLD} light={false} />
+            <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
+            <div className="vision-photo-wash" style={{
+              background: "linear-gradient(155deg, rgba(242,233,216,0.08) 0%, rgba(23,48,31,0.30) 100%)",
+            }} />
           </div>
         </div>
       </section>
     </>
-  );
-}
-
-// Placeholder "premium" : cadre discret + repères d'angle + libellé —
-// pas un simple bloc gris. À remplacer par la vraie photo (même conteneur).
-function PlaceholderLabel({ text, gold, light }) {
-  const corner = { position: "absolute", width: 18, height: 18, borderColor: gold };
-  return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <span style={{ ...corner, top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
-      <span style={{ ...corner, top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
-      <span style={{ ...corner, bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
-      <span style={{ ...corner, bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
-      <span style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontSize: 11, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase",
-        color: light ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)",
-      }}>
-        {text}
-      </span>
-    </div>
   );
 }
