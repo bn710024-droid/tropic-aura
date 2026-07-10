@@ -52,13 +52,16 @@ const SECTIONS = [
     id: "demain", num: "03", kicker: "DEMAIN", bg: SAGE, dark: true,
     title: "Nous préparons la croissance.",
     desc: "Nous investissons dans nos capacités, nos infrastructures et nos partenariats pour répondre à une demande internationale croissante.",
-    photoLabel: "Illustration conceptuelle",
+    photo: "/images/about/demain-conditionnement.jpg",
+    photoAlt: "Ligne de conditionnement Tropicaura",
   },
   {
     id: "ambition", num: "04", kicker: "NOTRE AMBITION", bg: STONE, dark: false,
     title: "Investir pour créer plus de valeur.",
     desc: "Nous souhaitons investir progressivement dans la transformation, réduire les pertes post-récolte et créer plus de valeur pour nos partenaires et pour les marchés.",
-    photoLabel: "Visuel à venir",
+    photo: "/images/about/ambition-site.jpg",
+    photoAlt: "Site industriel Tropicaura",
+    photoPosition: "62% 50%",
   },
   {
     id: "avenir", num: "05", kicker: "NOTRE AVENIR", bg: BLACK, dark: true,
@@ -604,15 +607,24 @@ export default function APropos() {
               }}
             >
               <div className="vision-photo-inner" ref={(el) => (sPhotoInnerRefs.current[k] = el)}>
-                <div className="vision-placeholder">
-                  <span className="vision-placeholder-corner" style={{ top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
-                  <span className="vision-placeholder-corner" style={{ top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
-                  <span className="vision-placeholder-corner" style={{ bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
-                  <span className="vision-placeholder-corner" style={{ bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
-                  <span className="vision-placeholder-label" style={{ color: s.dark ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)" }}>
-                    {s.photoLabel}
-                  </span>
-                </div>
+                {s.photo ? (
+                  <img
+                    src={s.photo}
+                    alt={s.photoAlt}
+                    className="vision-photo-img"
+                    style={s.photoPosition ? { objectPosition: s.photoPosition } : undefined}
+                  />
+                ) : (
+                  <div className="vision-placeholder">
+                    <span className="vision-placeholder-corner" style={{ top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
+                    <span className="vision-placeholder-corner" style={{ top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
+                    <span className="vision-placeholder-corner" style={{ bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
+                    <span className="vision-placeholder-corner" style={{ bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
+                    <span className="vision-placeholder-label" style={{ color: s.dark ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)" }}>
+                      {s.photoLabel}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
