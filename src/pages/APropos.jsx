@@ -24,6 +24,8 @@ const GOLD = "#C9A84C";
 const BLACK = "#0B0F0A";
 const IVORY = "#F2E9D8";
 const FOREST = "#122A1E";
+const SAGE = "#2E3628"; // vert sauge/olive très sombre — distinct de FOREST, légèrement plus clair
+const STONE = "#DDDAD2"; // gris minéral clair — pierre / béton poli
 const IVORY_TEXT = "rgba(242,233,216,0.82)";
 const FOREST_TEXT = "rgba(23,48,31,0.82)";
 
@@ -47,13 +49,13 @@ const SECTIONS = [
     ],
   },
   {
-    id: "demain", num: "03", kicker: "DEMAIN", bg: BLACK, dark: true,
+    id: "demain", num: "03", kicker: "DEMAIN", bg: SAGE, dark: true,
     title: "Nous préparons la croissance.",
     desc: "Nous investissons dans nos capacités, nos infrastructures et nos partenariats pour répondre à une demande internationale croissante.",
     photoLabel: "Illustration conceptuelle",
   },
   {
-    id: "ambition", num: "04", kicker: "NOTRE AMBITION", bg: IVORY, dark: false,
+    id: "ambition", num: "04", kicker: "NOTRE AMBITION", bg: STONE, dark: false,
     title: "Investir pour créer plus de valeur.",
     desc: "Nous souhaitons investir progressivement dans la transformation, réduire les pertes post-récolte et créer plus de valeur pour nos partenaires et pour les marchés.",
     photoLabel: "Visuel à venir",
@@ -157,7 +159,7 @@ export default function APropos() {
       const entranceStart = (i) => wrapTop(i) - H;
       const dwellEnd = (i) => wrapTop(i) + DWELL;
 
-      // ── Fond : glisse en continu forêt → ivoire → noir → ivoire → noir → ivoire ──
+      // ── Fond : glisse en continu forêt → ivoire → sauge → pierre → noir → ivoire ──
       const prog = scroll / SU;
       const ci = Math.min(last, Math.floor(prog));
       const localInSU = scroll - ci * SU;
@@ -436,7 +438,7 @@ export default function APropos() {
         <span className="ghost__logo" ref={logoRef}>Tropicaura</span>
       </header>
 
-      {/* ── Fond interpolé (forêt → ivoire → noir → ivoire → noir → ivoire) ── */}
+      {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
 
       {/* ── Puces de navigation ── */}
@@ -593,10 +595,12 @@ export default function APropos() {
               ref={(el) => (sPhotoRefs.current[k] = el)}
               style={{
                 clipPath: "inset(100% 0 0 0)",
-                background: s.dark
-                  ? "linear-gradient(155deg, #17201B 0%, #0B0F0A 100%)"
-                  : "linear-gradient(155deg, #EDE2CB 0%, #DCC9A0 100%)",
-                border: s.dark ? "1px solid rgba(201,168,76,0.35)" : "1px solid rgba(23,48,31,0.18)",
+                background: s.id === "ambition"
+                  ? "linear-gradient(155deg, #E9E7E1 0%, #CDC9BF 100%)"
+                  : s.dark
+                    ? "linear-gradient(155deg, #17201B 0%, #0B0F0A 100%)"
+                    : "linear-gradient(155deg, #EDE2CB 0%, #DCC9A0 100%)",
+                border: s.dark ? "1px solid rgba(201,168,76,0.35)" : s.id === "ambition" ? "1px solid rgba(60,58,52,0.18)" : "1px solid rgba(23,48,31,0.18)",
               }}
             >
               <div className="vision-photo-inner" ref={(el) => (sPhotoInnerRefs.current[k] = el)}>
