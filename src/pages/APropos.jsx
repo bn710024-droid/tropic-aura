@@ -3,30 +3,39 @@ import Lenis from "lenis";
 
 // ============================================================
 //  À PROPOS — "Notre Vision" — récit éditorial continu
-//  Sections 01 (Notre Vision, forêt) et 02 (Aujourd'hui, ivoire) UNIQUEMENT.
-//  03-06 suivront la même logique une fois validées.
+//  Sections 01-06 complètes. 01 (forêt) et 02 (ivoire) sont VALIDÉES et
+//  n'ont pas été retouchées, à une exception près : un fondu de SORTIE a été
+//  ajouté à la 02 (elle n'en avait pas besoin tant qu'aucune section ne la
+//  suivait). Sections 03-06 : textes courts, placeholders premium en attente
+//  des visuels définitifs (port de Dakar pour la 05 notamment).
 //
-//  Principe : tout est fonction PURE du scroll (comme le reste du site,
-//  aucune transition CSS sur les éléments animés — seul le fade d'apparition
-//  au montage de la section 01 utilise une durée réelle, cf. mountEase).
-//  La transition 01→02 n'est jamais une coupure : la couleur de fond glisse
-//  en continu (même mécanisme bg-layer que Home), le texte/la photo de 01
-//  s'effacent pendant que 02 apparaît, sur une fenêtre de scroll large.
+//  Principe inchangé : tout est fonction PURE du scroll, aucune transition
+//  CSS sur les éléments animés (sauf le mount-fade de la section 01, basé sur
+//  le temps réel — cf. mountEase). Chaque section médiane (02 à 05) a une
+//  fenêtre d'ENTRÉE (depuis la précédente) et une fenêtre de SORTIE (vers la
+//  suivante) qui se chevauchent largement → jamais de coupure. La dernière
+//  section (06) n'a qu'une entrée ; sa sortie vers le noir est déjà gérée par
+//  le fondu interne du Footer (transparent → #09120A sur ses premiers 48vh).
 // ============================================================
 
 export const PAGE_ENTRY_COLOR = { desktop: "#122A1E", mobile: "#122A1E" };
 
 const GOLD = "#C9A84C";
+const BLACK = "#0B0F0A";
+const IVORY = "#F2E9D8";
+const FOREST = "#122A1E";
+const IVORY_TEXT = "rgba(242,233,216,0.82)";
+const FOREST_TEXT = "rgba(23,48,31,0.82)";
 
 const SECTIONS = [
   {
-    id: "vision", num: "01", kicker: "NOTRE VISION", bg: "#122A1E", dark: true,
+    id: "vision", num: "01", kicker: "NOTRE VISION", bg: FOREST, dark: true,
     title: "Construire davantage qu'une entreprise d'export.",
     desc: "Notre ambition est de créer une chaîne de valeur durable reliant les producteurs africains aux marchés internationaux.",
     hint: "Défiler pour découvrir",
   },
   {
-    id: "aujourdhui", num: "02", kicker: "AUJOURD'HUI", bg: "#F2E9D8", dark: false,
+    id: "aujourdhui", num: "02", kicker: "AUJOURD'HUI", bg: IVORY, dark: false,
     title: "Nous construisons un réseau fiable.",
     desc: "Chaque jour, nos équipes et partenaires travaillent pour garantir la qualité, la traçabilité et la fiabilité de nos mangues d'exportation.",
     checklist: [
@@ -37,6 +46,40 @@ const SECTIONS = [
       "Logistique internationale",
     ],
   },
+  {
+    id: "demain", num: "03", kicker: "DEMAIN", bg: BLACK, dark: true,
+    title: "Nous préparons la croissance.",
+    desc: "Nous investissons dans nos capacités, nos infrastructures et nos partenariats pour répondre à une demande internationale croissante.",
+    photoLabel: "Illustration conceptuelle",
+  },
+  {
+    id: "ambition", num: "04", kicker: "NOTRE AMBITION", bg: IVORY, dark: false,
+    title: "Investir pour créer plus de valeur.",
+    desc: "Nous souhaitons investir progressivement dans la transformation, réduire les pertes post-récolte et créer plus de valeur pour nos partenaires et pour les marchés.",
+    photoLabel: "Visuel à venir",
+  },
+  {
+    id: "avenir", num: "05", kicker: "NOTRE AVENIR", bg: BLACK, dark: true,
+    title: "Relier l'Afrique aux marchés du monde.",
+    desc: "Depuis Dakar, nous connectons nos producteurs aux plus grands ports et marchés internationaux avec efficacité et transparence.",
+    photoLabel: "Photo — Port de Dakar",
+    map: true,
+  },
+  {
+    id: "engagement", num: "06", kicker: "NOTRE ENGAGEMENT", bg: IVORY, dark: false,
+    title: "Des relations durables basées sur la confiance.",
+    desc: "Nous construisons des partenariats solides et transparents avec nos producteurs, nos clients et nos collaborateurs.",
+    photoLabel: "Visuel à venir",
+    calm: true,
+  },
+];
+
+// Routes d'export stylisées (diagramme sobre, pas une carte géographique
+// littérale) — Dakar au centre, trois destinations, tracés animés au scroll.
+const ROUTES = [
+  { name: "ROTTERDAM", x: 320, y: 34, path: "M 55 128 Q 170 55 320 34" },
+  { name: "ANVERS",    x: 335, y: 62, path: "M 55 128 Q 175 78 335 62" },
+  { name: "MARSEILLE", x: 300, y: 100, path: "M 55 128 Q 150 108 300 100" },
 ];
 
 const hexToRgb = (h) => {
@@ -48,6 +91,12 @@ const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+const fadeRise = (scroll, start, span, rise) => {
+  const t = easeInOutCubic(clamp01((scroll - start) / span));
+  return { t, y: Math.round((1 - t) * rise) };
+};
+const fadeOutMult = (scroll, start, span) =>
+  1 - easeInOutCubic(clamp01((scroll - start) / span));
 
 // ============================================================
 export default function APropos() {
@@ -56,15 +105,20 @@ export default function APropos() {
   const dotRefs    = useRef([]);
   const lenisRef   = useRef(null);
 
-  // Section 01
+  // Section 01 (inchangée)
   const s1TextRef  = useRef(null);
   const s1PhotoRef = useRef(null);
   const s1HintRef  = useRef(null);
-  // Section 02
+  // Section 02 (inchangée + fondu de sortie ajouté plus bas)
   const s2TitleRef = useRef(null);
   const s2DescRef  = useRef(null);
   const s2ItemRefs = useRef([]);
   const s2PhotoRef = useRef(null);
+  // Sections 03-06 (génériques, k = 0..3 ↔ SECTIONS[k+2])
+  const sTitleRefs = useRef([]);
+  const sDescRefs  = useRef([]);
+  const sPhotoRefs = useRef([]);
+  const mapPathRefs = useRef([]);
 
   useEffect(() => {
     // Lenis DESKTOP UNIQUEMENT — même règle que le reste du site (sur mobile
@@ -89,7 +143,7 @@ export default function APropos() {
     const t0 = performance.now();
 
     const update = (scroll, H, elapsed) => {
-      // ── Fond : glisse en continu de la forêt vers l'ivoire sur [0, H] ──
+      // ── Fond : glisse en continu forêt → ivoire → noir → ivoire → noir → ivoire ──
       const prog = scroll / H;
       const ci = Math.min(last, Math.floor(prog));
       const ft = Math.min(1, Math.max(0, prog - ci));
@@ -98,16 +152,15 @@ export default function APropos() {
       const bgR = lerp(ca[0], cb[0], ft), bgG = lerp(ca[1], cb[1], ft), bgB = lerp(ca[2], cb[2], ft);
       if (bgRef.current) bgRef.current.style.backgroundColor = `rgb(${bgR},${bgG},${bgB})`;
 
-      // Luminance approximative du fond courant → logo & dots s'adaptent
-      // (blanc chaud sur fond sombre, forêt profonde sur fond ivoire).
+      // Luminance approximative du fond courant → logo & dots s'adaptent.
       const luminance = (0.299 * bgR + 0.587 * bgG + 0.114 * bgB) / 255;
       const onDark = luminance < 0.5;
-      if (logoRef.current) logoRef.current.style.color = onDark ? "#F2E9D8" : "#17301F";
+      if (logoRef.current) logoRef.current.style.color = onDark ? IVORY : "#17301F";
 
       // ── Montée douce au chargement (section 01 uniquement, une fois) ──
       const mountEase = easeOutCubic(clamp01(elapsed / 900));
 
-      // ── SECTION 01 — dérive lente au scroll + sortie vers la transition ──
+      // ── SECTION 01 — dérive lente au scroll + sortie vers la transition ── (inchangé)
       const s1DriftY = -Math.min(110, scroll * 0.16);
       const s1FadeT = easeInOutCubic(clamp01((scroll - 0.45 * H) / (0.65 * H)));
       const s1TextOpacity = (1 - s1FadeT) * mountEase;
@@ -116,7 +169,6 @@ export default function APropos() {
         s1TextRef.current.style.transform =
           `translateY(${Math.round(s1DriftY + (1 - mountEase) * 26)}px)`;
       }
-
       const s1PhotoParallaxY = Math.min(50, scroll * 0.05);
       const s1PhotoScale = 1 + Math.min(0.035, prog * 0.035);
       const s1SlideT = easeInOutCubic(clamp01((scroll - 0.5 * H) / (0.7 * H)));
@@ -127,37 +179,94 @@ export default function APropos() {
         s1PhotoRef.current.style.transform =
           `translate3d(${s1PhotoX.toFixed(1)}px, ${s1PhotoParallaxY.toFixed(1)}px, 0) scale(${s1PhotoScale.toFixed(3)})`;
       }
-
-      // Indice de scroll : s'efface dès les premiers pixels de défilement.
       if (s1HintRef.current) {
         const hintOpacity = (1 - clamp01(scroll / (0.14 * H))) * mountEase;
         s1HintRef.current.style.opacity = hintOpacity.toFixed(3);
       }
 
-      // ── SECTION 02 — apparition douce, décalée (titre → texte → liste) ──
+      // ── SECTION 02 — entrée (inchangée) + SORTIE (ajoutée, section 03 existe désormais) ──
       const s2Base = 0.6 * H;
       const s2Span = 0.6 * H;
+      const s2ExitStart = 1.45 * H, s2ExitSpan = 0.65 * H;
+      const s2ExitPhotoStart = 1.5 * H, s2ExitPhotoSpan = 0.7 * H;
+      const s2Exit = fadeOutMult(scroll, s2ExitStart, s2ExitSpan);
+      const s2ExitPhoto = fadeOutMult(scroll, s2ExitPhotoStart, s2ExitPhotoSpan);
+
       const s2TitleT = easeInOutCubic(clamp01((scroll - s2Base) / s2Span));
       if (s2TitleRef.current) {
-        s2TitleRef.current.style.opacity = s2TitleT.toFixed(3);
+        s2TitleRef.current.style.opacity = (s2TitleT * s2Exit).toFixed(3);
         s2TitleRef.current.style.transform = `translateY(${Math.round((1 - s2TitleT) * 26)}px)`;
       }
       const s2DescT = easeInOutCubic(clamp01((scroll - (s2Base + 0.08 * H)) / s2Span));
       if (s2DescRef.current) {
-        s2DescRef.current.style.opacity = s2DescT.toFixed(3);
+        s2DescRef.current.style.opacity = (s2DescT * s2Exit).toFixed(3);
         s2DescRef.current.style.transform = `translateY(${Math.round((1 - s2DescT) * 22)}px)`;
       }
       s2ItemRefs.current.forEach((el, i) => {
         if (!el) return;
         const start = s2Base + 0.16 * H + i * 0.05 * H;
         const t = easeInOutCubic(clamp01((scroll - start) / (0.4 * H)));
-        el.style.opacity = t.toFixed(3);
+        el.style.opacity = (t * s2Exit).toFixed(3);
         el.style.transform = `translateY(${Math.round((1 - t) * 14)}px)`;
       });
       const s2PhotoT = easeInOutCubic(clamp01((scroll - (s2Base + 0.1 * H)) / (0.55 * H)));
       if (s2PhotoRef.current) {
-        s2PhotoRef.current.style.opacity = s2PhotoT.toFixed(3);
-        s2PhotoRef.current.style.transform = `scale(${(1.06 - 0.06 * s2PhotoT).toFixed(3)})`;
+        s2PhotoRef.current.style.opacity = (s2PhotoT * s2ExitPhoto).toFixed(3);
+        s2PhotoRef.current.style.transform =
+          `translateX(${Math.round(-(1 - s2ExitPhoto) * 60)}px) scale(${(1.06 - 0.06 * s2PhotoT).toFixed(3)})`;
+      }
+
+      // ── SECTIONS 03-06 — même langage visuel, généralisé ──
+      // Section d'index i (0-based dans SECTIONS) occupe nominalement [i·H,(i+1)·H).
+      // Fenêtre d'entrée alignée sur celle, déjà validée, de la section 02.
+      for (let k = 0; k < 4; k++) {
+        const i = k + 2; // index réel dans SECTIONS (2..5)
+        const isLast = i === last;
+        const s = SECTIONS[i];
+        const rise = s.calm ? 18 : 26; // section 06 : montée plus douce ("impression de conclusion")
+        const entranceStart = (i - 0.4) * H;
+        const entranceSpan = s.calm ? 0.7 * H : 0.6 * H;
+
+        const exitMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.45) * H, 0.65 * H);
+        const exitPhotoMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.5) * H, 0.7 * H);
+
+        const titleR = fadeRise(scroll, entranceStart, entranceSpan, rise);
+        if (sTitleRefs.current[k]) {
+          sTitleRefs.current[k].style.opacity = (titleR.t * exitMult).toFixed(3);
+          sTitleRefs.current[k].style.transform = `translateY(${titleR.y}px)`;
+        }
+        const descR = fadeRise(scroll, entranceStart + 0.08 * H, entranceSpan, rise - 4);
+        if (sDescRefs.current[k]) {
+          sDescRefs.current[k].style.opacity = (descR.t * exitMult).toFixed(3);
+          sDescRefs.current[k].style.transform = `translateY(${descR.y}px)`;
+        }
+
+        // Photo : entrée en zoom doux (comme 01/02) + dérive/échelle pendant le
+        // séjour dans la section + glissement de sortie (comme 01).
+        const localScroll = scroll - i * H;
+        const localProg = clamp01(localScroll / H);
+        const photoScaleMax = s.calm ? 0.02 : 0.035;
+        const photoT = easeInOutCubic(clamp01((scroll - (entranceStart + 0.1 * H)) / (0.55 * H)));
+        const photoParallaxY = Math.min(40, Math.max(0, localScroll * 0.04));
+        const slideMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.5) * H, 0.7 * H);
+        const photoX = isLast ? 0 : -(1 - slideMult) * 50;
+        if (sPhotoRefs.current[k]) {
+          sPhotoRefs.current[k].style.opacity = (photoT * exitPhotoMult).toFixed(3);
+          sPhotoRefs.current[k].style.transform =
+            `translate3d(${photoX.toFixed(1)}px, ${photoParallaxY.toFixed(1)}px, 0) scale(${(1 + photoScaleMax * localProg).toFixed(3)})`;
+        }
+
+        // Carte export (section 05 uniquement) : tracés dorés qui se dessinent
+        // très légèrement pendant le scroll — jamais d'animation en boucle.
+        if (s.map) {
+          mapPathRefs.current.forEach((p, r) => {
+            if (!p) return;
+            const start = entranceStart + 0.22 * H + r * 0.06 * H;
+            const dt = easeInOutCubic(clamp01((scroll - start) / (0.45 * H)));
+            p.style.strokeDashoffset = (100 - dt * 100).toFixed(1);
+            p.style.opacity = (0.6 * exitMult).toFixed(3);
+          });
+        }
       }
 
       // ── Puces de navigation — couleur adaptée au fond actif ──
@@ -238,11 +347,17 @@ export default function APropos() {
         .vision-check { color: ${GOLD}; font-size: 13px; }
         .vision-hint { position: absolute; left: clamp(28px, 6vw, 96px); bottom: 48px; display: flex; align-items: center; gap: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
         .vision-hint-arrow { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid ${GOLD}; color: ${GOLD}; font-size: 12px; }
+        .vision-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+        .vision-placeholder-corner { position: absolute; width: 18px; height: 18px; border-color: ${GOLD}; }
+        .vision-placeholder-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+        .vision-map { margin-top: 30px; width: 100%; max-width: 400px; border: 1px solid rgba(201,168,76,0.22); border-radius: 2px; padding: 18px 18px 14px; box-sizing: border-box; }
+        .vision-map-caption { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(242,233,216,0.45); margin-top: 10px; display: block; }
         @media (max-width: 900px) {
           .vision-chapter { flex-direction: column; height: auto; min-height: 100vh; }
           .vision-text-col { width: 100%; min-width: 0; padding: 120px 24px 32px; }
           .vision-photo-col { width: 100%; padding: 0 24px 56px; }
           .vision-photo-frame { height: 46vh; }
+          .vision-map { max-width: 100%; }
         }
       `}</style>
 
@@ -251,7 +366,7 @@ export default function APropos() {
         <span className="ghost__logo" ref={logoRef}>Tropicaura</span>
       </header>
 
-      {/* ── Fond interpolé (forêt → ivoire, continu) ── */}
+      {/* ── Fond interpolé (forêt → ivoire → noir → ivoire → noir → ivoire) ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
 
       {/* ── Puces de navigation ── */}
@@ -284,8 +399,8 @@ export default function APropos() {
           <span className="vision-kicker" style={{ color: "rgba(242,233,216,0.68)", marginTop: 6, display: "block" }}>
             {SECTIONS[0].kicker}
           </span>
-          <h1 className="vision-title" style={{ color: "#F2E9D8" }}>{SECTIONS[0].title}</h1>
-          <p className="vision-desc" style={{ color: "rgba(242,233,216,0.82)" }}>{SECTIONS[0].desc}</p>
+          <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS[0].title}</h1>
+          <p className="vision-desc" style={{ color: IVORY_TEXT }}>{SECTIONS[0].desc}</p>
         </div>
         <div className="vision-photo-col">
           <div
@@ -316,7 +431,7 @@ export default function APropos() {
             {SECTIONS[1].title}
           </h1>
           <div className="vision-line" style={{ background: GOLD }} />
-          <p className="vision-desc" ref={s2DescRef} style={{ color: "rgba(23,48,31,0.82)", opacity: 0 }}>
+          <p className="vision-desc" ref={s2DescRef} style={{ color: FOREST_TEXT, opacity: 0 }}>
             {SECTIONS[1].desc}
           </p>
           <ul className="vision-checklist" style={{ color: "#17301F" }}>
@@ -341,6 +456,83 @@ export default function APropos() {
           </div>
         </div>
       </section>
+
+      {/* ══ SECTIONS 03-06 — génériques (texte court + placeholder premium) ══ */}
+      {SECTIONS.slice(2).map((s, k) => (
+        <section className="vision-chapter" key={s.id}>
+          <div className="vision-text-col">
+            <span className="vision-num">{s.num}</span>
+            <span className="vision-kicker" style={{ color: s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)", marginTop: 6, display: "block" }}>
+              {s.kicker}
+            </span>
+            <h1 className="vision-title" ref={(el) => (sTitleRefs.current[k] = el)} style={{ color: s.dark ? IVORY : "#17301F", opacity: 0 }}>
+              {s.title}
+            </h1>
+            <div className="vision-line" style={{ background: GOLD }} />
+            <p className="vision-desc" ref={(el) => (sDescRefs.current[k] = el)} style={{ color: s.dark ? IVORY_TEXT : FOREST_TEXT, opacity: 0 }}>
+              {s.desc}
+            </p>
+
+            {/* Carte export — section 05 uniquement */}
+            {s.map && (
+              <div className="vision-map">
+                <svg viewBox="0 0 360 150" width="100%" style={{ display: "block" }}>
+                  {ROUTES.map((r, idx) => (
+                    <path
+                      key={r.name}
+                      ref={(el) => (mapPathRefs.current[idx] = el)}
+                      d={r.path}
+                      fill="none"
+                      stroke={GOLD}
+                      strokeWidth="1"
+                      pathLength="100"
+                      strokeDasharray="100"
+                      strokeDashoffset="100"
+                      opacity="0"
+                    />
+                  ))}
+                  {/* Halo + point Dakar */}
+                  <circle cx="55" cy="128" r="8" fill={GOLD} opacity="0.14" />
+                  <circle cx="55" cy="128" r="3.2" fill={GOLD} />
+                  <text x="55" y="142" textAnchor="middle" fontSize="8" letterSpacing="1" fill="rgba(242,233,216,0.75)" fontFamily="'Plus Jakarta Sans',sans-serif">DAKAR</text>
+                  {/* Destinations */}
+                  {ROUTES.map((r) => (
+                    <g key={r.name}>
+                      <circle cx={r.x} cy={r.y} r="2.4" fill={GOLD} opacity="0.85" />
+                      <text x={r.x} y={r.y - 8} textAnchor="middle" fontSize="7" letterSpacing="0.8" fill="rgba(242,233,216,0.5)" fontFamily="'Plus Jakarta Sans',sans-serif">{r.name}</text>
+                    </g>
+                  ))}
+                </svg>
+                <span className="vision-map-caption">Réseau d'export — Dakar</span>
+              </div>
+            )}
+          </div>
+
+          <div className="vision-photo-col">
+            <div
+              className="vision-photo-frame"
+              ref={(el) => (sPhotoRefs.current[k] = el)}
+              style={{
+                opacity: 0,
+                background: s.dark
+                  ? "linear-gradient(155deg, #17201B 0%, #0B0F0A 100%)"
+                  : "linear-gradient(155deg, #EDE2CB 0%, #DCC9A0 100%)",
+                border: s.dark ? "1px solid rgba(201,168,76,0.35)" : "1px solid rgba(23,48,31,0.18)",
+              }}
+            >
+              <div className="vision-placeholder">
+                <span className="vision-placeholder-corner" style={{ top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
+                <span className="vision-placeholder-corner" style={{ top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
+                <span className="vision-placeholder-corner" style={{ bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
+                <span className="vision-placeholder-corner" style={{ bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
+                <span className="vision-placeholder-label" style={{ color: s.dark ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)" }}>
+                  {s.photoLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
     </>
   );
 }
