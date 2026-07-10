@@ -146,10 +146,23 @@ export default function APropos() {
     const t0 = performance.now();
 
     const update = (scroll, H, elapsed) => {
+      // ── Unité de section : desktop = section épinglée (sticky) + palier fixe
+      // de la hauteur d'un écran avant de céder la place à la suivante → la
+      // photo a enfin le temps d'être vue posée, nette, dans son cadre. Sur
+      // mobile, wrapper non épinglé (voir CSS) → unité inchangée (H), aucune
+      // régression sur le calage déjà validé du rendu mobile.
+      const SU = isDesktop ? 2 * H : H;
+      const wrapTop = (i) => i * SU;
+      const entranceStart = (i) => wrapTop(i) - H;
+      const dwellEnd = (i) => wrapTop(i) + H;
+
       // ── Fond : glisse en continu forêt → ivoire → noir → ivoire → noir → ivoire ──
-      const prog = scroll / H;
+      const prog = scroll / SU;
       const ci = Math.min(last, Math.floor(prog));
-      const ft = Math.min(1, Math.max(0, prog - ci));
+      const localInSU = scroll - ci * SU;
+      const ft = isDesktop
+        ? clamp01((localInSU - H) / H) // couleur stable pendant le palier fixe, fondu pendant la sortie
+        : clamp01(prog - ci);          // mobile : formule d'origine, inchangée
       const ca = COLORS[ci];
       const cb = COLORS[Math.min(last, ci + 1)];
       const bgR = lerp(ca[0], cb[0], ft), bgG = lerp(ca[1], cb[1], ft), bgB = lerp(ca[2], cb[2], ft);
@@ -163,9 +176,13 @@ export default function APropos() {
       // ── Montée douce au chargement (section 01 uniquement, une fois) ──
       const mountEase = easeOutCubic(clamp01(elapsed / 900));
 
-      // ── SECTION 01 — dérive lente au scroll + sortie vers la transition ── (inchangé)
+      // ── SECTION 01 — dérive lente au scroll + sortie vers la transition ──
+      // Desktop : la sortie démarre seulement à la fin du palier fixe (dwellEnd)
+      // → la section reste posée, immobile, tout le temps du palier.
       const s1DriftY = -Math.min(110, scroll * 0.16);
-      const s1FadeT = easeInOutCubic(clamp01((scroll - 0.45 * H) / (0.65 * H)));
+      const s1ExitBase = isDesktop ? dwellEnd(0) + 0.05 * H : 0.45 * H;
+      const s1ExitSpan = isDesktop ? 0.6 * H : 0.65 * H;
+      const s1FadeT = easeInOutCubic(clamp01((scroll - s1ExitBase) / s1ExitSpan));
       const s1TextOpacity = (1 - s1FadeT) * mountEase;
       if (s1TextRef.current) {
         s1TextRef.current.style.opacity = s1TextOpacity.toFixed(3);
@@ -173,8 +190,10 @@ export default function APropos() {
           `translateY(${Math.round(s1DriftY + (1 - mountEase) * 26)}px)`;
       }
       const s1PhotoParallaxY = Math.min(50, scroll * 0.05);
-      const s1PhotoScale = 1 + Math.min(0.035, prog * 0.035);
-      const s1SlideT = easeInOutCubic(clamp01((scroll - 0.5 * H) / (0.7 * H)));
+      const s1PhotoScale = 1 + Math.min(0.035, (scroll / H) * 0.035);
+      const s1PhotoExitBase = isDesktop ? dwellEnd(0) + 0.1 * H : 0.5 * H;
+      const s1PhotoExitSpan = isDesktop ? 0.65 * H : 0.7 * H;
+      const s1SlideT = easeInOutCubic(clamp01((scroll - s1PhotoExitBase) / s1PhotoExitSpan));
       const s1PhotoReveal = (1 - s1SlideT) * mountEase;
       const s1PhotoX = -s1SlideT * 60;
       if (s1PhotoRef.current) {
@@ -197,34 +216,44 @@ export default function APropos() {
         s1HintRef.current.style.opacity = hintOpacity.toFixed(3);
       }
 
-      // ── SECTION 02 — entrée (inchangée) + SORTIE (ajoutée, section 03 existe désormais) ──
-      const s2Base = 0.6 * H;
-      const s2Span = 0.6 * H;
-      const s2ExitStart = 1.45 * H, s2ExitSpan = 0.65 * H;
-      const s2ExitPhotoStart = 1.5 * H, s2ExitPhotoSpan = 0.7 * H;
+      // ── SECTION 02 — entrée + sortie ──
+      // Desktop : ancrée sur le palier fixe de la section 02 (voir SU/dwellEnd
+      // plus haut) → le texte et la photo ont le temps de se poser à l'écran
+      // avant que la sortie ne commence. Mobile : formules d'origine.
+      const s2Base = isDesktop ? entranceStart(1) : 0.6 * H;
+      const s2Span = isDesktop ? 0.5 * H : 0.6 * H;
+      const s2TitleOffset = isDesktop ? 0.15 * H : 0;
+      const s2DescOffset = isDesktop ? 0.23 * H : 0.08 * H;
+      const s2ChecklistOffset = isDesktop ? 0.38 * H : 0.16 * H;
+      const s2ChecklistStagger = isDesktop ? 0.05 * H : 0.035 * H;
+      const s2ChecklistSpan = isDesktop ? 0.3 * H : 0.28 * H;
+      const s2PhotoOffset = isDesktop ? 0.3 * H : 0.1 * H;
+      const s2PhotoSpan = isDesktop ? 0.6 * H : 0.55 * H;
+      const s2ExitStart = isDesktop ? dwellEnd(1) + 0.05 * H : 1.45 * H;
+      const s2ExitSpan = isDesktop ? 0.6 * H : 0.65 * H;
+      const s2ExitPhotoStart = isDesktop ? dwellEnd(1) + 0.1 * H : 1.5 * H;
+      const s2ExitPhotoSpan = isDesktop ? 0.65 * H : 0.7 * H;
       const s2Exit = fadeOutMult(scroll, s2ExitStart, s2ExitSpan);
       const s2ExitPhoto = fadeOutMult(scroll, s2ExitPhotoStart, s2ExitPhotoSpan);
 
-      const s2TitleT = easeInOutCubic(clamp01((scroll - s2Base) / s2Span));
+      const s2TitleT = easeInOutCubic(clamp01((scroll - (s2Base + s2TitleOffset)) / s2Span));
       if (s2TitleRef.current) {
         s2TitleRef.current.style.opacity = (s2TitleT * s2Exit).toFixed(3);
         s2TitleRef.current.style.transform = `translateY(${Math.round((1 - s2TitleT) * 26)}px)`;
       }
-      const s2DescT = easeInOutCubic(clamp01((scroll - (s2Base + 0.08 * H)) / s2Span));
+      const s2DescT = easeInOutCubic(clamp01((scroll - (s2Base + s2DescOffset)) / s2Span));
       if (s2DescRef.current) {
         s2DescRef.current.style.opacity = (s2DescT * s2Exit).toFixed(3);
         s2DescRef.current.style.transform = `translateY(${Math.round((1 - s2DescT) * 22)}px)`;
       }
       s2ItemRefs.current.forEach((el, i) => {
         if (!el) return;
-        // Décalage et durée resserrés : la liste se révèle plus vite, aucun
-        // item ne reste "presque invisible" trop longtemps.
-        const start = s2Base + 0.16 * H + i * 0.035 * H;
-        const t = easeInOutCubic(clamp01((scroll - start) / (0.28 * H)));
+        const start = s2Base + s2ChecklistOffset + i * s2ChecklistStagger;
+        const t = easeInOutCubic(clamp01((scroll - start) / s2ChecklistSpan));
         el.style.opacity = (t * s2Exit).toFixed(3);
         el.style.transform = `translateY(${Math.round((1 - t) * 14)}px)`;
       });
-      const s2PhotoT = easeInOutCubic(clamp01((scroll - (s2Base + 0.1 * H)) / (0.55 * H)));
+      const s2PhotoT = easeInOutCubic(clamp01((scroll - (s2Base + s2PhotoOffset)) / s2PhotoSpan));
       const s2PhotoReveal = s2PhotoT * s2ExitPhoto;
       if (s2PhotoRef.current) {
         // Rideau qui monte (clip-path) — voir commentaire section 01.
@@ -237,25 +266,30 @@ export default function APropos() {
       }
 
       // ── SECTIONS 03-06 — même langage visuel, généralisé ──
-      // Section d'index i (0-based dans SECTIONS) occupe nominalement [i·H,(i+1)·H).
-      // Fenêtre d'entrée alignée sur celle, déjà validée, de la section 02.
+      // Desktop : chaque section a désormais un vrai palier fixe (dwellEnd) où
+      // elle reste posée, immobile, avant de céder la place à la suivante.
+      // Mobile : formules d'origine, strictement inchangées.
       for (let k = 0; k < 4; k++) {
         const i = k + 2; // index réel dans SECTIONS (2..5)
         const isLast = i === last;
         const s = SECTIONS[i];
         const rise = s.calm ? 18 : 26; // section 06 : montée plus douce ("impression de conclusion")
-        const entranceStart = (i - 0.4) * H;
+        const eStart = isDesktop ? entranceStart(i) : (i - 0.4) * H;
         const entranceSpan = s.calm ? 0.7 * H : 0.6 * H;
 
-        const exitMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.45) * H, 0.65 * H);
-        const exitPhotoMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.5) * H, 0.7 * H);
+        const exitMultBase = isDesktop ? dwellEnd(i) + 0.05 * H : (i + 0.45) * H;
+        const exitPhotoBase = isDesktop ? dwellEnd(i) + 0.1 * H : (i + 0.5) * H;
+        const exitMult = isLast ? 1 : fadeOutMult(scroll, exitMultBase, 0.65 * H);
+        const exitPhotoMult = isLast ? 1 : fadeOutMult(scroll, exitPhotoBase, 0.7 * H);
 
-        const titleR = fadeRise(scroll, entranceStart, entranceSpan, rise);
+        const titleOffset = isDesktop ? 0.15 * H : 0;
+        const descOffset = isDesktop ? 0.23 * H : 0.08 * H;
+        const titleR = fadeRise(scroll, eStart + titleOffset, entranceSpan, rise);
         if (sTitleRefs.current[k]) {
           sTitleRefs.current[k].style.opacity = (titleR.t * exitMult).toFixed(3);
           sTitleRefs.current[k].style.transform = `translateY(${titleR.y}px)`;
         }
-        const descR = fadeRise(scroll, entranceStart + 0.08 * H, entranceSpan, rise - 4);
+        const descR = fadeRise(scroll, eStart + descOffset, entranceSpan, rise - 4);
         if (sDescRefs.current[k]) {
           sDescRefs.current[k].style.opacity = (descR.t * exitMult).toFixed(3);
           sDescRefs.current[k].style.transform = `translateY(${descR.y}px)`;
@@ -263,13 +297,14 @@ export default function APropos() {
 
         // Photo : entrée en zoom doux (comme 01/02) + dérive/échelle pendant le
         // séjour dans la section + glissement de sortie (comme 01).
-        const localScroll = scroll - i * H;
+        const localScroll = scroll - wrapTop(i);
         const localProg = clamp01(localScroll / H);
         const photoScaleMax = s.calm ? 0.02 : 0.035;
-        const photoT = easeInOutCubic(clamp01((scroll - (entranceStart + 0.1 * H)) / (0.55 * H)));
+        const photoOffset = isDesktop ? 0.3 * H : 0.1 * H;
+        const photoSpan = isDesktop ? 0.6 * H : 0.55 * H;
+        const photoT = easeInOutCubic(clamp01((scroll - (eStart + photoOffset)) / photoSpan));
         const photoParallaxY = Math.min(40, Math.max(0, localScroll * 0.04));
-        const slideMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.5) * H, 0.7 * H);
-        const photoX = isLast ? 0 : -(1 - slideMult) * 50;
+        const photoX = isLast ? 0 : -(1 - exitPhotoMult) * 50;
         if (sPhotoRefs.current[k]) {
           // Rideau qui monte (clip-path) — voir commentaire section 01.
           const photoReveal = photoT * exitPhotoMult;
@@ -285,9 +320,11 @@ export default function APropos() {
         // Carte export (section 05 uniquement) : tracés dorés qui se dessinent
         // très légèrement pendant le scroll — jamais d'animation en boucle.
         if (s.map) {
+          const mapOffset = isDesktop ? 0.35 * H : 0.22 * H;
+          const mapStagger = isDesktop ? 0.08 * H : 0.06 * H;
           mapPathRefs.current.forEach((p, r) => {
             if (!p) return;
-            const start = entranceStart + 0.22 * H + r * 0.06 * H;
+            const start = eStart + mapOffset + r * mapStagger;
             const dt = easeInOutCubic(clamp01((scroll - start) / (0.45 * H)));
             p.style.strokeDashoffset = (100 - dt * 100).toFixed(1);
             p.style.opacity = (0.6 * exitMult).toFixed(3);
@@ -296,7 +333,7 @@ export default function APropos() {
       }
 
       // ── Puces de navigation — couleur adaptée au fond actif ──
-      const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
+      const active = Math.min(last, Math.max(0, Math.round(scroll / SU)));
       const activeDark = SECTIONS[active].dark;
       const dotOn = activeDark ? "rgba(242,233,216,0.95)" : "rgba(23,48,31,0.72)";
       const dotOff = activeDark ? "rgba(242,233,216,0.32)" : "rgba(23,48,31,0.28)";
@@ -349,15 +386,19 @@ export default function APropos() {
     };
   }, []);
 
-  const scrollTo = (i) =>
-    lenisRef.current
-      ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
-      : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
+  const scrollTo = (i) => {
+    const isDesktopNow = window.matchMedia("(min-width: 769px)").matches;
+    const su = (isDesktopNow ? 2 : 1) * window.innerHeight;
+    return lenisRef.current
+      ? lenisRef.current.scrollTo(i * su, { duration: 1.2 })
+      : window.scrollTo({ top: i * su, behavior: "smooth" });
+  };
 
   return (
     <>
       <style>{`
-        .vision-chapter { position: relative; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: visible; }
+        .vision-chapter-wrap { position: relative; height: 200vh; }
+        .vision-chapter { position: sticky; top: 0; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: visible; }
         .vision-text-col { width: 46%; min-width: 340px; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(28px, 6vw, 96px); box-sizing: border-box; }
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
         .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, clip-path; }
@@ -380,7 +421,8 @@ export default function APropos() {
         .vision-map { margin-top: 30px; width: 100%; max-width: 400px; border: 1px solid rgba(201,168,76,0.22); border-radius: 2px; padding: 18px 18px 14px; box-sizing: border-box; }
         .vision-map-caption { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(242,233,216,0.45); margin-top: 10px; display: block; }
         @media (max-width: 900px) {
-          .vision-chapter { flex-direction: column; height: auto; min-height: 100vh; }
+          .vision-chapter-wrap { height: auto; }
+          .vision-chapter { position: relative; top: auto; flex-direction: column; height: auto; min-height: 100vh; }
           .vision-text-col { width: 100%; min-width: 0; padding: 120px 24px 32px; }
           .vision-photo-col { width: 100%; padding: 0 24px 56px; }
           .vision-photo-frame { height: 46vh; }
@@ -420,6 +462,7 @@ export default function APropos() {
       </nav>
 
       {/* ══ SECTION 01 — NOTRE VISION (forêt) ══ */}
+      <div className="vision-chapter-wrap">
       <section className="vision-chapter">
         <div className="vision-text-col" ref={s1TextRef} style={{ opacity: 0 }}>
           <span className="vision-num">{SECTIONS[0].num}</span>
@@ -448,8 +491,10 @@ export default function APropos() {
           {SECTIONS[0].hint}
         </div>
       </section>
+      </div>
 
       {/* ══ SECTION 02 — AUJOURD'HUI (ivoire) ══ */}
+      <div className="vision-chapter-wrap">
       <section className="vision-chapter">
         <div className="vision-text-col">
           <span className="vision-num">{SECTIONS[1].num}</span>
@@ -487,10 +532,12 @@ export default function APropos() {
           </div>
         </div>
       </section>
+      </div>
 
       {/* ══ SECTIONS 03-06 — génériques (texte court + placeholder premium) ══ */}
       {SECTIONS.slice(2).map((s, k) => (
-        <section className="vision-chapter" key={s.id}>
+        <div className="vision-chapter-wrap" key={s.id}>
+        <section className="vision-chapter">
           <div className="vision-text-col">
             <span className="vision-num">{s.num}</span>
             <span className="vision-kicker" style={{ color: s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)", marginTop: 6, display: "block" }}>
@@ -565,6 +612,7 @@ export default function APropos() {
             </div>
           </div>
         </section>
+        </div>
       ))}
     </>
   );
