@@ -172,10 +172,13 @@ export default function APropos() {
       const s1PhotoParallaxY = Math.min(50, scroll * 0.05);
       const s1PhotoScale = 1 + Math.min(0.035, prog * 0.035);
       const s1SlideT = easeInOutCubic(clamp01((scroll - 0.5 * H) / (0.7 * H)));
-      const s1PhotoOpacity = (1 - s1SlideT) * mountEase;
+      const s1PhotoReveal = (1 - s1SlideT) * mountEase;
       const s1PhotoX = -s1SlideT * 60;
       if (s1PhotoRef.current) {
-        s1PhotoRef.current.style.opacity = s1PhotoOpacity.toFixed(3);
+        // Rideau qui monte (clip-path), pas un fondu d'opacité : la partie
+        // visible de la photo reste toujours nette — un fondu classique
+        // donne un effet "brumeux/délavé" sur une photographie.
+        s1PhotoRef.current.style.clipPath = `inset(${((1 - s1PhotoReveal) * 100).toFixed(1)}% 0 0 0)`;
         s1PhotoRef.current.style.transform =
           `translate3d(${s1PhotoX.toFixed(1)}px, ${s1PhotoParallaxY.toFixed(1)}px, 0) scale(${s1PhotoScale.toFixed(3)})`;
       }
@@ -210,8 +213,10 @@ export default function APropos() {
         el.style.transform = `translateY(${Math.round((1 - t) * 14)}px)`;
       });
       const s2PhotoT = easeInOutCubic(clamp01((scroll - (s2Base + 0.1 * H)) / (0.55 * H)));
+      const s2PhotoReveal = s2PhotoT * s2ExitPhoto;
       if (s2PhotoRef.current) {
-        s2PhotoRef.current.style.opacity = (s2PhotoT * s2ExitPhoto).toFixed(3);
+        // Rideau qui monte (clip-path) — voir commentaire section 01.
+        s2PhotoRef.current.style.clipPath = `inset(${((1 - s2PhotoReveal) * 100).toFixed(1)}% 0 0 0)`;
         s2PhotoRef.current.style.transform =
           `translateX(${Math.round(-(1 - s2ExitPhoto) * 60)}px) scale(${(1.06 - 0.06 * s2PhotoT).toFixed(3)})`;
       }
@@ -251,7 +256,9 @@ export default function APropos() {
         const slideMult = isLast ? 1 : fadeOutMult(scroll, (i + 0.5) * H, 0.7 * H);
         const photoX = isLast ? 0 : -(1 - slideMult) * 50;
         if (sPhotoRefs.current[k]) {
-          sPhotoRefs.current[k].style.opacity = (photoT * exitPhotoMult).toFixed(3);
+          // Rideau qui monte (clip-path) — voir commentaire section 01.
+          const photoReveal = photoT * exitPhotoMult;
+          sPhotoRefs.current[k].style.clipPath = `inset(${((1 - photoReveal) * 100).toFixed(1)}% 0 0 0)`;
           sPhotoRefs.current[k].style.transform =
             `translate3d(${photoX.toFixed(1)}px, ${photoParallaxY.toFixed(1)}px, 0) scale(${(1 + photoScaleMax * localProg).toFixed(3)})`;
         }
@@ -334,7 +341,7 @@ export default function APropos() {
         .vision-chapter { position: relative; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: visible; }
         .vision-text-col { width: 46%; min-width: 340px; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(28px, 6vw, 96px); box-sizing: border-box; }
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
-        .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, opacity; }
+        .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, clip-path; }
         .vision-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
         .vision-photo-wash { position: absolute; inset: 0; pointer-events: none; }
         .vision-num { font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; letter-spacing: .04em; color: ${GOLD}; }
@@ -406,7 +413,7 @@ export default function APropos() {
           <div
             className="vision-photo-frame"
             ref={s1PhotoRef}
-            style={{ opacity: 0, border: `1px solid rgba(201,168,76,0.35)` }}
+            style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(201,168,76,0.35)` }}
           >
             <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
             <div className="vision-photo-wash" style={{
@@ -447,7 +454,7 @@ export default function APropos() {
           <div
             className="vision-photo-frame"
             ref={s2PhotoRef}
-            style={{ opacity: 0, border: `1px solid rgba(23,48,31,0.18)` }}
+            style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(23,48,31,0.18)` }}
           >
             <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
             <div className="vision-photo-wash" style={{
@@ -513,7 +520,7 @@ export default function APropos() {
               className="vision-photo-frame"
               ref={(el) => (sPhotoRefs.current[k] = el)}
               style={{
-                opacity: 0,
+                clipPath: "inset(100% 0 0 0)",
                 background: s.dark
                   ? "linear-gradient(155deg, #17201B 0%, #0B0F0A 100%)"
                   : "linear-gradient(155deg, #EDE2CB 0%, #DCC9A0 100%)",
