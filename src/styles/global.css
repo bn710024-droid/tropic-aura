@@ -239,7 +239,7 @@ body::-webkit-scrollbar { display: none; }
   content: "";
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 75px;
+  height: 54px;
   background: rgba(51, 51, 51, .20);
   z-index: -1;
   pointer-events: none;
