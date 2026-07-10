@@ -419,7 +419,7 @@ export default function APropos() {
           >
             <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
             <div className="vision-photo-wash" style={{
-              background: "linear-gradient(155deg, rgba(18,42,30,0.32) 0%, rgba(14,32,21,0.55) 100%)",
+              background: "linear-gradient(155deg, rgba(18,42,30,0.12) 0%, rgba(14,32,21,0.22) 100%)",
             }} />
           </div>
         </div>
@@ -460,7 +460,7 @@ export default function APropos() {
           >
             <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
             <div className="vision-photo-wash" style={{
-              background: "linear-gradient(155deg, rgba(242,233,216,0.08) 0%, rgba(23,48,31,0.30) 100%)",
+              background: "linear-gradient(155deg, rgba(242,233,216,0.04) 0%, rgba(23,48,31,0.12) 100%)",
             }} />
           </div>
         </div>
