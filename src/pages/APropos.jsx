@@ -107,17 +107,20 @@ export default function APropos() {
 
   // Section 01 (inchangée)
   const s1TextRef  = useRef(null);
-  const s1PhotoRef = useRef(null);
+  const s1PhotoRef = useRef(null);      // cadre (bordure) — clip-path + translate SEULEMENT, jamais de scale
+  const s1PhotoInnerRef = useRef(null); // image à l'intérieur — porte le zoom, le cadre ne bouge pas
   const s1HintRef  = useRef(null);
   // Section 02 (inchangée + fondu de sortie ajouté plus bas)
   const s2TitleRef = useRef(null);
   const s2DescRef  = useRef(null);
   const s2ItemRefs = useRef([]);
   const s2PhotoRef = useRef(null);
+  const s2PhotoInnerRef = useRef(null);
   // Sections 03-06 (génériques, k = 0..3 ↔ SECTIONS[k+2])
   const sTitleRefs = useRef([]);
   const sDescRefs  = useRef([]);
   const sPhotoRefs = useRef([]);
+  const sPhotoInnerRefs = useRef([]);
   const mapPathRefs = useRef([]);
 
   useEffect(() => {
@@ -179,8 +182,15 @@ export default function APropos() {
         // visible de la photo reste toujours nette — un fondu classique
         // donne un effet "brumeux/délavé" sur une photographie.
         s1PhotoRef.current.style.clipPath = `inset(${((1 - s1PhotoReveal) * 100).toFixed(1)}% 0 0 0)`;
+        // Cadre (bordure) : SEULEMENT une translation — jamais de scale ici,
+        // sinon la bordure elle-même grossit et déborde de sa marge.
         s1PhotoRef.current.style.transform =
-          `translate3d(${s1PhotoX.toFixed(1)}px, ${s1PhotoParallaxY.toFixed(1)}px, 0) scale(${s1PhotoScale.toFixed(3)})`;
+          `translate3d(${s1PhotoX.toFixed(1)}px, ${s1PhotoParallaxY.toFixed(1)}px, 0)`;
+      }
+      if (s1PhotoInnerRef.current) {
+        // Zoom : appliqué UNIQUEMENT à l'image, à l'intérieur du cadre fixe
+        // (le overflow:hidden du cadre découpe proprement l'excédent).
+        s1PhotoInnerRef.current.style.transform = `scale(${s1PhotoScale.toFixed(3)})`;
       }
       if (s1HintRef.current) {
         const hintOpacity = (1 - clamp01(scroll / (0.14 * H))) * mountEase;
@@ -219,8 +229,11 @@ export default function APropos() {
       if (s2PhotoRef.current) {
         // Rideau qui monte (clip-path) — voir commentaire section 01.
         s2PhotoRef.current.style.clipPath = `inset(${((1 - s2PhotoReveal) * 100).toFixed(1)}% 0 0 0)`;
-        s2PhotoRef.current.style.transform =
-          `translateX(${Math.round(-(1 - s2ExitPhoto) * 60)}px) scale(${(1.06 - 0.06 * s2PhotoT).toFixed(3)})`;
+        // Cadre : translation seule, jamais de scale (voir commentaire section 01).
+        s2PhotoRef.current.style.transform = `translateX(${Math.round(-(1 - s2ExitPhoto) * 60)}px)`;
+      }
+      if (s2PhotoInnerRef.current) {
+        s2PhotoInnerRef.current.style.transform = `scale(${(1.06 - 0.06 * s2PhotoT).toFixed(3)})`;
       }
 
       // ── SECTIONS 03-06 — même langage visuel, généralisé ──
@@ -261,8 +274,12 @@ export default function APropos() {
           // Rideau qui monte (clip-path) — voir commentaire section 01.
           const photoReveal = photoT * exitPhotoMult;
           sPhotoRefs.current[k].style.clipPath = `inset(${((1 - photoReveal) * 100).toFixed(1)}% 0 0 0)`;
+          // Cadre : translation seule, jamais de scale (voir commentaire section 01).
           sPhotoRefs.current[k].style.transform =
-            `translate3d(${photoX.toFixed(1)}px, ${photoParallaxY.toFixed(1)}px, 0) scale(${(1 + photoScaleMax * localProg).toFixed(3)})`;
+            `translate3d(${photoX.toFixed(1)}px, ${photoParallaxY.toFixed(1)}px, 0)`;
+        }
+        if (sPhotoInnerRefs.current[k]) {
+          sPhotoInnerRefs.current[k].style.transform = `scale(${(1 + photoScaleMax * localProg).toFixed(3)})`;
         }
 
         // Carte export (section 05 uniquement) : tracés dorés qui se dessinent
@@ -344,6 +361,7 @@ export default function APropos() {
         .vision-text-col { width: 46%; min-width: 340px; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(28px, 6vw, 96px); box-sizing: border-box; }
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
         .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, clip-path; }
+        .vision-photo-inner { position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; }
         .vision-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
         .vision-photo-wash { position: absolute; inset: 0; pointer-events: none; }
         .vision-num { font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; letter-spacing: .04em; color: ${GOLD}; }
@@ -417,10 +435,12 @@ export default function APropos() {
             ref={s1PhotoRef}
             style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(201,168,76,0.35)` }}
           >
-            <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
-            <div className="vision-photo-wash" style={{
-              background: "linear-gradient(155deg, rgba(18,42,30,0.12) 0%, rgba(14,32,21,0.22) 100%)",
-            }} />
+            <div className="vision-photo-inner" ref={s1PhotoInnerRef}>
+              <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
+              <div className="vision-photo-wash" style={{
+                background: "linear-gradient(155deg, rgba(18,42,30,0.12) 0%, rgba(14,32,21,0.22) 100%)",
+              }} />
+            </div>
           </div>
         </div>
         <div className="vision-hint" ref={s1HintRef} style={{ opacity: 0, color: "rgba(242,233,216,0.75)" }}>
@@ -458,10 +478,12 @@ export default function APropos() {
             ref={s2PhotoRef}
             style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(23,48,31,0.18)` }}
           >
-            <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
-            <div className="vision-photo-wash" style={{
-              background: "linear-gradient(155deg, rgba(242,233,216,0.04) 0%, rgba(23,48,31,0.12) 100%)",
-            }} />
+            <div className="vision-photo-inner" ref={s2PhotoInnerRef}>
+              <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
+              <div className="vision-photo-wash" style={{
+                background: "linear-gradient(155deg, rgba(242,233,216,0.04) 0%, rgba(23,48,31,0.12) 100%)",
+              }} />
+            </div>
           </div>
         </div>
       </section>
@@ -529,14 +551,16 @@ export default function APropos() {
                 border: s.dark ? "1px solid rgba(201,168,76,0.35)" : "1px solid rgba(23,48,31,0.18)",
               }}
             >
-              <div className="vision-placeholder">
-                <span className="vision-placeholder-corner" style={{ top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
-                <span className="vision-placeholder-corner" style={{ top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
-                <span className="vision-placeholder-corner" style={{ bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
-                <span className="vision-placeholder-corner" style={{ bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
-                <span className="vision-placeholder-label" style={{ color: s.dark ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)" }}>
-                  {s.photoLabel}
-                </span>
+              <div className="vision-photo-inner" ref={(el) => (sPhotoInnerRefs.current[k] = el)}>
+                <div className="vision-placeholder">
+                  <span className="vision-placeholder-corner" style={{ top: 14, left: 14, borderTop: "1px solid", borderLeft: "1px solid" }} />
+                  <span className="vision-placeholder-corner" style={{ top: 14, right: 14, borderTop: "1px solid", borderRight: "1px solid" }} />
+                  <span className="vision-placeholder-corner" style={{ bottom: 14, left: 14, borderBottom: "1px solid", borderLeft: "1px solid" }} />
+                  <span className="vision-placeholder-corner" style={{ bottom: 14, right: 14, borderBottom: "1px solid", borderRight: "1px solid" }} />
+                  <span className="vision-placeholder-label" style={{ color: s.dark ? "rgba(242,233,216,0.55)" : "rgba(23,48,31,0.50)" }}>
+                    {s.photoLabel}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
