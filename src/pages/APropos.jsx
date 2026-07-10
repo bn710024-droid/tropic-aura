@@ -207,8 +207,10 @@ export default function APropos() {
       }
       s2ItemRefs.current.forEach((el, i) => {
         if (!el) return;
-        const start = s2Base + 0.16 * H + i * 0.05 * H;
-        const t = easeInOutCubic(clamp01((scroll - start) / (0.4 * H)));
+        // Décalage et durée resserrés : la liste se révèle plus vite, aucun
+        // item ne reste "presque invisible" trop longtemps.
+        const start = s2Base + 0.16 * H + i * 0.035 * H;
+        const t = easeInOutCubic(clamp01((scroll - start) / (0.28 * H)));
         el.style.opacity = (t * s2Exit).toFixed(3);
         el.style.transform = `translateY(${Math.round((1 - t) * 14)}px)`;
       });
