@@ -216,8 +216,8 @@ export default function APropos() {
       // Desktop : chaque section a désormais un vrai palier fixe (dwellEnd) où
       // elle reste posée, immobile, avant de céder la place à la suivante.
       // Mobile : formules d'origine, strictement inchangées.
-      for (let k = 0; k < 4; k++) {
-        const i = k + 2; // index réel dans SECTIONS (2..5)
+      for (let k = 0; k < SECTIONS.length - 2; k++) {
+        const i = k + 2; // index réel dans SECTIONS (2..dernier)
         // Section trop loin du scroll actuel (déjà réglée à son état final
         // depuis longtemps, ou pas encore concernée) : on saute tout son
         // calcul, y compris le clipPath (coûteux, force un repaint) — ses
@@ -359,7 +359,17 @@ export default function APropos() {
         .vision-kicker { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
         .vision-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(30px, 3.1vw, 46px); line-height: 1.14; letter-spacing: -.01em; margin: 18px 0 20px; }
         .vision-desc { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.75; font-weight: 400; max-width: 420px; }
+        .vision-desc-group { display: flex; flex-direction: column; gap: 16px; }
         .vision-line { width: 34px; height: 1px; margin: 22px 0; }
+        /* ── Scène-citation : respiration typographique seule à l'écran ── */
+        .vision-chapter--quote { justify-content: center; align-items: center; padding: 0 clamp(28px, 8vw, 160px); box-sizing: border-box; }
+        .vision-quote {
+          font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500;
+          font-size: clamp(28px, 4vw, 56px); line-height: 1.28; letter-spacing: -.01em;
+          text-align: center; max-width: 1000px;
+        }
+        .vision-quote::before { content: "\\201C"; }
+        .vision-quote::after { content: "\\201D"; }
         .vision-checklist { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
         .vision-checklist li { display: flex; align-items: baseline; gap: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; }
         .vision-check { color: ${GOLD}; font-size: 13px; }
@@ -390,6 +400,8 @@ export default function APropos() {
         .ms-about-bg { position: absolute; inset: 0; z-index: 0; }
         .ms-about-photo { margin-top: 26px; position: relative; z-index: 2; }
         .ms-about-photo .vision-photo-frame { height: 42vh; will-change: auto; }
+        .ms-about--quote { align-items: center; text-align: center; padding: 0 28px; }
+        .ms-about--quote .vision-quote { position: relative; z-index: 2; font-size: clamp(24px, 7vw, 34px); }
         ${buildMotionCSS()}
         ${buildKenBurnsCSS()}
       `}</style>
@@ -413,7 +425,7 @@ export default function APropos() {
             key={s.id}
             ref={(el) => (dotRefs.current[i] = el)}
             onClick={() => scrollTo(i)}
-            title={s.title}
+            title={s.title || s.quote}
             style={{
               width: 6, height: 6, borderRadius: "50%",
               background: "rgba(242,233,216,0.32)",
@@ -436,7 +448,11 @@ export default function APropos() {
             {SECTIONS[0].kicker}
           </span>
           <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS[0].title}</h1>
-          <p className="vision-desc" style={{ color: IVORY_TEXT }}>{SECTIONS[0].desc}</p>
+          <div className="vision-desc-group">
+            {SECTIONS[0].desc.map((p, i) => (
+              <p key={i} className="vision-desc" style={{ color: IVORY_TEXT }}>{p}</p>
+            ))}
+          </div>
         </div>
         <div className="vision-photo-col">
           <div
@@ -471,9 +487,11 @@ export default function APropos() {
             {SECTIONS[1].title}
           </h1>
           <div className="vision-line" style={{ background: GOLD }} />
-          <p className="vision-desc" ref={s2DescRef} style={{ color: FOREST_TEXT, opacity: 0 }}>
-            {SECTIONS[1].desc}
-          </p>
+          <div className="vision-desc-group" ref={s2DescRef} style={{ opacity: 0 }}>
+            {SECTIONS[1].desc.map((p, i) => (
+              <p key={i} className="vision-desc" style={{ color: FOREST_TEXT }}>{p}</p>
+            ))}
+          </div>
           <ul className="vision-checklist" style={{ color: "#17301F" }}>
             {SECTIONS[1].checklist.map((item, i) => (
               <li key={item} ref={(el) => (s2ItemRefs.current[i] = el)} style={{ opacity: 0 }}>
@@ -500,9 +518,22 @@ export default function APropos() {
       </section>
       </div>
 
-      {/* ══ SECTIONS 03-06 — génériques (texte court + placeholder premium) ══ */}
+      {/* ══ SECTIONS 03+ — génériques (texte + photo), et scène-citation isolée ══ */}
       {SECTIONS.slice(2).map((s, k) => (
         <div className="vision-chapter-wrap" key={s.id}>
+        {s.type === "quote" ? (
+          /* ── Scène-citation : respiration typographique entre deux sections,
+             pas de numéro/kicker/photo — juste la phrase, seule, en grand. ── */
+          <section className="vision-chapter vision-chapter--quote">
+            <p
+              className="vision-quote"
+              ref={(el) => (sDescRefs.current[k] = el)}
+              style={{ color: IVORY, opacity: 0 }}
+            >
+              {s.quote}
+            </p>
+          </section>
+        ) : (
         <section className="vision-chapter">
           <div className="vision-text-col">
             <span className="vision-num">{s.num}</span>
@@ -513,9 +544,11 @@ export default function APropos() {
               {s.title}
             </h1>
             <div className="vision-line" style={{ background: GOLD }} />
-            <p className="vision-desc" ref={(el) => (sDescRefs.current[k] = el)} style={{ color: s.dark ? IVORY_TEXT : FOREST_TEXT, opacity: 0 }}>
-              {s.desc}
-            </p>
+            <div className="vision-desc-group" ref={(el) => (sDescRefs.current[k] = el)} style={{ opacity: 0 }}>
+              {s.desc.map((p, pi) => (
+                <p key={pi} className="vision-desc" style={{ color: s.dark ? IVORY_TEXT : FOREST_TEXT }}>{p}</p>
+              ))}
+            </div>
           </div>
 
           <div className="vision-photo-col">
@@ -557,6 +590,7 @@ export default function APropos() {
             </div>
           </div>
         </section>
+        )}
         </div>
       ))}
       </div>

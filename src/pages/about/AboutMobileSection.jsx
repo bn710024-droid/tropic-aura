@@ -17,6 +17,20 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
   const pace = PACE[s.pace] || 1;
   const exitX = exitDirection === "right" ? "32px" : "-32px";
 
+  if (s.type === "quote") {
+    return (
+      <MotionScene className="ms-about ms-about--quote" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px">
+        <div className="ms-about-bg" style={{ background: s.bg }} />
+        <p
+          className="ms-layer ms-layer--title vision-quote"
+          style={{ color: IVORY, transitionDuration: `${300 * pace}ms` }}
+        >
+          {s.quote}
+        </p>
+      </MotionScene>
+    );
+  }
+
   return (
     <MotionScene className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px" style={{ "--ms-exit-x": exitX }}>
       <div className="ms-about-bg" style={{ background: s.bg }} />
@@ -33,12 +47,14 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
           {s.title}
         </h1>
         <div className="vision-line ms-layer ms-layer--icon" style={{ background: GOLD }} />
-        <p
-          className="ms-layer ms-layer--text vision-desc"
-          style={{ color: descColor, transitionDuration: `${250 * pace}ms` }}
+        <div
+          className="ms-layer ms-layer--text vision-desc-group"
+          style={{ transitionDuration: `${250 * pace}ms` }}
         >
-          {s.desc}
-        </p>
+          {s.desc.map((p, i) => (
+            <p key={i} className="vision-desc" style={{ color: descColor }}>{p}</p>
+          ))}
+        </div>
 
         {s.checklist && (
           <ul className="vision-checklist" style={{ color: "#17301F" }}>
