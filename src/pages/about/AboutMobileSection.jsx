@@ -1,12 +1,11 @@
 import MotionScene from "../../motion/MotionScene";
 import { GOLD, IVORY, IVORY_TEXT, FOREST_TEXT, PACE } from "./aboutTheme";
 
-// Scène mobile "escalier" — seul le bloc TITRE (numéro/kicker/titre) reste
-// épinglé pendant que le CONTENU (texte/photo) de la même section défile
-// normalement en dessous. Une fois le contenu passé, le titre suivant
-// prend le relais à la même position — jamais de carte opaque qui
-// recouvre tout, jamais de scroll verrouillé (MotionScene observe via
-// IntersectionObserver, voir src/motion/).
+// Scène mobile "escalier" — le bloc COMPLET (titre + texte + photo) reste
+// épinglé à l'écran comme un seul morceau, immobile pendant la lecture,
+// jusqu'à ce que le bloc suivant arrive et le remplace entièrement — comme
+// des pages qui se tournent. Jamais de scroll verrouillé : MotionScene
+// observe la position via IntersectionObserver, voir src/motion/.
 export default function AboutMobileSection({ section }) {
   const s = section;
   const kickerColor = s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)";
@@ -15,8 +14,11 @@ export default function AboutMobileSection({ section }) {
   const pace = PACE[s.pace] || 1;
 
   return (
-    <MotionScene as="div" className="ms-about-wrap" curtainColor={s.bg} rootMargin="-8% 0px -30% 0px" style={{ background: s.bg }}>
-      <div className="ms-about-header">
+    <div className="ms-about-wrap">
+    <MotionScene className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -30% 0px">
+      <div className="ms-about-bg" style={{ background: s.bg }} />
+
+      <div className="ms-about-inner">
         <span className="ms-layer ms-layer--icon vision-num">{s.num}</span>
         <span className="ms-layer ms-layer--icon vision-kicker" style={{ color: kickerColor, marginTop: 6, display: "block" }}>
           {s.kicker}
@@ -28,9 +30,6 @@ export default function AboutMobileSection({ section }) {
           {s.title}
         </h1>
         <div className="vision-line ms-layer ms-layer--icon" style={{ background: GOLD }} />
-      </div>
-
-      <div className="ms-about-content">
         <p
           className="ms-layer ms-layer--text vision-desc"
           style={{ color: descColor, transitionDuration: `${250 * pace}ms` }}
@@ -65,5 +64,6 @@ export default function AboutMobileSection({ section }) {
         </div>
       </div>
     </MotionScene>
+    </div>
   );
 }

@@ -359,24 +359,23 @@ export default function APropos() {
           .about-mobile-tree { display: block; }
         }
 
-        /* ── Scènes mobiles "escalier" : seul le bloc TITRE reste épinglé
-           (position: sticky) pendant que le CONTENU (texte/photo) de la
-           même section défile normalement en dessous, derrière lui. Une
-           fois le contenu passé, le titre suivant prend le relais à la
-           même position — jamais de carte opaque qui recouvre tout,
-           jamais de scroll verrouillé. ── */
-        .motion-scene.ms-about-wrap { position: relative; min-height: 100vh; padding-bottom: 64px; }
-        .ms-about-wrap .ms-curtain { display: none; }
-        .ms-about-header {
-          position: sticky; top: 96px; z-index: 3;
-          padding: 0 24px; box-sizing: border-box;
+        /* ── Scènes mobiles "escalier" : le bloc COMPLET (titre + texte +
+           photo) reste épinglé comme un seul morceau dans un wrapper plus
+           haut que 100vh → le bloc suivant arrive et le remplace
+           entièrement, comme des pages qui se tournent — jamais de scroll
+           verrouillé (le wrapper, lui, défile normalement). ── */
+        .ms-about-wrap { position: relative; height: 145vh; }
+        .ms-about-wrap:last-child { height: 100vh; }
+        .motion-scene.ms-about {
+          position: sticky; top: 0; height: 100vh; min-height: 100vh;
+          display: flex; flex-direction: column; justify-content: center;
+          padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden;
+          box-shadow: 0 -18px 46px rgba(0,0,0,0.28);
         }
-        .ms-about-content {
-          position: relative; z-index: 1;
-          padding: 18px 24px 0; box-sizing: border-box;
-          margin-top: 14px;
-        }
-        .ms-about-photo { margin-top: 26px; }
+        .ms-about .ms-curtain { display: none; }
+        .ms-about-inner { position: relative; z-index: 2; }
+        .ms-about-bg { position: absolute; inset: 0; z-index: 0; }
+        .ms-about-photo { margin-top: 26px; position: relative; z-index: 2; }
         .ms-about-photo .vision-photo-frame { height: 42vh; will-change: auto; }
         ${buildMotionCSS()}
         ${buildKenBurnsCSS()}
