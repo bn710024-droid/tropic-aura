@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSceneTrigger } from "../motion";
+import { MAP_ANIMATION_DELAY_MS } from "../motion/motionTokens";
 
 // ============================================================
 //  Carte export animée — section "Notre Avenir" (À propos).
@@ -74,11 +76,34 @@ const timingFor = (index) => {
 
 export default function ExportRouteMap() {
   const [hovered, setHovered] = useState(null);
+  const [started, setStarted] = useState(false);
+  const rootRef = useRef(null);
+  const phase = useSceneTrigger(rootRef, { rootMargin: "-15% 0px -15% 0px" });
+
+  // La carte doit d'abord être comprise, immobile, avant que le récit
+  // (les routes) ne commence — cf. Motion System, MAP_ANIMATION_DELAY_MS.
+  useEffect(() => {
+    if (phase !== "entering") return undefined;
+    const t = setTimeout(() => setStarted(true), MAP_ANIMATION_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [phase]);
 
   return (
-    <div className="export-map">
+    <div className={`export-map${started ? " is-started" : ""}`} ref={rootRef}>
       <style>{`
         .export-map { position: absolute; inset: 0; width: 100%; height: 100%; background: #050505; }
+        .export-map [class*="export-route--"],
+        .export-map [class*="export-dot--"],
+        .export-map [class*="export-arrive--"],
+        .export-map .export-dakar-ring {
+          animation-play-state: paused;
+        }
+        .export-map.is-started [class*="export-route--"],
+        .export-map.is-started [class*="export-dot--"],
+        .export-map.is-started [class*="export-arrive--"],
+        .export-map.is-started .export-dakar-ring {
+          animation-play-state: running;
+        }
 
         /* ── Dakar : anneau fin qui respire doucement une fois par cycle, jamais plus de quelques px ── */
         .export-dakar-ring { transform-box: fill-box; transform-origin: center; animation: dakarPulse ${CYCLE_MS}ms ease-out infinite; }

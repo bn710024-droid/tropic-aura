@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import ExportRouteMap from "../components/ExportRouteMap";
+import AboutMobileSection from "./about/AboutMobileSection";
+import { GOLD, BLACK, IVORY, FOREST, SAGE, STONE, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
+import { buildMotionCSS, buildKenBurnsCSS } from "../motion";
 
 // ============================================================
 //  À PROPOS — "Notre Vision" — récit éditorial continu
@@ -20,66 +23,6 @@ import ExportRouteMap from "../components/ExportRouteMap";
 // ============================================================
 
 export const PAGE_ENTRY_COLOR = { desktop: "#122A1E", mobile: "#122A1E" };
-
-const GOLD = "#C9A84C";
-const BLACK = "#0B0F0A";
-const IVORY = "#F2E9D8";
-const FOREST = "#122A1E";
-const SAGE = "#2E3628"; // vert sauge/olive très sombre — distinct de FOREST, légèrement plus clair
-const STONE = "#DDDAD2"; // gris minéral clair — pierre / béton poli
-const IVORY_TEXT = "rgba(242,233,216,0.82)";
-const FOREST_TEXT = "rgba(23,48,31,0.82)";
-
-const SECTIONS = [
-  {
-    id: "vision", num: "01", kicker: "NOTRE VISION", bg: FOREST, dark: true,
-    title: "Construire davantage qu'une entreprise d'export.",
-    desc: "Notre ambition est de créer une chaîne de valeur durable reliant les producteurs africains aux marchés internationaux.",
-    hint: "Défiler pour découvrir",
-  },
-  {
-    id: "aujourdhui", num: "02", kicker: "AUJOURD'HUI", bg: IVORY, dark: false,
-    title: "Nous construisons un réseau fiable.",
-    desc: "Chaque jour, nos équipes et partenaires travaillent pour garantir la qualité, la traçabilité et la fiabilité de nos mangues d'exportation.",
-    checklist: [
-      "Réseau de producteurs",
-      "Préparation export",
-      "Contrôle qualité",
-      "Documentation export",
-      "Logistique internationale",
-    ],
-  },
-  {
-    id: "demain", num: "03", kicker: "DEMAIN", bg: SAGE, dark: true,
-    title: "Nous préparons la croissance.",
-    desc: "Nous investissons dans nos capacités, nos infrastructures et nos partenariats pour répondre à une demande internationale croissante.",
-    photo: "/images/about/demain-conditionnement.jpg",
-    photoAlt: "Ligne de conditionnement Tropicaura",
-  },
-  {
-    id: "ambition", num: "04", kicker: "NOTRE AMBITION", bg: STONE, dark: false,
-    title: "Investir pour créer plus de valeur.",
-    desc: "Nous souhaitons investir progressivement dans la transformation, réduire les pertes post-récolte et créer plus de valeur pour nos partenaires et pour les marchés.",
-    photo: "/images/about/ambition-site.jpg",
-    photoAlt: "Site industriel Tropicaura",
-    photoPosition: "62% 50%",
-  },
-  {
-    id: "avenir", num: "05", kicker: "NOTRE AVENIR", bg: BLACK, dark: true,
-    title: "Relier l'Afrique aux marchés du monde.",
-    desc: "Depuis Dakar, nous connectons nos producteurs aux plus grands ports et marchés internationaux avec efficacité et transparence.",
-    photo: "/images/about/avenir-port-dakar.jpg",
-    photoAlt: "Port de Dakar",
-  },
-  {
-    id: "engagement", num: "06", kicker: "NOTRE ENGAGEMENT", bg: IVORY, dark: false,
-    title: "Des relations durables basées sur la confiance.",
-    desc: "Nous construisons des partenariats solides et transparents avec nos producteurs, nos clients et nos collaborateurs.",
-    photo: "/images/about/engagement-partenariat.jpg",
-    photoAlt: "Équipe Tropicaura et partenaire dans un verger de manguiers",
-    calm: true,
-  },
-];
 
 const hexToRgb = (h) => {
   const n = parseInt(h.slice(1), 16);
@@ -408,17 +351,35 @@ export default function APropos() {
         .vision-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
         .vision-placeholder-corner { position: absolute; width: 18px; height: 18px; border-color: ${GOLD}; }
         .vision-placeholder-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
-        .vision-map-desktop { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .vision-map-mobile-fallback { display: none; }
+
+        /* ── Bascule desktop / mobile : deux arbres distincts, jamais mélangés ── */
+        .about-mobile-tree { display: none; }
         @media (max-width: 900px) {
-          .vision-chapter-wrap { height: auto; }
-          .vision-chapter { position: relative; top: auto; flex-direction: column; height: auto; min-height: 100vh; }
-          .vision-text-col { width: 100%; min-width: 0; padding: 120px 24px 32px; }
-          .vision-photo-col { width: 100%; padding: 0 24px 56px; }
-          .vision-photo-frame { height: 46vh; }
-          .vision-map-desktop { display: none; }
-          .vision-map-mobile-fallback { display: block; }
+          .about-desktop-tree { display: none; }
+          .about-mobile-tree { display: block; }
         }
+
+        /* ── Scènes mobiles "escalier" : seul le bloc TITRE reste épinglé
+           (position: sticky) pendant que le CONTENU (texte/photo) de la
+           même section défile normalement en dessous, derrière lui. Une
+           fois le contenu passé, le titre suivant prend le relais à la
+           même position — jamais de carte opaque qui recouvre tout,
+           jamais de scroll verrouillé. ── */
+        .motion-scene.ms-about-wrap { position: relative; min-height: 100vh; padding-bottom: 64px; }
+        .ms-about-wrap .ms-curtain { display: none; }
+        .ms-about-header {
+          position: sticky; top: 96px; z-index: 3;
+          padding: 0 24px; box-sizing: border-box;
+        }
+        .ms-about-content {
+          position: relative; z-index: 1;
+          padding: 18px 24px 0; box-sizing: border-box;
+          margin-top: 14px;
+        }
+        .ms-about-photo { margin-top: 26px; }
+        .ms-about-photo .vision-photo-frame { height: 42vh; will-change: auto; }
+        ${buildMotionCSS()}
+        ${buildKenBurnsCSS()}
       `}</style>
 
       {/* ── Header fantôme transparent ── */}
@@ -452,6 +413,8 @@ export default function APropos() {
         ))}
       </nav>
 
+      {/* ══ Arbre desktop — moteur scroll continu existant, inchangé ══ */}
+      <div className="about-desktop-tree">
       {/* ══ SECTION 01 — NOTRE VISION (forêt) ══ */}
       <div className="vision-chapter-wrap">
       <section className="vision-chapter">
@@ -559,12 +522,7 @@ export default function APropos() {
             >
               <div className="vision-photo-inner" ref={(el) => (sPhotoInnerRefs.current[k] = el)}>
                 {s.id === "avenir" ? (
-                  <>
-                    <div className="vision-map-desktop">
-                      <ExportRouteMap />
-                    </div>
-                    <img src={s.photo} alt={s.photoAlt} className="vision-photo-img vision-map-mobile-fallback" />
-                  </>
+                  <ExportRouteMap />
                 ) : s.photo ? (
                   <img
                     src={s.photo}
@@ -589,6 +547,14 @@ export default function APropos() {
         </section>
         </div>
       ))}
+      </div>
+
+      {/* ══ Arbre mobile — scènes "page turn" (Motion System), aucun scroll verrouillé ══ */}
+      <div className="about-mobile-tree">
+        {SECTIONS.map((s) => (
+          <AboutMobileSection key={s.id} section={s} />
+        ))}
+      </div>
     </>
   );
 }
