@@ -218,6 +218,14 @@ export default function APropos() {
       // Mobile : formules d'origine, strictement inchangées.
       for (let k = 0; k < 4; k++) {
         const i = k + 2; // index réel dans SECTIONS (2..5)
+        // Section trop loin du scroll actuel (déjà réglée à son état final
+        // depuis longtemps, ou pas encore concernée) : on saute tout son
+        // calcul, y compris le clipPath (coûteux, force un repaint) — ses
+        // styles restent tels qu'ils ont été laissés la dernière fois
+        // qu'elle était proche, ce qui est déjà son état stable (ouvert,
+        // fermé, ou invisible). Économise l'essentiel du travail par frame
+        // fait jusqu'ici pour des sections hors champ.
+        if (Math.abs(scroll - wrapTop(i)) > 2 * SU) continue;
         const isLast = i === last;
         const s = SECTIONS[i];
         const rise = s.calm ? 18 : 26; // section 06 : montée plus douce ("impression de conclusion")
@@ -291,7 +299,16 @@ export default function APropos() {
       if (lenis) lenis.raf(time);
       const scroll = readScroll();
       const elapsed = time - t0;
-      if (Math.abs(scroll - lastScroll) > 0.04 || elapsed < 950) {
+      // Le palier "elapsed < 950" ne sert qu'au fondu de montée de la
+      // section 01 au chargement (mountEase, indépendant du scroll) — les
+      // autres pages (Accueil, Produits) n'ont pas ce besoin et se
+      // contentent du seul throttle par delta de scroll, d'où leur
+      // fluidité de référence. On restreint donc ce palier au cas réel où
+      // il sert (on est encore au tout début de la page), au lieu de
+      // forcer un recalcul complet à chaque frame pendant 950ms peu
+      // importe où se trouve le visiteur.
+      const mountWindow = elapsed < 950 && scroll < (window.innerHeight || 1);
+      if (Math.abs(scroll - lastScroll) > 0.04 || mountWindow) {
         lastScroll = scroll;
         update(scroll, window.innerHeight || 1, elapsed);
       }
