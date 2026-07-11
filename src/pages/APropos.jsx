@@ -360,6 +360,11 @@ export default function APropos() {
         .vision-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(30px, 3.1vw, 46px); line-height: 1.14; letter-spacing: -.01em; margin: 18px 0 20px; }
         .vision-desc { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.75; font-weight: 400; max-width: 420px; }
         .vision-desc-group { display: flex; flex-direction: column; gap: 16px; }
+        /* ── Paragraphe fondateur mis en avant (voir descHighlight dans aboutTheme.js) ── */
+        .vision-desc--gold {
+          font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500;
+          font-size: clamp(16px, 1.3vw, 19px); line-height: 1.5; color: ${GOLD} !important;
+        }
         .vision-line { width: 34px; height: 1px; margin: 22px 0; }
         /* ── Scène-citation : respiration typographique seule à l'écran ── */
         .vision-chapter--quote { justify-content: center; align-items: center; padding: 0 clamp(28px, 8vw, 160px); box-sizing: border-box; }
@@ -450,7 +455,13 @@ export default function APropos() {
           <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS[0].title}</h1>
           <div className="vision-desc-group">
             {SECTIONS[0].desc.map((p, i) => (
-              <p key={i} className="vision-desc" style={{ color: IVORY_TEXT }}>{p}</p>
+              <p
+                key={i}
+                className={`vision-desc${SECTIONS[0].descHighlight === i ? " vision-desc--gold" : ""}`}
+                style={SECTIONS[0].descHighlight === i ? undefined : { color: IVORY_TEXT }}
+              >
+                {p}
+              </p>
             ))}
           </div>
         </div>
@@ -489,7 +500,13 @@ export default function APropos() {
           <div className="vision-line" style={{ background: GOLD }} />
           <div className="vision-desc-group" ref={s2DescRef} style={{ opacity: 0 }}>
             {SECTIONS[1].desc.map((p, i) => (
-              <p key={i} className="vision-desc" style={{ color: FOREST_TEXT }}>{p}</p>
+              <p
+                key={i}
+                className={`vision-desc${SECTIONS[1].descHighlight === i ? " vision-desc--gold" : ""}`}
+                style={SECTIONS[1].descHighlight === i ? undefined : { color: FOREST_TEXT }}
+              >
+                {p}
+              </p>
             ))}
           </div>
           <ul className="vision-checklist" style={{ color: "#17301F" }}>
@@ -546,7 +563,13 @@ export default function APropos() {
             <div className="vision-line" style={{ background: GOLD }} />
             <div className="vision-desc-group" ref={(el) => (sDescRefs.current[k] = el)} style={{ opacity: 0 }}>
               {s.desc.map((p, pi) => (
-                <p key={pi} className="vision-desc" style={{ color: s.dark ? IVORY_TEXT : FOREST_TEXT }}>{p}</p>
+                <p
+                  key={pi}
+                  className={`vision-desc${s.descHighlight === pi ? " vision-desc--gold" : ""}`}
+                  style={s.descHighlight === pi ? undefined : { color: s.dark ? IVORY_TEXT : FOREST_TEXT }}
+                >
+                  {p}
+                </p>
               ))}
             </div>
           </div>

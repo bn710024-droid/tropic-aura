@@ -52,7 +52,13 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
           style={{ transitionDuration: `${250 * pace}ms` }}
         >
           {s.desc.map((p, i) => (
-            <p key={i} className="vision-desc" style={{ color: descColor }}>{p}</p>
+            <p
+              key={i}
+              className={`vision-desc${s.descHighlight === i ? " vision-desc--gold" : ""}`}
+              style={s.descHighlight === i ? undefined : { color: descColor }}
+            >
+              {p}
+            </p>
           ))}
         </div>
 

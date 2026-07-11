@@ -26,6 +26,10 @@ export const SECTIONS = [
       "Nous ne cherchons pas uniquement à exporter des fruits. Nous cherchons à augmenter la valeur créée à partir de chaque récolte africaine.",
       "Notre vision est de construire progressivement un réseau reliant les producteurs, les partenaires logistiques et les acheteurs internationaux autour d'une même exigence : qualité, traçabilité, conformité et création de valeur à chaque étape de la chaîne.",
     ],
+    // Le premier paragraphe est la phrase fondatrice de Tropicaura — mise en
+    // avant en doré plutôt qu'isolée dans sa propre scène (redondant avec ce
+    // texte). Index dans le tableau `desc` ci-dessus.
+    descHighlight: 0,
     hint: "Défiler pour découvrir",
     photo: "/images/about/vision-verger.jpg",
     photoAlt: "Verger de manguiers",
@@ -76,12 +80,6 @@ export const SECTIONS = [
     photoPosition: "62% 50%",
     motionVariant: "investment",
     pace: "normal",
-  },
-  {
-    id: "quote", type: "quote", bg: BLACK, dark: true,
-    quote: "Nous ne cherchons pas uniquement à exporter des fruits. Nous cherchons à augmenter la valeur créée à partir de chaque récolte africaine.",
-    motionVariant: "quote",
-    pace: "slow",
   },
   {
     id: "avenir", num: "05", kicker: "NOTRE RÉSEAU INTERNATIONAL", bg: BLACK, dark: true,
