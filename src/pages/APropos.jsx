@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import ExportRouteMap from "../components/ExportRouteMap";
 
 // ============================================================
 //  À PROPOS — "Notre Vision" — récit éditorial continu
@@ -69,7 +70,6 @@ const SECTIONS = [
     desc: "Depuis Dakar, nous connectons nos producteurs aux plus grands ports et marchés internationaux avec efficacité et transparence.",
     photo: "/images/about/avenir-port-dakar.jpg",
     photoAlt: "Port de Dakar",
-    map: true,
   },
   {
     id: "engagement", num: "06", kicker: "NOTRE ENGAGEMENT", bg: IVORY, dark: false,
@@ -79,14 +79,6 @@ const SECTIONS = [
     photoAlt: "Équipe Tropicaura et partenaire dans un verger de manguiers",
     calm: true,
   },
-];
-
-// Routes d'export stylisées (diagramme sobre, pas une carte géographique
-// littérale) — Dakar au centre, trois destinations, tracés animés au scroll.
-const ROUTES = [
-  { name: "ROTTERDAM", x: 320, y: 34, path: "M 55 128 Q 170 55 320 34" },
-  { name: "ANVERS",    x: 335, y: 62, path: "M 55 128 Q 175 78 335 62" },
-  { name: "MARSEILLE", x: 300, y: 100, path: "M 55 128 Q 150 108 300 100" },
 ];
 
 const hexToRgb = (h) => {
@@ -128,7 +120,6 @@ export default function APropos() {
   const sDescRefs  = useRef([]);
   const sPhotoRefs = useRef([]);
   const sPhotoInnerRefs = useRef([]);
-  const mapPathRefs = useRef([]);
 
   useEffect(() => {
     // Lenis DESKTOP UNIQUEMENT — même règle que le reste du site (sur mobile
@@ -324,20 +315,6 @@ export default function APropos() {
         if (sPhotoInnerRefs.current[k]) {
           sPhotoInnerRefs.current[k].style.transform = `scale(${(1 + photoScaleMax * localProg).toFixed(3)})`;
         }
-
-        // Carte export (section 05 uniquement) : tracés dorés qui se dessinent
-        // très légèrement pendant le scroll — jamais d'animation en boucle.
-        if (s.map) {
-          const mapOffset = isDesktop ? 0.35 * H : 0.22 * H;
-          const mapStagger = isDesktop ? 0.08 * H : 0.06 * H;
-          mapPathRefs.current.forEach((p, r) => {
-            if (!p) return;
-            const start = eStart + mapOffset + r * mapStagger;
-            const dt = easeInOutCubic(clamp01((scroll - start) / (0.45 * H)));
-            p.style.strokeDashoffset = (100 - dt * 100).toFixed(1);
-            p.style.opacity = (0.6 * exitMult).toFixed(3);
-          });
-        }
       }
 
       // ── Puces de navigation — couleur adaptée au fond actif ──
@@ -426,15 +403,16 @@ export default function APropos() {
         .vision-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
         .vision-placeholder-corner { position: absolute; width: 18px; height: 18px; border-color: ${GOLD}; }
         .vision-placeholder-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
-        .vision-map { margin-top: 30px; width: 100%; max-width: 400px; border: 1px solid rgba(201,168,76,0.22); border-radius: 2px; padding: 18px 18px 14px; box-sizing: border-box; }
-        .vision-map-caption { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(242,233,216,0.45); margin-top: 10px; display: block; }
+        .vision-map-desktop { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .vision-map-mobile-fallback { display: none; }
         @media (max-width: 900px) {
           .vision-chapter-wrap { height: auto; }
           .vision-chapter { position: relative; top: auto; flex-direction: column; height: auto; min-height: 100vh; }
           .vision-text-col { width: 100%; min-width: 0; padding: 120px 24px 32px; }
           .vision-photo-col { width: 100%; padding: 0 24px 56px; }
           .vision-photo-frame { height: 46vh; }
-          .vision-map { max-width: 100%; }
+          .vision-map-desktop { display: none; }
+          .vision-map-mobile-fallback { display: block; }
         }
       `}</style>
 
@@ -558,40 +536,6 @@ export default function APropos() {
             <p className="vision-desc" ref={(el) => (sDescRefs.current[k] = el)} style={{ color: s.dark ? IVORY_TEXT : FOREST_TEXT, opacity: 0 }}>
               {s.desc}
             </p>
-
-            {/* Carte export — section 05 uniquement */}
-            {s.map && (
-              <div className="vision-map">
-                <svg viewBox="0 0 360 150" width="100%" style={{ display: "block" }}>
-                  {ROUTES.map((r, idx) => (
-                    <path
-                      key={r.name}
-                      ref={(el) => (mapPathRefs.current[idx] = el)}
-                      d={r.path}
-                      fill="none"
-                      stroke={GOLD}
-                      strokeWidth="1"
-                      pathLength="100"
-                      strokeDasharray="100"
-                      strokeDashoffset="100"
-                      opacity="0"
-                    />
-                  ))}
-                  {/* Halo + point Dakar */}
-                  <circle cx="55" cy="128" r="8" fill={GOLD} opacity="0.14" />
-                  <circle cx="55" cy="128" r="3.2" fill={GOLD} />
-                  <text x="55" y="142" textAnchor="middle" fontSize="8" letterSpacing="1" fill="rgba(242,233,216,0.75)" fontFamily="'Plus Jakarta Sans',sans-serif">DAKAR</text>
-                  {/* Destinations */}
-                  {ROUTES.map((r) => (
-                    <g key={r.name}>
-                      <circle cx={r.x} cy={r.y} r="2.4" fill={GOLD} opacity="0.85" />
-                      <text x={r.x} y={r.y - 8} textAnchor="middle" fontSize="7" letterSpacing="0.8" fill="rgba(242,233,216,0.5)" fontFamily="'Plus Jakarta Sans',sans-serif">{r.name}</text>
-                    </g>
-                  ))}
-                </svg>
-                <span className="vision-map-caption">Réseau d'export — Dakar</span>
-              </div>
-            )}
           </div>
 
           <div className="vision-photo-col">
@@ -609,7 +553,14 @@ export default function APropos() {
               }}
             >
               <div className="vision-photo-inner" ref={(el) => (sPhotoInnerRefs.current[k] = el)}>
-                {s.photo ? (
+                {s.id === "avenir" ? (
+                  <>
+                    <div className="vision-map-desktop">
+                      <ExportRouteMap />
+                    </div>
+                    <img src={s.photo} alt={s.photoAlt} className="vision-photo-img vision-map-mobile-fallback" />
+                  </>
+                ) : s.photo ? (
                   <img
                     src={s.photo}
                     alt={s.photoAlt}
