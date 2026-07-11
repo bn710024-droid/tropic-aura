@@ -128,7 +128,7 @@ export default function APropos() {
       // → la section reste posée, immobile, tout le temps du palier.
       const s1DriftY = -Math.min(110, scroll * 0.16);
       const s1ExitBase = isDesktop ? dwellEnd(0) + 0.05 * H : 0.45 * H;
-      const s1ExitSpan = isDesktop ? 0.6 * H : 0.65 * H;
+      const s1ExitSpan = isDesktop ? 0.43 * H : 0.47 * H;
       const s1FadeT = easeInOutCubic(clamp01((scroll - s1ExitBase) / s1ExitSpan));
       const s1TextOpacity = (1 - s1FadeT) * mountEase;
       if (s1TextRef.current) {
@@ -139,7 +139,7 @@ export default function APropos() {
       const s1PhotoParallaxY = Math.min(50, scroll * 0.05);
       const s1PhotoScale = 1 + Math.min(0.035, (scroll / H) * 0.035);
       const s1PhotoExitBase = isDesktop ? dwellEnd(0) + 0.1 * H : 0.5 * H;
-      const s1PhotoExitSpan = isDesktop ? 0.65 * H : 0.7 * H;
+      const s1PhotoExitSpan = isDesktop ? 0.47 * H : 0.5 * H;
       const s1SlideT = easeInOutCubic(clamp01((scroll - s1PhotoExitBase) / s1PhotoExitSpan));
       const s1PhotoReveal = (1 - s1SlideT) * mountEase;
       const s1PhotoX = -s1SlideT * 60;
@@ -168,18 +168,18 @@ export default function APropos() {
       // plus haut) → le texte et la photo ont le temps de se poser à l'écran
       // avant que la sortie ne commence. Mobile : formules d'origine.
       const s2Base = isDesktop ? entranceStart(1) : 0.6 * H;
-      const s2Span = isDesktop ? 0.5 * H : 0.6 * H;
+      const s2Span = isDesktop ? 0.36 * H : 0.43 * H;
       const s2TitleOffset = isDesktop ? 0.15 * H : 0;
       const s2DescOffset = isDesktop ? 0.23 * H : 0.08 * H;
       const s2ChecklistOffset = isDesktop ? 0.38 * H : 0.16 * H;
-      const s2ChecklistStagger = isDesktop ? 0.05 * H : 0.035 * H;
-      const s2ChecklistSpan = isDesktop ? 0.3 * H : 0.28 * H;
+      const s2ChecklistStagger = isDesktop ? 0.036 * H : 0.025 * H;
+      const s2ChecklistSpan = isDesktop ? 0.22 * H : 0.2 * H;
       const s2PhotoOffset = isDesktop ? 0.3 * H : 0.1 * H;
-      const s2PhotoSpan = isDesktop ? 0.6 * H : 0.55 * H;
+      const s2PhotoSpan = isDesktop ? 0.43 * H : 0.4 * H;
       const s2ExitStart = isDesktop ? dwellEnd(1) + 0.05 * H : 1.45 * H;
-      const s2ExitSpan = isDesktop ? 0.6 * H : 0.65 * H;
+      const s2ExitSpan = isDesktop ? 0.43 * H : 0.47 * H;
       const s2ExitPhotoStart = isDesktop ? dwellEnd(1) + 0.1 * H : 1.5 * H;
-      const s2ExitPhotoSpan = isDesktop ? 0.65 * H : 0.7 * H;
+      const s2ExitPhotoSpan = isDesktop ? 0.47 * H : 0.5 * H;
       const s2Exit = fadeOutMult(scroll, s2ExitStart, s2ExitSpan);
       const s2ExitPhoto = fadeOutMult(scroll, s2ExitPhotoStart, s2ExitPhotoSpan);
 
@@ -222,12 +222,12 @@ export default function APropos() {
         const s = SECTIONS[i];
         const rise = s.calm ? 18 : 26; // section 06 : montée plus douce ("impression de conclusion")
         const eStart = isDesktop ? entranceStart(i) : (i - 0.4) * H;
-        const entranceSpan = s.calm ? 0.7 * H : 0.6 * H;
+        const entranceSpan = s.calm ? 0.5 * H : 0.43 * H;
 
         const exitMultBase = isDesktop ? dwellEnd(i) + 0.05 * H : (i + 0.45) * H;
         const exitPhotoBase = isDesktop ? dwellEnd(i) + 0.1 * H : (i + 0.5) * H;
-        const exitMult = isLast ? 1 : fadeOutMult(scroll, exitMultBase, 0.65 * H);
-        const exitPhotoMult = isLast ? 1 : fadeOutMult(scroll, exitPhotoBase, 0.7 * H);
+        const exitMult = isLast ? 1 : fadeOutMult(scroll, exitMultBase, 0.47 * H);
+        const exitPhotoMult = isLast ? 1 : fadeOutMult(scroll, exitPhotoBase, 0.5 * H);
 
         const titleOffset = isDesktop ? 0.15 * H : 0;
         const descOffset = isDesktop ? 0.23 * H : 0.08 * H;
@@ -248,7 +248,7 @@ export default function APropos() {
         const localProg = clamp01(localScroll / H);
         const photoScaleMax = s.calm ? 0.02 : 0.035;
         const photoOffset = isDesktop ? 0.3 * H : 0.1 * H;
-        const photoSpan = isDesktop ? 0.6 * H : 0.55 * H;
+        const photoSpan = isDesktop ? 0.43 * H : 0.4 * H;
         const photoT = easeInOutCubic(clamp01((scroll - (eStart + photoOffset)) / photoSpan));
         const photoParallaxY = Math.min(40, Math.max(0, localScroll * 0.04));
         const photoX = isLast ? 0 : -(1 - exitPhotoMult) * 50;

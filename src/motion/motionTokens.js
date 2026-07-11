@@ -1,21 +1,16 @@
 // Motion System Tropicaura — jetons de durée partagés (mobile "page turn").
-// Ce sont les durées données par la direction créative — ne pas les
-// modifier à la légère, elles définissent le rythme de marque.
-//
-//   Rideau   400ms   Fond    500ms   Titre   300ms
-//   Texte    250ms   Image   500ms   Icônes  200ms
-//
-// Toutes les sections mobiles réutilisent ces mêmes valeurs — jamais de
-// durée bespoke par section. C'est ce qui crée l'identité : le visiteur
-// apprend l'histoire, pas l'interface.
-
+// Base d'origine donnée par la direction créative (rideau 400 / fond 500 /
+// titre 300 / texte 250 / image 500 / icônes 200), réduite d'~28% sur
+// demande ("augmente un peu la rapidité de l'affichage") — mêmes
+// proportions entre couches, juste plus vif. Toutes les sections mobiles
+// réutilisent ces mêmes valeurs — jamais de durée bespoke par section.
 export const DURATION = {
-  curtain: 400,
-  background: 500,
-  title: 300,
-  text: 250,
-  image: 500,
-  icon: 200,
+  curtain: 290,
+  background: 360,
+  title: 220,
+  text: 180,
+  image: 360,
+  icon: 145,
 };
 
 // Décalage entre le début de chaque couche pendant l'entrée d'une scène —
@@ -36,7 +31,7 @@ export const STAGGER = {
 // Temps de lecture minimum avant que la sortie puisse être déclenchée —
 // évite qu'un scroll très rapide fasse jouer l'entrée et la sortie quasi
 // simultanément (donnerait un flash au lieu d'une scène lue).
-export const MIN_READ_MS = 260;
+export const MIN_READ_MS = 190;
 
 // Ken Burns — zoom lent et quasi imperceptible, jamais une entrée brutale.
 export const KEN_BURNS_SCALE_FROM = 1.05;
