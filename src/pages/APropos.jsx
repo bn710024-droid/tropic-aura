@@ -161,7 +161,12 @@ export default function APropos() {
       const localInSU = scroll - ci * SU;
       const ft = isDesktop
         ? clamp01((localInSU - DWELL) / H) // couleur stable pendant le palier fixe, fondu pendant la sortie
-        : clamp01(prog - ci);              // mobile : formule d'origine, inchangée
+        : clamp01((prog - ci - 0.45) / 0.55); // mobile : le fond ne bascule qu'à partir de 45% du scroll de la
+          // section (même seuil que exitMultBase pour le texte) — avant ce
+          // correctif le fond commençait à glisser dès le début de la
+          // section pendant que le texte restait plein opacité, ce qui
+          // rendait le texte ivoire quasi invisible sur un fond déjà
+          // redevenu clair (contraste écrasé, notamment noir → ivoire).
       const ca = COLORS[ci];
       const cb = COLORS[Math.min(last, ci + 1)];
       const bgR = lerp(ca[0], cb[0], ft), bgG = lerp(ca[1], cb[1], ft), bgB = lerp(ca[2], cb[2], ft);
