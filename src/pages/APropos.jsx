@@ -67,14 +67,16 @@ const SECTIONS = [
     id: "avenir", num: "05", kicker: "NOTRE AVENIR", bg: BLACK, dark: true,
     title: "Relier l'Afrique aux marchés du monde.",
     desc: "Depuis Dakar, nous connectons nos producteurs aux plus grands ports et marchés internationaux avec efficacité et transparence.",
-    photoLabel: "Photo — Port de Dakar",
+    photo: "/images/about/avenir-port-dakar.jpg",
+    photoAlt: "Port de Dakar",
     map: true,
   },
   {
     id: "engagement", num: "06", kicker: "NOTRE ENGAGEMENT", bg: IVORY, dark: false,
     title: "Des relations durables basées sur la confiance.",
     desc: "Nous construisons des partenariats solides et transparents avec nos producteurs, nos clients et nos collaborateurs.",
-    photoLabel: "Visuel à venir",
+    photo: "/images/about/engagement-partenariat.jpg",
+    photoAlt: "Équipe Tropicaura et partenaire dans un verger de manguiers",
     calm: true,
   },
 ];
