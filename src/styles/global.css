@@ -430,6 +430,18 @@ body::-webkit-scrollbar { display: none; }
     -webkit-overflow-scrolling: touch;
   }
 
+  /* ── Fix Safari iOS : position:sticky cassé par overflow sur un ancêtre ──
+     body a overflow-x:hidden en règle globale (protection anti-scroll
+     horizontal, tout en haut de ce fichier). Sur WebKit mobile, N'IMPORTE
+     QUEL overflow non-visible sur un ancêtre (même overflow-x seul) casse
+     le calcul du containing block d'un descendant position:sticky, qui se
+     comporte alors comme un simple position:relative — Chrome desktop et
+     l'émulation mobile de Chrome DevTools n'ont PAS ce bug, d'où l'écart
+     entre le rendu testé ici et le rendu réel sur iPhone. Scopé à la page
+     À Propos (seule page utilisant du sticky mobile pour l'instant) via
+     :has(), même pattern que .mobile-scroll-wrapper ci-dessus. */
+  body:has(.about-mobile-tree) { overflow-x: visible; }
+
   /* .bg-layer porte l'interpolation continue de couleur (même mécanisme que
      desktop). .bg-depth (halo radial clair au centre + vignette sombre aux
      bords) est ACTIF ici aussi : c'est l'éclairage premium façon Combilo.
