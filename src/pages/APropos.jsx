@@ -376,20 +376,16 @@ export default function APropos() {
           .about-mobile-tree { display: block; }
         }
 
-        /* ── Scènes mobiles "escalier" : le bloc COMPLET (titre + texte +
-           photo) reste épinglé comme un seul morceau dans un wrapper plus
-           haut que 100vh → le bloc suivant arrive et le remplace
-           entièrement, comme des pages qui se tournent — jamais de scroll
-           verrouillé (le wrapper, lui, défile normalement). ── */
-        .ms-about-wrap { position: relative; height: 145vh; }
-        .ms-about-wrap:last-child { height: 100vh; }
-        .motion-scene.ms-about {
-          position: sticky; top: 0; height: 100vh; min-height: 100vh;
+        /* ── Scènes mobiles : flux natif continu, jamais de position:sticky
+           (un scroll qui "accroche" donne l'impression d'un bug, pas d'un
+           site premium). Chaque section se révèle simplement au passage du
+           rideau quand elle entre dans le viewport ; en sortie, seule la
+           photo glisse légèrement de côté (voir --ms-exit-x). ── */
+        .ms-about {
+          position: relative; min-height: 100vh;
           display: flex; flex-direction: column; justify-content: center;
           padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden;
-          box-shadow: 0 -18px 46px rgba(0,0,0,0.28);
         }
-        .ms-about .ms-curtain { display: none; }
         .ms-about-inner { position: relative; z-index: 2; }
         .ms-about-bg { position: absolute; inset: 0; z-index: 0; }
         .ms-about-photo { margin-top: 26px; position: relative; z-index: 2; }

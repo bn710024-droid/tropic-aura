@@ -68,10 +68,14 @@ export function buildMotionCSS() {
     ${layer("image", DURATION.image, STAGGER.image, 0, 0)}
     ${layer("icon", DURATION.icon, STAGGER.icon, 10, 6)}
 
-    /* La couche image se révèle en zoom doux plutôt qu'en montée (voir kenBurns.js) */
-    .motion-scene[data-phase="idle"] .ms-layer--image { transform: scale(1.02); }
+    /* La couche image se révèle en zoom doux plutôt qu'en montée (voir kenBurns.js).
+       En sortie : un léger glissement latéral plutôt qu'une montée verticale —
+       la photo "cède la place" au chapitre suivant qui arrive, elle ne
+       s'efface pas simplement sur place. Sens réglable via la variable
+       --ms-exit-x (posée par le composant appelant), 32px par défaut. */
+    .motion-scene[data-phase="idle"] .ms-layer--image { transform: scale(1.02) translateX(0); }
     .motion-scene[data-phase="entering"] .ms-layer--image,
-    .motion-scene[data-phase="reading"] .ms-layer--image { transform: scale(1); }
-    .motion-scene[data-phase="exiting"] .ms-layer--image { transform: scale(0.99); }
+    .motion-scene[data-phase="reading"] .ms-layer--image { transform: scale(1) translateX(0); }
+    .motion-scene[data-phase="exiting"] .ms-layer--image { transform: scale(1) translateX(var(--ms-exit-x, -32px)); }
   `;
 }

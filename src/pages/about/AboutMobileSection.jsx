@@ -1,21 +1,24 @@
 import MotionScene from "../../motion/MotionScene";
 import { GOLD, IVORY, IVORY_TEXT, FOREST_TEXT, PACE } from "./aboutTheme";
 
-// Scène mobile "escalier" — le bloc COMPLET (titre + texte + photo) reste
-// épinglé à l'écran comme un seul morceau, immobile pendant la lecture,
-// jusqu'à ce que le bloc suivant arrive et le remplace entièrement — comme
-// des pages qui se tournent. Jamais de scroll verrouillé : MotionScene
-// observe la position via IntersectionObserver, voir src/motion/.
-export default function AboutMobileSection({ section }) {
+// Scène mobile — flux de scroll natif continu, JAMAIS de position:sticky
+// (l'effet "ça bloque, ça accroche" a été explicitement rejeté : un scroll
+// qui semble se figer donne l'impression d'un bug, pas d'un site premium).
+// Chaque section se révèle simplement via le rideau + la cascade de
+// couches (Motion System) quand elle entre dans le viewport, comme un
+// article normal. Seule nuance : en sortie, la photo glisse légèrement de
+// côté (pas une simple montée/fondu) pour suggérer que le chapitre suivant
+// vient prendre sa place — voir --ms-exit-x dans motionStyles.js.
+export default function AboutMobileSection({ section, exitDirection = "left" }) {
   const s = section;
   const kickerColor = s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)";
   const titleColor = s.dark ? IVORY : "#17301F";
   const descColor = s.dark ? IVORY_TEXT : FOREST_TEXT;
   const pace = PACE[s.pace] || 1;
+  const exitX = exitDirection === "right" ? "32px" : "-32px";
 
   return (
-    <div className="ms-about-wrap">
-    <MotionScene className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -30% 0px">
+    <MotionScene className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px" style={{ "--ms-exit-x": exitX }}>
       <div className="ms-about-bg" style={{ background: s.bg }} />
 
       <div className="ms-about-inner">
@@ -64,6 +67,5 @@ export default function AboutMobileSection({ section }) {
         </div>
       </div>
     </MotionScene>
-    </div>
   );
 }
