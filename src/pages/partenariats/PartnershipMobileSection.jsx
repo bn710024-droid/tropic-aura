@@ -73,7 +73,6 @@ export default function PartnershipMobileSection({ section }) {
       <MotionScene className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
         <div className="pm-bg" style={{ background: s.bg }} />
         <div className="pm-inner">
-          {Icon && <span className="ms-layer ms-layer--icon pm-photo-icon"><Icon /></span>}
           <h2 className="ms-layer ms-layer--title pm-photo-title">{s.title}</h2>
           <div className="ms-layer ms-layer--text pm-photo-paragraphs" style={{ transitionDelay: "100ms" }}>
             {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}

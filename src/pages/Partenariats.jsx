@@ -74,7 +74,6 @@ function SceneContent({ s }) {
       return (
         <div className="pw-photo-row">
           <div className="pw-photo-textcol">
-            {Icon && <span className="pw-photo-icon"><Icon /></span>}
             <h2 className="pw-photo-title">{s.title}</h2>
             <i className="pw-photo-divider" />
             {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
