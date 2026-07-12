@@ -254,7 +254,7 @@ body::-webkit-scrollbar { display: none; }
   letter-spacing: -.01em;
   color: #fff;
   text-decoration: none;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, .3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 0, 0, 0.4);
   user-select: none;
 }
 .ghost__contact {
