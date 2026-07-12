@@ -42,12 +42,6 @@ const COLUMNS = [
       ],
     },
     {
-      label: "Notre Univers", href: "/univers", img: "/menu-univers.jpg",
-      subs: [
-        { label: "Nos engagements", href: "/univers" },
-      ],
-    },
-    {
       label: "Insights", href: "/insights", img: "/menu-visual.jpg",
       subs: [
         { label: "Market Intelligence", href: "/insights" },
