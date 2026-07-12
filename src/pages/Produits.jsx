@@ -56,13 +56,13 @@ const SECTIONS = [
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
