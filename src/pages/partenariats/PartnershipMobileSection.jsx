@@ -1,5 +1,6 @@
 import MotionScene from "../../motion/MotionScene";
 import PartnershipTimeline from "../../components/PartnershipTimeline";
+import ConclusionConstellation from "./ConclusionConstellation";
 import { ICONS } from "./icons";
 
 // Scène mobile Partenariats — même philosophie que la page À Propos : flux
@@ -89,6 +90,7 @@ export default function PartnershipMobileSection({ section }) {
   return (
     <MotionScene className="pm-section pm-conclusion" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
       <div className="pm-bg" style={{ background: s.bg }} />
+      <ConclusionConstellation />
       <div className="pm-inner pm-inner--center">
         {s.paragraphs.map((p, i) => (
           <p key={i} className="ms-layer ms-layer--title pm-conclusion-text" style={{ transitionDelay: `${i * 120}ms` }}>{p}</p>

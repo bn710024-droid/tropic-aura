@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
 import PartnershipTimeline from "../components/PartnershipTimeline";
 import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
+import ConclusionConstellation from "./partenariats/ConclusionConstellation";
 import { ICONS } from "./partenariats/icons";
 import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
 
@@ -363,6 +364,7 @@ export default function Partenariats() {
                 <div className="pw-photo-overlay" />
               </>
             )}
+            {s.type === "conclusion" && <ConclusionConstellation />}
             <div
               ref={(el) => (contentRefs.current[i] = el)}
               className="scene__content pw-content"
