@@ -1,96 +1,77 @@
-﻿import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import FallingText from "../components/FallingText";
-import IMAGES from "../images";
+import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
+import PartnershipTimeline from "../components/PartnershipTimeline";
+import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
+import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
 
 // ============================================================
-//  PARTENARIATS — gradients par section, crossfade au scroll
-//  5 calques bg-layer empilés en DOM order (dernier = dessus)
+//  PARTENARIATS — refonte 5 scènes (Hero / Vision / Parcours /
+//  Photo / Conclusion). Moteur desktop INCHANGÉ (crossfade + reveal
+//  au scroll piloté par rAF, cf. historique du fichier) : seul le
+//  contenu de chaque scène change. L'arbre mobile réutilise
+//  exactement la philosophie de la page À Propos (Motion System,
+//  flux natif continu, jamais de position:sticky).
 // ============================================================
-
-// Phrases valeurs + couleurs (beige / doré)
-const VALEURS = [
-  "Confiance durable",
-  "Transparence totale",
-  "Relations équitables",
-  "Croissance ensemble",
-  "Valeur partagée",
-];
-const VALEUR_COLORS = ["#E8D5C4", "#C9A84C"];
-
-// Fruits uniques en fin de paragraphe (sans répétition — 1 par paragraphe)
-const PARA_FRUITS = [
-  IMAGES.orange, IMAGES.fraises, IMAGES.coco,
-  IMAGES.melonJaune, IMAGES.papaye, IMAGES.banane,
-  IMAGES.fruitPassion, IMAGES.ananas, IMAGES.melonVert,
-  IMAGES.mangue, IMAGES.avocat, IMAGES.pasteque,
-  IMAGES.myrtilles, IMAGES.citronVert, IMAGES.citronJaune,
-  IMAGES.papayeCoupe,
-];
-
-export const PAGE_ENTRY_COLOR = { desktop: "#D9C08D", mobile: "#D9C08D" };  // stop moyen du dégradé #E1CCA0 → #D1B57A
-
-const SECTIONS = [
-  {
-    id: "fondations", num: "01", surtitre: "FONDATIONS", side: "left",
-    bg: "linear-gradient(180deg, #E1CCA0 0%, #D1B57A 100%)",
-    dark: true,
-    title: "Des fondations construites sur la confiance.",
-    paragraphs: [
-      "Chaque partenariat durable repose sur des fondations solides.",
-      "Chez Tropicaura, nous croyons que le commerce international ne se résume pas à l'échange de produits. Il repose avant tout sur la confiance, la transparence et une vision commune du long terme.",
-      "Nous ne recherchons pas des opportunités ponctuelles. Nous construisons des relations capables de grandir, d'évoluer et de créer de la valeur sur le long terme.",
-    ],
-  },
-  {
-    id: "reseau", num: "02", surtitre: "RÉSEAU", side: "right",
-    bg: "linear-gradient(180deg, #90A984 0%, #708A65 100%)",
-    dark: true,
-    title: "Un réseau qui dépasse les frontières.",
-    paragraphs: [
-      "Derrière chaque réussite commerciale se trouve un réseau de partenaires engagés.",
-      "Tropicaura développe des relations stratégiques à travers les principales régions tropicales d'Afrique, en connectant producteurs, stations de conditionnement, partenaires logistiques, distributeurs et acheteurs internationaux autour d'un objectif commun : l'excellence.",
-      "Chaque connexion renforce l'écosystème. Chaque partenariat ouvre de nouvelles opportunités.",
-    ],
-  },
-  {
-    id: "terroirs", num: "03", surtitre: "TERROIRS", side: "left",
-    bg: "linear-gradient(180deg, #4F7980 0%, #355C62 100%)",
-    dark: false,
-    title: "Révéler le potentiel des terroirs tropicaux.",
-    paragraphs: [
-      "Certaines des opportunités agricoles les plus prometteuses au monde se trouvent dans les régions tropicales africaines.",
-      "Tropicaura contribue à un avenir où ces territoires sont reconnus pour leur richesse naturelle, leur professionnalisme, leur capacité d'innovation et leur aptitude à répondre aux standards les plus exigeants du commerce mondial.",
-      "Notre ambition est simple : transformer le potentiel en opportunités concrètes et créer de la valeur durable pour l'ensemble des acteurs de la chaîne.",
-    ],
-  },
-  {
-    id: "avenir", num: "04", surtitre: "AVENIR", side: "right",
-    bg: "linear-gradient(180deg, #D4B47B 0%, #BE9A5A 100%)",
-    dark: true,
-    title: "Construire l'avenir ensemble.",
-    paragraphs: [
-      "Nous croyons que l'avenir du commerce tropical sera porté par des partenariats solides, une vision partagée et une collaboration durable.",
-      "Tropicaura construit un écosystème dans lequel chaque acteur contribue à une réussite collective.",
-      "Nous ne voulons pas simplement développer des relations commerciales. Nous souhaitons bâtir des alliances stratégiques capables d'accompagner la prochaine génération du commerce agricole international.",
-    ],
-  },
-  {
-    id: "cta", num: "05", surtitre: "REJOINDRE LE RÉSEAU", side: "left",
-    bg: "linear-gradient(180deg, #C49A5A 0%, #A87E40 100%)",
-    dark: true,
-    title: "Rejoignez un réseau qui façonne l'avenir du commerce tropical.",
-    paragraphs: [
-      "Les plus grandes opportunités naissent lorsque des partenaires ambitieux avancent dans la même direction. Que vous soyez producteur, importateur, distributeur ou partenaire logistique, Tropicaura souhaite collaborer avec des acteurs qui partagent une même exigence de qualité et de création de valeur.",
-    ],
-    hasButton: true,
-  },
-];
 
 const N = SECTIONS.length;
-const SIDES = SECTIONS.map((s) => s.side);   // côté du texte par section
+const LAYOUT = { hero: "center", vision: "left", timeline: "center", photo: "photo", conclusion: "center" };
 
-// ============================================================
+// Couleur d'entrée pour le voile de morph du CTA (cf. src/lib/destinationColors.js) —
+// la première scène (hero) est un fond noir plein.
+export const PAGE_ENTRY_COLOR = { desktop: "#0B0F0A", mobile: "#0B0F0A" };
+
+function SceneContent({ s }) {
+  switch (s.type) {
+    case "hero":
+      return (
+        <>
+          <h1 className="pw-hero-title">{s.title}</h1>
+          <p className="pw-hero-subtitle">{s.subtitle}</p>
+        </>
+      );
+    case "vision":
+      return (
+        <>
+          <span className="pw-kicker">{s.kicker}</span>
+          <div className="pw-statements">
+            {s.statements.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+          <div className="pw-paragraphs">
+            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+        </>
+      );
+    case "timeline":
+      return (
+        <>
+          <span className="pw-kicker">{s.kicker}</span>
+          <h2 className="pw-title">{s.title}</h2>
+          <div className="pw-timeline-wrap">
+            <PartnershipTimeline />
+          </div>
+        </>
+      );
+    case "photo":
+      return (
+        <div className="pw-photo-text">
+          {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+      );
+    case "conclusion":
+      return (
+        <>
+          {s.paragraphs.map((p, i) => <p key={i} className="pw-conclusion-text">{p}</p>)}
+          <a href={s.buttonHref} className="pw-button ms-glow">
+            {s.button} <span>→</span>
+          </a>
+        </>
+      );
+    default:
+      return null;
+  }
+}
+
 export default function Partenariats() {
   const bgRefs      = useRef([]);
   const contentRefs = useRef([]);
@@ -99,8 +80,6 @@ export default function Partenariats() {
   const lenisRef    = useRef(null);
 
   useEffect(() => {
-    // Lenis DESKTOP UNIQUEMENT (sur mobile il fait "sauter" au retour vers le
-    // haut) → scroll natif iOS sur mobile, lu via window.scrollY.
     const isDesktop = window.matchMedia('(min-width: 769px)').matches;
     const lenis = isDesktop ? new Lenis({
       duration: 1.2,
@@ -123,19 +102,12 @@ export default function Partenariats() {
       const ci   = Math.min(last, Math.floor(prog));
       const ft   = Math.min(1, Math.max(0, prog - ci));
 
-      // ── crossfade entre couches de gradient ──
-      // DOM order = z-order: bg-4 est au-dessus de bg-3, etc.
-      // bg-0 toujours visible en dessous. Les suivants s'ouvrent en fondu.
       bgRefs.current.forEach((el, j) => {
         if (!el) return;
         const opacity = j <= ci ? 1 : j === ci + 1 ? ft : 0;
         el.style.opacity = opacity.toFixed(3);
       });
 
-      // ── fade-in contenu (une seule fois) ──
-      // La fenêtre de révélation se termine AVANT que la section soit
-      // centrée → garantit que même la dernière section (qu'on ne peut
-      // pas dépasser au scroll) se révèle à 100 %.
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
         if (!el || revealed.current.has(j)) return;
@@ -143,7 +115,6 @@ export default function Partenariats() {
         const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
         if (e >= 0.999) {
-          // figé net : on retire le transform (un translateY fractionnaire flouterait le texte)
           el.style.opacity   = "1";
           el.style.transform = "none";
           revealed.current.add(j);
@@ -153,19 +124,15 @@ export default function Partenariats() {
         }
       });
 
-      // ── nav dots (couleur adaptée à la section active) ──
       const active   = Math.min(last, Math.max(0, Math.round(scroll / H)));
-      const isDark   = SECTIONS[active].dark;
-      const dotOn    = isDark ? "rgba(0,0,0,0.60)"    : "rgba(255,255,255,0.90)";
-      const dotOff   = isDark ? "rgba(0,0,0,0.20)"    : "rgba(255,255,255,0.30)";
-      const shadowOn = isDark ? "0 0 0 2px rgba(0,0,0,0.10)" : "0 0 0 2px rgba(255,255,255,0.15)";
-      dotRefs.current.forEach((dot, j) => {
+      const dotRefs$ = dotRefs.current;
+      dotRefs$.forEach((dot, j) => {
         if (!dot) return;
         const on = j === active;
         dot.style.width      = on ? "9px" : "6px";
         dot.style.height     = on ? "9px" : "6px";
-        dot.style.background = on ? dotOn : dotOff;
-        dot.style.boxShadow  = on ? shadowOn : "none";
+        dot.style.background = on ? "rgba(242,233,216,0.90)" : "rgba(242,233,216,0.30)";
+        dot.style.boxShadow  = on ? "0 0 0 2px rgba(0,0,0,0.15)" : "none";
       });
     };
 
@@ -187,8 +154,6 @@ export default function Partenariats() {
       rafId = requestAnimationFrame(raf);
     };
 
-    // Filet de sécurité mobile (pas de Lenis) : rAF est throttlé par iOS pendant
-    // un geste tactile actif — un vrai 'scroll' natif ne l'est pas.
     const onNativeScroll = () => {
       if (lenis) return;
       const scroll = window.scrollY || 0;
@@ -212,13 +177,68 @@ export default function Partenariats() {
       ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
       : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
-  let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
-
   return (
     <>
-      {/* Pulse léger des dots de navigation (opacity 0.5 → 1, en boucle) */}
       <style>{`
-        @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+        .partenariats-mobile-tree { display: none; }
+        @media (max-width: 900px) {
+          .partenariats-desktop-tree { display: none; }
+          .partenariats-mobile-tree { display: block; }
+        }
+
+        .pw-photo-bg { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: cover; display: block; animation: pwKenBurns 9000ms cubic-bezier(0.16,1,0.3,1) forwards; }
+        @keyframes pwKenBurns { from { transform: scale(1.06); } to { transform: scale(1); } }
+        .pw-photo-overlay { position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, rgba(11,15,10,0.15) 0%, rgba(11,15,10,0.55) 72%, rgba(11,15,10,0.82) 100%); pointer-events: none; }
+
+        .pw-content { max-width: 620px; color: #F2E9D8; }
+        .scene[data-layout="center"] { justify-content: center; }
+        .scene[data-layout="center"] .pw-content { text-align: center; max-width: 760px; padding-left: 0; padding-right: 0; align-items: center; }
+        .scene[data-layout="left"] .pw-content { padding-left: clamp(24px,7vw,96px); }
+        .scene[data-layout="photo"] { align-items: flex-end; }
+        .scene[data-layout="photo"] .pw-content { max-width: 580px; padding-left: clamp(24px,7vw,96px); padding-bottom: clamp(56px,8vh,120px); }
+
+        .pw-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(32px, 4.4vw, 66px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; color: #F2E9D8; }
+        .pw-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.78); max-width: 560px; margin: 0 auto; }
+
+        .pw-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 22px; }
+        .pw-statements p { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.32; letter-spacing: -.01em; color: #F2E9D8; margin: 0 0 14px; }
+        .pw-paragraphs { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+        .pw-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(13px, 1.05vw, 15.5px); line-height: 1.78; color: rgba(242,233,216,0.72); margin: 0; max-width: 460px; }
+
+        .pw-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 40px); line-height: 1.18; color: #F2E9D8; margin: 0 0 44px; }
+        .pw-timeline-wrap { width: min(880px, 84vw); }
+
+        .pw-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: #F2E9D8; margin: 0 0 8px; }
+
+        .pw-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.42; color: #F2E9D8; margin: 0 auto 16px; max-width: 640px; }
+        .pw-button { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 15px 36px; text-decoration: none; }
+
+        /* ── Arbre mobile : mêmes classes Motion System que la page À Propos ── */
+        .pm-hero, .pm-photo-section { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
+        .pm-hero-photo, .pm-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pm-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(11,15,10,0.10) 0%, rgba(11,15,10,0.55) 70%, rgba(11,15,10,0.86) 100%); pointer-events: none; }
+        .pm-hero-text, .pm-photo-text { position: relative; z-index: 2; padding: 24px 24px 72px; box-sizing: border-box; }
+        .pm-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(28px, 8vw, 40px); line-height: 1.16; color: #F2E9D8; margin: 0 0 14px; }
+        .pm-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: rgba(242,233,216,0.80); margin: 0; }
+        .pm-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: #F2E9D8; margin: 0 0 8px; }
+
+        .pm-section { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden; }
+        .pm-bg { position: absolute; inset: 0; z-index: 0; }
+        .pm-inner { position: relative; z-index: 2; width: 100%; }
+        .pm-inner--center { text-align: center; }
+        .pm-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 18px; }
+        .pm-statements p { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.32; color: #F2E9D8; margin: 0 0 12px; }
+        .pm-paragraphs { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+        .pm-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; line-height: 1.72; color: rgba(242,233,216,0.72); margin: 0; }
+        .pm-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.28; color: #F2E9D8; margin: 0 0 34px; }
+        .pm-timeline-wrap { width: 100%; }
+
+        .pm-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(19px, 5.6vw, 24px); line-height: 1.4; color: #F2E9D8; margin: 0 auto 14px; max-width: 440px; }
+        .pm-button { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 14px 32px; text-decoration: none; }
+
+        ${buildMotionCSS()}
+        ${buildKenBurnsCSS()}
+        ${buildGlowPulseCSS("ms-glow")}
       `}</style>
 
       {/* ── Header transparent (logo seul) ── */}
@@ -234,119 +254,66 @@ export default function Partenariats() {
         </a>
       </header>
 
-      {/* ── Couches de gradient (DOM order = z-order) ── */}
-      {SECTIONS.map((s, i) => (
-        <div
-          key={s.id + "-bg"}
-          ref={(el) => (bgRefs.current[i] = el)}
-          className="bg-layer"
-          style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
-        />
-      ))}
-      {/* Éclairage Combilo (halo central + vignette, soft-light) — au-dessus des fonds */}
-      <div className="bg-depth" />
+      <div className="partenariats-desktop-tree">
+        <style>{`
+          @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+        `}</style>
 
-      {/* ── Cascade de textes valeurs (derrière le contenu) ── */}
-      <FallingText phrases={VALEURS} colors={VALEUR_COLORS} sides={SIDES} interval={1700} fall={4} />
-
-      {/* ── Nav dots — desktop uniquement (voir .dots-nav dans global.css) ── */}
-      <nav className="dots-nav" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
         {SECTIONS.map((s, i) => (
-          <button
-            key={s.id}
-            ref={(el) => (dotRefs.current[i] = el)}
-            onClick={() => scrollTo(i)}
-            title={s.title}
-            style={{ width:6, height:6, borderRadius:"50%", background:"rgba(0,0,0,0.20)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
+          <div
+            key={s.id + "-bg"}
+            ref={(el) => (bgRefs.current[i] = el)}
+            className="bg-layer"
+            style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
           />
         ))}
-      </nav>
+        <div className="bg-depth" />
 
-      {/* ── Sections ── */}
-      {SECTIONS.map((s, i) => {
-        const isRight      = s.side === "right";
-        const textColor    = s.dark ? "#111111"              : "#FFFFFF";
-        const labelColor   = s.dark ? "rgba(0,0,0,0.40)"    : "rgba(255,255,255,0.62)";
-        const dividerColor = s.dark ? "rgba(0,0,0,0.18)"    : "rgba(255,255,255,0.35)";
-        const paraColor    = s.dark ? "rgba(0,0,0,0.82)"    : "rgba(255,255,255,0.95)";
+        <nav className="dots-nav" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
+          {SECTIONS.map((s, i) => (
+            <button
+              key={s.id}
+              ref={(el) => (dotRefs.current[i] = el)}
+              onClick={() => scrollTo(i)}
+              title={s.title || s.kicker}
+              style={{ width:6, height:6, borderRadius:"50%", background:"rgba(242,233,216,0.30)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
+            />
+          ))}
+        </nav>
 
-        return (
-          <section key={s.id} data-index={i} className="scene" style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}>
+        {SECTIONS.map((s, i) => (
+          <section key={s.id} data-index={i} className="scene" data-layout={LAYOUT[s.type]}>
+            {(s.type === "hero" || s.type === "photo") && (
+              <>
+                <img src={s.photo} alt={s.photoAlt} className="pw-photo-bg" />
+                <div className="pw-photo-overlay" />
+              </>
+            )}
             <div
               ref={(el) => (contentRefs.current[i] = el)}
-              className="scene__content"
+              className="scene__content pw-content"
               style={{
                 opacity:      i === 0 ? 1 : 0,
                 transform:    i === 0 ? "translateY(0)" : "translateY(24px)",
-                paddingLeft:  isRight ? 16 : "clamp(24px,7vw,96px)",
-                paddingRight: isRight ? "clamp(24px,7vw,96px)" : 16,
               }}
             >
-              {/* Numéro + surtitre */}
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
-                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".26em", textTransform:"uppercase", color:labelColor }}>
-                  {s.num}
-                </span>
-                <div style={{ width:1, height:24, background:dividerColor }} />
-                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".22em", textTransform:"uppercase", color:labelColor }}>
-                  {s.surtitre}
-                </span>
-              </div>
-
-              {/* Titre */}
-              <h2 style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:"clamp(24px, 2.8vw, 44px)", lineHeight:1.08, letterSpacing:"-.03em", color:textColor, margin:"0 0 18px" }}>
-                {s.title}
-              </h2>
-
-              {/* Filet */}
-              <div style={{ width:32, height:1, background:dividerColor, margin:"0 0 20px" }} />
-
-              {/* Paragraphes */}
-              {s.paragraphs.map((p, pi) => {
-                const fruit = PARA_FRUITS[fruitIdx % PARA_FRUITS.length];
-                fruitIdx++;
-                return (
-                  <p key={pi} style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:"clamp(13px,1.1vw,15px)", lineHeight:1.80, fontWeight:400, color:paraColor, margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0" }}>
-                    {p}{" "}
-                    <img
-                      src={fruit}
-                      alt=""
-                      aria-hidden="true"
-                      style={{
-                        height: "1.6em", width: "auto",
-                        verticalAlign: "-0.45em",
-                        marginLeft: 4, display: "inline-block",
-                        filter: "drop-shadow(0 3px 7px rgba(0,0,0,0.28))",
-                      }}
-                    />
-                  </p>
-                );
-              })}
-
-              {/* Bouton CTA */}
-              {s.hasButton && (
-                <div style={{ marginTop:36 }}>
-                  <a href="/contact" style={{ textDecoration:"none" }}>
-                    <button
-                      style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:11, letterSpacing:".18em", textTransform:"uppercase", color:textColor, background:"transparent", border:`1.5px solid ${dividerColor}`, borderRadius:100, padding:"13px 38px", cursor:"pointer", transition:"background .3s, border-color .3s" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = s.dark ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = s.dark ? "rgba(0,0,0,0.50)" : "rgba(255,255,255,0.60)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = dividerColor; }}
-                    >
-                      Devenir partenaire →
-                    </button>
-                  </a>
-                </div>
-              )}
+              <SceneContent s={s} />
             </div>
 
             {i === 0 && (
-              <div className="scene__hint scene__hint--dark">
+              <div className="scene__hint">
                 <i /><span>Défilez vers le bas</span>
               </div>
             )}
           </section>
-        );
-      })}
+        ))}
+      </div>
+
+      <div className="partenariats-mobile-tree">
+        {SECTIONS.map((s, i) => (
+          <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} />
+        ))}
+      </div>
     </>
   );
 }
