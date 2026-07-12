@@ -242,6 +242,10 @@ export default function Produits() {
           .prod-text  { width: 100% !important; }
           .prod-name  { font-size: clamp(34px, 11vw, 52px) !important; }
           .prod-meta  { gap: 18px 30px !important; }
+          /* MOBILE : on coupe le flottement (transform animé + drop-shadow =
+             re-rasterisation à chaque frame → micro-sauts au scroll sur iOS).
+             Ombre statique et plus légère → rasterisée une seule fois. */
+          .prod-float { animation: none !important; filter: drop-shadow(0 16px 22px rgba(0,0,0,0.42)) !important; }
         }
         @media (prefers-reduced-motion: reduce){ .prod-float { animation: none !important; } }
       `}</style>
