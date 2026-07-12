@@ -49,9 +49,10 @@ const ROUTES = [
   { id: "anvers", name: "Anvers", country: "Belgique", x: 728, y: 262, path: "M 585 536 Q 628 350 728 262" },
   { id: "marseille", name: "Marseille", country: "France", x: 724, y: 338, path: "M 585 536 Q 645 400 724 338" },
   { id: "barcelone", name: "Barcelone", country: "Espagne", x: 683, y: 349, path: "M 585 536 Q 630 410 683 349" },
-  { id: "montreal", name: "Montréal", country: "Canada", x: 364, y: 356, path: "M 585 536 Q 480 390 364 356" },
-  { id: "toronto", name: "Toronto", country: "Canada", x: 340, y: 367, path: "M 585 536 Q 470 400 340 367" },
-  { id: "newyork", name: "New York", country: "États-Unis", x: 365, y: 418, path: "M 585 536 Q 490 430 365 418" },
+  { id: "londres", name: "Londres", country: "Royaume-Uni", x: 672, y: 296, path: "M 585 536 Q 628 385 672 296" },
+  { id: "montreal", name: "Montréal", country: "Canada", x: 322, y: 326, path: "M 585 536 Q 468 388 322 326" },
+  { id: "toronto", name: "Toronto", country: "Canada", x: 300, y: 335, path: "M 585 536 Q 455 395 300 335" },
+  { id: "newyork", name: "New York", country: "États-Unis", x: 308, y: 363, path: "M 585 536 Q 460 425 308 363" },
   { id: "dubai", name: "Dubaï", country: "Émirats Arabes Unis", x: 920, y: 483, path: "M 585 536 Q 760 440 920 483" },
 ];
 
