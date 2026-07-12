@@ -246,8 +246,11 @@ body::-webkit-scrollbar { display: none; }
 }
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
-  /* Wordmark texte façon Combilo — remplace l'ancien logo.png (fond noir plein
-     intégré à l'image, d'où la "boîte noire" visible dans le header). */
+  /* Symbole (monogramme T détouré, or sur transparent) + wordmark. Le mark est
+     injecté en ::before → un seul point de vérité pour les 9 headers du site. */
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   font-size: 21px;
@@ -256,6 +259,14 @@ body::-webkit-scrollbar { display: none; }
   text-decoration: none;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 0, 0, 0.4);
   user-select: none;
+}
+.ghost__logo::before {
+  content: "";
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: url(/logo-mark.png) center / contain no-repeat;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
 }
 .ghost__contact {
   position: relative;
@@ -642,7 +653,8 @@ body::-webkit-scrollbar { display: none; }
     background: transparent;
   }
 
-  .ghost__logo { font-size: 17px !important; }
+  .ghost__logo { font-size: 17px !important; gap: 9px; }
+  .ghost__logo::before { width: 24px; height: 24px; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }
