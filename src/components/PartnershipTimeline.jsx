@@ -21,11 +21,11 @@ const Y = 20;
 const R = 22;
 
 const STEPS = [
-  { id: "echange", num: "01", x: 40, title: "Premier échange", text: "Nous faisons connaissance et comprenons vos besoins et vos objectifs." },
-  { id: "comprehension", num: "02", x: 280, title: "Compréhension de vos besoins", text: "Nous analysons votre marché, vos contraintes et vos exigences." },
-  { id: "preparation", num: "03", x: 520, title: "Préparation export", text: "Nous sélectionnons les meilleurs produits et préparons chaque détail de l'expédition." },
-  { id: "expedition", num: "04", title: "Première expédition", x: 760, text: "Votre commande est expédiée avec le même niveau d'attention que toutes les autres." },
-  { id: "developpement", num: "05", x: 960, title: "Développement du partenariat", text: "Nous restons à vos côtés pour faire grandir notre collaboration année après année." },
+  { id: "echange", num: "01", x: 60, title: "Première conversation", text: "Nous faisons connaissance et comprenons vos besoins et vos objectifs." },
+  { id: "comprehension", num: "02", x: 280, title: "Comprendre vos besoins", text: "Nous analysons votre marché, vos contraintes et vos exigences." },
+  { id: "preparation", num: "03", x: 500, title: "Préparation de votre expédition", text: "Nous sélectionnons les meilleurs produits et préparons chaque détail de l'expédition." },
+  { id: "expedition", num: "04", title: "Première expédition", x: 720, text: "Votre commande est expédiée avec le même niveau d'attention que toutes les autres." },
+  { id: "developpement", num: "05", x: 940, title: "Grandir ensemble", text: "Nous restons à vos côtés pour faire grandir notre collaboration année après année." },
 ];
 
 const PATH = `M ${STEPS[0].x} ${Y} L ${STEPS[4].x} ${Y}`;
@@ -132,10 +132,10 @@ export default function PartnershipTimeline() {
       </div>
 
       <style>{`
-        .pt-labels { position: relative; margin-top: 34px; height: 120px; }
-        .pt-label { position: absolute; top: 0; width: 190px; transform: translateX(-50%); text-align: center; }
-        .pt-label-title { display: block; font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; color: ${IVORY}; margin-bottom: 8px; line-height: 1.3; }
-        .pt-label-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; line-height: 1.55; color: rgba(242,233,216,0.60); margin: 0; }
+        .pt-labels { position: relative; margin-top: 34px; height: 128px; }
+        .pt-label { position: absolute; top: 0; width: 172px; padding: 0 8px; box-sizing: border-box; transform: translateX(-50%); text-align: center; }
+        .pt-label-title { display: block; font-family: 'Fraunces', serif; font-weight: 500; font-size: 14px; color: ${IVORY}; margin-bottom: 8px; line-height: 1.32; }
+        .pt-label-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; line-height: 1.55; color: rgba(242,233,216,0.60); margin: 0; }
         @media (max-width: 900px) {
           .pt-labels { height: auto; }
           .pt-label { position: static; width: 100%; transform: none; text-align: left; margin-bottom: 22px; }

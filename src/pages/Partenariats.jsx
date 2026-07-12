@@ -224,7 +224,8 @@ export default function Partenariats() {
         .scene[data-type="photo"] .pw-content { max-width: 460px; padding-left: clamp(24px,7vw,96px); }
 
         .scene[data-type="timeline"], .scene[data-type="conclusion"] { justify-content: center; }
-        .scene[data-type="timeline"] .pw-content, .scene[data-type="conclusion"] .pw-content { text-align: center; max-width: 900px; padding: 0 clamp(24px,6vw,80px); }
+        .scene[data-type="timeline"] .pw-content, .scene[data-type="conclusion"] .pw-content { text-align: center; width: 100%; max-width: 900px; padding: 0 clamp(24px,6vw,80px); }
+        .scene[data-type="timeline"] .pw-content { max-width: 1160px; }
         .scene[data-type="conclusion"] .pw-content { max-width: 700px; }
 
         .pw-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(32px, 4.4vw, 62px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; color: #F2E9D8; }
@@ -246,7 +247,7 @@ export default function Partenariats() {
         .pw-action-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; line-height: 1.62; color: rgba(242,233,216,0.60); margin: 0; }
 
         .pw-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 40px); line-height: 1.18; color: #F2E9D8; margin: 0 0 44px; }
-        .pw-timeline-wrap { width: min(880px, 84vw); }
+        .pw-timeline-wrap { width: 100%; }
 
         .pw-photo-text { text-align: left; }
         .pw-photo-icon { display: inline-flex; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 22px; }
