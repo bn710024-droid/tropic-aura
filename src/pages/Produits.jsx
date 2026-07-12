@@ -68,13 +68,13 @@ const SECTIONS = [
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
     png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
     desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
     png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
     desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
 
   // ── Spécialités ──
