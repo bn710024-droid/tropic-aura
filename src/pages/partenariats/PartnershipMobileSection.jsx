@@ -69,15 +69,17 @@ export default function PartnershipMobileSection({ section }) {
   if (s.type === "photo") {
     const Icon = ICONS[s.icon];
     return (
-      <MotionScene as="div" className="pm-photo-section" rootMargin="-5% 0px -20% 0px">
-        <img src={s.photo} alt={s.photoAlt} className="pm-photo-img ms-ken-burns" />
-        <div className="pm-hero-overlay" />
-        <div className="pm-photo-text">
+      <MotionScene className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
+        <div className="pm-bg" style={{ background: s.bg }} />
+        <div className="pm-inner">
           {Icon && <span className="ms-layer ms-layer--icon pm-photo-icon"><Icon /></span>}
-          <h2 className="ms-layer ms-layer--title pm-photo-title" style={{ transitionDelay: "80ms" }}>{s.title}</h2>
-          {s.paragraphs.map((p, i) => (
-            <p key={i} className="ms-layer ms-layer--text" style={{ transitionDelay: `${180 + i * 120}ms` }}>{p}</p>
-          ))}
+          <h2 className="ms-layer ms-layer--title pm-photo-title">{s.title}</h2>
+          <div className="ms-layer ms-layer--text pm-photo-paragraphs" style={{ transitionDelay: "100ms" }}>
+            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+          <div className="ms-layer ms-layer--image pm-photo-frame" style={{ transitionDelay: "200ms" }}>
+            <img src={s.photo} alt={s.photoAlt} className="pm-photo-frame-img ms-ken-burns" />
+          </div>
         </div>
       </MotionScene>
     );

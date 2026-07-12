@@ -71,11 +71,18 @@ function SceneContent({ s }) {
     case "photo": {
       const Icon = ICONS[s.icon];
       return (
-        <div className="pw-photo-text">
-          {Icon && <span className="pw-photo-icon"><Icon /></span>}
-          <h2 className="pw-photo-title">{s.title}</h2>
-          <i className="pw-photo-divider" />
-          {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+        <div className="pw-photo-row">
+          <div className="pw-photo-textcol">
+            {Icon && <span className="pw-photo-icon"><Icon /></span>}
+            <h2 className="pw-photo-title">{s.title}</h2>
+            <i className="pw-photo-divider" />
+            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+          <div className="pw-photo-framecol">
+            <div className="pw-photo-frame">
+              <img src={s.photo} alt={s.photoAlt} className="pw-photo-frame-img ms-ken-burns" />
+            </div>
+          </div>
         </div>
       );
     }
@@ -210,7 +217,6 @@ export default function Partenariats() {
         .pw-photo-bg { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: cover; display: block; animation: pwKenBurns 9000ms cubic-bezier(0.16,1,0.3,1) forwards; }
         @keyframes pwKenBurns { from { transform: scale(1.06); } to { transform: scale(1); } }
         .pw-photo-overlay { position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, rgba(11,15,10,0.15) 0%, rgba(11,15,10,0.55) 72%, rgba(11,15,10,0.82) 100%); pointer-events: none; }
-        .scene[data-type="photo"] .pw-photo-overlay { background: linear-gradient(90deg, rgba(11,15,10,0.90) 0%, rgba(11,15,10,0.55) 42%, rgba(11,15,10,0.15) 68%, rgba(11,15,10,0.05) 100%); }
 
         .pw-content { max-width: 620px; color: #F2E9D8; }
 
@@ -220,8 +226,17 @@ export default function Partenariats() {
         .scene[data-type="vision"] { justify-content: center; }
         .scene[data-type="vision"] .pw-content { max-width: 1180px; width: 100%; padding: 0 clamp(24px,6vw,80px); }
 
-        .scene[data-type="photo"] { justify-content: flex-start; align-items: center; }
-        .scene[data-type="photo"] .pw-content { max-width: 460px; padding-left: clamp(24px,7vw,96px); }
+        .scene[data-type="photo"] { justify-content: center; }
+        .scene[data-type="photo"] .pw-content { max-width: 1180px; width: 100%; padding: 0 clamp(24px,6vw,80px); }
+        .pw-photo-row { display: flex; gap: clamp(48px,6vw,100px); align-items: center; text-align: left; }
+        .pw-photo-textcol { flex: 1; }
+        .pw-photo-framecol { flex: 1.15; }
+        .pw-photo-frame { position: relative; width: 100%; height: 64vh; max-height: 620px; border-radius: 2px; overflow: hidden; border: 1px solid rgba(201,168,76,0.20); }
+        .pw-photo-frame-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        @media (max-width: 1080px) {
+          .pw-photo-row { flex-direction: column-reverse; gap: 36px; }
+          .pw-photo-frame { height: 46vh; }
+        }
 
         .scene[data-type="timeline"], .scene[data-type="conclusion"] { justify-content: center; }
         .scene[data-type="timeline"] .pw-content, .scene[data-type="conclusion"] .pw-content { text-align: center; width: 100%; max-width: 900px; padding: 0 clamp(24px,6vw,80px); }
@@ -249,11 +264,10 @@ export default function Partenariats() {
         .pw-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 40px); line-height: 1.18; color: #F2E9D8; margin: 0 0 44px; }
         .pw-timeline-wrap { width: 100%; }
 
-        .pw-photo-text { text-align: left; }
         .pw-photo-icon { display: inline-flex; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 22px; }
         .pw-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.32; color: #F2E9D8; margin: 0 0 18px; }
         .pw-photo-divider { display: block; width: 34px; height: 1px; background: ${GOLD}; margin: 0 0 18px; }
-        .pw-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.80); margin: 0 0 8px; }
+        .pw-photo-textcol p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.72); margin: 0 0 8px; }
 
         .pw-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.42; color: #F2E9D8; margin: 0 auto 16px; max-width: 640px; }
         .pw-button { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 15px 36px; text-decoration: none; }
@@ -263,17 +277,19 @@ export default function Partenariats() {
         }
 
         /* ── Arbre mobile : mêmes classes Motion System que la page À Propos ── */
-        .pm-hero, .pm-photo-section { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
-        .pm-hero-photo, .pm-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pm-hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
+        .pm-hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
         .pm-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(11,15,10,0.10) 0%, rgba(11,15,10,0.55) 70%, rgba(11,15,10,0.86) 100%); pointer-events: none; }
-        .pm-hero-text, .pm-photo-text { position: relative; z-index: 2; padding: 24px 24px 72px; box-sizing: border-box; }
+        .pm-hero-text { position: relative; z-index: 2; padding: 24px 24px 72px; box-sizing: border-box; }
         .pm-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(28px, 8vw, 40px); line-height: 1.16; color: #F2E9D8; margin: 0 0 14px; }
         .pm-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: rgba(242,233,216,0.80); margin: 0; }
         .pm-hero-hint { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(242,233,216,0.65); }
         .pm-hero-hint-arrow { color: ${GOLD}; animation: hintBounce 1.9s ease-in-out infinite; }
-        .pm-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: #F2E9D8; margin: 0 0 8px; }
         .pm-photo-icon { display: inline-flex; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 16px; }
         .pm-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6vw, 26px); line-height: 1.3; color: #F2E9D8; margin: 0 0 14px; }
+        .pm-photo-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; line-height: 1.68; color: rgba(242,233,216,0.72); margin: 0 0 8px; }
+        .pm-photo-frame { position: relative; width: 100%; height: 42vh; border-radius: 2px; overflow: hidden; border: 1px solid rgba(201,168,76,0.20); margin-top: 24px; }
+        .pm-photo-frame-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .pm-section { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden; }
         .pm-bg { position: absolute; inset: 0; z-index: 0; }
@@ -341,7 +357,7 @@ export default function Partenariats() {
 
         {SECTIONS.map((s, i) => (
           <section key={s.id} data-index={i} className="scene" data-type={s.type}>
-            {(s.type === "hero" || s.type === "photo") && (
+            {s.type === "hero" && (
               <>
                 <img src={s.photo} alt={s.photoAlt} className="pw-photo-bg" />
                 <div className="pw-photo-overlay" />
