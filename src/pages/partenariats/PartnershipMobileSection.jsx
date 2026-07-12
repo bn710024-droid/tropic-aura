@@ -1,5 +1,6 @@
 import MotionScene from "../../motion/MotionScene";
 import PartnershipTimeline from "../../components/PartnershipTimeline";
+import { ICONS } from "./icons";
 
 // Scène mobile Partenariats — même philosophie que la page À Propos : flux
 // de scroll natif continu, jamais de position:sticky, jamais de scroll
@@ -16,6 +17,9 @@ export default function PartnershipMobileSection({ section }) {
         <div className="pm-hero-text">
           <h1 className="ms-layer ms-layer--title pm-hero-title">{s.title}</h1>
           <p className="ms-layer ms-layer--text pm-hero-subtitle" style={{ transitionDelay: "260ms" }}>{s.subtitle}</p>
+          <div className="ms-layer ms-layer--icon pm-hero-hint" style={{ transitionDelay: "380ms" }}>
+            <span>Défiler pour découvrir</span><span className="pm-hero-hint-arrow">↓</span>
+          </div>
         </div>
       </MotionScene>
     );
@@ -27,11 +31,20 @@ export default function PartnershipMobileSection({ section }) {
         <div className="pm-bg" style={{ background: s.bg }} />
         <div className="pm-inner">
           <span className="ms-layer ms-layer--icon pm-kicker">{s.kicker}</span>
-          <div className="ms-layer ms-layer--title pm-statements">
-            {s.statements.map((p, i) => <p key={i}>{p}</p>)}
-          </div>
-          <div className="ms-layer ms-layer--text pm-paragraphs" style={{ transitionDelay: "180ms" }}>
-            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          <p className="ms-layer ms-layer--title pm-statement">{s.statement}</p>
+          <div className="ms-layer ms-layer--text pm-vision-actions" style={{ transitionDelay: "180ms" }}>
+            {s.actions.map((a, i) => {
+              const Icon = ICONS[a.icon];
+              return (
+                <div key={i} className="pm-action">
+                  <span className="pm-action-icon"><Icon /></span>
+                  <div>
+                    <p className="pm-action-title">{a.title}</p>
+                    <p className="pm-action-text">{a.text}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </MotionScene>
@@ -54,13 +67,16 @@ export default function PartnershipMobileSection({ section }) {
   }
 
   if (s.type === "photo") {
+    const Icon = ICONS[s.icon];
     return (
       <MotionScene as="div" className="pm-photo-section" rootMargin="-5% 0px -20% 0px">
         <img src={s.photo} alt={s.photoAlt} className="pm-photo-img ms-ken-burns" />
         <div className="pm-hero-overlay" />
         <div className="pm-photo-text">
+          {Icon && <span className="ms-layer ms-layer--icon pm-photo-icon"><Icon /></span>}
+          <h2 className="ms-layer ms-layer--title pm-photo-title" style={{ transitionDelay: "80ms" }}>{s.title}</h2>
           {s.paragraphs.map((p, i) => (
-            <p key={i} className="ms-layer ms-layer--text" style={{ transitionDelay: `${i * 120}ms` }}>{p}</p>
+            <p key={i} className="ms-layer ms-layer--text" style={{ transitionDelay: `${180 + i * 120}ms` }}>{p}</p>
           ))}
         </div>
       </MotionScene>

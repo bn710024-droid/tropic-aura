@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
 import PartnershipTimeline from "../components/PartnershipTimeline";
 import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
+import { ICONS } from "./partenariats/icons";
 import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
 
 // ============================================================
@@ -15,7 +16,6 @@ import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
 // ============================================================
 
 const N = SECTIONS.length;
-const LAYOUT = { hero: "center", vision: "left", timeline: "center", photo: "photo", conclusion: "center" };
 
 // Couleur d'entrée pour le voile de morph du CTA (cf. src/lib/destinationColors.js) —
 // la première scène (hero) est un fond noir plein.
@@ -28,17 +28,33 @@ function SceneContent({ s }) {
         <>
           <h1 className="pw-hero-title">{s.title}</h1>
           <p className="pw-hero-subtitle">{s.subtitle}</p>
+          <div className="pw-hero-hint">
+            <span>Défiler pour découvrir</span>
+            <i className="pw-hero-hint-line" />
+            <span className="pw-hero-hint-arrow">↓</span>
+          </div>
         </>
       );
     case "vision":
       return (
         <>
           <span className="pw-kicker">{s.kicker}</span>
-          <div className="pw-statements">
-            {s.statements.map((p, i) => <p key={i}>{p}</p>)}
-          </div>
-          <div className="pw-paragraphs">
-            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          <div className="pw-vision-grid">
+            <p className="pw-statement">{s.statement}</p>
+            <div className="pw-vision-actions">
+              {s.actions.map((a, i) => {
+                const Icon = ICONS[a.icon];
+                return (
+                  <div key={i} className="pw-action">
+                    <span className="pw-action-icon"><Icon /></span>
+                    <div>
+                      <p className="pw-action-title">{a.title}</p>
+                      <p className="pw-action-text">{a.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </>
       );
@@ -52,12 +68,17 @@ function SceneContent({ s }) {
           </div>
         </>
       );
-    case "photo":
+    case "photo": {
+      const Icon = ICONS[s.icon];
       return (
         <div className="pw-photo-text">
+          {Icon && <span className="pw-photo-icon"><Icon /></span>}
+          <h2 className="pw-photo-title">{s.title}</h2>
+          <i className="pw-photo-divider" />
           {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
         </div>
       );
+    }
     case "conclusion":
       return (
         <>
@@ -189,29 +210,56 @@ export default function Partenariats() {
         .pw-photo-bg { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: cover; display: block; animation: pwKenBurns 9000ms cubic-bezier(0.16,1,0.3,1) forwards; }
         @keyframes pwKenBurns { from { transform: scale(1.06); } to { transform: scale(1); } }
         .pw-photo-overlay { position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, rgba(11,15,10,0.15) 0%, rgba(11,15,10,0.55) 72%, rgba(11,15,10,0.82) 100%); pointer-events: none; }
+        .scene[data-type="photo"] .pw-photo-overlay { background: linear-gradient(90deg, rgba(11,15,10,0.90) 0%, rgba(11,15,10,0.55) 42%, rgba(11,15,10,0.15) 68%, rgba(11,15,10,0.05) 100%); }
 
         .pw-content { max-width: 620px; color: #F2E9D8; }
-        .scene[data-layout="center"] { justify-content: center; }
-        .scene[data-layout="center"] .pw-content { text-align: center; max-width: 760px; padding-left: 0; padding-right: 0; align-items: center; }
-        .scene[data-layout="left"] .pw-content { padding-left: clamp(24px,7vw,96px); }
-        .scene[data-layout="photo"] { align-items: flex-end; }
-        .scene[data-layout="photo"] .pw-content { max-width: 580px; padding-left: clamp(24px,7vw,96px); padding-bottom: clamp(56px,8vh,120px); }
 
-        .pw-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(32px, 4.4vw, 66px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; color: #F2E9D8; }
-        .pw-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.78); max-width: 560px; margin: 0 auto; }
+        .scene[data-type="hero"] { justify-content: flex-start; align-items: flex-end; }
+        .scene[data-type="hero"] .pw-content { max-width: 640px; padding: 0 clamp(24px,7vw,96px) clamp(72px,11vh,150px); }
 
-        .pw-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 22px; }
-        .pw-statements p { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.32; letter-spacing: -.01em; color: #F2E9D8; margin: 0 0 14px; }
-        .pw-paragraphs { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
-        .pw-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(13px, 1.05vw, 15.5px); line-height: 1.78; color: rgba(242,233,216,0.72); margin: 0; max-width: 460px; }
+        .scene[data-type="vision"] { justify-content: center; }
+        .scene[data-type="vision"] .pw-content { max-width: 1180px; width: 100%; padding: 0 clamp(24px,6vw,80px); }
+
+        .scene[data-type="photo"] { justify-content: flex-start; align-items: center; }
+        .scene[data-type="photo"] .pw-content { max-width: 460px; padding-left: clamp(24px,7vw,96px); }
+
+        .scene[data-type="timeline"], .scene[data-type="conclusion"] { justify-content: center; }
+        .scene[data-type="timeline"] .pw-content, .scene[data-type="conclusion"] .pw-content { text-align: center; max-width: 900px; padding: 0 clamp(24px,6vw,80px); }
+        .scene[data-type="conclusion"] .pw-content { max-width: 700px; }
+
+        .pw-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(32px, 4.4vw, 62px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; color: #F2E9D8; }
+        .pw-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.78); max-width: 480px; margin: 0; }
+        .pw-hero-hint { display: flex; align-items: center; gap: 14px; margin-top: 40px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(242,233,216,0.65); }
+        .pw-hero-hint-line { display: block; width: 40px; height: 1px; background: rgba(242,233,216,0.4); }
+        .pw-hero-hint-arrow { color: ${GOLD}; animation: hintBounce 1.9s ease-in-out infinite; }
+
+        .pw-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 30px; }
+
+        .pw-vision-grid { display: flex; gap: clamp(48px,6vw,100px); align-items: flex-start; text-align: left; }
+        .pw-statement { flex: 1.05; font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 38px); line-height: 1.38; letter-spacing: -.01em; color: #F2E9D8; margin: 0; }
+        .pw-vision-actions { flex: 1; display: flex; flex-direction: column; }
+        .pw-action { display: flex; gap: 18px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid rgba(201,168,76,0.14); }
+        .pw-action:first-child { padding-top: 4px; }
+        .pw-action:last-child { border-bottom: none; }
+        .pw-action-icon { flex: none; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: ${GOLD}; }
+        .pw-action-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: 17px; color: #F2E9D8; margin: 0 0 6px; }
+        .pw-action-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; line-height: 1.62; color: rgba(242,233,216,0.60); margin: 0; }
 
         .pw-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 40px); line-height: 1.18; color: #F2E9D8; margin: 0 0 44px; }
         .pw-timeline-wrap { width: min(880px, 84vw); }
 
-        .pw-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: #F2E9D8; margin: 0 0 8px; }
+        .pw-photo-text { text-align: left; }
+        .pw-photo-icon { display: inline-flex; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 22px; }
+        .pw-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.32; color: #F2E9D8; margin: 0 0 18px; }
+        .pw-photo-divider { display: block; width: 34px; height: 1px; background: ${GOLD}; margin: 0 0 18px; }
+        .pw-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.80); margin: 0 0 8px; }
 
         .pw-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.42; color: #F2E9D8; margin: 0 auto 16px; max-width: 640px; }
         .pw-button { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 15px 36px; text-decoration: none; }
+
+        @media (max-width: 1080px) {
+          .pw-vision-grid { flex-direction: column; gap: 40px; }
+        }
 
         /* ── Arbre mobile : mêmes classes Motion System que la page À Propos ── */
         .pm-hero, .pm-photo-section { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
@@ -220,16 +268,25 @@ export default function Partenariats() {
         .pm-hero-text, .pm-photo-text { position: relative; z-index: 2; padding: 24px 24px 72px; box-sizing: border-box; }
         .pm-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(28px, 8vw, 40px); line-height: 1.16; color: #F2E9D8; margin: 0 0 14px; }
         .pm-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: rgba(242,233,216,0.80); margin: 0; }
+        .pm-hero-hint { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(242,233,216,0.65); }
+        .pm-hero-hint-arrow { color: ${GOLD}; animation: hintBounce 1.9s ease-in-out infinite; }
         .pm-photo-text p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: #F2E9D8; margin: 0 0 8px; }
+        .pm-photo-icon { display: inline-flex; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 16px; }
+        .pm-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6vw, 26px); line-height: 1.3; color: #F2E9D8; margin: 0 0 14px; }
 
         .pm-section { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden; }
         .pm-bg { position: absolute; inset: 0; z-index: 0; }
         .pm-inner { position: relative; z-index: 2; width: 100%; }
         .pm-inner--center { text-align: center; }
         .pm-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 18px; }
-        .pm-statements p { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.32; color: #F2E9D8; margin: 0 0 12px; }
-        .pm-paragraphs { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
-        .pm-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; line-height: 1.72; color: rgba(242,233,216,0.72); margin: 0; }
+        .pm-statement { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.38; color: #F2E9D8; margin: 0; }
+        .pm-vision-actions { display: flex; flex-direction: column; margin-top: 30px; }
+        .pm-action { display: flex; gap: 14px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid rgba(201,168,76,0.14); }
+        .pm-action:first-child { padding-top: 0; }
+        .pm-action:last-child { border-bottom: none; }
+        .pm-action-icon { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: ${GOLD}; }
+        .pm-action-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: 15px; color: #F2E9D8; margin: 0 0 5px; }
+        .pm-action-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; line-height: 1.6; color: rgba(242,233,216,0.60); margin: 0; }
         .pm-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.28; color: #F2E9D8; margin: 0 0 34px; }
         .pm-timeline-wrap { width: 100%; }
 
@@ -282,7 +339,7 @@ export default function Partenariats() {
         </nav>
 
         {SECTIONS.map((s, i) => (
-          <section key={s.id} data-index={i} className="scene" data-layout={LAYOUT[s.type]}>
+          <section key={s.id} data-index={i} className="scene" data-type={s.type}>
             {(s.type === "hero" || s.type === "photo") && (
               <>
                 <img src={s.photo} alt={s.photoAlt} className="pw-photo-bg" />
@@ -299,12 +356,6 @@ export default function Partenariats() {
             >
               <SceneContent s={s} />
             </div>
-
-            {i === 0 && (
-              <div className="scene__hint">
-                <i /><span>Défilez vers le bas</span>
-              </div>
-            )}
           </section>
         ))}
       </div>

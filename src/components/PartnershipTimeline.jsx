@@ -2,34 +2,35 @@ import { CSS_EASE_IN_OUT } from "../motion/easing";
 
 // ============================================================
 //  Timeline SVG animée — section "Le parcours d'un partenariat".
-//  Un seul tracé traversant 5 étapes dans l'ordre (pas un éventail depuis
-//  une origine comme la carte export de la page À Propos) : le point
-//  lumineux part de la première étape, parcourt toute la ligne, s'arrête
-//  brièvement (halo doré) à chaque étape atteinte, puis repart. Une fois
-//  arrivé à la dernière étape, tout reste éclairé 2s avant de s'éteindre
-//  et de recommencer — boucle infinie, ~11s, aucun JS par frame (100%
-//  CSS, même technique que ExportRouteMap.jsx).
+//  Ligne horizontale plate, 5 étapes numérotées (01→05) en cercles
+//  bagués — pas une courbe. Un point lumineux parcourt la ligne dans
+//  l'ordre, chaque cercle s'allume (contour → plein doré) à son tour,
+//  reste éclairé 2s une fois la dernière étape atteinte, puis
+//  s'éteint et recommence — boucle infinie, ~11s, 100% CSS (même
+//  technique que ExportRouteMap.jsx).
 // ============================================================
 
-const GOLD_LINE = "#D9A94A";
+const GOLD_LINE = "#C9A84C";
 const GOLD_POINT = "#F2D896";
+const BLACK_FILL = "#0B0F0A";
+const IVORY = "#F2E9D8";
 
-const VIEW_W = 900;
-const VIEW_H = 260;
+const VIEW_W = 1000;
+const VIEW_H = 40;
+const Y = 20;
+const R = 22;
 
 const STEPS = [
-  { id: "echange", x: 60, y: 150, title: "Premier échange", text: "Une conversation simple pour comprendre vos besoins et vos objectifs." },
-  { id: "comprehension", x: 255, y: 80, title: "Compréhension de vos besoins", text: "Nous prenons le temps de cerner votre marché, vos contraintes et vos attentes." },
-  { id: "preparation", x: 450, y: 190, title: "Préparation export", text: "Sélection, conditionnement et documentation préparés avec rigueur." },
-  { id: "expedition", x: 645, y: 80, title: "Première expédition", text: "Un premier envoi, suivi de près, pour poser les bases de la confiance." },
-  { id: "developpement", x: 840, y: 150, title: "Développement du partenariat", text: "Une collaboration qui s'approfondit, expédition après expédition." },
+  { id: "echange", num: "01", x: 40, title: "Premier échange", text: "Nous faisons connaissance et comprenons vos besoins et vos objectifs." },
+  { id: "comprehension", num: "02", x: 280, title: "Compréhension de vos besoins", text: "Nous analysons votre marché, vos contraintes et vos exigences." },
+  { id: "preparation", num: "03", x: 520, title: "Préparation export", text: "Nous sélectionnons les meilleurs produits et préparons chaque détail de l'expédition." },
+  { id: "expedition", num: "04", title: "Première expédition", x: 760, text: "Votre commande est expédiée avec le même niveau d'attention que toutes les autres." },
+  { id: "developpement", num: "05", x: 960, title: "Développement du partenariat", text: "Nous restons à vos côtés pour faire grandir notre collaboration année après année." },
 ];
 
-const PATH = `M ${STEPS[0].x} ${STEPS[0].y} C 130 90, 190 90, ${STEPS[1].x} ${STEPS[1].y} C 330 70, 380 200, ${STEPS[2].x} ${STEPS[2].y} C 520 180, 570 70, ${STEPS[3].x} ${STEPS[3].y} C 715 70, 765 150, ${STEPS[4].x} ${STEPS[4].y}`;
+const PATH = `M ${STEPS[0].x} ${Y} L ${STEPS[4].x} ${Y}`;
 
 const CYCLE_MS = 11000;
-// 5 étapes, budget de parcours 7500ms (~1500ms/étape), tenue 2000ms,
-// fondu 800ms, pause 700ms avant la reprise — voir motion/drawSVG.js.
 const ARRIVE_PCT = [13.6, 27.3, 40.9, 54.5, 68.2];
 const HOLD_END_PCT = 86.4;
 const FADE_END_PCT = 95.5;
@@ -46,9 +47,9 @@ export default function PartnershipTimeline() {
         }
         @keyframes pt-line-draw {
           0%                        { opacity: 0; stroke-dashoffset: 100; }
-          0.5%                      { opacity: 1; }
-          ${ARRIVE_PCT[4]}%         { opacity: 1; stroke-dashoffset: 0; }
-          ${HOLD_END_PCT}%          { opacity: 1; stroke-dashoffset: 0; }
+          0.5%                      { opacity: 0.5; }
+          ${ARRIVE_PCT[4]}%         { opacity: 0.5; stroke-dashoffset: 0; }
+          ${HOLD_END_PCT}%          { opacity: 0.5; stroke-dashoffset: 0; }
           ${FADE_END_PCT}%          { opacity: 0; stroke-dashoffset: 0; }
           100%                      { opacity: 0; stroke-dashoffset: 0; }
         }
@@ -67,23 +68,36 @@ export default function PartnershipTimeline() {
           100%               { opacity: 0; }
         }
         ${STEPS.map((s, i) => `
-        .pt-point-${i} { transform-box: fill-box; transform-origin: center; animation: pt-arrive-${i} ${CYCLE_MS}ms ease-out infinite; }
-        @keyframes pt-arrive-${i} {
-          0%, ${ARRIVE_PCT[i] - 0.3}% { transform: scale(1); opacity: 0.4; }
-          ${ARRIVE_PCT[i]}%           { transform: scale(1); opacity: 1; }
-          ${ARRIVE_PCT[i] + 2.5}%     { transform: scale(1.8); opacity: 0.5; }
-          ${ARRIVE_PCT[i] + 5}%       { transform: scale(1); opacity: 1; }
-          ${HOLD_END_PCT}%            { transform: scale(1); opacity: 1; }
-          ${FADE_END_PCT}%            { opacity: 0.4; }
-          100%                        { opacity: 0.4; }
+        .pt-ring-${i} {
+          fill: ${BLACK_FILL}; stroke: rgba(201,168,76,0.45); stroke-width: 1.3;
+          animation: pt-ring-${i} ${CYCLE_MS}ms ease-out infinite;
         }
-        .pt-label-${i} { opacity: 0; animation: pt-label-${i} ${CYCLE_MS}ms ease-out infinite; }
+        @keyframes pt-ring-${i} {
+          0%, ${ARRIVE_PCT[i] - 0.3}% { stroke: rgba(201,168,76,0.45); fill: ${BLACK_FILL}; }
+          ${ARRIVE_PCT[i]}%           { stroke: ${GOLD_LINE}; fill: rgba(201,168,76,0.16); }
+          ${ARRIVE_PCT[i] + 5}%       { stroke: ${GOLD_LINE}; fill: rgba(201,168,76,0.16); }
+          ${HOLD_END_PCT}%            { stroke: ${GOLD_LINE}; fill: rgba(201,168,76,0.16); }
+          ${FADE_END_PCT}%            { stroke: rgba(201,168,76,0.45); fill: ${BLACK_FILL}; }
+          100%                        { stroke: rgba(201,168,76,0.45); fill: ${BLACK_FILL}; }
+        }
+        .pt-num-${i} {
+          fill: rgba(242,233,216,0.55);
+          animation: pt-num-${i} ${CYCLE_MS}ms ease-out infinite;
+        }
+        @keyframes pt-num-${i} {
+          0%, ${ARRIVE_PCT[i] - 0.3}% { fill: rgba(242,233,216,0.55); }
+          ${ARRIVE_PCT[i]}%           { fill: ${GOLD_POINT}; }
+          ${HOLD_END_PCT}%            { fill: ${GOLD_POINT}; }
+          ${FADE_END_PCT}%            { fill: rgba(242,233,216,0.55); }
+          100%                        { fill: rgba(242,233,216,0.55); }
+        }
+        .pt-label-${i} { opacity: 0.35; animation: pt-label-${i} ${CYCLE_MS}ms ease-out infinite; }
         @keyframes pt-label-${i} {
-          0%, ${ARRIVE_PCT[i]}%   { opacity: 0; transform: translateY(6px); }
+          0%, ${ARRIVE_PCT[i]}%   { opacity: 0.35; transform: translateY(4px); }
           ${ARRIVE_PCT[i] + 3}%   { opacity: 1; transform: translateY(0); }
           ${HOLD_END_PCT}%        { opacity: 1; transform: translateY(0); }
-          ${FADE_END_PCT}%        { opacity: 0; }
-          100%                    { opacity: 0; }
+          ${FADE_END_PCT}%        { opacity: 0.35; }
+          100%                    { opacity: 0.35; }
         }
         `).join("\n")}
       `}</style>
@@ -99,9 +113,12 @@ export default function PartnershipTimeline() {
           pathLength="100"
           strokeDasharray="100"
         />
-        <circle className="pt-dot" r="6" fill={GOLD_POINT} />
+        <circle className="pt-dot" r="5" fill={GOLD_POINT} />
         {STEPS.map((s, i) => (
-          <circle key={s.id} className={`pt-point-${i}`} cx={s.x} cy={s.y} r="6" fill={GOLD_POINT} />
+          <g key={s.id}>
+            <circle className={`pt-ring-${i}`} cx={s.x} cy={Y} r={R} />
+            <text className={`pt-num-${i}`} x={s.x} y={Y + 5} textAnchor="middle" fontFamily="'Plus Jakarta Sans', sans-serif" fontSize="13" fontWeight="700">{s.num}</text>
+          </g>
         ))}
       </svg>
 
@@ -115,13 +132,13 @@ export default function PartnershipTimeline() {
       </div>
 
       <style>{`
-        .pt-labels { position: relative; margin-top: 22px; height: 120px; }
-        .pt-label { position: absolute; top: 0; width: 200px; transform: translateX(-50%); text-align: center; }
-        .pt-label-title { display: block; font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; color: ${GOLD_POINT}; margin-bottom: 6px; }
-        .pt-label-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; line-height: 1.55; color: rgba(242,233,216,0.72); margin: 0; }
+        .pt-labels { position: relative; margin-top: 34px; height: 120px; }
+        .pt-label { position: absolute; top: 0; width: 190px; transform: translateX(-50%); text-align: center; }
+        .pt-label-title { display: block; font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; color: ${IVORY}; margin-bottom: 8px; line-height: 1.3; }
+        .pt-label-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; line-height: 1.55; color: rgba(242,233,216,0.60); margin: 0; }
         @media (max-width: 900px) {
           .pt-labels { height: auto; }
-          .pt-label { position: static; width: 100%; transform: none; text-align: left; margin-bottom: 20px; }
+          .pt-label { position: static; width: 100%; transform: none; text-align: left; margin-bottom: 22px; }
         }
       `}</style>
     </div>
