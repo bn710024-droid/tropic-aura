@@ -382,18 +382,25 @@ export default function Home() {
       rafId = requestAnimationFrame(raf);
     };
 
-    // MOBILE : un SEUL déclencheur, l'événement 'scroll' natif du wrapper (non
-    // throttlé pendant un geste tactile, contrairement à rAF sur iOS). Il appelle
-    // update() une fois par événement — plus de double/triple mise à jour.
+    // MOBILE : l'événement 'scroll' natif déclenche, mais les écritures de style
+    // sont COALESCÉES dans un rAF (une seule mise à jour par frame, calée sur le
+    // paint). Sans ça, plusieurs events par frame écrivaient background-color +
+    // transforms de façon synchrone au milieu du geste tactile → judder sur les
+    // fruits. On lit scrollTop DANS le rAF pour la valeur la plus fraîche.
+    let scrollRafId = 0;
     const onNativeScrollUpdate = () => {
-      const wrapper = wrapperRef.current;
-      const scroll = (wrapper && wrapper.scrollHeight > wrapper.clientHeight)
-        ? wrapper.scrollTop
-        : (window.scrollY || 0);
-      if (Math.abs(scroll - lastScroll) > 0.04) {
-        lastScroll = scroll;
-        update(scroll, window.innerHeight || 1);
-      }
+      if (scrollRafId) return;                    // une frame déjà en attente → on coalesce
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = 0;
+        const wrapper = wrapperRef.current;
+        const scroll = (wrapper && wrapper.scrollHeight > wrapper.clientHeight)
+          ? wrapper.scrollTop
+          : (window.scrollY || 0);
+        if (Math.abs(scroll - lastScroll) > 0.04) {
+          lastScroll = scroll;
+          update(scroll, window.innerHeight || 1);
+        }
+      });
     };
     const wrapperEl = wrapperRef.current;
 
@@ -408,6 +415,7 @@ export default function Home() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
       window.removeEventListener("resize", onResize);
       if (wrapperEl) wrapperEl.removeEventListener('scroll', onNativeScrollUpdate);
       if (lenis) lenis.destroy();
