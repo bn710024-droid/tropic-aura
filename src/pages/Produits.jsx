@@ -82,7 +82,7 @@ const SECTIONS = [
     type: "product", id: "gombo", side: "right", bg: "#243318",
     png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
     desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
