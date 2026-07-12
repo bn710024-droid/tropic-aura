@@ -88,14 +88,14 @@ export default function Footer() {
           fontSize: "clamp(30px, 5vw, 72px)", lineHeight: 1.06,
           letterSpacing: "-.035em", color: "#fff", margin: 0, maxWidth: 900,
         }}>
-          Connecting Exceptional Origins With Exceptional Partners.
+          Connecter des Origines Exceptionnelles avec des Partenaires Exceptionnels.
         </h2>
 
         <div ref={reveal} style={{
           ...r0(0.12), marginTop: "clamp(40px,6vh,64px)",
           display: "flex", flexWrap: "wrap", gap: "8px 26px",
         }}>
-          {["Dakar, Senegal", "Premium Produce Export", "Europe-Focused Partnerships"].map((t, i) => (
+          {["Dakar, Sénégal", "Export de Produits Premium", "Partenariats Axés sur l'Europe"].map((t, i) => (
             <span key={t} style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12, fontWeight: 500,
               letterSpacing: ".14em", textTransform: "uppercase",
@@ -169,7 +169,7 @@ export default function Footer() {
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.4vw,18px)",
             fontWeight: 600, letterSpacing: ".02em", color: "rgba(255,255,255,0.55)",
           }}>
-            Built for Long-Term Partnerships.
+            Construit pour les Partenariats de Long Terme.
           </span>
           <span style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
