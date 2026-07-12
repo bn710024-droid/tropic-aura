@@ -134,7 +134,7 @@ const SECTIONS = [
     mobileDesc: "Nous collaborons avec des entreprises qui partagent notre exigence de qualité, de transparence et de performance sur le long terme.",
     cta: "Découvrir nos engagements",
     mobileCta: "Découvrir",
-    link: "/univers",
+    link: "/partenariats",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,

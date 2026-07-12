@@ -1,7 +1,6 @@
 import { PAGE_ENTRY_COLOR as APROPOS } from "../pages/APropos";
 import { PAGE_ENTRY_COLOR as PRODUITS } from "../pages/Produits";
 import { PAGE_ENTRY_COLOR as PARTENARIATS } from "../pages/Partenariats";
-import { PAGE_ENTRY_COLOR as UNIVERS } from "../pages/Univers";
 import { PAGE_ENTRY_COLOR as CONTACT } from "../pages/Contact";
 
 const FALLBACK_COLOR = { desktop: "#0E9F6E", mobile: "#0E9F6E" };
@@ -14,8 +13,6 @@ const ROUTE_COLORS = {
   "/produits": PRODUITS,
   "/partnerships": PARTENARIATS,
   "/partenariats": PARTENARIATS,
-  "/univers": UNIVERS,
-  "/notre-univers": UNIVERS,
   "/contact": CONTACT,
 };
 
