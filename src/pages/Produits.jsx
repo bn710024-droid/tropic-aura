@@ -111,6 +111,7 @@ export default function Produits() {
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
   const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
+  const revealed    = useRef(new Set());  // sections déjà révélées → on ne les ré-anime plus (anti-scintillement au scroll-haut)
 
   useEffect(() => {
     // Lenis (smooth-scroll) DESKTOP UNIQUEMENT. Sur mobile tactile, Lenis fait
@@ -160,11 +161,14 @@ export default function Produits() {
 
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
-        if (!el) return;
+        // Une fois révélée, une section reste figée (opacité 1, transform none) :
+        // en remontant, on ne rejoue PLUS l'animation à l'envers → fini les
+        // clignotements / micro-sauts. Même patron que la page Partenariats.
+        if (!el || revealed.current.has(j)) return;
         const enter    = j * H - H * 0.60;
         const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
-        if (e >= 0.999) { el.style.opacity = "1"; el.style.transform = "none"; }
+        if (e >= 0.999) { el.style.opacity = "1"; el.style.transform = "none"; revealed.current.add(j); }
         else { el.style.opacity = e.toFixed(3); el.style.transform = `translateY(${Math.round(30 * (1 - e))}px)`; }
       });
 
