@@ -289,7 +289,17 @@ export default function Home() {
     //  Aucun terme temporel : si le scroll ne bouge pas, rien ne bouge.
     //  Les fruits sont parfaitement figés au repos.
     let lastScroll = -99999;
-    const onResize = () => { lastScroll = -99999; };  // force un recalcul
+
+    // Hauteur RÉELLE d'une section (.scene à 100vh) : sur un vrai mobile,
+    // window.innerHeight (viewport visuel) rétrécit avec la barre d'URL alors
+    // que 100vh reste fixe → sans ça, l'index de section dérive au fil du scroll.
+    const measureH = () => {
+      const sc = document.querySelector('.scene');
+      const h = sc ? sc.getBoundingClientRect().height : 0;
+      return h > 0 ? h : (window.innerHeight || 1);
+    };
+    let secH = measureH();
+    const onResize = () => { secH = measureH(); lastScroll = -99999; };  // force un recalcul
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
@@ -378,7 +388,7 @@ export default function Home() {
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
-        update(scroll, window.innerHeight || 1);
+        update(scroll, secH);
       }
       rafId = requestAnimationFrame(raf);
     };
@@ -399,14 +409,14 @@ export default function Home() {
           : (window.scrollY || 0);
         if (Math.abs(scroll - lastScroll) > 0.04) {
           lastScroll = scroll;
-          update(scroll, window.innerHeight || 1);
+          update(scroll, secH);
         }
       });
     };
     const wrapperEl = wrapperRef.current;
 
     // 1er rendu forcé (mobile + desktop) : couleur de fond + transforms initiaux.
-    update(0, window.innerHeight || 1);
+    update(0, secH);
 
     if (lenis) {
       rafId = requestAnimationFrame(raf);                 // desktop : boucle rAF

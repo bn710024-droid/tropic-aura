@@ -110,6 +110,7 @@ export default function Produits() {
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
+  const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
 
   useEffect(() => {
     // Lenis (smooth-scroll) DESKTOP UNIQUEMENT. Sur mobile tactile, Lenis fait
@@ -130,7 +131,20 @@ export default function Produits() {
     const easeOut  = (t) => 1 - (1 - t) * (1 - t);
     const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
-    const onResize = () => { lastScroll = -99999; };
+
+    // Hauteur RÉELLE d'une section = celle utilisée par la mise en page (.scene à
+    // 100vh). Sur un vrai mobile, window.innerHeight (viewport VISUEL) rétrécit
+    // quand la barre d'URL est visible, alors que 100vh (viewport LARGE) reste
+    // fixe → l'écart s'accumule section après section et le moteur révèle la
+    // MAUVAISE scène (images qui se chevauchent). On mesure donc un .scene réel.
+    const measureH = () => {
+      const sc = document.querySelector('.scene');
+      const h = sc ? sc.getBoundingClientRect().height : 0;
+      return h > 0 ? h : (window.innerHeight || 1);
+    };
+    let secH = measureH();
+    secHRef.current = secH;
+    const onResize = () => { secH = measureH(); secHRef.current = secH; lastScroll = -99999; };
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
@@ -175,7 +189,7 @@ export default function Produits() {
     const raf = (time) => {
       if (lenis) lenis.raf(time);
       const scroll = readScroll();
-      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
       rafId = requestAnimationFrame(raf);
     };
 
@@ -187,11 +201,11 @@ export default function Produits() {
     const onNativeScroll = () => {
       if (lenis) return;
       const scroll = window.scrollY || 0;
-      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
     };
     if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
 
-    update(0, window.innerHeight || 1);
+    update(0, secH);
     rafId = requestAnimationFrame(raf);
 
     return () => {
@@ -202,9 +216,12 @@ export default function Produits() {
     };
   }, []);
 
-  const scrollTo = (i) => lenisRef.current
-    ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
-    : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
+  const scrollTo = (i) => {
+    const H = secHRef.current || window.innerHeight;
+    return lenisRef.current
+      ? lenisRef.current.scrollTo(i * H, { duration: 1.2 })
+      : window.scrollTo({ top: i * H, behavior: "smooth" });
+  };
 
   return (
     <>
