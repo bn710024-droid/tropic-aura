@@ -238,7 +238,11 @@ export default function Produits() {
         .prod-name  { font-size: clamp(34px, 4.4vw, 68px); }
         @media (max-width: 820px){
           .prod-row   { flex-direction: column !important; gap: 18px !important; padding: 96px clamp(22px,7vw,40px) 60px !important; justify-content:center !important; }
-          .prod-photo { width: 100% !important; height: 36vh !important; }
+          /* Image en dvh (pas vh) : la section fait 100dvh (zone visible réelle),
+             donc l'image doit se mesurer sur la MÊME base, sinon elle est trop
+             haute (36vh = 36% du viewport LARGE) et pousse le texte hors écran
+             → titre/méta coupés. 32dvh garde tout le bloc dans un écran. */
+          .prod-photo { width: 100% !important; height: 32dvh !important; }
           .prod-text  { width: 100% !important; }
           .prod-name  { font-size: clamp(34px, 11vw, 52px) !important; }
           .prod-meta  { gap: 18px 30px !important; }
