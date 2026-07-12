@@ -472,7 +472,7 @@ export default function APropos() {
             style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(201,168,76,0.35)` }}
           >
             <div className="vision-photo-inner" ref={s1PhotoInnerRef}>
-              <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" />
+              <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" style={{ objectPosition: "50% 28%" }} />
               <div className="vision-photo-wash" style={{
                 background: "linear-gradient(155deg, rgba(18,42,30,0.12) 0%, rgba(14,32,21,0.22) 100%)",
               }} />
