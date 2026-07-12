@@ -22,7 +22,7 @@ const SECTIONS = [
   // ── Signature ──
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
-    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Keitt",
+    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Kent",
     desc: "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Mars – Septembre", "Standard": "Export Premium" },
   },
