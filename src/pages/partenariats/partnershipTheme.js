@@ -36,7 +36,7 @@ export const SECTIONS = [
     photo: "/images/partenariats/expedition-conteneur.jpg",
     photoAlt: "Conteneur rempli de cartons de mangues, prêt à quitter la station de conditionnement",
     icon: "leaf",
-    title: "Chaque conteneur quitte nos partenaires avec le même niveau d'exigence, qu'il s'agisse de votre première commande ou de votre cinquantième.",
+    title: "Chaque conteneur quitte notre station de conditionnement avec le même niveau d'exigence, qu'il s'agisse de votre première commande ou de votre cinquantième.",
     paragraphs: [
       "Derrière chaque conteneur se trouvent des dizaines de contrôles, de décisions et d'échanges qui permettent d'expédier chaque commande dans les meilleures conditions.",
     ],
