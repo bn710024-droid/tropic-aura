@@ -2,6 +2,7 @@
 import Lenis from "lenis";
 import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
+import Footer from "../components/Footer";
 
 // ============================================================
 //  HOME — animation organique pilotée 100% par rAF
@@ -614,6 +615,11 @@ export default function Home() {
           )}
         </section>
       ))}
+      {/* Footer DANS le wrapper : sur mobile le body est figé (overflow:hidden)
+          et ce wrapper est le vrai scroller — le footer doit donc vivre ici pour
+          être atteignable. Sur desktop le wrapper est display:contents (no-op),
+          le footer flotte normalement après les sections. */}
+      <Footer />
       </div>
     </>
   );

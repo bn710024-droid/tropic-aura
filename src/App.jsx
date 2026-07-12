@@ -22,11 +22,14 @@ export default function App() {
   else if (path === "/insights/fournisseur-stable-opportuniste")             Page = InsightPartenariats;
 
   const isArticle = path.startsWith("/insights/");
+  // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
+  // (le body y est figé) — on évite ici le doublon.
+  const isHome = Page === Home;
 
   return (
     <>
       <Page />
-      {!isArticle && <Footer />}
+      {!isArticle && !isHome && <Footer />}
       {!isArticle && <LiquidMenu />}
     </>
   );
