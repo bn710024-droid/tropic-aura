@@ -88,7 +88,7 @@ const SECTIONS = [
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
     png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piment vert",
     desc: "Couleur intense, fraîcheur maîtrisée et sélection rigoureuse. Un produit de caractère destiné aux marchés à forte demande.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Mars – Août", "Standard": "Export Premium" },
   },
 
   // ── Besoin spécifique ──
