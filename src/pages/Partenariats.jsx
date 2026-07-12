@@ -208,6 +208,9 @@ export default function Partenariats() {
   return (
     <>
       <style>{`
+        /* Images décoratives : pas de pointer-events → le navigateur (Edge) ne
+           colle plus son bouton "Recherche visuelle" au survol. */
+        .pw-photo-bg, .pw-photo-frame-img, .pm-hero-photo, .pm-photo-frame-img { pointer-events: none; }
         .partenariats-mobile-tree { display: none; }
         @media (max-width: 900px) {
           .partenariats-desktop-tree { display: none; }

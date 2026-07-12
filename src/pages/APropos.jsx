@@ -353,7 +353,7 @@ export default function APropos() {
         .vision-photo-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(24px, 5vw, 64px) clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) 0; box-sizing: border-box; }
         .vision-photo-frame { position: relative; width: 100%; height: 78vh; max-height: 760px; border-radius: 2px; overflow: hidden; will-change: transform, clip-path; }
         .vision-photo-inner { position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; }
-        .vision-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .vision-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
         .vision-photo-wash { position: absolute; inset: 0; pointer-events: none; }
         .vision-num { font-family: 'Fraunces', serif; font-weight: 500; font-size: 15px; letter-spacing: .04em; color: ${GOLD}; }
         .vision-kicker { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
