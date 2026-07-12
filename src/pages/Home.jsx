@@ -28,7 +28,7 @@ import { getDestinationColor } from "../lib/destinationColors";
 //  s = size px, b = blur px. Géant toujours à DROITE (texte à gauche dégagé).
 const LAYOUTS = [
   // 0 HERO — géant centre-droite
-  [ {x:68,y:48,s:430,b:0}, {x:16,y:20,s:150,b:0}, {x:92,y:24,s:185,b:0}, {x:12,y:84,s:135,b:0}, {x:90,y:82,s:200,b:0}, {x:52,y:94,s:120,b:0} ],
+  [ {x:68,y:48,s:380,b:0}, {x:16,y:20,s:150,b:0}, {x:92,y:24,s:185,b:0}, {x:12,y:84,s:135,b:0}, {x:90,y:82,s:200,b:0}, {x:52,y:94,s:120,b:0} ],
   // 1 MANGUES — géant bas-droite, petits en haut
   [ {x:71,y:50,s:205,b:0}, {x:20,y:18,s:160,b:0}, {x:90,y:20,s:150,b:0}, {x:46,y:13,s:140,b:0}, {x:90,y:80,s:175,b:0}, {x:52,y:87,s:150,b:0}, {x:16,y:82,s:160,b:0} ],
   // 2 ANANAS — géant haut-droite, petits en bas
