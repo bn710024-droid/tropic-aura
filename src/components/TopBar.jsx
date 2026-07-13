@@ -5,7 +5,7 @@ export default function TopBar() {
   };
 
   return (
-    <header className="ghost" style={{ zIndex: 200, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <header className="ghost" style={{ zIndex: 650, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <a href="/" className="ghost__logo">Tropicaura</a>
       <button
         id="topbar-menu-btn"
