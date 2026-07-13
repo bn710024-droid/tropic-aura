@@ -290,7 +290,7 @@ export default function LiquidMenu() {
           position: "fixed", inset: 0, zIndex: 600,
           pointerEvents: "none", overflow: "hidden",
           backgroundColor: "#0A0A0A",
-          clipPath: "circle(0px at 0% 100%)",
+          clipPath: "circle(0px at 100% 0%)",
           display: "flex",
         }}
       >
