@@ -1,1 +1,11 @@
-version:0.0.1 configurations:[name:tropic-aura-dev] configurations:[runtimeExecutable:npm] configurations:[runtimeArgs:[run] configurations:[dev] configurations:[--] configurations:[--port] configurations:[5175]] configurations:[port:5175]
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tropic-aura-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5175"],
+      "port": 5175
+    }
+  ]
+}

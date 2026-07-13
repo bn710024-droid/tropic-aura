@@ -1,5 +1,10 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  CONTACT — « Le dernier chapitre »
@@ -10,6 +15,8 @@ import Lenis from "lenis";
 //
 //  ⚠️ Coordonnées provisoires — à remplacer par les vraies.
 // ============================================================
+
+export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 00 000 00 00";
@@ -31,15 +38,17 @@ export default function Contact() {
   };
 
   useEffect(() => {
-    // Smooth scroll (cohérence avec le reste du site)
-    const lenis = new Lenis({
+    // Smooth scroll (cohérence avec le reste du site) — DESKTOP UNIQUEMENT.
+    // Sur mobile, Lenis fait "sauter" au retour vers le haut → scroll natif iOS.
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.15,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-    });
+    }) : null;
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
-    rafId = requestAnimationFrame(raf);
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     // Apparitions douces au scroll
     const io = new IntersectionObserver((entries) => {
@@ -53,9 +62,23 @@ export default function Contact() {
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
     revealRefs.current.forEach((el) => el && io.observe(el));
 
+    // Saut direct vers une section via ?section=<id> (déclenché par le
+    // sous-lien "Nous contacter" du menu → /contact?section=form).
+    const target = new URLSearchParams(window.location.search).get("section");
+    let scrollTimeout;
+    if (target === "form") {
+      scrollTimeout = setTimeout(() => {
+        const el = document.getElementById("contact-form");
+        if (!el) return;
+        if (lenis) lenis.scrollTo(el, { duration: 1.2 });
+        else el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+    }
+
     return () => {
       cancelAnimationFrame(rafId);
-      lenis.destroy();
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      if (lenis) lenis.destroy();
       io.disconnect();
     };
   }, []);
@@ -97,8 +120,23 @@ export default function Contact() {
 
   const r0 = { opacity: 0, transform: "translateY(26px)", transition: "opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1)" };
 
+  const contactDescription =
+    "Contactez Tropicaura pour vos besoins d'import de fruits et légumes frais d'Afrique de l'Ouest. Devis, volumes, Incoterms FOB Dakar — réponse sous 48h.";
+  const contactTrail = buildBreadcrumbTrail("/contact");
+
   return (
     <>
+      <SEOHead
+        title="Contact — Demander une Offre Export"
+        description={contactDescription}
+        path="/contact"
+        keywords={["contact export fruits", "devis import fruits Afrique", "fournisseur Sénégal contact"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/contact", title: "Contact", description: contactDescription, breadcrumb: true }),
+          breadcrumbListSchema(contactTrail, "/contact"),
+        ]}
+      />
       <style>{`
         .ct-grid  { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px,7vw,110px); }
         .ct-form-2{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
@@ -112,16 +150,9 @@ export default function Contact() {
         }
       `}</style>
 
-      {/* Logo (s'inverse automatiquement selon le fond via mix-blend) */}
-      <span
-        ref={logoRef}
-        style={{
-          position: "fixed", top: 16, left: "clamp(20px,5vw,48px)", zIndex: 200,
-          pointerEvents: "none",
-        }}
-      >
-        <span className="ghost__logo">Tropicaura</span>
-      </span>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
+      <Breadcrumbs trail={contactTrail} />
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
       <section style={{
@@ -160,7 +191,7 @@ export default function Contact() {
       </section>
 
       {/* ━━━━━ 2. EXPÉRIENCE DE CONTACT ━━━━━ */}
-      <section style={{
+      <section id="contact-form" style={{
         background: "#F5F1E8",
         padding: "clamp(80px,14vh,160px) clamp(24px,8vw,140px)",
       }}>

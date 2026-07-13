@@ -88,14 +88,14 @@ export default function Footer() {
           fontSize: "clamp(30px, 5vw, 72px)", lineHeight: 1.06,
           letterSpacing: "-.035em", color: "#fff", margin: 0, maxWidth: 900,
         }}>
-          Connecting Exceptional Origins With Exceptional Partners.
+          Connecter des Origines Exceptionnelles avec des Partenaires Exceptionnels.
         </h2>
 
         <div ref={reveal} style={{
           ...r0(0.12), marginTop: "clamp(40px,6vh,64px)",
           display: "flex", flexWrap: "wrap", gap: "8px 26px",
         }}>
-          {["Dakar, Senegal", "Premium Produce Export", "Europe-Focused Partnerships"].map((t, i) => (
+          {["Dakar, Sénégal", "Export de Produits Premium", "Partenariats Axés sur l'Europe"].map((t, i) => (
             <span key={t} style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12, fontWeight: 500,
               letterSpacing: ".14em", textTransform: "uppercase",
@@ -117,12 +117,19 @@ export default function Footer() {
         <div className="ft-info" ref={reveal} style={r0(0)}>
           {/* Marque */}
           <div>
-            <img src="/logo.png" alt="Tropicaura" style={{ height: 40, display: "block", marginBottom: 16 }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+              <img src="/logo-mark.png" alt="" style={{ height: 38, display: "block" }} />
+              <span style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
+                fontSize: 20, letterSpacing: "-.01em", color: "#fff",
+              }}>Tropicaura</span>
+            </div>
             <p style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, lineHeight: 1.7,
               fontWeight: 400, color: "rgba(255,255,255,0.45)", margin: 0, maxWidth: 240,
             }}>
-              Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.
+              <span className="only-desktop">Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.</span>
+              <span className="only-mobile">Export premium depuis le Sénégal vers les marchés internationaux.</span>
             </p>
           </div>
 
@@ -168,7 +175,7 @@ export default function Footer() {
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.4vw,18px)",
             fontWeight: 600, letterSpacing: ".02em", color: "rgba(255,255,255,0.55)",
           }}>
-            Built for Long-Term Partnerships.
+            Construit pour les Partenariats de Long Terme.
           </span>
           <span style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,

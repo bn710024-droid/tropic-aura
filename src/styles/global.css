@@ -2,7 +2,12 @@
    Tropicaura — Expérience plein écran
    Scroll-snap natif + pluie de produits en cascade
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+/* Polices Google Fonts : chargées via <link rel="stylesheet"> dans
+   index.html (avec preconnect), pas via @import ici — un @import CSS
+   est render-blocking en cascade (HTML → CSS → découverte de l'import
+   → fetch police), alors qu'un <link> dans <head> est découvert et
+   téléchargé en parallèle dès le début du parsing HTML. Voir Core Web
+   Vitals / LCP. */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -25,6 +30,10 @@ body::-webkit-scrollbar { display: none; }
 
 ::selection { background: rgba(255,255,255,.3); }
 
+/* ---------- WRAPPER DE SCROLL DÉDIÉ (mobile uniquement — voir media query) ----------
+   Desktop : display:contents = aucune box, aucun impact sur le flow/scroll/Lenis. */
+.mobile-scroll-wrapper { display: contents; }
+
 /* ---------- CALQUE DE FOND FIXE (couleur interpolée) ---------- */
 .bg-layer {
   position: fixed;
@@ -42,22 +51,39 @@ body::-webkit-scrollbar { display: none; }
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Éclairage Combilo (desktop) : mode de fusion `soft-light`. Le blanc
-     ILLUMINE la couleur de fond en gardant sa teinte/saturation (couleur
-     lumineuse, pas délavée) ; le noir l'ASSOMBRIT en gardant la teinte
-     (couleur profonde, pas grise) → le dégradé "dans la teinte" de Combilo.
+  /* Éclairage Combilo GLOBAL (desktop + mobile, toutes les pages avec .bg-depth).
+     CLÉ : mode de fusion `soft-light`. Le blanc ILLUMINE la couleur de fond en
+     gardant sa teinte/saturation (couleur lumineuse, pas délavée) ; le noir
+     l'ASSOMBRIT en gardant la teinte (couleur profonde, pas grise) → le dégradé
+     "dans la teinte" de Combilo, du clair éclatant au foncé riche.
        1. halo lumineux central (source de lumière, légèrement sous le centre),
        2. vignette profonde sur tous les bords → volume/3D,
        3. bande haute assombrie (sous le header).
      Le centre reste transparent → texte sur couleur propre, aucune tache. */
   background:
-    radial-gradient(78% 62% at 50% 47%,
-      rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 62%),
-    radial-gradient(128% 128% at 50% 45%,
-      rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .35) 74%, rgba(0, 0, 0, .78) 100%),
+    /* halo central ADOUCI (plus de "spot néon") : source de lumière discrète */
+    radial-gradient(66% 52% at 50% 42%,
+      rgba(255, 255, 255, .24), rgba(255, 255, 255, 0) 60%),
+    /* vignette plus profonde et plus large → volume, matière, moins "plat" */
+    radial-gradient(132% 124% at 50% 42%,
+      rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, .42) 72%, rgba(0, 0, 0, .88) 100%),
     linear-gradient(to bottom,
-      rgba(0, 0, 0, .24) 0%, rgba(0, 0, 0, 0) 16%);
+      rgba(0, 0, 0, .30) 0%, rgba(0, 0, 0, 0) 15%);
   mix-blend-mode: soft-light;
+}
+
+/* Grain de film fin sur la couleur de fond → texture premium/éditoriale qui
+   supprime l'aspect couleur-plate "néon". Statique + fixed → rasterisé une
+   seule fois, aucun coût au scroll (important sur iOS). */
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
 }
 
 /* ---------- SECTION PLEIN ÉCRAN (flux libre) ---------- */
@@ -226,30 +252,42 @@ body::-webkit-scrollbar { display: none; }
   pointer-events: none;          /* le fond ne bloque pas le scroll */
   background: transparent;
 }
-/* Bandeau sombre façon Combilo : valeurs relevées sur leur vrai site
-   (.topbar sur combilo.nl) — height: 3em ≈ 75px, background rgba(51,51,51,.5),
-   aucun dégradé (leur CSS ne change pas ces valeurs pour mobile). */
+/* Bande sombre façon Combilo : valeurs RELEVÉES SUR LEUR VRAI SITE (inspection
+   directe de .topbar sur combilo.nl) — height: 3em ≈ 75px, background:
+   rgba(51,51,51,0.5), aucun dégradé (leur CSS ne contient aucune media query
+   qui change ces valeurs pour mobile) → même hauteur, même couleur partout. */
 .ghost::before {
   content: "";
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 75px;
-  background: rgba(51, 51, 51, .32);
+  height: 54px;
+  background: rgba(51, 51, 51, .20);
   z-index: -1;
   pointer-events: none;
 }
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
-  /* Wordmark texte façon Combilo — remplace l'ancien logo.png (fond noir plein
-     intégré à l'image, d'où la "boîte noire" visible dans le header). */
+  /* Symbole (monogramme T détouré, or sur transparent) + wordmark. Le mark est
+     injecté en ::before → un seul point de vérité pour les 9 headers du site. */
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   font-size: 21px;
   letter-spacing: -.01em;
   color: #fff;
   text-decoration: none;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, .3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 0, 0, 0.4);
   user-select: none;
+}
+.ghost__logo::before {
+  content: "";
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: url(/logo-mark.png) center / contain no-repeat;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
 }
 .ghost__contact {
   position: relative;
@@ -368,7 +406,312 @@ body::-webkit-scrollbar { display: none; }
   border-bottom-color: rgba(0, 0, 0, .55);
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* Calque fruits mobile global — masqué hors mobile (évite la fuite desktop) */
+.fruits-layer-mobile { display: none; }
+
+/* Variantes de texte desktop / mobile — bascule CSS pure, sans JS ni resize listener */
+.only-mobile { display: none; }
+
+/* ============================================================
+   MOBILE ≤768px — scroll natif + snap mandatory
+   bg-layer masqué, mobileBg par section via --mobile-bg
+   ============================================================ */
 @media (max-width: 768px) {
-  .scene__desc { max-width: 90%; }
+
+  /* Points de navigation latéraux (Produits, APropos, Partenariats, Univers) :
+     desktop uniquement. !important nécessaire pour battre le display:flex
+     posé en inline style dans le JSX de chaque page. */
+  .dots-nav { display: none !important; }
+
+  /* ── html/body : figés UNIQUEMENT sur la page qui a le wrapper (l'accueil) ──
+     CRITIQUE : le sélecteur :has(.mobile-scroll-wrapper) restreint le gel aux
+     seules pages qui possèdent réellement le wrapper de scroll dédié. Sans ça,
+     html/body seraient figés sur TOUTES les pages (CSS global) alors que seule
+     l'accueil a le wrapper → les autres pages devenaient impossibles à scroller.
+     Architecture "wrapper dédié" (pattern Combilo) : plus html/body ne scrollent
+     là où le wrapper existe → aucun WebKit ne confond le scroller racine avec le
+     containing block d'un position:fixed → .fruits-layer-mobile reste ancré. */
+  html:has(.mobile-scroll-wrapper) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body:has(.mobile-scroll-wrapper) {
+    height: 100dvh;
+    overflow: hidden;
+    background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
+  }
+
+  /* ── Wrapper de scroll dédié — le VRAI scroller mobile ──
+     display:contents hors mobile (voir règle de base plus haut) : aucun impact
+     desktop, Lenis/scroll document inchangés. */
+  .mobile-scroll-wrapper {
+    display: block;
+    height: 100dvh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /* Snap CSS mandatory RETIRÉ : sur iOS il se battait avec le momentum natif et
+       donnait un scroll rigide/mécanique. Remplacé par le snap JS façon desktop
+       (momentum libre + pose douce sur la section la plus proche — voir Home.jsx).
+       scroll-behavior:smooth retiré aussi : il détournerait les écritures
+       scrollTop image-par-image de l'animation de pose. */
+    /* -webkit-overflow-scrolling: touch ICI est sans risque : ce wrapper n'est PAS un
+       ancêtre de .fruits-layer-mobile (qui est fixed, hors du wrapper, sibling).
+       L'ancien bug venait de cette propriété posée sur html, qui LUI était ancêtre
+       du calque fixed. */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Fix Safari iOS : position:sticky cassé par overflow sur un ancêtre ──
+     body a overflow-x:hidden en règle globale (protection anti-scroll
+     horizontal, tout en haut de ce fichier). Sur WebKit mobile, N'IMPORTE
+     QUEL overflow non-visible sur un ancêtre (même overflow-x seul) casse
+     le calcul du containing block d'un descendant position:sticky, qui se
+     comporte alors comme un simple position:relative — Chrome desktop et
+     l'émulation mobile de Chrome DevTools n'ont PAS ce bug, d'où l'écart
+     entre le rendu testé ici et le rendu réel sur iPhone. Scopé à la page
+     À Propos (seule page utilisant du sticky mobile pour l'instant) via
+     :has(), même pattern que .mobile-scroll-wrapper ci-dessus. */
+  body:has(.about-mobile-tree) { overflow-x: visible; }
+
+  /* .bg-layer porte l'interpolation continue de couleur (même mécanisme que
+     desktop). .bg-depth (halo radial clair au centre + vignette sombre aux
+     bords) est ACTIF ici aussi : c'est l'éclairage premium façon Combilo.
+     Global et fixed → continu au scroll, aucune couture entre sections
+     (contrairement à l'ancien .scene::before par-section, resté supprimé). */
+
+  /* (Éclairage Combilo désormais dans la règle .bg-depth de base → desktop +
+     mobile + toutes les pages. Plus d'override mobile ici.) */
+
+  /* ── Section plein écran ── */
+  .scene {
+    height: 100dvh;
+    min-height: unset;
+    width: 100vw;
+    z-index: 10;   /* EXPLICITE : textes/CTA au-dessus du calque fruits (z:1) — règle Combilo */
+    isolation: isolate;   /* stacking context bulletproof — le rang z-index 10 vs 1 ne dépend d'aucun autre ancêtre */
+    overflow: clip; /* clip les fruits débordants SANS créer de scroll container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: calc(56px + env(safe-area-inset-top, 0px)) 24px 40px 24px;
+    box-sizing: border-box;
+    background: transparent;   /* laisse .bg-layer (interpolation continue) transparaître */
+    /* scroll-snap-align/stop retirés : le snap est désormais géré en JS
+       (momentum libre + pose douce), comme la sensation Lenis du desktop. */
+  }
+
+  /* Halo/vignette par section retiré (H2 confirmé) : chaque .scene::before
+     était indépendant et clippé à sa propre boîte, créant une coupure nette
+     à la frontière entre deux sections pendant le glissement — alors que
+     .bg-layer, lui, est unique et continu. Le fondu de couleur global suffit. */
+  .scene::before { display: none; }
+
+  /* Fruits desktop — cachés */
+  .rain { display: none; }
+
+  /* Variantes de texte : bascule desktop → mobile */
+  .only-desktop { display: none; }
+  .only-mobile { display: inline; }
+
+  /* ── Calques fruits mobile GLOBAUX — deux plans pour tout le site ──
+     position:fixed, hors du wrapper de scroll (siblings, pas descendants).
+     Plan MID  (z:1, sous le texte) : parallaxe 0.5×  — rivière principale.
+     Plan SOFT (z:2, sous le texte) : parallaxe 0.35× — profondeur de champ.
+     Empilement complet : fond (0) < fruits (1-2) < textes/CTA (10).
+     Deux déclencheurs redondants (voir Home.jsx) : la boucle rAF (fiable, même
+     chemin que le fondu couleur) + un vrai listener 'scroll' natif en filet de
+     sécurité — sur iOS Safari, rAF peut être retardée pendant un geste de scroll
+     tactile actif (le thread principal priorise le scroll natif), le listener
+     'scroll' natif ne l'est pas. Fonction PURE du scroll, aucune inertie propre.
+     translate3d (pas translateY) force une couche GPU dédiée pour un repaint fiable
+     de l'élément fixed pendant le scroll. z-index entre bg-layer(0) et .scene(10). */
+  .fruits-layer-mobile {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    isolation: isolate;   /* confine ce calque à son propre contexte d'empilement */
+    pointer-events: none;
+    will-change: transform;
+    /* promotion GPU dès le premier paint (avant toute écriture JS) — sur certaines
+       versions de WebKit, will-change seul ne suffit pas à garantir une couche de
+       composition dédiée pour un position:fixed avant le premier scroll. */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Plan SOFT (profondeur de champ) : SOUS le texte comme tout fruit (z:2 < scene:10),
+     juste au-dessus du plan mid (z:1). Aucun fruit ne masque jamais texte ou CTA. */
+  .fruits-layer-mobile--soft {
+    z-index: 2;
+  }
+
+  .global-fruit {
+    position: absolute;
+    pointer-events: none;
+    display: block;
+    height: auto;
+    animation: none;
+    transition: none;
+  }
+
+  /* ── Contenu texte (z:4 dans .scene z:10 — TOUJOURS au-dessus des fruits z:1-2) ──
+     Cadre naturel : texte CENTRÉ entre les deux colonnes de fruits. align-self
+     center + max-width 48vw → le texte occupe ~26-74%, les fruits nets sont
+     confinés aux bords (≤24% et ≥76%) → gap propre des deux côtés, aucun
+     chevauchement à toute position de scroll. */
+  .scene__content {
+    position: relative;
+    z-index: 4;
+    align-self: center;
+    max-width: 56vw;
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2dvh;
+    pointer-events: auto;
+  }
+
+  /* Voile sombre localisé RETIRÉ : sur un fond uni il se voyait comme une tache
+     brunâtre/noirâtre derrière le texte. Dans cette compo (fruits sur les bords,
+     pas derrière le texte), la lisibilité est assurée par les seules ombres
+     portées ci-dessous — elles collent aux lettres et ne salissent pas le fond. */
+
+  /* ── Titre — massif & percutant (gabarit Combilo) : Poppins très gras, leading
+     serré, léger tracking négatif ── */
+  .scene__title {
+    font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(26px, 8vw, 40px);
+    line-height: 1.05;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    margin: 0 0 0.8dvh;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .45), 0 1px 3px rgba(0, 0, 0, .35);
+  }
+
+  /* ── Description — Poppins, poids moyen, interligne aéré pour la lecture ── */
+  .scene__desc {
+    font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 100%;
+    margin: 0;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, .4), 0 1px 2px rgba(0, 0, 0, .3);
+  }
+
+  /* ── CTA compact centré — repos transparent (identique au style desktop).
+     Couleur au tap portée par le morph (.cta-morph), pas par le bouton lui-même. ── */
+  .scene__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;              /* remplit la colonne de droite (option 2), sans déborder */
+    min-width: 0;
+    max-width: 100%;
+    padding: 12px 22px;
+    background: rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    cursor: pointer;
+    overflow: visible;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .20);
+  }
+
+  .cta-label {
+    flex: none;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+  }
+
+  /* Flèche simple, pas de cercle */
+  .cta-arrow {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: 0 !important;   /* espacement géré par le gap du parent */
+    background: transparent !important;
+    border-radius: 0 !important;
+    display: flex;
+    align-items: center;
+    overflow: visible !important;
+  }
+
+  .cta-arrow > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    font-size: 17px;
+    min-width: unset;
+  }
+
+  /* ── Header ghost — compact : hauteur et logo réduits ──
+     Ancien fond flouté (rgba(0,0,0,.05) + backdrop-filter) RETIRÉ : il créait
+     un second bandeau superposé au-dessus du bandeau Combilo (.ghost::before,
+     75px), avec deux bords visibles au lieu d'un seul. Un seul bandeau reste :
+     celui qui reproduit combilo.nl. */
+  .ghost {
+    height: auto;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px 16px;
+    background: transparent;
+  }
+
+  .ghost__logo { font-size: 17px !important; gap: 9px; }
+  .ghost__logo::before { width: 24px; height: 24px; }
+
+  /* Indicateur scroll — inutile sur mobile */
+  .scene__hint { display: none; }
+}
+
+/* ============================================================
+   MORPH CTA → PLEIN ÉCRAN — mobile ET desktop
+   Contraction légère au tap, puis le voile (.cta-morph) recouvre
+   l'écran avec la couleur d'entrée de la page de destination
+   (voir src/lib/destinationColors.js), juste avant la navigation.
+   ============================================================ */
+.scene__cta.is-tapping {
+  transform: scale(0.96);
+  transition: transform 100ms ease-out;
+}
+
+.cta-morph {
+  position: fixed;
+  border-radius: 999px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: ctaMorphExpand 400ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation-delay: 100ms;
+}
+
+@keyframes ctaMorphExpand {
+  to {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene__cta.is-tapping { transform: none; transition: none; }
+  .cta-morph { display: none; }
 }

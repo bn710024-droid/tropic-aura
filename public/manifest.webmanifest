@@ -1,0 +1,19 @@
+{
+  "name": "Tropicaura — Export Premium de Fruits & Légumes",
+  "short_name": "Tropicaura",
+  "description": "Exportateur B2B premium de fruits et légumes frais d'Afrique de l'Ouest vers l'Europe, le Canada, le Royaume-Uni et le Moyen-Orient.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B0F0A",
+  "theme_color": "#0B0F0A",
+  "lang": "fr",
+  "categories": ["business", "food"],
+  "icons": [
+    { "src": "/favicon-16x16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

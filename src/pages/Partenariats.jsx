@@ -1,94 +1,110 @@
-﻿import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import FallingText from "../components/FallingText";
-import IMAGES from "../images";
+import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
+import PartnershipTimeline from "../components/PartnershipTimeline";
+import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
+import ConclusionConstellation from "./partenariats/ConclusionConstellation";
+import { ICONS } from "./partenariats/icons";
+import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
-//  PARTENARIATS — gradients par section, crossfade au scroll
-//  5 calques bg-layer empilés en DOM order (dernier = dessus)
+//  PARTENARIATS — refonte 5 scènes (Hero / Vision / Parcours /
+//  Photo / Conclusion). Moteur desktop INCHANGÉ (crossfade + reveal
+//  au scroll piloté par rAF, cf. historique du fichier) : seul le
+//  contenu de chaque scène change. L'arbre mobile réutilise
+//  exactement la philosophie de la page À Propos (Motion System,
+//  flux natif continu, jamais de position:sticky).
 // ============================================================
-
-// Phrases valeurs + couleurs (beige / doré)
-const VALEURS = [
-  "Confiance durable",
-  "Transparence totale",
-  "Relations équitables",
-  "Croissance ensemble",
-  "Valeur partagée",
-];
-const VALEUR_COLORS = ["#E8D5C4", "#C9A84C"];
-
-// Fruits uniques en fin de paragraphe (sans répétition — 1 par paragraphe)
-const PARA_FRUITS = [
-  IMAGES.orange, IMAGES.fraises, IMAGES.coco,
-  IMAGES.melonJaune, IMAGES.papaye, IMAGES.banane,
-  IMAGES.fruitPassion, IMAGES.ananas, IMAGES.melonVert,
-  IMAGES.mangue, IMAGES.avocat, IMAGES.pasteque,
-  IMAGES.myrtilles, IMAGES.citronVert, IMAGES.citronJaune,
-  IMAGES.papayeCoupe,
-];
-
-const SECTIONS = [
-  {
-    id: "fondations", num: "01", surtitre: "FONDATIONS", side: "left",
-    bg: "linear-gradient(180deg, #E1CCA0 0%, #D1B57A 100%)",
-    dark: true,
-    title: "Des fondations construites sur la confiance.",
-    paragraphs: [
-      "Chaque partenariat durable repose sur des fondations solides.",
-      "Chez Tropicaura, nous croyons que le commerce international ne se résume pas à l'échange de produits. Il repose avant tout sur la confiance, la transparence et une vision commune du long terme.",
-      "Nous ne recherchons pas des opportunités ponctuelles. Nous construisons des relations capables de grandir, d'évoluer et de créer de la valeur sur le long terme.",
-    ],
-  },
-  {
-    id: "reseau", num: "02", surtitre: "RÉSEAU", side: "right",
-    bg: "linear-gradient(180deg, #90A984 0%, #708A65 100%)",
-    dark: true,
-    title: "Un réseau qui dépasse les frontières.",
-    paragraphs: [
-      "Derrière chaque réussite commerciale se trouve un réseau de partenaires engagés.",
-      "Tropicaura développe des relations stratégiques à travers les principales régions tropicales d'Afrique, en connectant producteurs, stations de conditionnement, partenaires logistiques, distributeurs et acheteurs internationaux autour d'un objectif commun : l'excellence.",
-      "Chaque connexion renforce l'écosystème. Chaque partenariat ouvre de nouvelles opportunités.",
-    ],
-  },
-  {
-    id: "terroirs", num: "03", surtitre: "TERROIRS", side: "left",
-    bg: "linear-gradient(180deg, #4F7980 0%, #355C62 100%)",
-    dark: false,
-    title: "Révéler le potentiel des terroirs tropicaux.",
-    paragraphs: [
-      "Certaines des opportunités agricoles les plus prometteuses au monde se trouvent dans les régions tropicales africaines.",
-      "Tropicaura contribue à un avenir où ces territoires sont reconnus pour leur richesse naturelle, leur professionnalisme, leur capacité d'innovation et leur aptitude à répondre aux standards les plus exigeants du commerce mondial.",
-      "Notre ambition est simple : transformer le potentiel en opportunités concrètes et créer de la valeur durable pour l'ensemble des acteurs de la chaîne.",
-    ],
-  },
-  {
-    id: "avenir", num: "04", surtitre: "AVENIR", side: "right",
-    bg: "linear-gradient(180deg, #D4B47B 0%, #BE9A5A 100%)",
-    dark: true,
-    title: "Construire l'avenir ensemble.",
-    paragraphs: [
-      "Nous croyons que l'avenir du commerce tropical sera porté par des partenariats solides, une vision partagée et une collaboration durable.",
-      "Tropicaura construit un écosystème dans lequel chaque acteur contribue à une réussite collective.",
-      "Nous ne voulons pas simplement développer des relations commerciales. Nous souhaitons bâtir des alliances stratégiques capables d'accompagner la prochaine génération du commerce agricole international.",
-    ],
-  },
-  {
-    id: "cta", num: "05", surtitre: "REJOINDRE LE RÉSEAU", side: "left",
-    bg: "linear-gradient(180deg, #C49A5A 0%, #A87E40 100%)",
-    dark: true,
-    title: "Rejoignez un réseau qui façonne l'avenir du commerce tropical.",
-    paragraphs: [
-      "Les plus grandes opportunités naissent lorsque des partenaires ambitieux avancent dans la même direction. Que vous soyez producteur, importateur, distributeur ou partenaire logistique, Tropicaura souhaite collaborer avec des acteurs qui partagent une même exigence de qualité et de création de valeur.",
-    ],
-    hasButton: true,
-  },
-];
 
 const N = SECTIONS.length;
-const SIDES = SECTIONS.map((s) => s.side);   // côté du texte par section
 
-// ============================================================
+// Couleur d'entrée pour le voile de morph du CTA (cf. src/lib/destinationColors.js) —
+// la première scène (hero) est un fond noir plein.
+export const PAGE_ENTRY_COLOR = { desktop: "#0B0F0A", mobile: "#0B0F0A" };
+
+function SceneContent({ s }) {
+  switch (s.type) {
+    case "hero":
+      return (
+        <>
+          <h1 className="pw-hero-title">{s.title}</h1>
+          <p className="pw-hero-subtitle">{s.subtitle}</p>
+          <div className="pw-hero-hint">
+            <span>Défiler pour découvrir</span>
+            <i className="pw-hero-hint-line" />
+            <span className="pw-hero-hint-arrow">↓</span>
+          </div>
+        </>
+      );
+    case "vision":
+      return (
+        <>
+          <span className="pw-kicker">{s.kicker}</span>
+          <div className="pw-vision-grid">
+            <p className="pw-statement">{s.statement}</p>
+            <div className="pw-vision-actions">
+              {s.actions.map((a, i) => {
+                const Icon = ICONS[a.icon];
+                return (
+                  <div key={i} className="pw-action">
+                    <span className="pw-action-icon"><Icon /></span>
+                    <div>
+                      <p className="pw-action-title">{a.title}</p>
+                      <p className="pw-action-text">{a.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      );
+    case "timeline":
+      return (
+        <>
+          <span className="pw-kicker">{s.kicker}</span>
+          <h2 className="pw-title">{s.title}</h2>
+          <div className="pw-timeline-wrap">
+            <PartnershipTimeline />
+          </div>
+        </>
+      );
+    case "photo": {
+      const Icon = ICONS[s.icon];
+      return (
+        <div className="pw-photo-row">
+          <div className="pw-photo-textcol">
+            <h2 className="pw-photo-title">{s.title}</h2>
+            <i className="pw-photo-divider" />
+            {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+          <div className="pw-photo-framecol">
+            <div className="pw-photo-frame">
+              <img src={s.photo} alt={s.photoAlt} className="pw-photo-frame-img ms-ken-burns" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+    case "conclusion":
+      return (
+        <>
+          {s.paragraphs.map((p, i) => <p key={i} className="pw-conclusion-text">{p}</p>)}
+          <a href={s.buttonHref} className="pw-button ms-glow">
+            {s.button} <span>→</span>
+          </a>
+        </>
+      );
+    default:
+      return null;
+  }
+}
+
 export default function Partenariats() {
   const bgRefs      = useRef([]);
   const contentRefs = useRef([]);
@@ -97,13 +113,14 @@ export default function Partenariats() {
   const lenisRef    = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -118,19 +135,12 @@ export default function Partenariats() {
       const ci   = Math.min(last, Math.floor(prog));
       const ft   = Math.min(1, Math.max(0, prog - ci));
 
-      // ── crossfade entre couches de gradient ──
-      // DOM order = z-order: bg-4 est au-dessus de bg-3, etc.
-      // bg-0 toujours visible en dessous. Les suivants s'ouvrent en fondu.
       bgRefs.current.forEach((el, j) => {
         if (!el) return;
         const opacity = j <= ci ? 1 : j === ci + 1 ? ft : 0;
         el.style.opacity = opacity.toFixed(3);
       });
 
-      // ── fade-in contenu (une seule fois) ──
-      // La fenêtre de révélation se termine AVANT que la section soit
-      // centrée → garantit que même la dernière section (qu'on ne peut
-      // pas dépasser au scroll) se révèle à 100 %.
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
         if (!el || revealed.current.has(j)) return;
@@ -138,7 +148,6 @@ export default function Partenariats() {
         const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
         if (e >= 0.999) {
-          // figé net : on retire le transform (un translateY fractionnaire flouterait le texte)
           el.style.opacity   = "1";
           el.style.transform = "none";
           revealed.current.add(j);
@@ -148,29 +157,28 @@ export default function Partenariats() {
         }
       });
 
-      // ── nav dots (couleur adaptée à la section active) ──
       const active   = Math.min(last, Math.max(0, Math.round(scroll / H)));
-      const isDark   = SECTIONS[active].dark;
-      const dotOn    = isDark ? "rgba(0,0,0,0.60)"    : "rgba(255,255,255,0.90)";
-      const dotOff   = isDark ? "rgba(0,0,0,0.20)"    : "rgba(255,255,255,0.30)";
-      const shadowOn = isDark ? "0 0 0 2px rgba(0,0,0,0.10)" : "0 0 0 2px rgba(255,255,255,0.15)";
-      dotRefs.current.forEach((dot, j) => {
+      const dotRefs$ = dotRefs.current;
+      dotRefs$.forEach((dot, j) => {
         if (!dot) return;
         const on = j === active;
         dot.style.width      = on ? "9px" : "6px";
         dot.style.height     = on ? "9px" : "6px";
-        dot.style.background = on ? dotOn : dotOff;
-        dot.style.boxShadow  = on ? shadowOn : "none";
+        dot.style.background = on ? "rgba(242,233,216,0.90)" : "rgba(242,233,216,0.30)";
+        dot.style.boxShadow  = on ? "0 0 0 2px rgba(0,0,0,0.15)" : "none";
       });
     };
 
     const readScroll = () => {
-      const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      if (lenis) {
+        const s = lenis.animatedScroll;
+        return Number.isFinite(s) ? s : (window.scrollY || 0);
+      }
+      return window.scrollY || 0;
     };
 
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) {
         lastScroll = scroll;
@@ -179,152 +187,236 @@ export default function Partenariats() {
       rafId = requestAnimationFrame(raf);
     };
 
+    const onNativeScroll = () => {
+      if (lenis) return;
+      const scroll = window.scrollY || 0;
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+    };
+    if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
+
     update(0, window.innerHeight || 1);
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.destroy();
+      window.removeEventListener('scroll', onNativeScroll);
+      if (lenis) lenis.destroy();
     };
   }, []);
 
   const scrollTo = (i) =>
-    lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
+    lenisRef.current
+      ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
+      : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
-  let fruitIdx = 0; // compteur global → un fruit unique par paragraphe
+  // Saut direct vers une section via ?section=<id> (déclenché par les
+  // sous-liens du menu, ex. /partenariats?section=conclusion). Desktop
+  // utilise le moteur interne (scrollTo par index) ; mobile cible
+  // directement la scène DOM correspondante (flux naturel).
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("section");
+    if (!target) return;
+    const isDesktopNow = window.matchMedia("(min-width: 769px)").matches;
+    const t = setTimeout(() => {
+      if (isDesktopNow) {
+        const idx = SECTIONS.findIndex((s) => s.id === target);
+        if (idx >= 0) scrollTo(idx);
+      } else {
+        document.getElementById(`partner-${target}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  const partnershipsDescription =
+    "Tropicaura construit des partenariats commerciaux durables — transparence, préparation et fiabilité à chaque expédition depuis le port de Dakar.";
+  const partnershipsTrail = buildBreadcrumbTrail("/partenariats");
 
   return (
     <>
-      {/* Pulse léger des dots de navigation (opacity 0.5 → 1, en boucle) */}
+      <SEOHead
+        title="Partenariats B2B — Devenir Importateur ou Distributeur"
+        description={partnershipsDescription}
+        path="/partenariats"
+        keywords={["partenariat import export", "devenir distributeur fruits", "fournisseur fiable Afrique", "partenaire commercial Sénégal"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/partenariats", title: "Partenariats", description: partnershipsDescription, breadcrumb: true }),
+          breadcrumbListSchema(partnershipsTrail, "/partenariats"),
+        ]}
+      />
       <style>{`
-        @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+        /* Images décoratives : pas de pointer-events → le navigateur (Edge) ne
+           colle plus son bouton "Recherche visuelle" au survol. */
+        .pw-photo-bg, .pw-photo-frame-img, .pm-hero-photo, .pm-photo-frame-img { pointer-events: none; }
+        .partenariats-mobile-tree { display: none; }
+        @media (max-width: 900px) {
+          .partenariats-desktop-tree { display: none; }
+          .partenariats-mobile-tree { display: block; }
+        }
+
+        .pw-photo-bg { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: cover; display: block; animation: pwKenBurns 9000ms cubic-bezier(0.16,1,0.3,1) forwards; }
+        @keyframes pwKenBurns { from { transform: scale(1.06); } to { transform: scale(1); } }
+        .pw-photo-overlay { position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, rgba(11,15,10,0.15) 0%, rgba(11,15,10,0.55) 72%, rgba(11,15,10,0.82) 100%); pointer-events: none; }
+
+        .pw-content { max-width: 620px; color: #F2E9D8; }
+
+        .scene[data-type="hero"] { justify-content: flex-start; align-items: flex-end; }
+        .scene[data-type="hero"] .pw-content { max-width: 640px; padding: 0 clamp(24px,7vw,96px) clamp(72px,11vh,150px); }
+
+        .scene[data-type="vision"] { justify-content: center; }
+        .scene[data-type="vision"] .pw-content { max-width: 1180px; width: 100%; padding: 0 clamp(24px,6vw,80px); }
+
+        .scene[data-type="photo"] { justify-content: center; }
+        .scene[data-type="photo"] .pw-content { max-width: 1180px; width: 100%; padding: 0 clamp(24px,6vw,80px); }
+        .pw-photo-row { display: flex; gap: clamp(48px,6vw,100px); align-items: center; text-align: left; }
+        .pw-photo-textcol { flex: 1; }
+        .pw-photo-framecol { flex: 1.15; }
+        .pw-photo-frame { position: relative; width: 100%; height: 64vh; max-height: 620px; border-radius: 2px; overflow: hidden; border: 1px solid rgba(201,168,76,0.20); }
+        .pw-photo-frame-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        @media (max-width: 1080px) {
+          .pw-photo-row { flex-direction: column-reverse; gap: 36px; }
+          .pw-photo-frame { height: 46vh; }
+        }
+
+        .scene[data-type="timeline"], .scene[data-type="conclusion"] { justify-content: center; }
+        .scene[data-type="timeline"] .pw-content, .scene[data-type="conclusion"] .pw-content { text-align: center; width: 100%; max-width: 900px; padding: 0 clamp(24px,6vw,80px); }
+        .scene[data-type="timeline"] .pw-content { max-width: 1160px; }
+        .scene[data-type="conclusion"] .pw-content { max-width: 700px; }
+
+        .pw-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(32px, 4.4vw, 62px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; color: #F2E9D8; }
+        .pw-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.78); max-width: 480px; margin: 0; }
+        .pw-hero-hint { display: flex; align-items: center; gap: 14px; margin-top: 40px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(242,233,216,0.65); }
+        .pw-hero-hint-line { display: block; width: 40px; height: 1px; background: rgba(242,233,216,0.4); }
+        .pw-hero-hint-arrow { color: ${GOLD}; animation: hintBounce 1.9s ease-in-out infinite; }
+
+        .pw-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 30px; }
+
+        .pw-vision-grid { display: flex; gap: clamp(48px,6vw,100px); align-items: flex-start; text-align: left; }
+        .pw-statement { flex: 1.05; font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 38px); line-height: 1.38; letter-spacing: -.01em; color: #F2E9D8; margin: 0; }
+        .pw-vision-actions { flex: 1; display: flex; flex-direction: column; }
+        .pw-action { display: flex; gap: 18px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid rgba(201,168,76,0.14); }
+        .pw-action:first-child { padding-top: 4px; }
+        .pw-action:last-child { border-bottom: none; }
+        .pw-action-icon { flex: none; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: ${GOLD}; }
+        .pw-action-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: 17px; color: #F2E9D8; margin: 0 0 6px; }
+        .pw-action-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; line-height: 1.62; color: rgba(242,233,216,0.60); margin: 0; }
+
+        .pw-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(24px, 2.6vw, 40px); line-height: 1.18; color: #F2E9D8; margin: 0 0 44px; }
+        .pw-timeline-wrap { width: 100%; }
+
+        .pw-photo-icon { display: inline-flex; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 22px; }
+        .pw-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.32; color: #F2E9D8; margin: 0 0 18px; }
+        .pw-photo-divider { display: block; width: 34px; height: 1px; background: ${GOLD}; margin: 0 0 18px; }
+        .pw-photo-textcol p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.15vw, 17px); line-height: 1.7; color: rgba(242,233,216,0.72); margin: 0 0 8px; }
+
+        .pw-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.42; color: #F2E9D8; margin: 0 auto 16px; max-width: 640px; }
+        .pw-button { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 15px 36px; text-decoration: none; }
+
+        @media (max-width: 1080px) {
+          .pw-vision-grid { flex-direction: column; gap: 40px; }
+        }
+
+        /* ── Arbre mobile : mêmes classes Motion System que la page À Propos ── */
+        .pm-hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
+        .pm-hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pm-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(11,15,10,0.10) 0%, rgba(11,15,10,0.55) 70%, rgba(11,15,10,0.86) 100%); pointer-events: none; }
+        .pm-hero-text { position: relative; z-index: 2; padding: 24px 24px 72px; box-sizing: border-box; }
+        .pm-hero-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(28px, 8vw, 40px); line-height: 1.16; color: #F2E9D8; margin: 0 0 14px; }
+        .pm-hero-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14.5px; line-height: 1.65; color: rgba(242,233,216,0.80); margin: 0; }
+        .pm-hero-hint { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(242,233,216,0.65); }
+        .pm-hero-hint-arrow { color: ${GOLD}; animation: hintBounce 1.9s ease-in-out infinite; }
+        .pm-photo-icon { display: inline-flex; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.5); align-items: center; justify-content: center; color: ${GOLD}; margin-bottom: 16px; }
+        .pm-photo-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6vw, 26px); line-height: 1.3; color: #F2E9D8; margin: 0 0 14px; }
+        .pm-photo-paragraphs p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; line-height: 1.68; color: rgba(242,233,216,0.72); margin: 0 0 8px; }
+        .pm-photo-frame { position: relative; width: 100%; height: 42vh; border-radius: 2px; overflow: hidden; border: 1px solid rgba(201,168,76,0.20); margin-top: 24px; }
+        .pm-photo-frame-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .pm-section { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 108px 24px 48px; box-sizing: border-box; overflow: hidden; }
+        .pm-bg { position: absolute; inset: 0; z-index: 0; }
+        .pm-inner { position: relative; z-index: 2; width: 100%; }
+        .pm-inner--center { text-align: center; }
+        .pm-kicker { display: inline-block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: ${GOLD}; margin-bottom: 18px; }
+        .pm-statement { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.38; color: #F2E9D8; margin: 0; }
+        .pm-vision-actions { display: flex; flex-direction: column; margin-top: 30px; }
+        .pm-action { display: flex; gap: 14px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid rgba(201,168,76,0.14); }
+        .pm-action:first-child { padding-top: 0; }
+        .pm-action:last-child { border-bottom: none; }
+        .pm-action-icon { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: ${GOLD}; }
+        .pm-action-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: 15px; color: #F2E9D8; margin: 0 0 5px; }
+        .pm-action-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; line-height: 1.6; color: rgba(242,233,216,0.60); margin: 0; }
+        .pm-title { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(21px, 6.4vw, 27px); line-height: 1.28; color: #F2E9D8; margin: 0 0 34px; }
+        .pm-timeline-wrap { width: 100%; }
+
+        .pm-conclusion-text { font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 500; font-size: clamp(19px, 5.6vw, 24px); line-height: 1.4; color: #F2E9D8; margin: 0 auto 14px; max-width: 440px; }
+        .pm-button { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #0B0F0A; background: ${GOLD}; border-radius: 100px; padding: 14px 32px; text-decoration: none; }
+
+        ${buildMotionCSS()}
+        ${buildKenBurnsCSS()}
+        ${buildGlowPulseCSS("ms-glow")}
       `}</style>
 
-      {/* ── Header transparent (logo seul) ── */}
-      <header style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 66,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(20px,5vw,48px)",
-        pointerEvents: "none",
-        background: "transparent",
-      }}>
-        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
-          <span className="ghost__logo">Tropicaura</span>
-        </a>
-      </header>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
+      <Breadcrumbs trail={partnershipsTrail} />
 
-      {/* ── Couches de gradient (DOM order = z-order) ── */}
-      {SECTIONS.map((s, i) => (
-        <div
-          key={s.id + "-bg"}
-          ref={(el) => (bgRefs.current[i] = el)}
-          className="bg-layer"
-          style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
-        />
-      ))}
+      <div className="partenariats-desktop-tree">
+        <style>{`
+          @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+        `}</style>
 
-      {/* ── Cascade de textes valeurs (derrière le contenu) ── */}
-      <FallingText phrases={VALEURS} colors={VALEUR_COLORS} sides={SIDES} interval={1700} fall={4} />
-
-      {/* ── Nav dots ── */}
-      <nav style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
         {SECTIONS.map((s, i) => (
-          <button
-            key={s.id}
-            ref={(el) => (dotRefs.current[i] = el)}
-            onClick={() => scrollTo(i)}
-            title={s.title}
-            style={{ width:6, height:6, borderRadius:"50%", background:"rgba(0,0,0,0.20)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
+          <div
+            key={s.id + "-bg"}
+            ref={(el) => (bgRefs.current[i] = el)}
+            className="bg-layer"
+            style={{ background: s.bg, opacity: i === 0 ? 1 : 0 }}
           />
         ))}
-      </nav>
+        <div className="bg-depth" />
 
-      {/* ── Sections ── */}
-      {SECTIONS.map((s, i) => {
-        const isRight      = s.side === "right";
-        const textColor    = s.dark ? "#111111"              : "#FFFFFF";
-        const labelColor   = s.dark ? "rgba(0,0,0,0.40)"    : "rgba(255,255,255,0.62)";
-        const dividerColor = s.dark ? "rgba(0,0,0,0.18)"    : "rgba(255,255,255,0.35)";
-        const paraColor    = s.dark ? "rgba(0,0,0,0.82)"    : "rgba(255,255,255,0.95)";
+        <nav className="dots-nav" aria-label="Navigation par section" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
+          {SECTIONS.map((s, i) => (
+            <button
+              key={s.id}
+              ref={(el) => (dotRefs.current[i] = el)}
+              onClick={() => scrollTo(i)}
+              title={s.title || s.kicker}
+              aria-label={`Aller à la section ${s.title || s.kicker}`}
+              style={{ width:6, height:6, borderRadius:"50%", background:"rgba(242,233,216,0.30)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
+            />
+          ))}
+        </nav>
 
-        return (
-          <section key={s.id} data-index={i} className="scene" style={{ justifyContent: isRight ? "flex-end" : "flex-start" }}>
+        {SECTIONS.map((s, i) => (
+          <section key={s.id} data-index={i} className="scene" data-type={s.type}>
+            {s.type === "hero" && (
+              <>
+                <img src={s.photo} alt={s.photoAlt} className="pw-photo-bg" />
+                <div className="pw-photo-overlay" />
+              </>
+            )}
+            {s.type === "conclusion" && <ConclusionConstellation />}
             <div
               ref={(el) => (contentRefs.current[i] = el)}
-              className="scene__content"
+              className="scene__content pw-content"
               style={{
                 opacity:      i === 0 ? 1 : 0,
                 transform:    i === 0 ? "translateY(0)" : "translateY(24px)",
-                paddingLeft:  isRight ? 16 : "clamp(24px,7vw,96px)",
-                paddingRight: isRight ? "clamp(24px,7vw,96px)" : 16,
               }}
             >
-              {/* Numéro + surtitre */}
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
-                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".26em", textTransform:"uppercase", color:labelColor }}>
-                  {s.num}
-                </span>
-                <div style={{ width:1, height:24, background:dividerColor }} />
-                <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".22em", textTransform:"uppercase", color:labelColor }}>
-                  {s.surtitre}
-                </span>
-              </div>
-
-              {/* Titre */}
-              <h2 style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:"clamp(24px, 2.8vw, 44px)", lineHeight:1.08, letterSpacing:"-.03em", color:textColor, margin:"0 0 18px" }}>
-                {s.title}
-              </h2>
-
-              {/* Filet */}
-              <div style={{ width:32, height:1, background:dividerColor, margin:"0 0 20px" }} />
-
-              {/* Paragraphes */}
-              {s.paragraphs.map((p, pi) => {
-                const fruit = PARA_FRUITS[fruitIdx % PARA_FRUITS.length];
-                fruitIdx++;
-                return (
-                  <p key={pi} style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:"clamp(13px,1.1vw,15px)", lineHeight:1.80, fontWeight:400, color:paraColor, margin: pi < s.paragraphs.length - 1 ? "0 0 12px" : "0" }}>
-                    {p}{" "}
-                    <img
-                      src={fruit}
-                      alt=""
-                      aria-hidden="true"
-                      style={{
-                        height: "1.6em", width: "auto",
-                        verticalAlign: "-0.45em",
-                        marginLeft: 4, display: "inline-block",
-                        filter: "drop-shadow(0 3px 7px rgba(0,0,0,0.28))",
-                      }}
-                    />
-                  </p>
-                );
-              })}
-
-              {/* Bouton CTA */}
-              {s.hasButton && (
-                <div style={{ marginTop:36 }}>
-                  <a href="/contact" style={{ textDecoration:"none" }}>
-                    <button
-                      style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:11, letterSpacing:".18em", textTransform:"uppercase", color:textColor, background:"transparent", border:`1.5px solid ${dividerColor}`, borderRadius:100, padding:"13px 38px", cursor:"pointer", transition:"background .3s, border-color .3s" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = s.dark ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = s.dark ? "rgba(0,0,0,0.50)" : "rgba(255,255,255,0.60)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = dividerColor; }}
-                    >
-                      Devenir partenaire →
-                    </button>
-                  </a>
-                </div>
-              )}
+              <SceneContent s={s} />
             </div>
-
-            {i === 0 && (
-              <div className="scene__hint scene__hint--dark">
-                <i /><span>Défilez vers le bas</span>
-              </div>
-            )}
           </section>
-        );
-      })}
+        ))}
+      </div>
+
+      <div className="partenariats-mobile-tree">
+        {SECTIONS.map((s, i) => (
+          <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} />
+        ))}
+      </div>
     </>
   );
 }

@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  PRODUITS — « La Collection »
@@ -9,6 +15,8 @@ import Lenis from "lenis";
 //  Chaque produit = un chapitre : couleur, fruit, ambiance.
 //  Mobile-first. Apparitions douces au scroll.
 // ============================================================
+
+export const PAGE_ENTRY_COLOR = { desktop: "#0E100E", mobile: "#0E100E" };
 
 const SECTIONS = [
   {
@@ -20,9 +28,9 @@ const SECTIONS = [
   // ── Signature ──
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
-    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Keitt",
+    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Kent",
     desc: "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
-    meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Mars – Septembre", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Juin – Mi-août", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
@@ -54,25 +62,25 @@ const SECTIONS = [
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
     png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
     desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
     png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
     png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
     desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
     png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
     desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
 
   // ── Spécialités ──
@@ -80,13 +88,13 @@ const SECTIONS = [
     type: "product", id: "gombo", side: "right", bg: "#243318",
     png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
     desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
-    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piment vert",
-    desc: "Couleur intense, fraîcheur maîtrisée et sélection rigoureuse. Un produit de caractère destiné aux marchés à forte demande.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Saison", "Standard": "Export Premium" },
+    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piments",
+    desc: "Un assortiment de couleurs et de variétés — doux ou forts, selon les besoins. Fraîcheur maîtrisée et sélection rigoureuse pour des marchés à forte demande.",
+    meta: { "Origine": "Sénégal", "Disponibilité": "Mars – Août", "Standard": "Export Premium" },
   },
 
   // ── Besoin spécifique ──
@@ -108,15 +116,21 @@ export default function Produits() {
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
+  const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
+  const revealed    = useRef(new Set());  // sections déjà révélées → on ne les ré-anime plus (anti-scintillement au scroll-haut)
 
   useEffect(() => {
-    const lenis = new Lenis({
+    // Lenis (smooth-scroll) DESKTOP UNIQUEMENT. Sur mobile tactile, Lenis fait
+    // "sauter" au changement de direction (retour vers le haut) → on garde le
+    // scroll natif iOS, lu via window.scrollY dans la boucle rAF.
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
-    });
+    }) : null;
     lenisRef.current = lenis;
 
     let rafId;
@@ -124,7 +138,20 @@ export default function Produits() {
     const easeOut  = (t) => 1 - (1 - t) * (1 - t);
     const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
-    const onResize = () => { lastScroll = -99999; };
+
+    // Hauteur RÉELLE d'une section = celle utilisée par la mise en page (.scene à
+    // 100vh). Sur un vrai mobile, window.innerHeight (viewport VISUEL) rétrécit
+    // quand la barre d'URL est visible, alors que 100vh (viewport LARGE) reste
+    // fixe → l'écart s'accumule section après section et le moteur révèle la
+    // MAUVAISE scène (images qui se chevauchent). On mesure donc un .scene réel.
+    const measureH = () => {
+      const sc = document.querySelector('.scene');
+      const h = sc ? sc.getBoundingClientRect().height : 0;
+      return h > 0 ? h : (window.innerHeight || 1);
+    };
+    let secH = measureH();
+    secHRef.current = secH;
+    const onResize = () => { secH = measureH(); secHRef.current = secH; lastScroll = -99999; };
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
@@ -140,11 +167,14 @@ export default function Produits() {
 
       SECTIONS.forEach((_, j) => {
         const el = contentRefs.current[j];
-        if (!el) return;
+        // Une fois révélée, une section reste figée (opacité 1, transform none) :
+        // en remontant, on ne rejoue PLUS l'animation à l'envers → fini les
+        // clignotements / micro-sauts. Même patron que la page Partenariats.
+        if (!el || revealed.current.has(j)) return;
         const enter    = j * H - H * 0.60;
         const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
         const e        = easeOut(progress);
-        if (e >= 0.999) { el.style.opacity = "1"; el.style.transform = "none"; }
+        if (e >= 0.999) { el.style.opacity = "1"; el.style.transform = "none"; revealed.current.add(j); }
         else { el.style.opacity = e.toFixed(3); el.style.transform = `translateY(${Math.round(30 * (1 - e))}px)`; }
       });
 
@@ -160,30 +190,82 @@ export default function Produits() {
     };
 
     const readScroll = () => {
-      const s = lenis.animatedScroll;
-      return Number.isFinite(s) ? s : (window.scrollY || 0);
+      if (lenis) {
+        const s = lenis.animatedScroll;
+        return Number.isFinite(s) ? s : (window.scrollY || 0);
+      }
+      return window.scrollY || 0;
     };
     const raf = (time) => {
-      lenis.raf(time);
+      if (lenis) lenis.raf(time);
       const scroll = readScroll();
-      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
       rafId = requestAnimationFrame(raf);
     };
 
-    update(0, window.innerHeight || 1);
+    // Filet de sécurité mobile (pas de Lenis) : requestAnimationFrame est throttlé
+    // par iOS Safari pendant un geste tactile actif (doigt posé, en train de
+    // glisser) — même mécanisme documenté/corrigé sur l'accueil. Un vrai
+    // événement 'scroll' natif ne l'est pas : il garde update() synchronisé
+    // même quand rAF accumule du retard (visible surtout en remontant vite).
+    const onNativeScroll = () => {
+      if (lenis) return;
+      const scroll = window.scrollY || 0;
+      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
+    };
+    if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
+
+    update(0, secH);
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
-      lenis.destroy();
+      window.removeEventListener('scroll', onNativeScroll);
+      if (lenis) lenis.destroy();
     };
   }, []);
 
-  const scrollTo = (i) => lenisRef.current?.scrollTo(i * window.innerHeight, { duration: 1.2 });
+  const scrollTo = (i) => {
+    const H = secHRef.current || window.innerHeight;
+    return lenisRef.current
+      ? lenisRef.current.scrollTo(i * H, { duration: 1.2 })
+      : window.scrollTo({ top: i * H, behavior: "smooth" });
+  };
+
+  // Saut direct vers une collection via ?section=<slug> (déclenché par les
+  // sous-liens du menu, ex. /produits?section=saison) — saute au premier
+  // produit de la collection. Même tree pour desktop/mobile → scrollTo
+  // fonctionne dans les deux cas, pas besoin de branchement par device.
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("section");
+    if (!target) return;
+    const COLLECTION = { signature: "SIGNATURE", saison: "SAISON", specialites: "SPÉCIALITÉS" };
+    const wanted = COLLECTION[target];
+    if (!wanted) return;
+    const idx = SECTIONS.findIndex((s) => s.collection === wanted);
+    if (idx < 0) return;
+    const t = setTimeout(() => scrollTo(idx), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  const produitsDescription =
+    "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, sélectionnés pour l'export B2B premium vers l'Europe et au-delà.";
+  const produitsTrail = buildBreadcrumbTrail("/produits");
 
   return (
     <>
+      <SEOHead
+        title="Nos Produits — Fruits & Légumes Export Premium"
+        description={produitsDescription}
+        path="/produits"
+        keywords={["mangue export", "avocat export", "ananas export", "citron vert export", "gombo export", "fruits tropicaux B2B"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/produits", title: "Produits", description: produitsDescription, breadcrumb: true }),
+          breadcrumbListSchema(produitsTrail, "/produits"),
+        ]}
+      />
       <style>{`
         .ct-grid  { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px,7vw,110px); }
         @keyframes prodFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-16px); } }
@@ -193,35 +275,38 @@ export default function Produits() {
         .prod-name  { font-size: clamp(34px, 4.4vw, 68px); }
         @media (max-width: 820px){
           .prod-row   { flex-direction: column !important; gap: 18px !important; padding: 96px clamp(22px,7vw,40px) 60px !important; justify-content:center !important; }
-          .prod-photo { width: 100% !important; height: 36vh !important; }
+          /* Image en dvh (pas vh) : la section fait 100dvh (zone visible réelle),
+             donc l'image doit se mesurer sur la MÊME base, sinon elle est trop
+             haute (36vh = 36% du viewport LARGE) et pousse le texte hors écran
+             → titre/méta coupés. 32dvh garde tout le bloc dans un écran. */
+          .prod-photo { width: 100% !important; height: 32dvh !important; }
           .prod-text  { width: 100% !important; }
           .prod-name  { font-size: clamp(34px, 11vw, 52px) !important; }
           .prod-meta  { gap: 18px 30px !important; }
+          /* MOBILE : on coupe le flottement (transform animé + drop-shadow =
+             re-rasterisation à chaque frame → micro-sauts au scroll sur iOS).
+             Ombre statique et plus légère → rasterisée une seule fois. */
+          .prod-float { animation: none !important; filter: drop-shadow(0 16px 22px rgba(0,0,0,0.42)) !important; }
         }
         @media (prefers-reduced-motion: reduce){ .prod-float { animation: none !important; } }
       `}</style>
 
-      <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">Tropicaura</span>
-      </header>
+      <TopBar />
+      <Breadcrumbs trail={produitsTrail} />
 
-      {/* Fond interpolé + gradient subtil « ressenti » */}
+      {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
-      <div style={{
-        position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
-        background:
-          "radial-gradient(130% 90% at 50% 16%, rgba(255,255,255,0.07), rgba(255,255,255,0) 55%)," +
-          "radial-gradient(120% 80% at 50% 118%, rgba(0,0,0,0.40), rgba(0,0,0,0) 60%)",
-      }} />
+      <div className="bg-depth" />
 
-      {/* Nav dots */}
-      <nav style={{
+      {/* Nav dots — desktop uniquement (voir .dots-nav dans global.css) */}
+      <nav className="dots-nav" aria-label="Navigation par produit" style={{
         position: "fixed", right: "clamp(14px,2vw,28px)", top: "50%",
         transform: "translateY(-50%)", zIndex: 150,
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",
       }}>
         {SECTIONS.map((s, i) => (
           <button key={s.id} ref={(el) => (dotRefs.current[i] = el)} onClick={() => scrollTo(i)} title={s.name || s.title}
+            aria-label={`Aller à ${s.name || s.title}`}
             style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.32)", border: "none", cursor: "pointer", padding: 0, transition: "width .25s, height .25s, background .25s, box-shadow .25s", display: "block" }} />
         ))}
       </nav>
@@ -369,6 +454,20 @@ export default function Produits() {
                     </div>
                   ))}
                 </div>
+
+                {/* Maillage interne : fiche produit SEO dédiée (/produits/:slug) */}
+                <Link
+                  to={`/produits/${s.id}`}
+                  aria-label={`Voir la fiche complète de ${s.name}`}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    marginTop: 28, fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: 13, fontWeight: 700, letterSpacing: ".04em",
+                    color: "#fff", textDecoration: "underline", textUnderlineOffset: 4,
+                  }}
+                >
+                  En savoir plus <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </div>
           </section>

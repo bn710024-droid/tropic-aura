@@ -1,5 +1,9 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema, articleSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 const GOLD  = "#C9A84C";
 const WHITE = "#FFFFFF";
@@ -13,10 +17,12 @@ export default function InsightPartenariats() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true });
+    // Lenis DESKTOP UNIQUEMENT (sur mobile il fait "sauter" au retour vers le haut).
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true }) : null;
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
-    rafId = requestAnimationFrame(raf);
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -29,7 +35,7 @@ export default function InsightPartenariats() {
     }, { threshold: 0.06 });
     revealRefs.current.forEach((el) => el && io.observe(el));
 
-    return () => { cancelAnimationFrame(rafId); lenis.destroy(); io.disconnect(); };
+    return () => { cancelAnimationFrame(rafId); if (lenis) lenis.destroy(); io.disconnect(); };
   }, []);
 
   const r = (delay = 0) => ({
@@ -49,8 +55,30 @@ export default function InsightPartenariats() {
     </ul>
   );
 
+  const articlePath = "/insights/fournisseur-stable-opportuniste";
+  const articleTitle = "Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest";
+  const articleDescription =
+    "Certaines relations commerciales se développent pendant plusieurs années. D'autres s'arrêtent après une seule saison. La différence ne repose pas uniquement sur le produit.";
+  const articleTrail = buildBreadcrumbTrail(articlePath);
+  const publishedTime = "2026-06-01";
+
   return (
     <div style={{ background: BG, minHeight: "100vh" }}>
+      <SEOHead
+        title={articleTitle}
+        description={articleDescription}
+        path={articlePath}
+        keywords={["fournisseur fiable Afrique", "partenariat import export durable", "sourcing fruits Sénégal"]}
+        type="article"
+        publishedTime={publishedTime}
+        modifiedTime={publishedTime}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: articlePath, title: articleTitle, description: articleDescription, breadcrumb: true }),
+          breadcrumbListSchema(articleTrail, articlePath),
+          articleSchema({ path: articlePath, title: articleTitle, description: articleDescription, image: "/menu-partenariats.jpg", datePublished: publishedTime }),
+        ]}
+      />
       <style>{`
         .art-nav {
           position: fixed; top: 0; left: 0; right: 0; z-index: 200;
@@ -240,6 +268,7 @@ export default function InsightPartenariats() {
         <a href="/" className="art-brand ghost__logo">Tropicaura</a>
         <a href="/insights" className="art-back">← Retour aux analyses</a>
       </nav>
+      <Breadcrumbs trail={articleTrail} />
 
       {/* ══ Hero ══ */}
       <header className="art-hero">

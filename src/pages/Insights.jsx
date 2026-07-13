@@ -1,5 +1,10 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  INSIGHTS — panneau gauche sticky · liste articles verticale
@@ -39,10 +44,12 @@ export default function Insights() {
   };
 
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true });
+    // Lenis DESKTOP UNIQUEMENT (sur mobile il fait "sauter" au retour vers le haut).
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const lenis = isDesktop ? new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true }) : null;
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
-    rafId = requestAnimationFrame(raf);
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -55,7 +62,7 @@ export default function Insights() {
     }, { threshold: 0.08 });
     revealRefs.current.forEach((el) => el && io.observe(el));
 
-    return () => { cancelAnimationFrame(rafId); lenis.destroy(); io.disconnect(); };
+    return () => { cancelAnimationFrame(rafId); if (lenis) lenis.destroy(); io.disconnect(); };
   }, []);
 
   const r = (delay = 0) => ({
@@ -72,8 +79,23 @@ export default function Insights() {
   /* Icônes SVG inline (document · horloge · globe) */
   const iconStyle = { width: 20, height: 20, marginBottom: 10, opacity: 0.6 };
 
+  const insightsDescription =
+    "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques, sourcing en Afrique de l'Ouest et fiabilité des partenariats fournisseurs.";
+  const insightsTrail = buildBreadcrumbTrail("/insights");
+
   return (
     <div style={{ background: BG, minHeight: "100vh" }}>
+      <SEOHead
+        title="Insights — Analyses du Commerce Tropical International"
+        description={insightsDescription}
+        path="/insights"
+        keywords={["sourcing Afrique de l'Ouest", "commerce international fruits", "fournisseur fiable export"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/insights", title: "Insights", description: insightsDescription, breadcrumb: true }),
+          breadcrumbListSchema(insightsTrail, "/insights"),
+        ]}
+      />
       <style>{`
         /* ── Layout ── */
         .ins-wrap { display: grid; grid-template-columns: 38% 62%; min-height: 100vh; }
@@ -178,10 +200,9 @@ export default function Insights() {
         }
       `}</style>
 
-      {/* Logo */}
-      <span style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, pointerEvents:"none" }}>
-        <span className="ghost__logo">Tropicaura</span>
-      </span>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
+      <Breadcrumbs trail={insightsTrail} />
 
       <div className="ins-wrap">
 
@@ -299,7 +320,7 @@ export default function Insights() {
           {/* Voir toutes */}
           <div ref={reveal} className="ins-voir" style={r(0.3)}>
             <div className="ins-voir-line" />
-            <a href="#" className="ins-voir-link">Voir toutes les analyses</a>
+            <a href="#analyses" className="ins-voir-link">Voir toutes les analyses</a>
             <span className="ins-voir-arrow">→</span>
           </div>
         </div>

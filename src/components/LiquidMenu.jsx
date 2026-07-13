@@ -1,4 +1,4 @@
-﻿import { useRef, useCallback } from "react";
+﻿import { useRef, useCallback, useEffect } from "react";
 
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
@@ -12,24 +12,31 @@
 // ============================================================
 
 // Navigation en 2 colonnes. Chaque rubrique : { label, href, img, subs[] }
+// Sous-liens = raccourcis directs vers les vraies sections de chaque page
+// (voir SECTIONS/aboutTheme.js, partnershipTheme.js, Produits.jsx). Le
+// paramètre ?section=<id> est lu au montage par chaque page pour sauter
+// directement au bon endroit — voir la logique dans APropos.jsx,
+// Partenariats.jsx, Produits.jsx, Contact.jsx.
 const COLUMNS = [
   [
     { label: "Accueil",  href: "/",         img: "/menu-accueil.jpg" },
     {
       label: "À Propos", href: "/about",    img: "/menu-apropos.jpg",
       subs: [
-        { label: "Notre Conviction", href: "/about" },
-        { label: "Notre Mission",    href: "/about" },
-        { label: "Notre Vision",     href: "/about" },
-        { label: "Notre Avenir",     href: "/about" },
+        { label: "Notre Vision",               href: "/about?section=vision" },
+        { label: "Nos Fondations",             href: "/about?section=aujourdhui" },
+        { label: "Notre Développement",        href: "/about?section=demain" },
+        { label: "Créer Plus de Valeur",       href: "/about?section=ambition" },
+        { label: "Notre Réseau International", href: "/about?section=avenir" },
+        { label: "Notre Engagement",           href: "/about?section=engagement" },
       ],
     },
     {
       label: "Produits", href: "/produits", img: "/menu-produits.jpg",
       subs: [
-        { label: "Signature",   href: "/produits" },
-        { label: "Saison",      href: "/produits" },
-        { label: "Spécialités", href: "/produits" },
+        { label: "Signature",   href: "/produits?section=signature" },
+        { label: "Saison",      href: "/produits?section=saison" },
+        { label: "Spécialités", href: "/produits?section=specialites" },
       ],
     },
   ],
@@ -37,28 +44,24 @@ const COLUMNS = [
     {
       label: "Partenariats", href: "/partenariats", img: "/menu-partenariats.jpg",
       subs: [
-        { label: "Le réseau",          href: "/partenariats" },
-        { label: "Devenir partenaire", href: "/partenariats" },
-      ],
-    },
-    {
-      label: "Notre Univers", href: "/univers", img: "/menu-univers.jpg",
-      subs: [
-        { label: "Nos engagements", href: "/univers" },
+        { label: "Notre vision",       href: "/partenariats?section=vision" },
+        { label: "Le parcours",        href: "/partenariats?section=parcours" },
+        { label: "Notre expédition",   href: "/partenariats?section=expedition" },
+        { label: "Devenir partenaire", href: "/partenariats?section=conclusion" },
       ],
     },
     {
       label: "Insights", href: "/insights", img: "/menu-visual.jpg",
       subs: [
-        { label: "Market Intelligence", href: "/insights" },
-        { label: "Export Knowledge",    href: "/insights" },
+        { label: "Sénégal, origine stratégique",       href: "/insights/senegal-origine-strategique" },
+        { label: "Fournisseur stable vs opportuniste", href: "/insights/fournisseur-stable-opportuniste" },
       ],
     },
     {
       label: "Contact", href: "/contact", img: "/menu-contact.jpg",
       subs: [
-        { label: "Nous contacter",         href: "/contact"      },
-        { label: "Demande de partenariat", href: "/partenariats" },
+        { label: "Nous contacter",         href: "/contact?section=form"          },
+        { label: "Demande de partenariat", href: "/partenariats?section=conclusion" },
       ],
     },
   ],
@@ -242,6 +245,13 @@ export default function LiquidMenu() {
   const goTo   = useCallback((href) => { close(() => { window.location.href = href; }); }, [close]);
   const toggle = useCallback(() => { if (isOpen.current) close(); else open(); }, [open, close]);
 
+  // Écoute l'événement personnalisé du TopBar pour ouvrir/fermer le menu
+  useEffect(() => {
+    const handleMenuToggle = () => toggle();
+    window.addEventListener("topbar-menu-click", handleMenuToggle);
+    return () => window.removeEventListener("topbar-menu-click", handleMenuToggle);
+  }, [toggle]);
+
   let ri = 0; // index plat pour les refs d'animation
 
   return (
@@ -250,57 +260,27 @@ export default function LiquidMenu() {
       <style>{`
         @media (max-width: 820px){
           .lm-img  { display: none !important; }
-          .lm-nav  { width: 100% !important; padding: 90px clamp(28px,9vw,72px) 60px !important; align-items: flex-start !important; overflow-y: auto !important; }
+          /* justify-content: flex-start (pas center, hérité du desktop) :
+             sur mobile le contenu du menu dépasse souvent la hauteur de
+             l'écran — centré verticalement, l'excédent est coupé À LA FOIS
+             en haut ET en bas (piège flexbox classique). En alignant en
+             haut, tout le contenu reste atteignable par le scroll. */
+          .lm-nav  {
+            width: 100% !important;
+            padding: 90px clamp(28px,9vw,72px) calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+          }
           .lm-cols { flex-direction: column !important; gap: clamp(24px,4vh,38px) !important; }
         }
       `}</style>
 
-      {/* ── Bouton déclencheur ─────────────────────────────── */}
-      <button
-        ref={btnRef}
-        onClick={toggle}
-        aria-label="Menu"
-        style={{
-          position: "fixed",
-          top: 16, right: "clamp(20px,5vw,48px)",
-          zIndex: 700,
-          width: 46, height: 46,
-          borderRadius: "50%",
-          backgroundColor: "rgba(0,0,0,0.30)",
-          border: "1.5px solid rgba(255,255,255,0.28)",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center", justifyContent: "center",
-          padding: 0,
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          transition: "background-color .28s, border-color .28s",
-        }}
-      >
-        {/* Grille 2×2 (fermé) */}
-        <div ref={gridRef} style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 4,
-          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
-          pointerEvents: "none",
-        }}>
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ width: 6, height: 6, borderRadius: 2, backgroundColor: "#fff", display: "block" }} />
-          ))}
-        </div>
-
-        {/* Croix × (ouvert) */}
-        <div ref={crossRef} style={{
-          position: "absolute", inset: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          opacity: 0, transform: "scale(.6)",
-          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
-          pointerEvents: "none",
-        }}>
-          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(45deg)" }} />
-          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(-45deg)" }} />
-        </div>
+      {/* Bouton caché — rendu par TopBar mais les refs d'animation sont ici */}
+      <button ref={btnRef} style={{ display: "none" }}>
+        <div ref={gridRef} />
+        <div ref={crossRef} />
       </button>
 
       {/* ── Overlay plein écran (révélé par cercle) ─────────── */}
