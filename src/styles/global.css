@@ -56,13 +56,29 @@ body::-webkit-scrollbar { display: none; }
        3. bande haute assombrie (sous le header).
      Le centre reste transparent → texte sur couleur propre, aucune tache. */
   background:
-    radial-gradient(78% 62% at 50% 47%,
-      rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 62%),
-    radial-gradient(128% 128% at 50% 45%,
-      rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .35) 74%, rgba(0, 0, 0, .78) 100%),
+    /* halo central ADOUCI (plus de "spot néon") : source de lumière discrète */
+    radial-gradient(66% 52% at 50% 42%,
+      rgba(255, 255, 255, .24), rgba(255, 255, 255, 0) 60%),
+    /* vignette plus profonde et plus large → volume, matière, moins "plat" */
+    radial-gradient(132% 124% at 50% 42%,
+      rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, .42) 72%, rgba(0, 0, 0, .88) 100%),
     linear-gradient(to bottom,
-      rgba(0, 0, 0, .24) 0%, rgba(0, 0, 0, 0) 16%);
+      rgba(0, 0, 0, .30) 0%, rgba(0, 0, 0, 0) 15%);
   mix-blend-mode: soft-light;
+}
+
+/* Grain de film fin sur la couleur de fond → texture premium/éditoriale qui
+   supprime l'aspect couleur-plate "néon". Statique + fixed → rasterisé une
+   seule fois, aucun coût au scroll (important sur iOS). */
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
 }
 
 /* ---------- SECTION PLEIN ÉCRAN (flux libre) ---------- */
