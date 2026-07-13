@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
 import Footer from "../components/Footer";
+import TopBar from "../components/TopBar";
 
 // ============================================================
 //  HOME — animation organique pilotée 100% par rAF
@@ -476,10 +477,8 @@ export default function Home() {
 
   return (
     <>
-      {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
-      <header className="ghost">
-        <a href="/" className="ghost__logo">Tropicaura</a>
-      </header>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
 
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />

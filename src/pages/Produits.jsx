@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
 
 // ============================================================
 //  PRODUITS — « La Collection »
@@ -270,9 +271,7 @@ export default function Produits() {
         @media (prefers-reduced-motion: reduce){ .prod-float { animation: none !important; } }
       `}</style>
 
-      <header className="ghost" style={{ zIndex: 200 }}>
-        <a href="/" className="ghost__logo">Tropicaura</a>
-      </header>
+      <TopBar />
 
       {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />

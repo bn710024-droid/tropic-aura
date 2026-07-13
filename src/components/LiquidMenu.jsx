@@ -1,4 +1,4 @@
-﻿import { useRef, useCallback } from "react";
+﻿import { useRef, useCallback, useEffect } from "react";
 
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
@@ -245,6 +245,13 @@ export default function LiquidMenu() {
   const goTo   = useCallback((href) => { close(() => { window.location.href = href; }); }, [close]);
   const toggle = useCallback(() => { if (isOpen.current) close(); else open(); }, [open, close]);
 
+  // Écoute l'événement personnalisé du TopBar pour ouvrir/fermer le menu
+  useEffect(() => {
+    const handleMenuToggle = () => toggle();
+    window.addEventListener("topbar-menu-click", handleMenuToggle);
+    return () => window.removeEventListener("topbar-menu-click", handleMenuToggle);
+  }, [toggle]);
+
   let ri = 0; // index plat pour les refs d'animation
 
   return (
@@ -270,52 +277,10 @@ export default function LiquidMenu() {
         }
       `}</style>
 
-      {/* ── Bouton déclencheur ─────────────────────────────── */}
-      <button
-        ref={btnRef}
-        onClick={toggle}
-        aria-label="Menu"
-        style={{
-          position: "fixed",
-          top: 16, right: "clamp(20px,5vw,48px)",
-          zIndex: 700,
-          width: 46, height: 46,
-          borderRadius: "50%",
-          backgroundColor: "rgba(0,0,0,0.30)",
-          border: "1.5px solid rgba(255,255,255,0.28)",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center", justifyContent: "center",
-          padding: 0,
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          transition: "background-color .28s, border-color .28s",
-        }}
-      >
-        {/* Grille 2×2 (fermé) */}
-        <div ref={gridRef} style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 4,
-          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
-          pointerEvents: "none",
-        }}>
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ width: 6, height: 6, borderRadius: 2, backgroundColor: "#fff", display: "block" }} />
-          ))}
-        </div>
-
-        {/* Croix × (ouvert) */}
-        <div ref={crossRef} style={{
-          position: "absolute", inset: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          opacity: 0, transform: "scale(.6)",
-          transition: "opacity .25s ease, transform .3s cubic-bezier(.76,0,.24,1)",
-          pointerEvents: "none",
-        }}>
-          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(45deg)" }} />
-          <span style={{ position: "absolute", width: 18, height: 1.5, backgroundColor: "#fff", borderRadius: 2, transform: "rotate(-45deg)" }} />
-        </div>
+      {/* Bouton caché — rendu par TopBar mais les refs d'animation sont ici */}
+      <button ref={btnRef} style={{ display: "none" }}>
+        <div ref={gridRef} />
+        <div ref={crossRef} />
       </button>
 
       {/* ── Overlay plein écran (révélé par cercle) ─────────── */}

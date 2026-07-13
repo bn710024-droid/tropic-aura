@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
 
 // ============================================================
 //  INSIGHTS — panneau gauche sticky · liste articles verticale
@@ -180,10 +181,8 @@ export default function Insights() {
         }
       `}</style>
 
-      {/* Logo */}
-      <a href="/" style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, textDecoration:"none" }}>
-        <span className="ghost__logo">Tropicaura</span>
-      </a>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
 
       <div className="ins-wrap">
 

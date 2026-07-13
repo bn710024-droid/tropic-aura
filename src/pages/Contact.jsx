@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
 
 // ============================================================
 //  CONTACT — « Le dernier chapitre »
@@ -130,17 +131,8 @@ export default function Contact() {
         }
       `}</style>
 
-      {/* Logo (s'inverse automatiquement selon le fond via mix-blend) */}
-      <a
-        href="/"
-        ref={logoRef}
-        style={{
-          position: "fixed", top: 16, left: "clamp(20px,5vw,48px)", zIndex: 200,
-          textDecoration: "none",
-        }}
-      >
-        <span className="ghost__logo">Tropicaura</span>
-      </a>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
       <section style={{

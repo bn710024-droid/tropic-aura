@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
 import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
 import PartnershipTimeline from "../components/PartnershipTimeline";
 import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
@@ -337,18 +338,8 @@ export default function Partenariats() {
         ${buildGlowPulseCSS("ms-glow")}
       `}</style>
 
-      {/* ── Header transparent (logo seul) ── */}
-      <header style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 66,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(20px,5vw,48px)",
-        pointerEvents: "none",
-        background: "transparent",
-      }}>
-        <a href="/" style={{ pointerEvents:"auto", textDecoration:"none" }}>
-          <span className="ghost__logo">Tropicaura</span>
-        </a>
-      </header>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
 
       <div className="partenariats-desktop-tree">
         <style>{`

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import TopBar from "../components/TopBar";
 import ExportRouteMap from "../components/ExportRouteMap";
 import AboutMobileSection from "./about/AboutMobileSection";
 import { GOLD, BLACK, IVORY, FOREST, SAGE, STONE, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
@@ -434,10 +435,8 @@ export default function APropos() {
         ${buildKenBurnsCSS()}
       `}</style>
 
-      {/* ── Header fantôme transparent ── */}
-      <header className="ghost" style={{ zIndex: 200 }}>
-        <a href="/" className="ghost__logo" ref={logoRef}>Tropicaura</a>
-      </header>
+      {/* Top bar avec logo + menu */}
+      <TopBar />
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
