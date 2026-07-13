@@ -338,11 +338,34 @@ export default function APropos() {
 
   const scrollTo = (i) => {
     const isDesktopNow = window.matchMedia("(min-width: 769px)").matches;
-    const su = (isDesktopNow ? 2 : 1) * window.innerHeight;
+    // DOIT matcher exactement le SU utilisé dans update() (voir useEffect
+    // ci-dessus) — un ancien "2" ici (au lieu de 1.5 desktop) faisait dériver
+    // la cible d'une demi-section par index, de plus en plus faux à mesure
+    // qu'on avance dans la page (bug pré-existant des points de navigation).
+    const su = (isDesktopNow ? 1.5 : 1) * window.innerHeight;
     return lenisRef.current
       ? lenisRef.current.scrollTo(i * su, { duration: 1.2 })
       : window.scrollTo({ top: i * su, behavior: "smooth" });
   };
+
+  // Saut direct vers une section via ?section=<id> (déclenché par les
+  // sous-liens du menu, ex. /about?section=avenir). Desktop utilise le
+  // moteur interne (scrollTo par index) ; mobile cible directement la
+  // scène DOM correspondante, le flux y étant naturel (non indexé).
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("section");
+    if (!target) return;
+    const isDesktopNow = window.matchMedia("(min-width: 769px)").matches;
+    const t = setTimeout(() => {
+      if (isDesktopNow) {
+        const idx = SECTIONS.findIndex((s) => s.id === target);
+        if (idx >= 0) scrollTo(idx);
+      } else {
+        document.getElementById(`about-${target}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 80);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <>

@@ -16,7 +16,7 @@ import { useSceneTrigger } from "./useSceneTrigger";
 // position via IntersectionObserver (useSceneTrigger) et joue sa propre
 // entrée/sortie à durée fixe une fois déclenchée. Voir motionStyles.js
 // pour le contrat de classes complet et motionTokens.js pour le rythme.
-export default function MotionScene({ children, className = "", curtainColor, rootMargin, as: Tag = "section", style }) {
+export default function MotionScene({ children, className = "", curtainColor, rootMargin, as: Tag = "section", style, id }) {
   const ref = useRef(null);
   const phase = useSceneTrigger(ref, rootMargin ? { rootMargin } : undefined);
 
@@ -27,6 +27,7 @@ export default function MotionScene({ children, className = "", curtainColor, ro
   return (
     <Tag
       ref={ref}
+      id={id}
       className={`motion-scene ${className}`}
       data-phase={phase}
       style={mergedStyle}

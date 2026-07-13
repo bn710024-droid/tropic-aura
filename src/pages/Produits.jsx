@@ -227,6 +227,22 @@ export default function Produits() {
       : window.scrollTo({ top: i * H, behavior: "smooth" });
   };
 
+  // Saut direct vers une collection via ?section=<slug> (déclenché par les
+  // sous-liens du menu, ex. /produits?section=saison) — saute au premier
+  // produit de la collection. Même tree pour desktop/mobile → scrollTo
+  // fonctionne dans les deux cas, pas besoin de branchement par device.
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("section");
+    if (!target) return;
+    const COLLECTION = { signature: "SIGNATURE", saison: "SAISON", specialites: "SPÉCIALITÉS" };
+    const wanted = COLLECTION[target];
+    if (!wanted) return;
+    const idx = SECTIONS.findIndex((s) => s.collection === wanted);
+    if (idx < 0) return;
+    const t = setTimeout(() => scrollTo(idx), 80);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       <style>{`

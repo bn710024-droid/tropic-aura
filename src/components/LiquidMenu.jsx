@@ -12,24 +12,31 @@
 // ============================================================
 
 // Navigation en 2 colonnes. Chaque rubrique : { label, href, img, subs[] }
+// Sous-liens = raccourcis directs vers les vraies sections de chaque page
+// (voir SECTIONS/aboutTheme.js, partnershipTheme.js, Produits.jsx). Le
+// paramètre ?section=<id> est lu au montage par chaque page pour sauter
+// directement au bon endroit — voir la logique dans APropos.jsx,
+// Partenariats.jsx, Produits.jsx, Contact.jsx.
 const COLUMNS = [
   [
     { label: "Accueil",  href: "/",         img: "/menu-accueil.jpg" },
     {
       label: "À Propos", href: "/about",    img: "/menu-apropos.jpg",
       subs: [
-        { label: "Notre Conviction", href: "/about" },
-        { label: "Notre Mission",    href: "/about" },
-        { label: "Notre Vision",     href: "/about" },
-        { label: "Notre Avenir",     href: "/about" },
+        { label: "Notre Vision",               href: "/about?section=vision" },
+        { label: "Nos Fondations",             href: "/about?section=aujourdhui" },
+        { label: "Notre Développement",        href: "/about?section=demain" },
+        { label: "Créer Plus de Valeur",       href: "/about?section=ambition" },
+        { label: "Notre Réseau International", href: "/about?section=avenir" },
+        { label: "Notre Engagement",           href: "/about?section=engagement" },
       ],
     },
     {
       label: "Produits", href: "/produits", img: "/menu-produits.jpg",
       subs: [
-        { label: "Signature",   href: "/produits" },
-        { label: "Saison",      href: "/produits" },
-        { label: "Spécialités", href: "/produits" },
+        { label: "Signature",   href: "/produits?section=signature" },
+        { label: "Saison",      href: "/produits?section=saison" },
+        { label: "Spécialités", href: "/produits?section=specialites" },
       ],
     },
   ],
@@ -37,22 +44,24 @@ const COLUMNS = [
     {
       label: "Partenariats", href: "/partenariats", img: "/menu-partenariats.jpg",
       subs: [
-        { label: "Le réseau",          href: "/partenariats" },
-        { label: "Devenir partenaire", href: "/partenariats" },
+        { label: "Notre vision",       href: "/partenariats?section=vision" },
+        { label: "Le parcours",        href: "/partenariats?section=parcours" },
+        { label: "Notre expédition",   href: "/partenariats?section=expedition" },
+        { label: "Devenir partenaire", href: "/partenariats?section=conclusion" },
       ],
     },
     {
       label: "Insights", href: "/insights", img: "/menu-visual.jpg",
       subs: [
-        { label: "Market Intelligence", href: "/insights" },
-        { label: "Export Knowledge",    href: "/insights" },
+        { label: "Sénégal, origine stratégique",       href: "/insights/senegal-origine-strategique" },
+        { label: "Fournisseur stable vs opportuniste", href: "/insights/fournisseur-stable-opportuniste" },
       ],
     },
     {
       label: "Contact", href: "/contact", img: "/menu-contact.jpg",
       subs: [
-        { label: "Nous contacter",         href: "/contact"      },
-        { label: "Demande de partenariat", href: "/partenariats" },
+        { label: "Nous contacter",         href: "/contact?section=form"          },
+        { label: "Demande de partenariat", href: "/partenariats?section=conclusion" },
       ],
     },
   ],

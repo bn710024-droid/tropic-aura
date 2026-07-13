@@ -205,6 +205,25 @@ export default function Partenariats() {
       ? lenisRef.current.scrollTo(i * window.innerHeight, { duration: 1.2 })
       : window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
+  // Saut direct vers une section via ?section=<id> (déclenché par les
+  // sous-liens du menu, ex. /partenariats?section=conclusion). Desktop
+  // utilise le moteur interne (scrollTo par index) ; mobile cible
+  // directement la scène DOM correspondante (flux naturel).
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("section");
+    if (!target) return;
+    const isDesktopNow = window.matchMedia("(min-width: 769px)").matches;
+    const t = setTimeout(() => {
+      if (isDesktopNow) {
+        const idx = SECTIONS.findIndex((s) => s.id === target);
+        if (idx >= 0) scrollTo(idx);
+      } else {
+        document.getElementById(`partner-${target}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 80);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       <style>{`

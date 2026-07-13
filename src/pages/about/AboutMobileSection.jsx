@@ -19,7 +19,7 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
 
   if (s.type === "quote") {
     return (
-      <MotionScene className="ms-about ms-about--quote" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px">
+      <MotionScene id={`about-${s.id}`} className="ms-about ms-about--quote" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px">
         <div className="ms-about-bg" style={{ background: s.bg }} />
         <p
           className="ms-layer ms-layer--title vision-quote"
@@ -32,7 +32,7 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
   }
 
   return (
-    <MotionScene className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px" style={{ "--ms-exit-x": exitX }}>
+    <MotionScene id={`about-${s.id}`} className="ms-about" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px" style={{ "--ms-exit-x": exitX }}>
       <div className="ms-about-bg" style={{ background: s.bg }} />
 
       <div className="ms-about-inner">

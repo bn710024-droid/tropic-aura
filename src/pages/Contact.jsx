@@ -57,8 +57,22 @@ export default function Contact() {
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
     revealRefs.current.forEach((el) => el && io.observe(el));
 
+    // Saut direct vers une section via ?section=<id> (déclenché par le
+    // sous-lien "Nous contacter" du menu → /contact?section=form).
+    const target = new URLSearchParams(window.location.search).get("section");
+    let scrollTimeout;
+    if (target === "form") {
+      scrollTimeout = setTimeout(() => {
+        const el = document.getElementById("contact-form");
+        if (!el) return;
+        if (lenis) lenis.scrollTo(el, { duration: 1.2 });
+        else el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+    }
+
     return () => {
       cancelAnimationFrame(rafId);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       if (lenis) lenis.destroy();
       io.disconnect();
     };
@@ -164,7 +178,7 @@ export default function Contact() {
       </section>
 
       {/* ━━━━━ 2. EXPÉRIENCE DE CONTACT ━━━━━ */}
-      <section style={{
+      <section id="contact-form" style={{
         background: "#F5F1E8",
         padding: "clamp(80px,14vh,160px) clamp(24px,8vw,140px)",
       }}>

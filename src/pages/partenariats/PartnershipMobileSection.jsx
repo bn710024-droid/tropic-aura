@@ -12,7 +12,7 @@ export default function PartnershipMobileSection({ section }) {
 
   if (s.type === "hero") {
     return (
-      <MotionScene as="div" className="pm-hero" rootMargin="-5% 0px -20% 0px">
+      <MotionScene id={`partner-${s.id}`} as="div" className="pm-hero" rootMargin="-5% 0px -20% 0px">
         <img src={s.photo} alt={s.photoAlt} className="pm-hero-photo ms-ken-burns" />
         <div className="pm-hero-overlay" />
         <div className="pm-hero-text">
@@ -28,7 +28,7 @@ export default function PartnershipMobileSection({ section }) {
 
   if (s.type === "vision") {
     return (
-      <MotionScene className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px">
+      <MotionScene id={`partner-${s.id}`} className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -20% 0px">
         <div className="pm-bg" style={{ background: s.bg }} />
         <div className="pm-inner">
           <span className="ms-layer ms-layer--icon pm-kicker">{s.kicker}</span>
@@ -54,7 +54,7 @@ export default function PartnershipMobileSection({ section }) {
 
   if (s.type === "timeline") {
     return (
-      <MotionScene className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
+      <MotionScene id={`partner-${s.id}`} className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
         <div className="pm-bg" style={{ background: s.bg }} />
         <div className="pm-inner">
           <span className="ms-layer ms-layer--icon pm-kicker">{s.kicker}</span>
@@ -70,7 +70,7 @@ export default function PartnershipMobileSection({ section }) {
   if (s.type === "photo") {
     const Icon = ICONS[s.icon];
     return (
-      <MotionScene className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
+      <MotionScene id={`partner-${s.id}`} className="pm-section" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
         <div className="pm-bg" style={{ background: s.bg }} />
         <div className="pm-inner">
           <h2 className="ms-layer ms-layer--title pm-photo-title">{s.title}</h2>
@@ -87,7 +87,7 @@ export default function PartnershipMobileSection({ section }) {
 
   // conclusion
   return (
-    <MotionScene className="pm-section pm-conclusion" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
+    <MotionScene id={`partner-${s.id}`} className="pm-section pm-conclusion" curtainColor={s.bg} rootMargin="-8% 0px -15% 0px">
       <div className="pm-bg" style={{ background: s.bg }} />
       <ConclusionConstellation />
       <div className="pm-inner pm-inner--center">
