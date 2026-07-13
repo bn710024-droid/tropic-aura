@@ -22,7 +22,7 @@ export default function TopBar() {
           backdropFilter: "blur(6px)",
           WebkitBackdropFilter: "blur(6px)",
           transition: "background-color .25s, border-color .25s",
-          marginRight: "clamp(20px,5vw,48px)",
+          marginRight: "clamp(10px,2.5vw,24px)",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
