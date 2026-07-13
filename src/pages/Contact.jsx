@@ -131,15 +131,16 @@ export default function Contact() {
       `}</style>
 
       {/* Logo (s'inverse automatiquement selon le fond via mix-blend) */}
-      <span
+      <a
+        href="/"
         ref={logoRef}
         style={{
           position: "fixed", top: 16, left: "clamp(20px,5vw,48px)", zIndex: 200,
-          pointerEvents: "none",
+          textDecoration: "none",
         }}
       >
         <span className="ghost__logo">Tropicaura</span>
-      </span>
+      </a>
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
       <section style={{

@@ -436,7 +436,7 @@ export default function APropos() {
 
       {/* ── Header fantôme transparent ── */}
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo" ref={logoRef}>Tropicaura</span>
+        <a href="/" className="ghost__logo" ref={logoRef}>Tropicaura</a>
       </header>
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}

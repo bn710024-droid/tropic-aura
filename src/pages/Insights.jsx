@@ -181,9 +181,9 @@ export default function Insights() {
       `}</style>
 
       {/* Logo */}
-      <span style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, pointerEvents:"none" }}>
+      <a href="/" style={{ position:"fixed", top:16, left:"clamp(20px,5vw,48px)", zIndex:200, textDecoration:"none" }}>
         <span className="ghost__logo">Tropicaura</span>
-      </span>
+      </a>
 
       <div className="ins-wrap">
 

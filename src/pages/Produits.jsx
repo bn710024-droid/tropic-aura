@@ -271,7 +271,7 @@ export default function Produits() {
       `}</style>
 
       <header className="ghost" style={{ zIndex: 200 }}>
-        <span className="ghost__logo">Tropicaura</span>
+        <a href="/" className="ghost__logo">Tropicaura</a>
       </header>
 
       {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}

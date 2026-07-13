@@ -478,7 +478,7 @@ export default function Home() {
     <>
       {/* Header fantôme — transparent, flotte par-dessus tout (ancrage marque) */}
       <header className="ghost">
-        <span className="ghost__logo">Tropicaura</span>
+        <a href="/" className="ghost__logo">Tropicaura</a>
       </header>
 
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
