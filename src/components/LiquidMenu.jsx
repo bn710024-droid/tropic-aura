@@ -76,9 +76,7 @@ const easeIn  = (t) => t * t * t;
 // ============================================================
 export default function LiquidMenu() {
   const overlayRef = useRef(null);
-  const btnRef     = useRef(null);
-  const gridRef    = useRef(null);   // grille 2×2 (état fermé)
-  const crossRef   = useRef(null);   // croix × (état ouvert)
+  const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
   const imgWrapRef = useRef(null);
   const imgARef    = useRef(null);
   const imgBRef    = useRef(null);
@@ -118,7 +116,8 @@ export default function LiquidMenu() {
   }, []);
 
   const measure = useCallback(() => {
-    const r = btnRef.current.getBoundingClientRect();
+    const realBtn = document.getElementById("topbar-menu-btn");
+    const r = (realBtn || btnRef.current).getBoundingClientRect();
     const x = r.left + r.width / 2;
     const y = r.top + r.height / 2;
     const W = window.innerWidth;
@@ -178,11 +177,11 @@ export default function LiquidMenu() {
       imgARef.current.dataset.src = DEFAULT_IMG;
     }
 
-    // Bouton : grille → croix ×
-    btnRef.current.style.backgroundColor = "rgba(255,255,255,0.08)";
-    btnRef.current.style.borderColor     = "rgba(255,255,255,0.22)";
-    if (gridRef.current)  { gridRef.current.style.opacity = "0"; gridRef.current.style.transform = "scale(.6)"; }
-    if (crossRef.current) { crossRef.current.style.opacity = "1"; crossRef.current.style.transform = "scale(1)"; }
+    // Bouton : grille → croix × (sur le VRAI bouton visible dans TopBar)
+    const realGrid  = document.getElementById("topbar-menu-grid");
+    const realCross = document.getElementById("topbar-menu-cross");
+    if (realGrid)  { realGrid.style.opacity = "0"; realGrid.style.transform = "scale(.6)"; }
+    if (realCross) { realCross.style.opacity = "1"; realCross.style.transform = "scale(1)"; }
 
     tweenRadius(0, center.current.full, 1.10, easeOut, null);
 
@@ -216,10 +215,10 @@ export default function LiquidMenu() {
     isOpen.current = false;
     killAll();
 
-    btnRef.current.style.backgroundColor = "rgba(0,0,0,0.30)";
-    btnRef.current.style.borderColor     = "rgba(255,255,255,0.28)";
-    if (crossRef.current) { crossRef.current.style.opacity = "0"; crossRef.current.style.transform = "scale(.6)"; }
-    if (gridRef.current)  { gridRef.current.style.opacity = "1"; gridRef.current.style.transform = "scale(1)"; }
+    const realGrid  = document.getElementById("topbar-menu-grid");
+    const realCross = document.getElementById("topbar-menu-cross");
+    if (realCross) { realCross.style.opacity = "0"; realCross.style.transform = "scale(.6)"; }
+    if (realGrid)  { realGrid.style.opacity = "1"; realGrid.style.transform = "scale(1)"; }
 
     const items = [...itemRefs.current.filter(Boolean)];
     if (footerRef.current) items.push(footerRef.current);
@@ -277,11 +276,8 @@ export default function LiquidMenu() {
         }
       `}</style>
 
-      {/* Bouton caché — rendu par TopBar mais les refs d'animation sont ici */}
-      <button ref={btnRef} style={{ display: "none" }}>
-        <div ref={gridRef} />
-        <div ref={crossRef} />
-      </button>
+      {/* Fallback si le bouton TopBar (#topbar-menu-btn) n'est pas encore monté */}
+      <button ref={btnRef} style={{ display: "none" }} />
 
       {/* ── Overlay plein écran (révélé par cercle) ─────────── */}
       <div
