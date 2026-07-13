@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  PRODUITS — « La Collection »
@@ -244,8 +249,23 @@ export default function Produits() {
     return () => clearTimeout(t);
   }, []);
 
+  const produitsDescription =
+    "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, sélectionnés pour l'export B2B premium vers l'Europe et au-delà.";
+  const produitsTrail = buildBreadcrumbTrail("/produits");
+
   return (
     <>
+      <SEOHead
+        title="Nos Produits — Fruits & Légumes Export Premium"
+        description={produitsDescription}
+        path="/produits"
+        keywords={["mangue export", "avocat export", "ananas export", "citron vert export", "gombo export", "fruits tropicaux B2B"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/produits", title: "Produits", description: produitsDescription, breadcrumb: true }),
+          breadcrumbListSchema(produitsTrail, "/produits"),
+        ]}
+      />
       <style>{`
         .ct-grid  { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px,7vw,110px); }
         @keyframes prodFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-16px); } }
@@ -272,19 +292,21 @@ export default function Produits() {
       `}</style>
 
       <TopBar />
+      <Breadcrumbs trail={produitsTrail} />
 
       {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />
 
       {/* Nav dots — desktop uniquement (voir .dots-nav dans global.css) */}
-      <nav className="dots-nav" style={{
+      <nav className="dots-nav" aria-label="Navigation par produit" style={{
         position: "fixed", right: "clamp(14px,2vw,28px)", top: "50%",
         transform: "translateY(-50%)", zIndex: 150,
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",
       }}>
         {SECTIONS.map((s, i) => (
           <button key={s.id} ref={(el) => (dotRefs.current[i] = el)} onClick={() => scrollTo(i)} title={s.name || s.title}
+            aria-label={`Aller à ${s.name || s.title}`}
             style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.32)", border: "none", cursor: "pointer", padding: 0, transition: "width .25s, height .25s, background .25s, box-shadow .25s", display: "block" }} />
         ))}
       </nav>
@@ -432,6 +454,20 @@ export default function Produits() {
                     </div>
                   ))}
                 </div>
+
+                {/* Maillage interne : fiche produit SEO dédiée (/produits/:slug) */}
+                <Link
+                  to={`/produits/${s.id}`}
+                  aria-label={`Voir la fiche complète de ${s.name}`}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    marginTop: 28, fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    fontSize: 13, fontWeight: 700, letterSpacing: ".04em",
+                    color: "#fff", textDecoration: "underline", textUnderlineOffset: 4,
+                  }}
+                >
+                  En savoir plus <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </div>
           </section>

@@ -1,5 +1,9 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema, articleSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 const GOLD  = "#C9A84C";
 const WHITE = "#FFFFFF";
@@ -82,8 +86,30 @@ export default function InsightSenegal() {
     "une capacité à résoudre les problèmes rapidement.",
   ];
 
+  const articlePath = "/insights/senegal-origine-strategique";
+  const articleTitle = "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux";
+  const articleDescription =
+    "Position géographique, accès maritime, saisonnalité complémentaire et amélioration des infrastructures créent de nouvelles opportunités pour les importateurs à la recherche de partenaires fiables.";
+  const articleTrail = buildBreadcrumbTrail(articlePath);
+  const publishedTime = "2026-06-01";
+
   return (
     <div style={{ background: BG, minHeight: "100vh" }}>
+      <SEOHead
+        title={articleTitle}
+        description={articleDescription}
+        path={articlePath}
+        keywords={["Sénégal export fruits", "origine stratégique fruits tropicaux", "sourcing Afrique de l'Ouest"]}
+        type="article"
+        publishedTime={publishedTime}
+        modifiedTime={publishedTime}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: articlePath, title: articleTitle, description: articleDescription, breadcrumb: true }),
+          breadcrumbListSchema(articleTrail, articlePath),
+          articleSchema({ path: articlePath, title: articleTitle, description: articleDescription, image: "/menu-apropos.jpg", datePublished: publishedTime }),
+        ]}
+      />
       <style>{`
         /* ── Nav ── */
         .art-nav {
@@ -295,6 +321,7 @@ export default function InsightSenegal() {
         <a href="/" className="art-brand ghost__logo">Tropicaura</a>
         <a href="/insights" className="art-back">← Retour aux analyses</a>
       </nav>
+      <Breadcrumbs trail={articleTrail} />
 
       {/* ══ Hero ══ */}
       <header className="art-hero">

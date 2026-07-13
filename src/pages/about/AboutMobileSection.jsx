@@ -9,8 +9,11 @@ import { GOLD, IVORY, IVORY_TEXT, FOREST_TEXT, PACE } from "./aboutTheme";
 // article normal. Seule nuance : en sortie, la photo glisse légèrement de
 // côté (pas une simple montée/fondu) pour suggérer que le chapitre suivant
 // vient prendre sa place — voir --ms-exit-x dans motionStyles.js.
-export default function AboutMobileSection({ section, exitDirection = "left" }) {
+export default function AboutMobileSection({ section, exitDirection = "left", isFirst = false }) {
   const s = section;
+  // SEO : une seule section porte le <h1> de la page (les autres, <h2>) —
+  // l'arbre desktop applique la même règle sur sa propre Section 01.
+  const TitleTag = isFirst ? "h1" : "h2";
   const kickerColor = s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)";
   const titleColor = s.dark ? IVORY : "#17301F";
   const descColor = s.dark ? IVORY_TEXT : FOREST_TEXT;
@@ -40,12 +43,12 @@ export default function AboutMobileSection({ section, exitDirection = "left" }) 
         <span className="ms-layer ms-layer--icon vision-kicker" style={{ color: kickerColor, marginTop: 6, display: "block" }}>
           {s.kicker}
         </span>
-        <h1
+        <TitleTag
           className="ms-layer ms-layer--title vision-title"
           style={{ color: titleColor, transitionDuration: `${300 * pace}ms` }}
         >
           {s.title}
-        </h1>
+        </TitleTag>
         <div className="vision-line ms-layer ms-layer--icon" style={{ background: GOLD }} />
         <div
           className="ms-layer ms-layer--text vision-desc-group"

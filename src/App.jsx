@@ -1,34 +1,61 @@
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home         from "./pages/Home";
 import APropos      from "./pages/APropos";
 import Partenariats from "./pages/Partenariats";
 import Produits     from "./pages/Produits";
+import ProductDetail from "./pages/ProductDetail";
 import Contact      from "./pages/Contact";
 import Insights        from "./pages/Insights";
 import InsightSenegal      from "./pages/InsightSenegal";
 import InsightPartenariats from "./pages/InsightPartenariats";
+import NotFound     from "./pages/NotFound";
 import LiquidMenu   from "./components/LiquidMenu";
 import Footer       from "./components/Footer";
 import "./styles/global.css";
 
+// ============================================================
+//  <App /> — routeur applicatif (react-router-dom).
+//
+//  Migré depuis un routage manuel par window.location.pathname
+//  vers <Routes>/<Route> : nécessaire pour supporter les URLs
+//  produit paramétrées (/produits/:slug) sans dupliquer la logique
+//  de correspondance de chemin. Comportement de navigation
+//  inchangé ailleurs (TopBar, LiquidMenu, Footer utilisent toujours
+//  des <a href> classiques → rechargement complet, testé et voulu
+//  pour le comportement de saut de section ?section=<id>).
+// ============================================================
 export default function App() {
-  const path = window.location.pathname;
-  let Page = Home;
-  if (path === "/about" || path === "/a-propos")                 Page = APropos;
-  else if (path === "/partnerships" || path === "/partenariats") Page = Partenariats;
-  else if (path === "/produits" || path === "/products")         Page = Produits;
-  else if (path === "/contact")                                  Page = Contact;
-  else if (path === "/insights")                                              Page = Insights;
-  else if (path === "/insights/senegal-origine-strategique")                 Page = InsightSenegal;
-  else if (path === "/insights/fournisseur-stable-opportuniste")             Page = InsightPartenariats;
+  const location = useLocation();
+  const path = location.pathname;
 
-  const isArticle = path.startsWith("/insights/");
+  // Auto-scroll vers le haut à chaque changement de route
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  const isArticle = path.startsWith("/insights/") && path !== "/insights";
   // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
   // (le body y est figé) — on évite ici le doublon.
-  const isHome = Page === Home;
+  const isHome = path === "/";
 
   return (
     <>
-      <Page />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<APropos />} />
+        <Route path="/a-propos" element={<APropos />} />
+        <Route path="/partnerships" element={<Partenariats />} />
+        <Route path="/partenariats" element={<Partenariats />} />
+        <Route path="/produits" element={<Produits />} />
+        <Route path="/products" element={<Produits />} />
+        <Route path="/produits/:slug" element={<ProductDetail />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/insights" element={<Insights />} />
+        <Route path="/insights/senegal-origine-strategique" element={<InsightSenegal />} />
+        <Route path="/insights/fournisseur-stable-opportuniste" element={<InsightPartenariats />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       {!isArticle && !isHome && <Footer />}
       {!isArticle && <LiquidMenu />}
     </>

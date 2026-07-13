@@ -5,14 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-sitemap.mjs && node scripts/generate-favicons.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "generate:favicons": "node scripts/generate-favicons.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
     "lenis": "^1.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-helmet-async": "^3.0.0",
     "react-router-dom": "^6.26.0"
   },
   "devDependencies": {

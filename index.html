@@ -2,13 +2,54 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tropic-Aura B.C. — Export Premium de fruits &amp; légumes du Sénégal vers l'Europe</title>
-    <meta name="description" content="Tropic-Aura connecte les vergers sénégalais aux marchés européens. Mangues Kent &amp; Keitt, ananas Victoria, avocats Hass. FOB Port de Dakar." />
+
+    <!-- title + meta description : gérés dynamiquement par SEOHead.jsx
+         (react-helmet-async) pour CHAQUE route. Ne pas en remettre ici :
+         Helmet ne supprime jamais les balises statiques existantes,
+         ce qui créerait des balises dupliquées (constaté et corrigé). -->
+    <title>Tropicaura</title>
+
+    <!-- ── Favicons & icônes (générés depuis le vrai logo — voir
+         scripts/generate-favicons.mjs, régénérés à chaque build) ── -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/favicon.svg" color="#0B0F0A" />
+    <meta name="msapplication-TileColor" content="#0B0F0A" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <!-- ── PWA / manifest ── -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0B0F0A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tropicaura" />
+
+    <!-- ── Core Web Vitals : préconnexion + polices ──
+         @import CSS (ancienne approche dans global.css) est bloquant pour
+         le rendu : le navigateur doit télécharger le CSS, le parser, PUIS
+         découvrir l'@import avant même de commencer à charger la police.
+         Un <link rel="stylesheet"> direct ici permet une découverte et un
+         téléchargement parallèles dès le tout début du parsing HTML. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    />
+
+    <!-- Logo de marque : présent en position fixe sur TOUTES les pages
+         (TopBar) → préchargement pour éviter tout flash sans logo. -->
+    <link rel="preload" as="image" href="/logo-mark.png" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      Tropicaura — Export premium de fruits et légumes frais d'Afrique de l'Ouest vers l'Europe, le Canada,
+      le Royaume-Uni et le Moyen-Orient. Cette application nécessite JavaScript. Contactez-nous : contact@tropic-aura.com
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -4,6 +4,8 @@ import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
 import Footer from "../components/Footer";
 import TopBar from "../components/TopBar";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, websiteSchema, webPageSchema } from "../seo/schema";
 
 // ============================================================
 //  HOME — animation organique pilotée 100% par rAF
@@ -475,8 +477,19 @@ export default function Home() {
     setTimeout(() => setMorphTarget(null), 700);
   };
 
+  const homeDescription =
+    "Tropicaura connecte les vergers d'Afrique de l'Ouest aux marchés internationaux. Export B2B premium de mangues, avocats, ananas, agrumes et légumes frais. FOB Port de Dakar.";
+
   return (
     <>
+      <SEOHead
+        title="Export Premium de Fruits & Légumes d'Afrique de l'Ouest"
+        description={homeDescription}
+        path="/"
+        keywords={["export fruits Afrique", "export légumes Sénégal", "mangue export", "avocat export", "fournisseur B2B fruits tropicaux", "FOB Dakar"]}
+        jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: "/", title: "Tropicaura", description: homeDescription })]}
+      />
+
       {/* Top bar avec logo + menu */}
       <TopBar />
 
@@ -596,10 +609,21 @@ export default function Home() {
           </div>
 
           <div className="scene__content">
-            <h1 className="scene__title">
-              <span className="only-desktop">{s.title}</span>
-              <span className="only-mobile">{s.mobileTitle || s.title}</span>
-            </h1>
+            {/* SEO : un seul <h1> par page (première scène) — les scènes
+                suivantes utilisent <h2> pour la même classe CSS afin de
+                préserver une hiérarchie de titres valide sans dupliquer
+                le H1 (voir audit "H1 unique par page"). */}
+            {i === 0 ? (
+              <h1 className="scene__title">
+                <span className="only-desktop">{s.title}</span>
+                <span className="only-mobile">{s.mobileTitle || s.title}</span>
+              </h1>
+            ) : (
+              <h2 className="scene__title">
+                <span className="only-desktop">{s.title}</span>
+                <span className="only-mobile">{s.mobileTitle || s.title}</span>
+              </h2>
+            )}
             <p className="scene__desc">
               <span className="only-desktop">{s.desc}</span>
               <span className="only-mobile">{s.mobileDesc || s.desc}</span>

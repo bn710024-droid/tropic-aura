@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
 import ExportRouteMap from "../components/ExportRouteMap";
 import AboutMobileSection from "./about/AboutMobileSection";
 import { GOLD, BLACK, IVORY, FOREST, SAGE, STONE, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
 import { buildMotionCSS, buildKenBurnsCSS } from "../motion";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  À PROPOS — "Notre Vision" — récit éditorial continu
@@ -368,8 +372,23 @@ export default function APropos() {
     return () => clearTimeout(t);
   }, []);
 
+  const aboutDescription =
+    "Tropicaura relie producteurs, logisticiens et acheteurs internationaux autour d'une même exigence : qualité, traçabilité et conformité export en Afrique de l'Ouest.";
+  const aboutTrail = buildBreadcrumbTrail("/about");
+
   return (
     <>
+      <SEOHead
+        title="À Propos — Notre Vision de l'Export Agroalimentaire"
+        description={aboutDescription}
+        path="/about"
+        keywords={["export Afrique de l'Ouest", "traçabilité export", "réseau producteurs Sénégal", "entreprise export B2B"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/about", title: "À Propos", description: aboutDescription, breadcrumb: true }),
+          breadcrumbListSchema(aboutTrail, "/about"),
+        ]}
+      />
       <style>{`
         .vision-chapter-wrap { position: relative; height: 150vh; }
         .vision-chapter { position: sticky; top: 0; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: visible; }
@@ -437,12 +456,13 @@ export default function APropos() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <Breadcrumbs trail={aboutTrail} />
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
 
       {/* ── Puces de navigation ── */}
-      <nav className="dots-nav" style={{
+      <nav className="dots-nav" aria-label="Navigation par section" style={{
         position: "fixed", right: "clamp(14px,2vw,28px)", top: "50%",
         transform: "translateY(-50%)", zIndex: 150,
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",
@@ -453,6 +473,7 @@ export default function APropos() {
             ref={(el) => (dotRefs.current[i] = el)}
             onClick={() => scrollTo(i)}
             title={s.title || s.quote}
+            aria-label={`Aller à la section ${s.title || s.quote}`}
             style={{
               width: 6, height: 6, borderRadius: "50%",
               background: "rgba(242,233,216,0.32)",
@@ -516,9 +537,10 @@ export default function APropos() {
           <span className="vision-kicker" style={{ color: "rgba(23,48,31,0.62)", marginTop: 6, display: "block" }}>
             {SECTIONS[1].kicker}
           </span>
-          <h1 className="vision-title" ref={s2TitleRef} style={{ color: "#17301F", opacity: 0 }}>
+          {/* SEO : h2 (le h1 unique de la page est en Section 01 ci-dessus). */}
+          <h2 className="vision-title" ref={s2TitleRef} style={{ color: "#17301F", opacity: 0 }}>
             {SECTIONS[1].title}
-          </h1>
+          </h2>
           <div className="vision-line" style={{ background: GOLD }} />
           <div className="vision-desc-group" ref={s2DescRef} style={{ opacity: 0 }}>
             {SECTIONS[1].desc.map((p, i) => (
@@ -579,9 +601,10 @@ export default function APropos() {
             <span className="vision-kicker" style={{ color: s.dark ? "rgba(242,233,216,0.68)" : "rgba(23,48,31,0.62)", marginTop: 6, display: "block" }}>
               {s.kicker}
             </span>
-            <h1 className="vision-title" ref={(el) => (sTitleRefs.current[k] = el)} style={{ color: s.dark ? IVORY : "#17301F", opacity: 0 }}>
+            {/* SEO : h2 (le h1 unique de la page est en Section 01 ci-dessus). */}
+            <h2 className="vision-title" ref={(el) => (sTitleRefs.current[k] = el)} style={{ color: s.dark ? IVORY : "#17301F", opacity: 0 }}>
               {s.title}
-            </h1>
+            </h2>
             <div className="vision-line" style={{ background: GOLD }} />
             <div className="vision-desc-group" ref={(el) => (sDescRefs.current[k] = el)} style={{ opacity: 0 }}>
               {s.desc.map((p, pi) => (
@@ -642,8 +665,8 @@ export default function APropos() {
 
       {/* ══ Arbre mobile — scènes "page turn" (Motion System), aucun scroll verrouillé ══ */}
       <div className="about-mobile-tree">
-        {SECTIONS.map((s) => (
-          <AboutMobileSection key={s.id} section={s} />
+        {SECTIONS.map((s, i) => (
+          <AboutMobileSection key={s.id} section={s} isFirst={i === 0} />
         ))}
       </div>
     </>

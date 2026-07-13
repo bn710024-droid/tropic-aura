@@ -2,7 +2,12 @@
    Tropicaura — Expérience plein écran
    Scroll-snap natif + pluie de produits en cascade
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Poppins:wght@400;500;600;700;800;900&display=swap');
+/* Polices Google Fonts : chargées via <link rel="stylesheet"> dans
+   index.html (avec preconnect), pas via @import ici — un @import CSS
+   est render-blocking en cascade (HTML → CSS → découverte de l'import
+   → fetch police), alors qu'un <link> dans <head> est découvert et
+   téléchargé en parallèle dès le début du parsing HTML. Voir Core Web
+   Vitals / LCP. */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 

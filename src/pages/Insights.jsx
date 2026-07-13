@@ -1,6 +1,10 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  INSIGHTS — panneau gauche sticky · liste articles verticale
@@ -75,8 +79,23 @@ export default function Insights() {
   /* Icônes SVG inline (document · horloge · globe) */
   const iconStyle = { width: 20, height: 20, marginBottom: 10, opacity: 0.6 };
 
+  const insightsDescription =
+    "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques, sourcing en Afrique de l'Ouest et fiabilité des partenariats fournisseurs.";
+  const insightsTrail = buildBreadcrumbTrail("/insights");
+
   return (
     <div style={{ background: BG, minHeight: "100vh" }}>
+      <SEOHead
+        title="Insights — Analyses du Commerce Tropical International"
+        description={insightsDescription}
+        path="/insights"
+        keywords={["sourcing Afrique de l'Ouest", "commerce international fruits", "fournisseur fiable export"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/insights", title: "Insights", description: insightsDescription, breadcrumb: true }),
+          breadcrumbListSchema(insightsTrail, "/insights"),
+        ]}
+      />
       <style>{`
         /* ── Layout ── */
         .ins-wrap { display: grid; grid-template-columns: 38% 62%; min-height: 100vh; }
@@ -183,6 +202,7 @@ export default function Insights() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <Breadcrumbs trail={insightsTrail} />
 
       <div className="ins-wrap">
 
@@ -300,7 +320,7 @@ export default function Insights() {
           {/* Voir toutes */}
           <div ref={reveal} className="ins-voir" style={r(0.3)}>
             <div className="ins-voir-line" />
-            <a href="#" className="ins-voir-link">Voir toutes les analyses</a>
+            <a href="#analyses" className="ins-voir-link">Voir toutes les analyses</a>
             <span className="ins-voir-arrow">→</span>
           </div>
         </div>

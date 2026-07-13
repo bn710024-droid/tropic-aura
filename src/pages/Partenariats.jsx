@@ -1,12 +1,16 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
 import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
 import PartnershipTimeline from "../components/PartnershipTimeline";
 import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
 import ConclusionConstellation from "./partenariats/ConclusionConstellation";
 import { ICONS } from "./partenariats/icons";
 import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  PARTENARIATS — refonte 5 scènes (Hero / Vision / Parcours /
@@ -225,8 +229,23 @@ export default function Partenariats() {
     return () => clearTimeout(t);
   }, []);
 
+  const partnershipsDescription =
+    "Tropicaura construit des partenariats commerciaux durables — transparence, préparation et fiabilité à chaque expédition depuis le port de Dakar.";
+  const partnershipsTrail = buildBreadcrumbTrail("/partenariats");
+
   return (
     <>
+      <SEOHead
+        title="Partenariats B2B — Devenir Importateur ou Distributeur"
+        description={partnershipsDescription}
+        path="/partenariats"
+        keywords={["partenariat import export", "devenir distributeur fruits", "fournisseur fiable Afrique", "partenaire commercial Sénégal"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/partenariats", title: "Partenariats", description: partnershipsDescription, breadcrumb: true }),
+          breadcrumbListSchema(partnershipsTrail, "/partenariats"),
+        ]}
+      />
       <style>{`
         /* Images décoratives : pas de pointer-events → le navigateur (Edge) ne
            colle plus son bouton "Recherche visuelle" au survol. */
@@ -340,6 +359,7 @@ export default function Partenariats() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <Breadcrumbs trail={partnershipsTrail} />
 
       <div className="partenariats-desktop-tree">
         <style>{`
@@ -356,13 +376,14 @@ export default function Partenariats() {
         ))}
         <div className="bg-depth" />
 
-        <nav className="dots-nav" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
+        <nav className="dots-nav" aria-label="Navigation par section" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
           {SECTIONS.map((s, i) => (
             <button
               key={s.id}
               ref={(el) => (dotRefs.current[i] = el)}
               onClick={() => scrollTo(i)}
               title={s.title || s.kicker}
+              aria-label={`Aller à la section ${s.title || s.kicker}`}
               style={{ width:6, height:6, borderRadius:"50%", background:"rgba(242,233,216,0.30)", border:"none", cursor:"pointer", padding:0, transition:"width .25s, height .25s, background .25s, box-shadow .25s", display:"block", animation:"dotPulse 1.8s ease-in-out infinite", animationDelay:`${i * 0.18}s` }}
             />
           ))}

@@ -1,6 +1,10 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../seo/SEOHead";
+import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
+import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 
 // ============================================================
 //  CONTACT — « Le dernier chapitre »
@@ -116,8 +120,23 @@ export default function Contact() {
 
   const r0 = { opacity: 0, transform: "translateY(26px)", transition: "opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1)" };
 
+  const contactDescription =
+    "Contactez Tropicaura pour vos besoins d'import de fruits et légumes frais d'Afrique de l'Ouest. Devis, volumes, Incoterms FOB Dakar — réponse sous 48h.";
+  const contactTrail = buildBreadcrumbTrail("/contact");
+
   return (
     <>
+      <SEOHead
+        title="Contact — Demander une Offre Export"
+        description={contactDescription}
+        path="/contact"
+        keywords={["contact export fruits", "devis import fruits Afrique", "fournisseur Sénégal contact"]}
+        jsonLd={[
+          organizationSchema(),
+          webPageSchema({ path: "/contact", title: "Contact", description: contactDescription, breadcrumb: true }),
+          breadcrumbListSchema(contactTrail, "/contact"),
+        ]}
+      />
       <style>{`
         .ct-grid  { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px,7vw,110px); }
         .ct-form-2{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
@@ -133,6 +152,7 @@ export default function Contact() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <Breadcrumbs trail={contactTrail} />
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
       <section style={{
