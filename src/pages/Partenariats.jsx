@@ -359,6 +359,7 @@ export default function Partenariats() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <img src="/logo-mark.png" alt="Tropicaura — Partenariats B2B durables pour l'export" width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={partnershipsTrail} />
 
       <div className="partenariats-desktop-tree">

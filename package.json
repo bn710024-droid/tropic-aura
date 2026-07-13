@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/generate-sitemap.mjs && node scripts/generate-favicons.mjs",
-    "build": "vite build",
+    "build": "node scripts/build-and-prerender.mjs",
+    "build:vite": "vite build",
     "preview": "vite preview",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "generate:favicons": "node scripts/generate-favicons.mjs"
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "4.3.4",
     "jimp": "^1.6.1",
+    "puppeteer": "^25.3.0",
     "sharp": "^0.35.2",
     "vite": "5.4.19"
   }

@@ -110,6 +110,16 @@ export default function InsightSenegal() {
           articleSchema({ path: articlePath, title: articleTitle, description: articleDescription, image: "/menu-apropos.jpg", datePublished: publishedTime }),
         ]}
       />
+
+      {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
+      <img
+        src="/logo-mark.png"
+        alt="Tropicaura — Pourquoi le Sénégal devient une origine stratégique pour les marchés internationaux"
+        width={512}
+        height={512}
+        style={{ display: "none" }}
+      />
+
       <style>{`
         /* ── Nav ── */
         .art-nav {

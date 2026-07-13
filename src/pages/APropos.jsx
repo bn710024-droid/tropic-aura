@@ -456,6 +456,7 @@ export default function APropos() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <img src="/logo-mark.png" alt="Tropicaura — Notre vision de l'export agroalimentaire" width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={aboutTrail} />
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}

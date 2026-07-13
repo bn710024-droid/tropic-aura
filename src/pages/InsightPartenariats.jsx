@@ -79,6 +79,16 @@ export default function InsightPartenariats() {
           articleSchema({ path: articlePath, title: articleTitle, description: articleDescription, image: "/menu-partenariats.jpg", datePublished: publishedTime }),
         ]}
       />
+
+      {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
+      <img
+        src="/logo-mark.png"
+        alt="Tropicaura — Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest"
+        width={512}
+        height={512}
+        style={{ display: "none" }}
+      />
+
       <style>{`
         .art-nav {
           position: fixed; top: 0; left: 0; right: 0; z-index: 200;

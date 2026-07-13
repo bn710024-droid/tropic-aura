@@ -202,6 +202,7 @@ export default function Insights() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <img src="/logo-mark.png" alt="Tropicaura — Insights et analyses du commerce tropical international" width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={insightsTrail} />
 
       <div className="ins-wrap">

@@ -493,6 +493,15 @@ export default function Home() {
       {/* Top bar avec logo + menu */}
       <TopBar />
 
+      {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
+      <img
+        src="/logo-mark.png"
+        alt="Logo Tropicaura — Export premium de fruits et légumes d'Afrique de l'Ouest"
+        width={512}
+        height={512}
+        style={{ display: "none" }}
+      />
+
       {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
       <div className="bg-depth" />

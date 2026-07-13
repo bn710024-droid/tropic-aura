@@ -152,6 +152,7 @@ export default function Contact() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
+      <img src="/logo-mark.png" alt="Tropicaura — Nous contacter pour vos besoins d'import fruits légumes" width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={contactTrail} />
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}

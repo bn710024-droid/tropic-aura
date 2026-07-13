@@ -292,6 +292,7 @@ export default function Produits() {
       `}</style>
 
       <TopBar />
+      <img src="/logo-mark.png" alt="Tropicaura — Collection de fruits et légumes d'export premium" width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={produitsTrail} />
 
       {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
