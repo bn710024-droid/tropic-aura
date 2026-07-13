@@ -244,7 +244,19 @@ export default function LiquidMenu() {
       <style>{`
         @media (max-width: 820px){
           .lm-img  { display: none !important; }
-          .lm-nav  { width: 100% !important; padding: 90px clamp(28px,9vw,72px) 60px !important; align-items: flex-start !important; overflow-y: auto !important; }
+          /* justify-content: flex-start (pas center, hérité du desktop) :
+             sur mobile le contenu du menu dépasse souvent la hauteur de
+             l'écran — centré verticalement, l'excédent est coupé À LA FOIS
+             en haut ET en bas (piège flexbox classique). En alignant en
+             haut, tout le contenu reste atteignable par le scroll. */
+          .lm-nav  {
+            width: 100% !important;
+            padding: 90px clamp(28px,9vw,72px) calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+          }
           .lm-cols { flex-direction: column !important; gap: clamp(24px,4vh,38px) !important; }
         }
       `}</style>
