@@ -64,7 +64,7 @@ export const PRODUCTS = [
     num: "01",
     image: "/png/prod-mangue.png",
     description:
-      "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
+      "Cultivée sous le soleil du Sénégal, la mangue exportée par Tropicaura est sélectionnée pour sa qualité gustative, sa tenue au transport et sa conformité aux exigences des importateurs internationaux. Selon la saison, nous proposons des mangues adaptées aux différents marchés et cahiers des charges.",
     origin: "Sénégal",
     availability: "Juin – Mi-août",
     standard: "Export Premium",
@@ -213,11 +213,20 @@ export const PRODUCTS = [
 
 /** Contenu partagé, identique pour chaque page produit — évite la duplication de logique. */
 export const PRODUCT_SHARED = {
-  incoterm: "FOB (Free On Board) – Port de Dakar",
+  incoterms: ["EXW", "FOB Dakar", "CIF (selon la destination et les modalités convenues)"],
+  incotermsNote:
+    "Les conditions logistiques sont définies avec chaque partenaire afin de proposer la solution la plus adaptée au marché de destination.",
   packaging:
-    "Conditionnement réalisé en station selon les standards export : cartons calibrés par catégorie, adaptés au produit et à la destination.",
+    "Conditionnement adapté au cahier des charges du client et aux exigences du marché de destination.",
+  calibrage: "Défini conformément au cahier des charges et aux exigences commerciales du client.",
   transport:
     "Transport maritime en conteneur au départ du port de Dakar, avec gestion de la chaîne du froid pour les produits qui le nécessitent.",
+  availabilityNote:
+    "Les variétés proposées dépendent de la saison de récolte, des disponibilités et des exigences du marché de destination. Nos équipes sélectionnent la solution la plus adaptée à chaque demande.",
+  customSolutions:
+    "Chaque projet d'export présente des exigences spécifiques en matière de variété, de calibrage, de conditionnement et de logistique. Tropicaura élabore chaque offre en fonction du cahier des charges communiqué par le client afin de proposer une solution adaptée à son marché.",
+  otherMarketsNote:
+    "Nous étudions également les opportunités commerciales vers d'autres marchés en fonction des besoins de nos partenaires.",
   faq: [
     {
       q: "Quel est le volume minimum de commande (MOQ) ?",
@@ -225,7 +234,7 @@ export const PRODUCT_SHARED = {
     },
     {
       q: "Quels Incoterms proposez-vous ?",
-      a: "Nos expéditions sont organisées en FOB au départ du port de Dakar. D'autres Incoterms peuvent être étudiés selon les accords commerciaux — contactez-nous pour en discuter.",
+      a: "Nos expéditions peuvent être organisées en EXW, FOB Dakar ou CIF selon la destination et les besoins du client. Contactez notre équipe pour définir la solution logistique adaptée à votre marché.",
     },
     {
       q: "Proposez-vous des certifications qualité ?",

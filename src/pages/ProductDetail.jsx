@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -25,13 +26,38 @@ const FONT = "'Plus Jakarta Sans',sans-serif";
 export default function ProductDetail() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
+  const ctaRef = useRef(null);
 
   if (!product) return <Navigate to="/produits" replace />;
+
+  // Effet magnétique : le CTA suit légèrement le curseur (max ~10px),
+  // grossit au survol, se compresse au clic — cf. cahier des charges
+  // "attire le curseur sans distraire". Transform piloté en impératif
+  // (ref + style direct) plutôt qu'en state, même logique que LiquidMenu.
+  const handleCtaMove = (e) => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const relX = e.clientX - r.left - r.width / 2;
+    const relY = e.clientY - r.top - r.height / 2;
+    const pullX = Math.max(-10, Math.min(10, relX * 0.3));
+    const pullY = Math.max(-10, Math.min(10, relY * 0.3));
+    el.style.transform = `translate(${pullX}px, ${pullY}px) scale(1.02)`;
+  };
+  const handleCtaLeave = () => {
+    if (ctaRef.current) ctaRef.current.style.transform = "translate(0,0) scale(1)";
+  };
+  const handleCtaDown = () => {
+    if (ctaRef.current) ctaRef.current.style.transform = "translate(0,0) scale(0.95)";
+  };
+  const handleCtaUp = () => {
+    if (ctaRef.current) ctaRef.current.style.transform = "translate(0,0) scale(1.02)";
+  };
 
   const path = `/produits/${product.slug}`;
   const related = getRelatedProducts(product.slug, 3);
   const trail = buildBreadcrumbTrail(path);
-  const description = `${product.name} (${product.englishName}) — ${product.description} Origine : ${product.origin}. Disponibilité : ${product.availability}. Export ${PRODUCT_SHARED.incoterm}.`.slice(0, 300);
+  const description = `${product.name} (${product.englishName}) — ${product.description} Origine : ${product.origin}. Disponibilité : ${product.availability}. Incoterms : ${PRODUCT_SHARED.incoterms.join(", ")}.`.slice(0, 300);
 
   const specs = [
     { label: "Nom commercial", value: `${product.name} (${product.englishName})` },
@@ -39,9 +65,6 @@ export default function ProductDetail() {
     { label: "Origine", value: product.origin },
     { label: "Disponibilité", value: product.availability },
     { label: "Standard", value: product.standard },
-    { label: "Conditionnement", value: PRODUCT_SHARED.packaging },
-    { label: "Transport", value: PRODUCT_SHARED.transport },
-    { label: "Incoterm", value: PRODUCT_SHARED.incoterm },
   ];
 
   // Pas d'image OG dédiée par produit : les PNG détourés (fond transparent)
@@ -62,7 +85,7 @@ export default function ProductDetail() {
           organizationSchema(),
           webPageSchema({ path, title: product.name, description, breadcrumb: true }),
           breadcrumbListSchema(trail, path),
-          productSchema(product, PRODUCT_SHARED.incoterm),
+          productSchema(product, PRODUCT_SHARED.incoterms),
           faqPageSchema(PRODUCT_SHARED.faq),
         ]}
       />
@@ -155,10 +178,31 @@ export default function ProductDetail() {
                 {product.description}
               </p>
 
+              <style>{`
+                .cta-shine {
+                  position: absolute; top: 0; left: -60%;
+                  width: 40%; height: 100%;
+                  background: linear-gradient(120deg, transparent, rgba(201,168,76,0.45), transparent);
+                  transform: skewX(-20deg);
+                  transition: left .55s ease;
+                  pointer-events: none;
+                }
+                .cta-magnetic:hover .cta-shine { left: 140%; }
+                .cta-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+                .cta-magnetic:hover .cta-arrow { transform: translateX(5px); }
+              `}</style>
               <Link
-                to="/contact"
+                ref={ctaRef}
+                to={`/contact?product=${encodeURIComponent(product.name)}&origin=${encodeURIComponent(product.origin)}&section=form`}
                 aria-label={`Demander une offre pour ${product.name}`}
+                className="cta-magnetic"
+                onMouseMove={handleCtaMove}
+                onMouseLeave={handleCtaLeave}
+                onMouseDown={handleCtaDown}
+                onMouseUp={handleCtaUp}
                 style={{
+                  position: "relative",
+                  overflow: "hidden",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 12,
@@ -171,9 +215,12 @@ export default function ProductDetail() {
                   fontSize: 13,
                   letterSpacing: ".04em",
                   textDecoration: "none",
+                  transition: "transform .18s ease-out",
+                  willChange: "transform",
                 }}
               >
-                Demander une offre <span aria-hidden="true">→</span>
+                <span className="cta-shine" aria-hidden="true" />
+                Demander une offre <span className="cta-arrow" aria-hidden="true">→</span>
               </Link>
             </div>
           </section>
@@ -278,6 +325,192 @@ export default function ProductDetail() {
                   </li>
                 ))}
               </ul>
+              <p
+                style={{
+                  fontFamily: FONT,
+                  fontSize: 13.5,
+                  lineHeight: 1.7,
+                  color: "rgba(255,255,255,0.55)",
+                  margin: "18px 0 0",
+                  maxWidth: 620,
+                }}
+              >
+                {PRODUCT_SHARED.otherMarketsNote}
+              </p>
+            </div>
+          </section>
+
+          {/* ── Conditions commerciales & logistique ── */}
+          <section
+            aria-labelledby="commercial-heading"
+            style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}
+          >
+            <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+              <h2
+                id="commercial-heading"
+                style={{
+                  fontFamily: FONT,
+                  fontWeight: 800,
+                  fontSize: "clamp(24px,2.6vw,34px)",
+                  color: "#fff",
+                  margin: "0 0 32px",
+                  letterSpacing: "-.02em",
+                }}
+              >
+                Conditions commerciales & logistique
+              </h2>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                  gap: "32px 40px",
+                }}
+              >
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    Incoterms proposés
+                  </h3>
+                  <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                    {PRODUCT_SHARED.incoterms.map((inc) => (
+                      <li
+                        key={inc}
+                        style={{
+                          fontFamily: FONT,
+                          fontSize: 15,
+                          lineHeight: 1.7,
+                          color: "rgba(255,255,255,0.9)",
+                        }}
+                      >
+                        {inc}
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 13.5,
+                      lineHeight: 1.7,
+                      color: "rgba(255,255,255,0.55)",
+                      margin: "12px 0 0",
+                    }}
+                  >
+                    {PRODUCT_SHARED.incotermsNote}
+                  </p>
+                </div>
+
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    Calibrage
+                  </h3>
+                  <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
+                    {PRODUCT_SHARED.calibrage}
+                  </p>
+                </div>
+
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    Conditionnement
+                  </h3>
+                  <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
+                    {PRODUCT_SHARED.packaging}
+                  </p>
+                </div>
+
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    Transport
+                  </h3>
+                  <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
+                    {PRODUCT_SHARED.transport}
+                  </p>
+                </div>
+
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: FONT,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.45)",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    Disponibilité & adaptation
+                  </h3>
+                  <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
+                    {PRODUCT_SHARED.availabilityNote}
+                  </p>
+                </div>
+              </div>
+
+              {/* Solutions sur mesure */}
+              <div
+                style={{
+                  marginTop: "clamp(40px,5vh,56px)",
+                  padding: "clamp(24px,3vw,32px)",
+                  borderRadius: 16,
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: FONT,
+                    fontWeight: 800,
+                    fontSize: 16,
+                    color: "#fff",
+                    margin: "0 0 10px",
+                    letterSpacing: "-.01em",
+                  }}
+                >
+                  Solutions sur mesure
+                </h3>
+                <p style={{ fontFamily: FONT, fontSize: 14.5, lineHeight: 1.75, color: "rgba(255,255,255,0.75)", margin: 0, maxWidth: 720 }}>
+                  {PRODUCT_SHARED.customSolutions}
+                </p>
+              </div>
             </div>
           </section>
 

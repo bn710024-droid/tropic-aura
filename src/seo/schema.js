@@ -133,7 +133,7 @@ export function breadcrumbListSchema(trail, currentPath) {
 }
 
 /** Product + Offer pour une fiche produit /produits/:slug. */
-export function productSchema(product, incoterm) {
+export function productSchema(product, incoterms) {
   const url = abs(`/produits/${product.slug}`);
   return {
     "@context": "https://schema.org",
@@ -162,7 +162,7 @@ export function productSchema(product, incoterm) {
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": `${SITE_URL}/#organization` },
       eligibleRegion: EXPORT_MARKETS.map((m) => ({ "@type": "Country", name: m.country })),
-      description: incoterm,
+      description: `Incoterms disponibles : ${incoterms.join(", ")}.`,
     },
   };
 }

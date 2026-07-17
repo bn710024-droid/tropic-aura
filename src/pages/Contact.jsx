@@ -31,6 +31,16 @@ const PILIERS = [
 export default function Contact() {
   const revealRefs = useRef([]);
   const logoRef    = useRef(null);
+  const messageRef = useRef(null);
+
+  // Pré-remplissage contextuel : arrivée depuis le CTA "Demander une offre"
+  // d'une fiche produit (?product=...&origin=...) — voir ProductDetail.jsx.
+  const searchParams = new URLSearchParams(window.location.search);
+  const productParam = searchParams.get("product");
+  const originParam  = searchParams.get("origin");
+  const messagePlaceholder = productParam
+    ? `Bonjour, je souhaiterais recevoir une offre pour ${productParam}${originParam ? ` (origine : ${originParam})` : ""}. Voici les volumes recherchés…`
+    : "Parlez-nous de votre projet, de vos volumes, de vos marchés…";
 
   // collecte des éléments à révéler
   const reveal = (el) => {
@@ -72,6 +82,11 @@ export default function Contact() {
         if (!el) return;
         if (lenis) lenis.scrollTo(el, { duration: 1.2 });
         else el.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Curseur placé dans le message une fois le scroll lancé, seulement
+        // si on arrive avec un produit pré-rempli (pas de focus intrusif sinon).
+        if (productParam) {
+          setTimeout(() => messageRef.current?.focus(), 500);
+        }
       }, 80);
     }
 
@@ -267,8 +282,8 @@ export default function Contact() {
 
             <div style={{ marginTop: 26 }}>
               <label style={labelStyle} htmlFor="message">Message</label>
-              <textarea className="ct-input" id="message" name="message" rows={4} required
-                placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
+              <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
+                placeholder={messagePlaceholder}
                 style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 onFocus={onFocus} onBlur={onBlur} />
             </div>
