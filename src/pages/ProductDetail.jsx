@@ -675,7 +675,7 @@ export default function ProductDetail() {
           {/* ── Maillage interne : produits associés ── */}
           {/* Sentinelle : déclenche l'assombrissement du fond immersif (voir useEffect)
               un peu avant l'arrivée sur cette section — sensation de ressortir du fruit. */}
-          <div ref={endSentinelRef} aria-hidden="true" style={{ height: 300, marginTop: -300 }} />
+          <div ref={endSentinelRef} aria-hidden="true" style={{ height: 4 }} />
           <section
             aria-labelledby="related-heading"
             style={{
