@@ -9,10 +9,16 @@ import { getProductBySlug, getRelatedProducts, getTransportText, PRODUCT_SHARED 
 import { EXPORT_MARKETS } from "../seo/siteConfig";
 
 const FONT = "'Plus Jakarta Sans',sans-serif";
-const GOLD = "#E8C878";
+const GOLD = "#E8C878"; // couleur d'accent par défaut, produits sans thème dédié (bgImage/accentColor)
 
-// Petit repère doré devant les titres de section — guide le regard (cf. brief).
-const accentBar = { display: "inline-block", width: 26, height: 2, background: GOLD, marginRight: 14, verticalAlign: "middle", borderRadius: 2 };
+const hexToRgba = (hex, alpha) => {
+  const n = parseInt(hex.replace("#", ""), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+};
+
+// Petit repère devant les titres de section — guide le regard (cf. brief). Couleur
+// pilotée par product.accentColor (thème par produit : or/mangue, vert/avocat...).
+const accentBar = (color) => ({ display: "inline-block", width: 26, height: 2, background: color, marginRight: 14, verticalAlign: "middle", borderRadius: 2 });
 // État initial commun avant l'apparition au scroll — pas de boîte ni de flou,
 // le contenu flotte directement sur le fond, comme le hero (retour utilisateur :
 // le "bandeau" en verre cassait l'effet fluide voulu).
@@ -84,6 +90,7 @@ export default function ProductDetail() {
   };
 
   const path = `/produits/${product.slug}`;
+  const accentColor = product.accentColor || GOLD;
   const related = getRelatedProducts(product.slug, 3);
   const trail = buildBreadcrumbTrail(path);
   const description = `${product.name} (${product.englishName}) — ${product.description} Origine : ${product.origin}. Disponibilité : ${product.availability}. Incoterms : ${PRODUCT_SHARED.incoterms.join(", ")}.`.slice(0, 300);
@@ -131,8 +138,8 @@ export default function ProductDetail() {
         <div aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", background: product.bg }}>
           <style>{`
             @keyframes fruitBreathe {
-              0%, 100% { transform: scale(1); }
-              50% { transform: scale(1.03); }
+              0%, 100% { transform: scale(1) translateX(0); }
+              50% { transform: scale(1.03) translateX(-0.6%); }
             }
             .fruit-bg-img {
               width: 100%; height: 100%; object-fit: cover;
@@ -203,7 +210,7 @@ export default function ProductDetail() {
                   fontWeight: 700,
                   letterSpacing: ".30em",
                   textTransform: "uppercase",
-                  color: product.bgImage ? GOLD : "rgba(255,255,255,0.55)",
+                  color: product.bgImage ? accentColor : "rgba(255,255,255,0.55)",
                   marginBottom: 18,
                 }}
               >
@@ -219,7 +226,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.03em",
                   color: "#fff",
                   margin: "0 0 8px",
-                  textShadow: product.bgImage ? "0 8px 40px rgba(0,0,0,0.6)" : "none",
+                  textShadow: product.bgImage ? `0 8px 40px rgba(0,0,0,0.6), 0 0 46px ${hexToRgba(accentColor, 0.22)}` : "none",
                 }}
               >
                 {product.name}
@@ -253,7 +260,7 @@ export default function ProductDetail() {
                 .cta-shine {
                   position: absolute; top: 0; left: -60%;
                   width: 40%; height: 100%;
-                  background: linear-gradient(120deg, transparent, rgba(201,168,76,0.45), transparent);
+                  background: linear-gradient(120deg, transparent, ${hexToRgba(accentColor, 0.45)}, transparent);
                   transform: skewX(-20deg);
                   transition: left .55s ease;
                   pointer-events: none;
@@ -262,11 +269,11 @@ export default function ProductDetail() {
                 .cta-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
                 .cta-magnetic:hover .cta-arrow { transform: translateX(5px); }
                 .cta-magnetic {
-                  box-shadow: 0 0 0 rgba(232,140,60,0), 0 0 0 1px rgba(255,255,255,0.12);
+                  box-shadow: 0 0 0 ${hexToRgba(accentColor, 0)}, 0 0 0 1px rgba(255,255,255,0.12);
                   transition: transform .18s ease-out, box-shadow .3s ease;
                 }
                 .cta-magnetic:hover {
-                  box-shadow: 0 10px 34px rgba(232,140,60,0.32), 0 0 0 1px rgba(255,255,255,0.18);
+                  box-shadow: 0 10px 34px ${hexToRgba(accentColor, 0.32)}, 0 0 0 1px rgba(255,255,255,0.18);
                 }
               `}</style>
               <Link
@@ -316,7 +323,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
-                <span style={accentBar} aria-hidden="true" />
+                <span style={accentBar(accentColor)} aria-hidden="true" />
                 Spécifications export
               </h2>
               <dl
@@ -426,7 +433,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
-                <span style={accentBar} aria-hidden="true" />
+                <span style={accentBar(accentColor)} aria-hidden="true" />
                 Conditions commerciales & logistique
               </h2>
               <div
@@ -598,7 +605,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
-                <span style={accentBar} aria-hidden="true" />
+                <span style={accentBar(accentColor)} aria-hidden="true" />
                 Questions fréquentes
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>

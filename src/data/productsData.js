@@ -77,6 +77,9 @@ export const PRODUCTS = [
       desktop: { webp: "/images/interior/mangue-interior.webp", jpg: "/images/interior/mangue-interior.jpg" },
       mobile: { webp: "/images/interior/mangue-interior-mobile.webp", jpg: "/images/interior/mangue-interior-mobile.jpg" },
     },
+    // Teinte d'accent (signature, accents de section, glow titre/CTA) — voir
+    // hexToRgba dans ProductDetail.jsx. Or/champagne, thème Mangue.
+    accentColor: "#E8C878",
   },
   {
     slug: "avocat",
@@ -91,6 +94,12 @@ export const PRODUCTS = [
     origin: "Afrique de l'Ouest",
     availability: "Toute l'année",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/avocat-interior.webp", jpg: "/images/interior/avocat-interior.jpg" },
+      mobile: { webp: "/images/interior/avocat-interior-mobile.webp", jpg: "/images/interior/avocat-interior-mobile.jpg" },
+    },
+    // Vert doré / champagne léger — thème Avocat.
+    accentColor: "#C7D9A0",
   },
   {
     slug: "ananas",
