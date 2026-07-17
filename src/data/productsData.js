@@ -68,6 +68,15 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Juin – Mi-août",
     standard: "Export Premium",
+    // Fond immersif "à l'intérieur du fruit" — voir ProductDetail.jsx.
+    // Uniquement Mangue pour l'instant (seule photo fournie) ; les autres
+    // produits gardent leur aplat de couleur (BG_COLORS) tant qu'aucune
+    // image n'est ajoutée ici — aucun changement de code nécessaire pour
+    // les activer plus tard, juste renseigner ce champ.
+    bgImage: {
+      desktop: { webp: "/images/interior/mangue-interior.webp", jpg: "/images/interior/mangue-interior.jpg" },
+      mobile: { webp: "/images/interior/mangue-interior-mobile.webp", jpg: "/images/interior/mangue-interior-mobile.jpg" },
+    },
   },
   {
     slug: "avocat",

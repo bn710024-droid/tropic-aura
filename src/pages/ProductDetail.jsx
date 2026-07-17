@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -9,6 +9,21 @@ import { getProductBySlug, getRelatedProducts, getTransportText, PRODUCT_SHARED 
 import { EXPORT_MARKETS } from "../seo/siteConfig";
 
 const FONT = "'Plus Jakarta Sans',sans-serif";
+const GOLD = "#E8C878";
+
+// Carte "verre" partagée par toutes les sections — fond immersif ou aplat
+// de couleur, le blur fonctionne dans les deux cas (voir bgImage sur mangue).
+const glassCard = {
+  background: "rgba(10,10,10,0.32)",
+  backdropFilter: "blur(18px)",
+  WebkitBackdropFilter: "blur(18px)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  borderRadius: 22,
+};
+// Petit repère doré devant les titres de section — guide le regard (cf. brief).
+const accentBar = { display: "inline-block", width: 26, height: 2, background: GOLD, marginRight: 14, verticalAlign: "middle", borderRadius: 2 };
+// État initial commun des cartes verre avant leur apparition au scroll (voir useEffect/reveal).
+const cardReveal = { opacity: 0, transform: "translateY(24px)", filter: "blur(6px)", transition: "opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .8s ease" };
 
 // ============================================================
 //  <ProductDetail /> — page produit SEO dédiée : /produits/:slug
@@ -27,6 +42,51 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
   const ctaRef = useRef(null);
+  const revealRefs = useRef([]);
+  const endSentinelRef = useRef(null);
+  const bgOverlayRef = useRef(null);
+  const reveal = (el) => {
+    if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
+  };
+
+  // Apparition douce des cartes verre au scroll (opacity + translateY + blur),
+  // et assombrissement progressif du fond immersif à l'approche du bas de
+  // page (transition "sortie du fruit" avant "Autres produits").
+  useEffect(() => {
+    if (!product) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "translateY(0)";
+          e.target.style.filter = "blur(0)";
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    revealRefs.current.forEach((el) => el && io.observe(el));
+
+    // Assombrissement à sens unique : une fois la sentinelle franchie, le fond
+    // reste sombre (pas de toggle) — sinon il se rallume en scrollant plus loin,
+    // puisque la sentinelle n'est alors plus "intersectante".
+    let darkenIO;
+    if (endSentinelRef.current && bgOverlayRef.current) {
+      darkenIO = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting && bgOverlayRef.current) {
+              bgOverlayRef.current.style.opacity = "1";
+              darkenIO.disconnect();
+            }
+          });
+        },
+        { threshold: 0, rootMargin: "0px 0px -10% 0px" }
+      );
+      darkenIO.observe(endSentinelRef.current);
+    }
+
+    return () => { io.disconnect(); if (darkenIO) darkenIO.disconnect(); };
+  }, [product?.slug]);
 
   if (!product) return <Navigate to="/produits" replace />;
 
@@ -42,7 +102,7 @@ export default function ProductDetail() {
     const relY = e.clientY - r.top - r.height / 2;
     const pullX = Math.max(-10, Math.min(10, relX * 0.3));
     const pullY = Math.max(-10, Math.min(10, relY * 0.3));
-    el.style.transform = `translate(${pullX}px, ${pullY}px) scale(1.02)`;
+    el.style.transform = `translate(${pullX}px, ${pullY - 2}px) scale(1.02)`;
   };
   const handleCtaLeave = () => {
     if (ctaRef.current) ctaRef.current.style.transform = "translate(0,0) scale(1)";
@@ -93,7 +153,50 @@ export default function ProductDetail() {
       <TopBar />
       <Breadcrumbs trail={trail} />
 
-      <main style={{ background: product.bg, minHeight: "100vh" }}>
+      {/* ── Fond immersif "à l'intérieur du fruit" — seulement si une photo
+          existe pour ce produit (voir bgImage dans productsData.js). Couche
+          fixe (position:fixed, pas background-attachment:fixed — cassé sur
+          Safari iOS) : reste ancrée à l'écran pendant que le contenu défile
+          par-dessus, même technique que .bg-layer sur Home/Produits. ── */}
+      {product.bgImage && (
+        <div aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", background: product.bg }}>
+          <style>{`
+            @keyframes fruitBreathe {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.03); }
+            }
+            .fruit-bg-img {
+              width: 100%; height: 100%; object-fit: cover;
+              animation: fruitBreathe 28s ease-in-out infinite;
+              will-change: transform;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .fruit-bg-img { animation: none; }
+            }
+          `}</style>
+          <picture>
+            <source media="(max-width: 768px)" srcSet={product.bgImage.mobile.webp} type="image/webp" />
+            <source media="(max-width: 768px)" srcSet={product.bgImage.mobile.jpg} type="image/jpeg" />
+            <source srcSet={product.bgImage.desktop.webp} type="image/webp" />
+            <img
+              className="fruit-bg-img"
+              src={product.bgImage.desktop.jpg}
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+          {/* Assombrit la gauche pour la lisibilité du texte du hero */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, transparent 75%)" }} />
+          {/* Plus sombre en haut/bas, guide le regard vers le centre */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 35%, rgba(0,0,0,0.15) 65%, rgba(9,15,10,0.55) 100%)" }} />
+          {/* Assombrissement de sortie, activé près de "Autres produits" (voir useEffect) — sensation de ressortir du fruit */}
+          <div ref={bgOverlayRef} style={{ position: "absolute", inset: 0, background: "#090F0A", opacity: 0, transition: "opacity 1.4s ease" }} />
+        </div>
+      )}
+
+      <main style={{ background: product.bgImage ? "transparent" : product.bg, minHeight: "100vh", position: "relative", zIndex: 1 }}>
         <article>
           {/* ── Hero produit ── */}
           <section
@@ -124,7 +227,7 @@ export default function ProductDetail() {
               />
             </div>
 
-            <div style={{ flex: "1 1 420px", minWidth: 0 }}>
+            <div style={{ flex: "1 1 420px", minWidth: 0, maxWidth: 680 }}>
               <span
                 style={{
                   display: "block",
@@ -133,7 +236,7 @@ export default function ProductDetail() {
                   fontWeight: 700,
                   letterSpacing: ".30em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.55)",
+                  color: product.bgImage ? GOLD : "rgba(255,255,255,0.55)",
                   marginBottom: 18,
                 }}
               >
@@ -144,11 +247,12 @@ export default function ProductDetail() {
                 style={{
                   fontFamily: FONT,
                   fontWeight: 800,
-                  fontSize: "clamp(36px,5vw,64px)",
+                  fontSize: product.bgImage ? "clamp(40px,6.2vw,78px)" : "clamp(36px,5vw,64px)",
                   lineHeight: 1.04,
                   letterSpacing: "-.03em",
                   color: "#fff",
                   margin: "0 0 8px",
+                  textShadow: product.bgImage ? "0 8px 40px rgba(0,0,0,0.6)" : "none",
                 }}
               >
                 {product.name}
@@ -190,6 +294,13 @@ export default function ProductDetail() {
                 .cta-magnetic:hover .cta-shine { left: 140%; }
                 .cta-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
                 .cta-magnetic:hover .cta-arrow { transform: translateX(5px); }
+                .cta-magnetic {
+                  box-shadow: 0 0 0 rgba(232,140,60,0), 0 0 0 1px rgba(255,255,255,0.12);
+                  transition: transform .18s ease-out, box-shadow .3s ease;
+                }
+                .cta-magnetic:hover {
+                  box-shadow: 0 10px 34px rgba(232,140,60,0.32), 0 0 0 1px rgba(255,255,255,0.18);
+                }
               `}</style>
               <Link
                 ref={ctaRef}
@@ -206,8 +317,8 @@ export default function ProductDetail() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 12,
-                  background: "#fff",
-                  color: "#0B1310",
+                  background: "#0B0B0A",
+                  color: "#fff",
                   borderRadius: 100,
                   padding: "15px 30px",
                   fontFamily: FONT,
@@ -215,7 +326,6 @@ export default function ProductDetail() {
                   fontSize: 13,
                   letterSpacing: ".04em",
                   textDecoration: "none",
-                  transition: "transform .18s ease-out",
                   willChange: "transform",
                 }}
               >
@@ -226,14 +336,8 @@ export default function ProductDetail() {
           </section>
 
           {/* ── Spécifications ── */}
-          <section
-            aria-labelledby="specs-heading"
-            style={{
-              background: "rgba(0,0,0,0.22)",
-              padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)",
-            }}
-          >
-            <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <section aria-labelledby="specs-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
+            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 1000, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
               <h2
                 id="specs-heading"
                 style={{
@@ -245,6 +349,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
+                <span style={accentBar} aria-hidden="true" />
                 Spécifications export
               </h2>
               <dl
@@ -341,11 +446,8 @@ export default function ProductDetail() {
           </section>
 
           {/* ── Conditions commerciales & logistique ── */}
-          <section
-            aria-labelledby="commercial-heading"
-            style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}
-          >
-            <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <section aria-labelledby="commercial-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
+            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 1000, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
               <h2
                 id="commercial-heading"
                 style={{
@@ -357,6 +459,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
+                <span style={accentBar} aria-hidden="true" />
                 Conditions commerciales & logistique
               </h2>
               <div
@@ -515,11 +618,8 @@ export default function ProductDetail() {
           </section>
 
           {/* ── FAQ ── */}
-          <section
-            aria-labelledby="faq-heading"
-            style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}
-          >
-            <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <section aria-labelledby="faq-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
+            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 800, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
               <h2
                 id="faq-heading"
                 style={{
@@ -531,6 +631,7 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
+                <span style={accentBar} aria-hidden="true" />
                 Questions fréquentes
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -572,10 +673,13 @@ export default function ProductDetail() {
           </section>
 
           {/* ── Maillage interne : produits associés ── */}
+          {/* Sentinelle : déclenche l'assombrissement du fond immersif (voir useEffect)
+              un peu avant l'arrivée sur cette section — sensation de ressortir du fruit. */}
+          <div ref={endSentinelRef} aria-hidden="true" style={{ height: 300, marginTop: -300 }} />
           <section
             aria-labelledby="related-heading"
             style={{
-              background: "rgba(0,0,0,0.22)",
+              background: product.bgImage ? "#090F0A" : "rgba(0,0,0,0.22)",
               padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)",
             }}
           >
