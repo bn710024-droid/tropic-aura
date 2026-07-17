@@ -151,7 +151,7 @@ export default function Contact() {
         keywords={["contact export fruits", "devis import fruits Afrique", "fournisseur Sénégal contact"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/contact", title: "Contact", description: contactDescription, breadcrumb: true }),
+          webPageSchema({ path: "/contact", title: "Contact", description: contactDescription, breadcrumb: true, pageType: "ContactPage" }),
           breadcrumbListSchema(contactTrail, "/contact"),
         ]}
       />

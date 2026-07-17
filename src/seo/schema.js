@@ -101,11 +101,11 @@ export function websiteSchema() {
  * WebPage générique — à combiner avec BreadcrumbList et, le cas
  * échéant, le schema spécifique de la page (Product, Article...).
  */
-export function webPageSchema({ path, title, description, breadcrumb }) {
+export function webPageSchema({ path, title, description, breadcrumb, pageType }) {
   const url = abs(path);
   return {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": pageType ? ["WebPage", pageType] : "WebPage",
     "@id": `${url}#webpage`,
     url,
     name: title,

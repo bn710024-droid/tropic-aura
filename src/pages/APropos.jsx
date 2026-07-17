@@ -385,7 +385,7 @@ export default function APropos() {
         keywords={["export Afrique de l'Ouest", "traçabilité export", "réseau producteurs Sénégal", "entreprise export B2B"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/about", title: "À Propos", description: aboutDescription, breadcrumb: true }),
+          webPageSchema({ path: "/about", title: "À Propos", description: aboutDescription, breadcrumb: true, pageType: "AboutPage" }),
           breadcrumbListSchema(aboutTrail, "/about"),
         ]}
       />

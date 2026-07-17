@@ -1,0 +1,52 @@
+# Tropicaura
+
+> Tropicaura B.C. is a B2B exporter of premium tropical fruits and vegetables from West Africa (Senegal), connecting orchards and farms to international importers, distributors, and retail buyers in Europe, North America, and the Middle East.
+
+## Company
+
+- Legal name: Tropicaura B.C.
+- Based in: Dakar, Senegal
+- Business model: B2B export (not a consumer/retail store — no online purchase, offers are quoted per request)
+- Contact: contact@tropic-aura.com
+- Export markets: Netherlands, Belgium, France, Spain, United Kingdom, Canada, United States, United Arab Emirates
+- Incoterms offered: EXW, FOB Dakar, CIF (terms confirmed per shipment with each client)
+
+## Pages
+
+- [Home](https://www.tropic-aura.com/): Company overview — origins, products, partnerships, vision, contact.
+- [About](https://www.tropic-aura.com/about): Company vision, history, and international network.
+- [Products](https://www.tropic-aura.com/produits): Full product collection, organized by Signature / Season / Specialty.
+- [Partnerships](https://www.tropic-aura.com/partenariats): B2B partnership approach and process for prospective importers/distributors.
+- [Insights](https://www.tropic-aura.com/insights): Articles on West African sourcing and supplier reliability.
+- [Contact](https://www.tropic-aura.com/contact): Contact form and direct coordinates to request an offer.
+
+## Product catalog
+
+Each product has a dedicated page with full specifications (origin, seasonal availability, packaging, transport, Incoterms, FAQ):
+
+**Signature**
+- [Mangue Kent / Kent Mango](https://www.tropic-aura.com/produits/mangue)
+- [Avocat / Avocado](https://www.tropic-aura.com/produits/avocat)
+- [Ananas / Pineapple](https://www.tropic-aura.com/produits/ananas)
+- [Papaye / Papaya](https://www.tropic-aura.com/produits/papaye)
+- [Banane / Banana](https://www.tropic-aura.com/produits/banane)
+
+**Season**
+- [Melon](https://www.tropic-aura.com/produits/melon)
+- [Pastèque / Watermelon](https://www.tropic-aura.com/produits/pasteque)
+- [Citron vert / Lime](https://www.tropic-aura.com/produits/citron-vert)
+- [Citron jaune / Lemon](https://www.tropic-aura.com/produits/citron-jaune)
+
+**Specialty**
+- [Gombo / Okra](https://www.tropic-aura.com/produits/gombo)
+- [Piments / Chili Peppers](https://www.tropic-aura.com/produits/piment)
+
+## How to request a quote
+
+Prospective buyers can request an offer via the [Contact page](https://www.tropic-aura.com/contact) or directly from any product page ("Demander une offre"). There is no public pricing — Tropicaura quotes per shipment based on volume, destination, and Incoterm.
+
+## Notes for AI agents and crawlers
+
+- All content on this site is in French. Page metadata (title, description) is available per-page and accurately reflects page content.
+- Structured data (schema.org JSON-LD: Organization, Product, FAQPage, BreadcrumbList, Article) is present on every page for machine-readable extraction.
+- This file lists only real, published information. No prices, certifications, or reviews are claimed unless verifiable on the corresponding page.
