@@ -251,6 +251,15 @@ const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
 const OFFSETS = [];
 SECTIONS.reduce((acc, s, i) => { OFFSETS[i] = acc; return acc + s.items.length; }, 0);
 
+// Mémoire de scroll (voir Produits.jsx pour le même principe) : reprendre où
+// l'utilisateur s'était arrêté au retour sur l'accueil. Particularité ici :
+// handleCtaClick quitte la page via window.location.href (rechargement
+// complet, pas une navigation React Router) — le cleanup de useEffect ne se
+// déclenche donc JAMAIS à la sortie. On sauvegarde plutôt sur 'pagehide',
+// seul événement fiable qui survit à un rechargement complet ou une fermeture
+// d'onglet (contrairement à 'beforeunload', déconseillé et parfois bloqué).
+const SCROLL_MEMORY_KEY = "scrollpos:/";
+
 export default function Home() {
   const bgRef = useRef(null);
   const scenesRef = useRef([]);
@@ -418,8 +427,21 @@ export default function Home() {
     };
     const wrapperEl = wrapperRef.current;
 
-    // 1er rendu forcé (mobile + desktop) : couleur de fond + transforms initiaux.
-    update(0, secH);
+    const savePosition = () => sessionStorage.setItem(SCROLL_MEMORY_KEY, String(readScroll()));
+
+    // Restauration : reprend la position quittée si elle existe (voir
+    // Produits.jsx pour le même principe — ici en plus mobile-wrapper-aware).
+    const savedY = Number(sessionStorage.getItem(SCROLL_MEMORY_KEY));
+    if (savedY > 0) {
+      if (lenis) lenis.scrollTo(savedY, { immediate: true });
+      else if (wrapperEl) wrapperEl.scrollTop = savedY;
+      else window.scrollTo(0, savedY);
+      lastScroll = savedY;
+      update(savedY, secH);
+    } else {
+      // 1er rendu forcé (mobile + desktop) : couleur de fond + transforms initiaux.
+      update(0, secH);
+    }
 
     if (lenis) {
       rafId = requestAnimationFrame(raf);                 // desktop : boucle rAF
@@ -427,11 +449,18 @@ export default function Home() {
       wrapperEl.addEventListener('scroll', onNativeScrollUpdate, { passive: true }); // mobile
     }
 
+    // 'pagehide' plutôt que 'beforeunload' : seul événement fiable qui se
+    // déclenche à la fois sur rechargement complet (handleCtaClick) ET sur
+    // fermeture d'onglet, sans bloquer le bfcache ni la navigation.
+    window.addEventListener('pagehide', savePosition);
+
     return () => {
       cancelAnimationFrame(rafId);
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener('pagehide', savePosition);
       if (wrapperEl) wrapperEl.removeEventListener('scroll', onNativeScrollUpdate);
+      savePosition();
       if (lenis) lenis.destroy();
     };
   }, []);
