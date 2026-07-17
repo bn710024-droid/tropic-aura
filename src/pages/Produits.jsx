@@ -291,6 +291,20 @@ export default function Produits() {
         .prod-row { display:flex; align-items:center; gap:clamp(24px,5vw,80px); width:100%; max-width:1280px; padding:0 clamp(28px,7vw,110px); }
         .prod-photo { width:46%; height:72vh; max-height:720px; flex-shrink:0; position:relative; display:flex; align-items:center; justify-content:center; overflow:visible; }
         .prod-name  { font-size: clamp(34px, 4.4vw, 68px); }
+        .prod-more {
+          display: inline-flex; align-items: center; gap: 10px;
+          margin-top: 28px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 11px; font-weight: 700; letter-spacing: .16em;
+          text-transform: uppercase; color: rgba(255,255,255,0.6);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(255,255,255,0.28);
+          padding-bottom: 7px;
+          transition: color .25s ease, border-color .25s ease;
+        }
+        .prod-more:hover { color: #fff; border-color: rgba(255,255,255,0.75); }
+        .prod-more-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+        .prod-more:hover .prod-more-arrow { transform: translateX(5px); }
         @media (max-width: 820px){
           .prod-row   { flex-direction: column !important; gap: 18px !important; padding: 96px clamp(22px,7vw,40px) 60px !important; justify-content:center !important; }
           /* Image en dvh (pas vh) : la section fait 100dvh (zone visible réelle),
@@ -478,14 +492,9 @@ export default function Produits() {
                 <Link
                   to={`/produits/${s.id}`}
                   aria-label={`Voir la fiche complète de ${s.name}`}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    marginTop: 28, fontFamily: "'Plus Jakarta Sans',sans-serif",
-                    fontSize: 13, fontWeight: 700, letterSpacing: ".04em",
-                    color: "#fff", textDecoration: "underline", textUnderlineOffset: 4,
-                  }}
+                  className="prod-more"
                 >
-                  En savoir plus <span aria-hidden="true">→</span>
+                  En savoir plus <span className="prod-more-arrow" aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>
