@@ -219,8 +219,13 @@ export const PRODUCT_SHARED = {
   packaging:
     "Conditionnement adapté au cahier des charges du client et aux exigences du marché de destination.",
   calibrage: "Défini conformément au cahier des charges et aux exigences commerciales du client.",
-  transport:
-    "Transport maritime en conteneur au départ du port de Dakar, avec gestion de la chaîne du froid pour les produits qui le nécessitent.",
+  // Deux variantes selon l'origine du produit (cf. getTransportText ci-dessous) :
+  // les produits sénégalais partent tous du même port (Dakar), les produits
+  // sourcés ailleurs en Afrique de l'Ouest/tropicale n'ont pas de port unique.
+  transportSenegal:
+    "Expédition maritime au départ du Port de Dakar (Sénégal) avec une gestion rigoureuse de la chaîne du froid pour les produits qui le nécessitent. Pour les expéditions urgentes, les produits premium ou les demandes spécifiques, des solutions de transport aérien peuvent également être organisées selon les besoins du client.",
+  transportOtherAfrica:
+    "Les expéditions sont organisées depuis le port d'origine le plus adapté, en fonction du pays de production et des contraintes logistiques. Pour les produits premium, les commandes urgentes ou les cahiers des charges spécifiques, des solutions de transport aérien peuvent également être proposées sur demande.",
   availabilityNote:
     "Les variétés proposées dépendent de la saison de récolte, des disponibilités et des exigences du marché de destination. Nos équipes sélectionnent la solution la plus adaptée à chaque demande.",
   customSolutions:
@@ -246,6 +251,11 @@ export const PRODUCT_SHARED = {
     },
   ],
 };
+
+/** Texte transport adapté à l'origine du produit — voir transportSenegal/transportOtherAfrica dans PRODUCT_SHARED. */
+export function getTransportText(product) {
+  return product.origin === "Sénégal" ? PRODUCT_SHARED.transportSenegal : PRODUCT_SHARED.transportOtherAfrica;
+}
 
 export function getProductBySlug(slug) {
   const product = PRODUCTS.find((p) => p.slug === slug);

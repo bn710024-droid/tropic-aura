@@ -5,7 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, productSchema, faqPageSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
-import { getProductBySlug, getRelatedProducts, PRODUCT_SHARED } from "../data/productsData";
+import { getProductBySlug, getRelatedProducts, getTransportText, PRODUCT_SHARED } from "../data/productsData";
 import { EXPORT_MARKETS } from "../seo/siteConfig";
 
 const FONT = "'Plus Jakarta Sans',sans-serif";
@@ -461,7 +461,7 @@ export default function ProductDetail() {
                     Transport
                   </h3>
                   <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-                    {PRODUCT_SHARED.transport}
+                    {getTransportText(product)}
                   </p>
                 </div>
 
