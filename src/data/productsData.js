@@ -174,6 +174,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Janvier – Fin avril",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/melon-interior.webp", jpg: "/images/interior/melon-interior.jpg" },
+      mobile: { webp: "/images/interior/melon-interior-mobile.webp", jpg: "/images/interior/melon-interior-mobile.jpg" },
+    },
+    // Orangé doré — thème Melon.
+    accentColor: "#F2B45E",
   },
   {
     slug: "pasteque",
@@ -188,6 +194,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Janvier – Fin avril",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/pasteque-interior.webp", jpg: "/images/interior/pasteque-interior.jpg" },
+      mobile: { webp: "/images/interior/pasteque-interior-mobile.webp", jpg: "/images/interior/pasteque-interior-mobile.jpg" },
+    },
+    // Rose corail vif — thème Pastèque.
+    accentColor: "#EF9090",
   },
   {
     slug: "citron-vert",
@@ -202,6 +214,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Toute l'année (Pic : Septembre – Décembre)",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/citron-vert-interior.webp", jpg: "/images/interior/citron-vert-interior.jpg" },
+      mobile: { webp: "/images/interior/citron-vert-interior-mobile.webp", jpg: "/images/interior/citron-vert-interior-mobile.jpg" },
+    },
+    // Vert citron vif — thème Citron vert.
+    accentColor: "#C8E080",
   },
   {
     slug: "citron-jaune",
@@ -216,6 +234,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Toute l'année (Pic : Septembre – Décembre)",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/citron-jaune-interior.webp", jpg: "/images/interior/citron-jaune-interior.jpg" },
+      mobile: { webp: "/images/interior/citron-jaune-interior-mobile.webp", jpg: "/images/interior/citron-jaune-interior-mobile.jpg" },
+    },
+    // Jaune citron éclatant — thème Citron jaune.
+    accentColor: "#F5E08A",
   },
   {
     slug: "gombo",
