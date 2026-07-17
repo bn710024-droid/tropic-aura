@@ -7,7 +7,6 @@
  * Or uses the PRERENDER_URL environment variable if provided
  */
 
-import puppeteer from 'puppeteer'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -21,6 +20,34 @@ const distDir = path.join(projectRoot, 'dist')
 const BASE_URL = process.env.PRERENDER_URL || 'http://localhost:4173'
 const HYDRATION_WAIT = 4000 // ms - Increased to allow React full hydration + animation setup
 const NAVIGATION_TIMEOUT = 30000 // ms
+
+// Le Chromium embarqué de `puppeteer` échoue au lancement dans le sandbox
+// de build Vercel (libnspr4.so manquant — cf. incident du 2026-07-17).
+// Sur Vercel (process.env.VERCEL défini automatiquement), on bascule vers
+// @sparticuz/chromium + puppeteer-core, un binaire compilé pour tourner
+// dans ces environnements contraints. En local, `puppeteer` classique
+// reste utilisé (déjà validé, aucun changement de comportement).
+async function launchBrowser() {
+  if (process.env.VERCEL) {
+    const [{ default: chromium }, { default: puppeteerCore }] = await Promise.all([
+      import('@sparticuz/chromium'),
+      import('puppeteer-core'),
+    ])
+    return puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      timeout: NAVIGATION_TIMEOUT,
+    })
+  }
+  const { default: puppeteer } = await import('puppeteer')
+  return puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    timeout: NAVIGATION_TIMEOUT,
+  })
+}
 
 async function prerender() {
   console.log('\n🚀 PRERENDER FOR BUILD: Generate static HTML')
@@ -36,11 +63,7 @@ async function prerender() {
   try {
     // Launch browser
     console.log('🚀 Launching Puppeteer browser...')
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      timeout: NAVIGATION_TIMEOUT
-    })
+    browser = await launchBrowser()
     console.log('✅ Browser launched\n')
 
     // Process each route
