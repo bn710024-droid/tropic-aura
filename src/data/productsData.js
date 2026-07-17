@@ -120,6 +120,9 @@ export const PRODUCTS = [
     },
     // Jaune doré intense — thème Ananas.
     accentColor: "#F0C556",
+    // Photo naturellement très claire (peu de zones sombres) — overlay renforcé
+    // pour garder le texte lisible. Voir bgOverlayIntensity dans ProductDetail.jsx.
+    bgOverlayIntensity: 1.35,
   },
   {
     slug: "papaye",
@@ -178,8 +181,8 @@ export const PRODUCTS = [
       desktop: { webp: "/images/interior/melon-interior.webp", jpg: "/images/interior/melon-interior.jpg" },
       mobile: { webp: "/images/interior/melon-interior-mobile.webp", jpg: "/images/interior/melon-interior-mobile.jpg" },
     },
-    // Orangé doré — thème Melon.
-    accentColor: "#F2B45E",
+    // Sable doré, plus discret que l'ananas — thème Melon.
+    accentColor: "#E0B878",
   },
   {
     slug: "pasteque",
@@ -220,6 +223,8 @@ export const PRODUCTS = [
     },
     // Vert citron vif — thème Citron vert.
     accentColor: "#C8E080",
+    // Photo très lumineuse — overlay renforcé.
+    bgOverlayIntensity: 1.3,
   },
   {
     slug: "citron-jaune",
@@ -240,6 +245,8 @@ export const PRODUCTS = [
     },
     // Jaune citron éclatant — thème Citron jaune.
     accentColor: "#F5E08A",
+    // Photo très lumineuse — overlay renforcé.
+    bgOverlayIntensity: 1.3,
   },
   {
     slug: "gombo",
@@ -260,6 +267,8 @@ export const PRODUCTS = [
     },
     // Vert frais — thème Gombo.
     accentColor: "#A8D08A",
+    // Photo déjà naturellement sombre à droite — overlay allégé.
+    bgOverlayIntensity: 0.85,
   },
   {
     slug: "piment",
@@ -278,8 +287,10 @@ export const PRODUCTS = [
       desktop: { webp: "/images/interior/piment-interior.webp", jpg: "/images/interior/piment-interior.jpg" },
       mobile: { webp: "/images/interior/piment-interior-mobile.webp", jpg: "/images/interior/piment-interior-mobile.jpg" },
     },
-    // Rouge-orangé épicé — thème Piments.
-    accentColor: "#E8896A",
+    // Rouge paprika profond — thème Piments.
+    accentColor: "#D9633F",
+    // Photo déjà naturellement sombre à droite — overlay allégé.
+    bgOverlayIntensity: 0.85,
   },
 ];
 

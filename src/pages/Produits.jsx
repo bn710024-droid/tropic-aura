@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -118,12 +118,29 @@ const SCROLL_MEMORY_KEY = "scrollpos:/produits";
 
 // ============================================================
 export default function Produits() {
+  const navigate    = useNavigate();
   const bgRef       = useRef(null);
   const contentRefs = useRef([]);
+  const photoRefs   = useRef([]);  // .prod-photo par section — point de départ du morph "En savoir plus"
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
   const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
   const revealed    = useRef(new Set());  // sections déjà révélées → on ne les ré-anime plus (anti-scintillement au scroll-haut)
+  const [morphTarget, setMorphTarget] = useState(null);
+
+  // "Entrer dans le fruit" : au clic sur En savoir plus, l'image du produit
+  // grossit en un voile plein écran (couleur de fond du produit) avant la
+  // navigation — même mécanisme que le CTA de Home.jsx (.cta-morph), réutilisé
+  // tel quel plutôt que ré-inventé. prefers-reduced-motion : nav immédiate.
+  const handleMoreClick = (e, i, href) => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // laisse le <Link> naviguer normalement
+    e.preventDefault();
+    const photoEl = photoRefs.current[i];
+    const rect = (photoEl || e.currentTarget).getBoundingClientRect();
+    setMorphTarget({ top: rect.top, left: rect.left, width: rect.width, height: rect.height, color: SECTIONS[i].bg });
+    setTimeout(() => navigate(href), 500);
+  };
 
   useEffect(() => {
     // Lenis (smooth-scroll) DESKTOP UNIQUEMENT. Sur mobile tactile, Lenis fait
@@ -443,7 +460,7 @@ export default function Produits() {
               style={{ opacity: i === 0 ? 1 : 0, transform: "translateY(30px)", flexDirection: isRight ? "row-reverse" : "row" }}
             >
               {/* Fruit détouré flottant (dépasse du cadre, ombre douce) */}
-              <div className="prod-photo">
+              <div className="prod-photo" ref={(el) => (photoRefs.current[i] = el)}>
                 {/* Halo lumineux (couleur du fond photo) → masque le halo de détourage */}
                 {s.glow && (
                   <div aria-hidden="true" style={{
@@ -488,11 +505,14 @@ export default function Produits() {
                   ))}
                 </div>
 
-                {/* Maillage interne : fiche produit SEO dédiée (/produits/:slug) */}
+                {/* Maillage interne : fiche produit SEO dédiée (/produits/:slug).
+                    onClick joue le morph puis navigue — le <a href> reste intact
+                    (React Router Link), aucun impact sur le crawl/SEO. */}
                 <Link
                   to={`/produits/${s.id}`}
                   aria-label={`Voir la fiche complète de ${s.name}`}
                   className="prod-more"
+                  onClick={(e) => handleMoreClick(e, i, `/produits/${s.id}`)}
                 >
                   En savoir plus <span className="prod-more-arrow" aria-hidden="true">→</span>
                 </Link>
@@ -501,6 +521,20 @@ export default function Produits() {
           </section>
         );
       })}
+
+      {/* Voile de morph "En savoir plus" — même mécanisme que le CTA de Home.jsx */}
+      {morphTarget && (
+        <div
+          className="cta-morph"
+          style={{
+            top: morphTarget.top,
+            left: morphTarget.left,
+            width: morphTarget.width,
+            height: morphTarget.height,
+            backgroundColor: morphTarget.color,
+          }}
+        />
+      )}
     </>
   );
 }

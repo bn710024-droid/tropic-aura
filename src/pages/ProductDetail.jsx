@@ -91,6 +91,11 @@ export default function ProductDetail() {
 
   const path = `/produits/${product.slug}`;
   const accentColor = product.accentColor || GOLD;
+  // Multiplicateur d'opacité des overlays, réglé par photo : les fonds très
+  // clairs (agrumes, ananas) ont besoin de plus de contraste, ceux déjà
+  // sombres du bon côté (gombo, piment) un peu moins. Voir productsData.js.
+  const overlayIntensity = product.bgOverlayIntensity || 1;
+  const ov = (base) => Math.min(0.92, base * overlayIntensity);
   const related = getRelatedProducts(product.slug, 3);
   const trail = buildBreadcrumbTrail(path);
   const description = `${product.name} (${product.englishName}) — ${product.description} Origine : ${product.origin}. Disponibilité : ${product.availability}. Incoterms : ${PRODUCT_SHARED.incoterms.join(", ")}.`.slice(0, 300);
@@ -138,8 +143,8 @@ export default function ProductDetail() {
         <div aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", background: product.bg }}>
           <style>{`
             @keyframes fruitBreathe {
-              0%, 100% { transform: scale(1) translateX(0); }
-              50% { transform: scale(1.03) translateX(-0.6%); }
+              0%, 100% { transform: scale(1) translate(0, 0); }
+              50% { transform: scale(1.03) translate(-1%, 0.5%); }
             }
             .fruit-bg-img {
               width: 100%; height: 100%; object-fit: cover;
@@ -163,10 +168,12 @@ export default function ProductDetail() {
               decoding="async"
             />
           </picture>
-          {/* Assombrit la gauche pour la lisibilité du texte du hero */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, transparent 75%)" }} />
+          {/* Assombrit la DROITE — c'est là que le texte du hero est réellement
+              positionné (colonne texte après la colonne image, voir plus bas) ;
+              l'ancienne version assombrissait la gauche par erreur. */}
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(270deg, rgba(0,0,0,${ov(0.74)}) 0%, rgba(0,0,0,${ov(0.38)}) 45%, transparent 75%)` }} />
           {/* Plus sombre en haut/bas, guide le regard vers le centre */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 35%, rgba(0,0,0,0.15) 65%, rgba(9,15,10,0.55) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, rgba(0,0,0,${ov(0.55)}) 0%, rgba(0,0,0,${ov(0.12)}) 35%, rgba(0,0,0,${ov(0.15)}) 65%, rgba(9,15,10,${ov(0.55)}) 100%)` }} />
         </div>
       )}
 
