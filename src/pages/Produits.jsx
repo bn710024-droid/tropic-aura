@@ -110,6 +110,12 @@ const hexToRgb = (h) => {
 };
 const COLORS = SECTIONS.map((s) => hexToRgb(s.bg));
 
+// Mémoire de scroll : conserve la position quittée pour qu'un retour depuis
+// une fiche produit (« En savoir plus » → retour) reprenne où l'utilisateur
+// s'était arrêté, plutôt que de repartir du hero. sessionStorage plutôt qu'un
+// state React : survit au démontage complet du composant entre deux visites.
+const SCROLL_MEMORY_KEY = "scrollpos:/produits";
+
 // ============================================================
 export default function Produits() {
   const bgRef       = useRef(null);
@@ -215,13 +221,25 @@ export default function Produits() {
     };
     if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
 
-    update(0, secH);
+    // Restauration : priorité au saut ?section=<slug> explicite (lien de menu),
+    // sinon on reprend la position quittée si elle existe.
+    const hasSectionParam = new URLSearchParams(window.location.search).has("section");
+    const savedY = !hasSectionParam ? Number(sessionStorage.getItem(SCROLL_MEMORY_KEY)) : 0;
+    if (savedY > 0) {
+      if (lenis) lenis.scrollTo(savedY, { immediate: true });
+      else window.scrollTo(0, savedY);
+      lastScroll = savedY;
+      update(savedY, secH);
+    } else {
+      update(0, secH);
+    }
     rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
       window.removeEventListener('scroll', onNativeScroll);
+      sessionStorage.setItem(SCROLL_MEMORY_KEY, String(readScroll()));
       if (lenis) lenis.destroy();
     };
   }, []);

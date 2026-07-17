@@ -29,9 +29,13 @@ export default function App() {
   const location = useLocation();
   const path = location.pathname;
 
-  // Auto-scroll vers le haut à chaque changement de route
+  // Auto-scroll vers le haut à chaque changement de route — SAUF si la page
+  // cible a mémorisé sa propre position de scroll (voir Produits.jsx), auquel
+  // cas on la laisse la restaurer elle-même plutôt que de forcer 0 et
+  // provoquer un flash (reset puis re-saut à la position mémorisée).
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const hasMemory = sessionStorage.getItem(`scrollpos:${location.pathname}`) !== null;
+    if (!hasMemory) window.scrollTo(0, 0);
   }, [location.pathname]);
 
   const isArticle = path.startsWith("/insights/") && path !== "/insights";
