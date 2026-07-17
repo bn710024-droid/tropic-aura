@@ -154,6 +154,12 @@ export const PRODUCTS = [
     origin: "Afrique tropicale",
     availability: "Toute l'année",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/banane-interior.webp", jpg: "/images/interior/banane-interior.jpg" },
+      mobile: { webp: "/images/interior/banane-interior-mobile.webp", jpg: "/images/interior/banane-interior-mobile.jpg" },
+    },
+    // Jaune crème doux — thème Banane.
+    accentColor: "#EEDDA0",
   },
   {
     slug: "melon",
