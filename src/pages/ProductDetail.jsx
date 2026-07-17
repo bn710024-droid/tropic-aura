@@ -11,19 +11,12 @@ import { EXPORT_MARKETS } from "../seo/siteConfig";
 const FONT = "'Plus Jakarta Sans',sans-serif";
 const GOLD = "#E8C878";
 
-// Carte "verre" partagée par toutes les sections — fond immersif ou aplat
-// de couleur, le blur fonctionne dans les deux cas (voir bgImage sur mangue).
-const glassCard = {
-  background: "rgba(10,10,10,0.32)",
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  border: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: 22,
-};
 // Petit repère doré devant les titres de section — guide le regard (cf. brief).
 const accentBar = { display: "inline-block", width: 26, height: 2, background: GOLD, marginRight: 14, verticalAlign: "middle", borderRadius: 2 };
-// État initial commun des cartes verre avant leur apparition au scroll (voir useEffect/reveal).
-const cardReveal = { opacity: 0, transform: "translateY(24px)", filter: "blur(6px)", transition: "opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .8s ease" };
+// État initial commun avant l'apparition au scroll — pas de boîte ni de flou,
+// le contenu flotte directement sur le fond, comme le hero (retour utilisateur :
+// le "bandeau" en verre cassait l'effet fluide voulu).
+const sectionReveal = { opacity: 0, transform: "translateY(24px)", transition: "opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1)" };
 
 // ============================================================
 //  <ProductDetail /> — page produit SEO dédiée : /produits/:slug
@@ -43,15 +36,12 @@ export default function ProductDetail() {
   const product = getProductBySlug(slug);
   const ctaRef = useRef(null);
   const revealRefs = useRef([]);
-  const endSentinelRef = useRef(null);
-  const bgOverlayRef = useRef(null);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
   };
 
-  // Apparition douce des cartes verre au scroll (opacity + translateY + blur),
-  // et assombrissement progressif du fond immersif à l'approche du bas de
-  // page (transition "sortie du fruit" avant "Autres produits").
+  // Apparition douce des sections au scroll (opacity + translateY, sans boîte
+  // ni flou — le contenu flotte directement sur le fond, comme le hero).
   useEffect(() => {
     if (!product) return;
     const io = new IntersectionObserver((entries) => {
@@ -59,33 +49,12 @@ export default function ProductDetail() {
         if (e.isIntersecting) {
           e.target.style.opacity = "1";
           e.target.style.transform = "translateY(0)";
-          e.target.style.filter = "blur(0)";
           io.unobserve(e.target);
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
     revealRefs.current.forEach((el) => el && io.observe(el));
-
-    // Assombrissement à sens unique : une fois la sentinelle franchie, le fond
-    // reste sombre (pas de toggle) — sinon il se rallume en scrollant plus loin,
-    // puisque la sentinelle n'est alors plus "intersectante".
-    let darkenIO;
-    if (endSentinelRef.current && bgOverlayRef.current) {
-      darkenIO = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting && bgOverlayRef.current) {
-              bgOverlayRef.current.style.opacity = "1";
-              darkenIO.disconnect();
-            }
-          });
-        },
-        { threshold: 0, rootMargin: "0px 0px -10% 0px" }
-      );
-      darkenIO.observe(endSentinelRef.current);
-    }
-
-    return () => { io.disconnect(); if (darkenIO) darkenIO.disconnect(); };
+    return () => io.disconnect();
   }, [product?.slug]);
 
   if (!product) return <Navigate to="/produits" replace />;
@@ -191,8 +160,6 @@ export default function ProductDetail() {
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, transparent 75%)" }} />
           {/* Plus sombre en haut/bas, guide le regard vers le centre */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 35%, rgba(0,0,0,0.15) 65%, rgba(9,15,10,0.55) 100%)" }} />
-          {/* Assombrissement de sortie, activé près de "Autres produits" (voir useEffect) — sensation de ressortir du fruit */}
-          <div ref={bgOverlayRef} style={{ position: "absolute", inset: 0, background: "#090F0A", opacity: 0, transition: "opacity 1.4s ease" }} />
         </div>
       )}
 
@@ -337,7 +304,7 @@ export default function ProductDetail() {
 
           {/* ── Spécifications ── */}
           <section aria-labelledby="specs-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
-            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 1000, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
+            <div ref={reveal} style={{ ...sectionReveal, maxWidth: 1000, margin: "0 auto" }}>
               <h2
                 id="specs-heading"
                 style={{
@@ -447,7 +414,7 @@ export default function ProductDetail() {
 
           {/* ── Conditions commerciales & logistique ── */}
           <section aria-labelledby="commercial-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
-            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 1000, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
+            <div ref={reveal} style={{ ...sectionReveal, maxWidth: 1000, margin: "0 auto" }}>
               <h2
                 id="commercial-heading"
                 style={{
@@ -619,7 +586,7 @@ export default function ProductDetail() {
 
           {/* ── FAQ ── */}
           <section aria-labelledby="faq-heading" style={{ padding: "clamp(60px,8vh,90px) clamp(24px,7vw,110px)" }}>
-            <div ref={reveal} style={{ ...glassCard, ...cardReveal, maxWidth: 800, margin: "0 auto", padding: "clamp(36px,5vw,52px)" }}>
+            <div ref={reveal} style={{ ...sectionReveal, maxWidth: 800, margin: "0 auto" }}>
               <h2
                 id="faq-heading"
                 style={{
@@ -673,9 +640,6 @@ export default function ProductDetail() {
           </section>
 
           {/* ── Maillage interne : produits associés ── */}
-          {/* Sentinelle : déclenche l'assombrissement du fond immersif (voir useEffect)
-              un peu avant l'arrivée sur cette section — sensation de ressortir du fruit. */}
-          <div ref={endSentinelRef} aria-hidden="true" style={{ height: 4 }} />
           <section
             aria-labelledby="related-heading"
             style={{
