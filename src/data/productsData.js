@@ -114,6 +114,12 @@ export const PRODUCTS = [
     origin: "Afrique tropicale",
     availability: "Toute l'année",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/ananas-interior.webp", jpg: "/images/interior/ananas-interior.jpg" },
+      mobile: { webp: "/images/interior/ananas-interior-mobile.webp", jpg: "/images/interior/ananas-interior-mobile.jpg" },
+    },
+    // Jaune doré intense — thème Ananas.
+    accentColor: "#F0C556",
   },
   {
     slug: "papaye",
