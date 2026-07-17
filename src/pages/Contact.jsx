@@ -35,12 +35,15 @@ export default function Contact() {
 
   // Pré-remplissage contextuel : arrivée depuis le CTA "Demander une offre"
   // d'une fiche produit (?product=...&origin=...) — voir ProductDetail.jsx.
+  // Texte écrit directement dans le champ (defaultValue, modifiable), pas
+  // en placeholder : un placeholder disparaît dès la frappe et peut donner
+  // l'impression trompeuse qu'un message est déjà présent alors qu'il est vide.
   const searchParams = new URLSearchParams(window.location.search);
   const productParam = searchParams.get("product");
   const originParam  = searchParams.get("origin");
-  const messagePlaceholder = productParam
+  const prefillMessage = productParam
     ? `Bonjour, je souhaiterais recevoir une offre pour ${productParam}${originParam ? ` (origine : ${originParam})` : ""}. Voici les volumes recherchés…`
-    : "Parlez-nous de votre projet, de vos volumes, de vos marchés…";
+    : "";
 
   // collecte des éléments à révéler
   const reveal = (el) => {
@@ -283,7 +286,8 @@ export default function Contact() {
             <div style={{ marginTop: 26 }}>
               <label style={labelStyle} htmlFor="message">Message</label>
               <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
-                placeholder={messagePlaceholder}
+                placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
+                defaultValue={prefillMessage}
                 style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 onFocus={onFocus} onBlur={onBlur} />
             </div>
