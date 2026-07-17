@@ -254,6 +254,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Toute l'année",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/gombo-interior.webp", jpg: "/images/interior/gombo-interior.jpg" },
+      mobile: { webp: "/images/interior/gombo-interior-mobile.webp", jpg: "/images/interior/gombo-interior-mobile.jpg" },
+    },
+    // Vert frais — thème Gombo.
+    accentColor: "#A8D08A",
   },
   {
     slug: "piment",
@@ -268,6 +274,12 @@ export const PRODUCTS = [
     origin: "Sénégal",
     availability: "Mars – Août",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/piment-interior.webp", jpg: "/images/interior/piment-interior.jpg" },
+      mobile: { webp: "/images/interior/piment-interior-mobile.webp", jpg: "/images/interior/piment-interior-mobile.jpg" },
+    },
+    // Rouge-orangé épicé — thème Piments.
+    accentColor: "#E8896A",
   },
 ];
 
