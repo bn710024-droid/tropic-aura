@@ -134,6 +134,12 @@ export const PRODUCTS = [
     origin: "Afrique tropicale",
     availability: "Toute l'année",
     standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/papaye-interior.webp", jpg: "/images/interior/papaye-interior.jpg" },
+      mobile: { webp: "/images/interior/papaye-interior-mobile.webp", jpg: "/images/interior/papaye-interior-mobile.jpg" },
+    },
+    // Corail / saumon doux — thème Papaye.
+    accentColor: "#EFA57B",
   },
   {
     slug: "banane",
