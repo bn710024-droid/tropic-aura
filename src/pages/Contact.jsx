@@ -322,8 +322,14 @@ export default function Contact() {
 
           {/* Colonne droite — formulaire, puis carte de remerciement en overlay
               une fois l'envoi confirmé par le serveur (jamais avant). */}
-          <form ref={reveal} onSubmit={onSubmit} style={{ ...r0, transitionDelay: ".1s", position: "relative" }}>
+          <form ref={reveal} onSubmit={onSubmit} style={{ ...r0, transitionDelay: ".1s" }}>
+            {/* Grid à une seule cellule : le conteneur adopte la hauteur du
+                plus grand des deux enfants (formulaire ou carte), au lieu
+                d'un position:absolute qui bornait la carte à la hauteur
+                (plus courte) du formulaire et coupait les boutons du bas. */}
+            <div style={{ display: "grid" }}>
             <div style={{
+              gridArea: "1 / 1",
               opacity: status === "sent" ? 0 : 1,
               filter: status === "sent" ? "blur(6px)" : "blur(0px)",
               transform: status === "sent" ? "translateY(14px)" : "none",
@@ -391,7 +397,7 @@ export default function Contact() {
 
             {status === "sent" && (
               <div style={{
-                position: "absolute", inset: 0, overflow: "hidden",
+                gridArea: "1 / 1", position: "relative", overflow: "hidden",
                 animation: "cardIn .65s cubic-bezier(.22,1,.36,1) both",
                 animationDelay: ".12s",
               }}>
@@ -537,6 +543,7 @@ export default function Contact() {
                 </div>
               </div>
             )}
+            </div>
           </form>
         </div>
       </section>
