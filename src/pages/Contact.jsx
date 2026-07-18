@@ -446,11 +446,16 @@ export default function Contact() {
                   <div>
                     <p style={{
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(15px,1.3vw,17px)",
-                      lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "6px 0 20px", maxWidth: 46 + "ch",
+                      lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "6px 0 12px", maxWidth: 46 + "ch",
                     }}>
-                      Merci d'avoir pris le temps de nous écrire. Chaque demande est lue personnellement.
-                      Je réponds moi-même à tous les messages afin de construire des partenariats solides
-                      dès le premier échange.
+                      Merci d'avoir pris le temps de nous écrire.
+                    </p>
+                    <p style={{
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(15px,1.3vw,17px)",
+                      lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "0 0 20px", maxWidth: 46 + "ch",
+                    }}>
+                      Chaque demande est lue personnellement. Je prends le temps d'étudier chaque projet
+                      afin de construire un partenariat durable dès le premier échange.
                     </p>
 
                     <div style={{ overflow: "hidden", width: signatureWriting ? "auto" : 0, transition: "width 1.8s cubic-bezier(.65,0,.35,1)" }}>
@@ -480,13 +485,14 @@ export default function Contact() {
                     </span>
 
                     <span style={{
-                      display: "block", marginTop: 12,
+                      display: "block", marginTop: 12, lineHeight: 1.6,
                       opacity: signatureWriting ? 1 : 0,
                       transition: "opacity 1.4s ease 2s",
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, fontStyle: "italic",
                       color: "rgba(0,0,0,0.55)",
                     }}>
-                      Chaque demande est étudiée personnellement, avec une réponse apportée dans les meilleurs délais.
+                      Chaque demande est étudiée personnellement.<br />
+                      Une réponse vous sera apportée dans les meilleurs délais.
                     </span>
 
                     <p style={{
