@@ -125,7 +125,6 @@ export default function Produits() {
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
   const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
-  const revealed    = useRef(new Set());  // sections déjà révélées → on ne les ré-anime plus (anti-scintillement au scroll-haut)
   const [morphTarget, setMorphTarget] = useState(null);
 
   // "Entrer dans le fruit" : au clic sur En savoir plus, l'image du produit
@@ -158,9 +157,23 @@ export default function Produits() {
 
     let rafId;
     const lerp     = (a, b, t) => Math.round(a + (b - a) * t);
-    const easeOut  = (t) => 1 - (1 - t) * (1 - t);
     const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
+
+    // Révélation du texte par IntersectionObserver — apparition fiable quand la
+    // section entre réellement dans le viewport (immunisée contre la dérive de
+    // la barre d'URL mobile qui faisait sauter les titres). Une fois révélée,
+    // la section reste figée (on cesse de l'observer) → aucune ré-animation.
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "none";
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -12% 0px" });
+    contentRefs.current.forEach((el) => el && io.observe(el));
 
     // Hauteur RÉELLE d'une section = celle utilisée par la mise en page (.scene à
     // 100vh). Sur un vrai mobile, window.innerHeight (viewport VISUEL) rétrécit
@@ -188,19 +201,11 @@ export default function Produits() {
           `rgb(${lerp(ca[0],cb[0],ft)},${lerp(ca[1],cb[1],ft)},${lerp(ca[2],cb[2],ft)})`;
       }
 
-      SECTIONS.forEach((_, j) => {
-        const el = contentRefs.current[j];
-        // Une fois révélée, une section reste figée (opacité 1, transform none) :
-        // en remontant, on ne rejoue PLUS l'animation à l'envers → fini les
-        // clignotements / micro-sauts. Même patron que la page Partenariats.
-        if (!el || revealed.current.has(j)) return;
-        const enter    = j * H - H * 0.60;
-        const progress = Math.min(1, Math.max(0, (scroll - enter) / (H * 0.42)));
-        const e        = easeOut(progress);
-        if (e >= 0.999) { el.style.opacity = "1"; el.style.transform = "none"; revealed.current.add(j); }
-        else { el.style.opacity = e.toFixed(3); el.style.transform = `translateY(${Math.round(30 * (1 - e))}px)`; }
-      });
-
+      // La RÉVÉLATION du texte n'est plus pilotée par la position de scroll ici :
+      // sur mobile, ce calcul dérivait avec la barre d'URL (viewport visuel vs
+      // 100vh) et pouvait faire "sauter" un titre. Elle est désormais gérée par
+      // un IntersectionObserver (voir plus bas) — apparition fiable, composée par
+      // le GPU via une transition CSS, indépendante de tout calcul de scroll.
       const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
       dotRefs.current.forEach((dot, j) => {
         if (!dot) return;
@@ -254,6 +259,7 @@ export default function Produits() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      io.disconnect();
       window.removeEventListener("resize", onResize);
       window.removeEventListener('scroll', onNativeScroll);
       sessionStorage.setItem(SCROLL_MEMORY_KEY, String(readScroll()));
@@ -373,7 +379,7 @@ export default function Produits() {
               <div
                 ref={(el) => (contentRefs.current[i] = el)}
                 className="prod-row"
-                style={{ opacity: 0, transform: "translateY(30px)", flexDirection: "row" }}
+                style={{ opacity: 0, transform: "translateY(30px)", flexDirection: "row", transition: "opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1)" }}
               >
                 {/* Image flottante */}
                 <div className="prod-photo">
@@ -461,7 +467,7 @@ export default function Produits() {
             <div
               ref={(el) => (contentRefs.current[i] = el)}
               className="prod-row"
-              style={{ opacity: i === 0 ? 1 : 0, transform: "translateY(30px)", flexDirection: isRight ? "row-reverse" : "row" }}
+              style={{ opacity: i === 0 ? 1 : 0, transform: "translateY(30px)", flexDirection: isRight ? "row-reverse" : "row", transition: "opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1)" }}
             >
               {/* Fruit détouré flottant (dépasse du cadre, ombre douce) */}
               <div className="prod-photo" ref={(el) => (photoRefs.current[i] = el)}>

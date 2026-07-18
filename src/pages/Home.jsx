@@ -179,8 +179,11 @@ const SECTIONS = [
 //    (≥76%) ; le texte occupe le centre. Les gros flous peuvent déborder légèrement
 //    hors des bords EXTÉRIEURS (bokeh atmosphérique, jamais un fruit net coupé).
 //    Couverture verticale : net topVh 0-345, flou topVh 0-275.
-const PARALLAX_MID = 0.5;   // plan NET (petits sujets)
-const PARALLAX_SOFT = 0.35; // plan FLOU (gros, premier plan)
+// Parallaxe volontairement douce : à 0.5/0.35 les fruits "pleuvaient" trop vite
+// au scroll (frappe à l'œil sur mobile). Abaissée pour un glissement ambiant,
+// pas une pluie. Valeurs réversibles si l'on veut plus/moins de mouvement.
+const PARALLAX_MID = 0.28;   // plan NET (petits sujets)
+const PARALLAX_SOFT = 0.18;  // plan FLOU (gros, premier plan)
 
 // PLAN NET — petits sujets parfaitement nets, en cadre sur les deux bords.
 const FRUITS_MID = [

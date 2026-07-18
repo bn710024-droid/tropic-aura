@@ -534,6 +534,11 @@ body::-webkit-scrollbar { display: none; }
     z-index: 1;
     isolation: isolate;   /* confine ce calque à son propre contexte d'empilement */
     pointer-events: none;
+    /* Les fruits de bord du plan MID étaient en opacité 1 → trop présents,
+       "frappe à l'œil". On atténue tout le calque à ~0.6 pour une texture
+       ambiante plutôt que des objets pleins. La couche SOFT (déjà atténuée
+       par fruit) est remise à 1 juste en dessous pour ne pas double-fader. */
+    opacity: 0.6;
     will-change: transform;
     /* promotion GPU dès le premier paint (avant toute écriture JS) — sur certaines
        versions de WebKit, will-change seul ne suffit pas à garantir une couche de
@@ -548,6 +553,7 @@ body::-webkit-scrollbar { display: none; }
      juste au-dessus du plan mid (z:1). Aucun fruit ne masque jamais texte ou CTA. */
   .fruits-layer-mobile--soft {
     z-index: 2;
+    opacity: 1;   /* la couche SOFT gère son atténuation par fruit — pas de double-fade */
   }
 
   .global-fruit {
