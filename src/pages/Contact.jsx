@@ -22,6 +22,13 @@ const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 77 881 20 18";
 const WHATSAPP_URL = "https://wa.me/221778812018";
 const GOLD  = "#D4AF6A";
+const MAX_MESSAGE_LENGTH = 2000;
+// Tant que cette variable n'est pas définie (Vercel → Settings →
+// Environment Variables → VITE_TURNSTILE_SITE_KEY), le widget ne
+// s'affiche simplement pas — le reste des protections anti-spam
+// (honeypot, délai minimal, validation stricte, rate limiting côté
+// serveur) reste actif indépendamment.
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 const PILIERS = [
   { titre: "Basé au Sénégal",          sous: "Au cœur des terroirs tropicaux d'Afrique de l'Ouest." },
@@ -34,9 +41,13 @@ export default function Contact() {
   const revealRefs = useRef([]);
   const logoRef    = useRef(null);
   const messageRef = useRef(null);
+  // Horodatage de montage du formulaire — comparé côté serveur au moment
+  // de la soumission pour rejeter les envois trop rapides (bots).
+  const formLoadedAt = useRef(Date.now());
   const [status, setStatus] = useState("idle"); // idle | submitting | sent | error
   const [errorMsg, setErrorMsg] = useState("");
   const [signatureWriting, setSignatureWriting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   // Pré-remplissage contextuel : arrivée depuis le CTA "Demander une offre"
   // d'une fiche produit (?product=...&origin=...) — voir ProductDetail.jsx.
@@ -66,6 +77,21 @@ export default function Contact() {
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
   };
+
+  // Widget Cloudflare Turnstile — chargé uniquement si une clé site est
+  // configurée. Le callback global est celui documenté par Cloudflare
+  // pour le rendu implicite (data-callback).
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    window.onTurnstileVerified = (token) => setTurnstileToken(token);
+    if (document.getElementById("cf-turnstile-script")) return;
+    const script = document.createElement("script");
+    script.id = "cf-turnstile-script";
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
     // Smooth scroll (cohérence avec le reste du site) — DESKTOP UNIQUEMENT.
@@ -130,6 +156,9 @@ export default function Contact() {
       message: f.message.value.trim(),
       product: productParam || undefined,
       origin: originParam || undefined,
+      website: f.website.value, // honeypot — doit rester vide
+      formLoadedAt: formLoadedAt.current,
+      turnstileToken,
     };
 
     setStatus("submitting");
@@ -144,6 +173,10 @@ export default function Contact() {
       if (!res.ok || !data.ok) {
         setStatus("error");
         setErrorMsg(data.error || "L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
+        // Jeton Turnstile à usage unique : on le réinitialise pour permettre
+        // une nouvelle tentative sans recharger la page.
+        window.turnstile?.reset();
+        setTurnstileToken("");
         return;
       }
       setStatus("sent");
@@ -362,11 +395,31 @@ export default function Contact() {
               <div style={{ marginTop: 26 }}>
                 <label style={labelStyle} htmlFor="message">Message</label>
                 <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
+                  maxLength={MAX_MESSAGE_LENGTH}
                   placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
                   defaultValue={prefillMessage}
                   style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                   onFocus={onFocus} onBlur={onBlur} />
               </div>
+
+              {/* Honeypot — invisible pour un humain (hors écran, jamais
+                  display:none/visibility:hidden qui sont parfois détectés
+                  par les bots), ignoré des lecteurs d'écran. Un champ
+                  rempli ici trahit un remplissage automatisé. */}
+              <input
+                type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              />
+
+              {TURNSTILE_SITE_KEY && (
+                <div style={{ marginTop: 22 }}>
+                  <div
+                    className="cf-turnstile"
+                    data-sitekey={TURNSTILE_SITE_KEY}
+                    data-callback="onTurnstileVerified"
+                  />
+                </div>
+              )}
 
               <button type="submit" disabled={status === "submitting"} style={{
                 marginTop: 40,
