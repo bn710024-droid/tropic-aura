@@ -15,11 +15,8 @@ export const SITE_URL = "https://www.tropic-aura.com";
 export const SITE_NAME = "Tropicaura";
 export const LEGAL_NAME = "Tropicaura B.C.";
 
-// Reprises telles quelles de Footer.jsx / Contact.jsx (déjà marquées
-// "à remplacer" dans le code source par l'équipe produit — on ne les
-// invente pas, on les centralise pour éviter la duplication).
 export const CONTACT_EMAIL = "contact@tropic-aura.com";
-export const CONTACT_PHONE = "+221 00 000 00 00";
+export const CONTACT_PHONE = "+221 78 917 98 05";
 export const LINKEDIN_URL = "https://www.linkedin.com/";
 
 export const ADDRESS = {

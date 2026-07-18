@@ -14,17 +14,13 @@ import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 //  Mobile-first. Le formulaire envoie réellement via /api/contact
 //  (Resend) — la séquence de remerciement (carte, signature) ne se
 //  déclenche qu'après confirmation serveur, jamais au clic seul.
-//
-//  ⚠️ Téléphone encore provisoire — à remplacer par le vrai numéro.
-//  Pas de carte WhatsApp tant que ce numéro n'est pas réel : mieux
-//  vaut l'omettre qu'exposer un lien mort après un moment de
-//  confiance aussi personnel que celui-ci.
 // ============================================================
 
 export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const EMAIL = "contact@tropic-aura.com";
-const PHONE = "+221 00 000 00 00";
+const PHONE = "+221 78 917 98 05";
+const WHATSAPP_URL = "https://wa.me/221789179805";
 const GOLD  = "#D4AF6A";
 
 const PILIERS = [
@@ -221,6 +217,11 @@ export default function Contact() {
           from { transform: translateX(-160%) skewX(-12deg); }
           to   { transform: translateX(160%) skewX(-12deg); }
         }
+        @keyframes signOff {
+          0%   { transform: rotate(0deg); }
+          45%  { transform: rotate(.35deg); }
+          100% { transform: rotate(0deg); }
+        }
         @media (max-width: 820px){
           .ct-grid   { grid-template-columns: 1fr !important; gap: 48px !important; }
           .ct-form-2 { grid-template-columns: 1fr !important; }
@@ -394,24 +395,25 @@ export default function Contact() {
                 animation: "cardIn .65s cubic-bezier(.22,1,.36,1) both",
                 animationDelay: ".12s",
               }}>
-                {/* Halo doré discret derrière le texte — pas de flou sur le
-                    contenu lui-même (contrairement au glass-card rejeté
-                    ailleurs sur le site), juste une forme colorée floutée
-                    en arrière-plan. */}
+                {/* Halo doré extrêmement doux derrière le texte — pas de flou
+                    sur le contenu lui-même (contrairement au glass-card
+                    rejeté ailleurs sur le site), juste une présence à peine
+                    perceptible en arrière-plan. */}
                 <div style={{
                   position: "absolute", left: "-10%", top: "-15%", width: "55%", height: "70%",
-                  background: `radial-gradient(closest-side, ${GOLD}3D, transparent)`,
-                  filter: "blur(50px)", pointerEvents: "none",
+                  background: `radial-gradient(closest-side, ${GOLD}1F, transparent)`,
+                  filter: "blur(70px)", pointerEvents: "none",
                 }} />
 
-                {/* Reflet unique qui traverse la carte une fois */}
+                {/* Reflet unique, volontairement sous le seuil de perception
+                    consciente — on le sent plus qu'on ne le voit. */}
                 <div style={{
                   position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden",
                 }}>
                   <div style={{
                     position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
-                    background: "linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent)",
-                    animation: "cardShine 1.3s ease-out 1s 1 both",
+                    background: "linear-gradient(100deg, transparent, rgba(255,255,255,.12), transparent)",
+                    animation: "cardShine 1.6s ease-out 1s 1 both",
                   }} />
                 </div>
 
@@ -453,9 +455,10 @@ export default function Contact() {
 
                     <div style={{ overflow: "hidden", width: signatureWriting ? "auto" : 0, transition: "width 1.8s cubic-bezier(.65,0,.35,1)" }}>
                       <span style={{
-                        display: "block", whiteSpace: "nowrap",
+                        display: "block", whiteSpace: "nowrap", transformOrigin: "left bottom",
                         fontFamily: "'Dancing Script',cursive", fontWeight: 700,
                         fontSize: 32, color: "#1A1A1A",
+                        animation: signatureWriting ? "signOff .25s ease-out 1.8s both" : "none",
                       }}>
                         Babacar Niang
                       </span>
@@ -483,7 +486,7 @@ export default function Contact() {
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, fontStyle: "italic",
                       color: "rgba(0,0,0,0.55)",
                     }}>
-                      Au plaisir d'échanger avec vous.
+                      Chaque demande est étudiée personnellement, avec une réponse apportée dans les meilleurs délais.
                     </span>
 
                     <p style={{
@@ -504,16 +507,19 @@ export default function Contact() {
 
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {[
+                        { label: "WhatsApp",               href: WHATSAPP_URL, external: true },
                         { label: "Découvrir nos produits", href: "/produits" },
                         { label: "Lire nos insights",       href: "/insights" },
                       ].map((c) => (
-                        <a key={c.href} href={c.href} style={{
-                          display: "inline-flex", alignItems: "center", gap: 8,
-                          padding: "12px 20px", borderRadius: 100,
-                          border: "1px solid rgba(0,0,0,0.18)", textDecoration: "none",
-                          fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12.5, fontWeight: 600,
-                          color: "#1A1A1A", transition: "border-color .25s, transform .25s",
-                        }}
+                        <a key={c.href} href={c.href}
+                          {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 8,
+                            padding: "12px 20px", borderRadius: 100,
+                            border: "1px solid rgba(0,0,0,0.18)", textDecoration: "none",
+                            fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12.5, fontWeight: 600,
+                            color: "#1A1A1A", transition: "border-color .25s, transform .25s",
+                          }}
                           onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.5)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                           onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.18)"; e.currentTarget.style.transform = "none"; }}
                         >

@@ -10,8 +10,8 @@
 //  → rupture, silence, respiration. Apparitions douces au scroll.
 // ============================================================
 
-const EMAIL = "contact@tropic-aura.com";   // ⚠️ à remplacer
-const PHONE = "+221 00 000 00 00";          // ⚠️ à remplacer
+const EMAIL = "contact@tropic-aura.com";
+const PHONE = "+221 78 917 98 05";
 const LINKEDIN = "https://www.linkedin.com/"; // ⚠️ à remplacer
 
 export default function Footer() {
