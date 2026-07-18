@@ -54,7 +54,7 @@ export default function Contact() {
   // une seule fois (pas régénérés à chaque re-render de status). Confinées
   // à la colonne de l'avatar (0-16%) pour ne jamais retomber sur le texte —
   // sinon ça ressemble à des taches sur l'écran plutôt qu'à un détail ambiant.
-  const dustParticles = useMemo(() => Array.from({ length: 14 }, (_, i) => ({
+  const dustParticles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
     left: Math.random() * 16,
     delay: Math.random() * 5,
     duration: 4.5 + Math.random() * 3,
