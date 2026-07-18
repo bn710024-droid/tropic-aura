@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -11,15 +11,21 @@ import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 //  3 moments : déclaration de marque (sombre) → expérience de
 //  contact (clair, coordonnées + formulaire éditorial) → bloc
 //  confiance (4 piliers, sombre). Apparitions douces au scroll.
-//  Mobile-first. Le formulaire ouvre le client mail pré-rempli.
+//  Mobile-first. Le formulaire envoie réellement via /api/contact
+//  (Resend) — la séquence de remerciement (carte, signature) ne se
+//  déclenche qu'après confirmation serveur, jamais au clic seul.
 //
-//  ⚠️ Coordonnées provisoires — à remplacer par les vraies.
+//  ⚠️ Téléphone encore provisoire — à remplacer par le vrai numéro.
+//  Pas de carte WhatsApp tant que ce numéro n'est pas réel : mieux
+//  vaut l'omettre qu'exposer un lien mort après un moment de
+//  confiance aussi personnel que celui-ci.
 // ============================================================
 
 export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 00 000 00 00";
+const GOLD  = "#D4AF6A";
 
 const PILIERS = [
   { titre: "Basé au Sénégal",          sous: "Au cœur des terroirs tropicaux d'Afrique de l'Ouest." },
@@ -32,6 +38,9 @@ export default function Contact() {
   const revealRefs = useRef([]);
   const logoRef    = useRef(null);
   const messageRef = useRef(null);
+  const [status, setStatus] = useState("idle"); // idle | submitting | sent | error
+  const [errorMsg, setErrorMsg] = useState("");
+  const [signatureWriting, setSignatureWriting] = useState(false);
 
   // Pré-remplissage contextuel : arrivée depuis le CTA "Demander une offre"
   // d'une fiche produit (?product=...&origin=...) — voir ProductDetail.jsx.
@@ -44,6 +53,15 @@ export default function Contact() {
   const prefillMessage = productParam
     ? `Bonjour, je souhaiterais recevoir une offre pour ${productParam}${originParam ? ` (origine : ${originParam})` : ""}. Voici les volumes recherchés…`
     : "";
+
+  // Particules dorées de la carte de remerciement — positions/délais figés
+  // une seule fois (pas régénérés à chaque re-render de status).
+  const dustParticles = useMemo(() => Array.from({ length: 20 }, () => ({
+    left: Math.random() * 100,
+    delay: Math.random() * 5,
+    duration: 4.5 + Math.random() * 3,
+    size: 3 + Math.random() * 3,
+  })), []);
 
   // collecte des éléments à révéler
   const reveal = (el) => {
@@ -101,23 +119,41 @@ export default function Contact() {
     };
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    if (status === "submitting") return;
     const f = e.target.elements;
-    const nom  = f.nom.value.trim();
-    const ese  = f.entreprise.value.trim();
-    const mail = f.email.value.trim();
-    const tel  = f.telephone.value.trim();
-    const msg  = f.message.value.trim();
-    const subject = `Demande de partenariat${ese ? " — " + ese : ""}`;
-    const body =
-      `Nom : ${nom}\n` +
-      `Entreprise : ${ese}\n` +
-      `Email : ${mail}\n` +
-      `Téléphone : ${tel}\n\n` +
-      `${msg}\n`;
-    window.location.href =
-      `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const payload = {
+      nom: f.nom.value.trim(),
+      entreprise: f.entreprise.value.trim(),
+      email: f.email.value.trim(),
+      telephone: f.telephone.value.trim(),
+      message: f.message.value.trim(),
+      product: productParam || undefined,
+      origin: originParam || undefined,
+    };
+
+    setStatus("submitting");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        setStatus("error");
+        setErrorMsg(data.error || "L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
+        return;
+      }
+      setStatus("sent");
+      // La signature "s'écrit" seule après un temps de lecture — voir carte de remerciement.
+      setTimeout(() => setSignatureWriting(true), 5500);
+    } catch {
+      setStatus("error");
+      setErrorMsg("L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
+    }
   };
 
   // styles partagés du formulaire (champ « éditorial » : filet bas uniquement)
@@ -160,6 +196,16 @@ export default function Contact() {
         .ct-form-2{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
         .ct-pill  { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px,4vw,56px); }
         .ct-input::placeholder { color: rgba(0,0,0,0.30); }
+        @keyframes dustFall {
+          0%   { transform: translateY(-10%) translateX(0); opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translateY(420px) translateX(14px); opacity: 0; }
+        }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(16px) scale(.98); }
+          to   { opacity: 1; transform: none; }
+        }
         @media (max-width: 820px){
           .ct-grid   { grid-template-columns: 1fr !important; gap: 48px !important; }
           .ct-form-2 { grid-template-columns: 1fr !important; }
@@ -258,55 +304,172 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Colonne droite — formulaire */}
-          <form ref={reveal} onSubmit={onSubmit} style={{ ...r0, transitionDelay: ".1s" }}>
-            <div className="ct-form-2">
-              <div>
-                <label style={labelStyle} htmlFor="nom">Nom</label>
-                <input className="ct-input" id="nom" name="nom" type="text" required
-                  placeholder="Votre nom" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          {/* Colonne droite — formulaire, puis carte de remerciement en overlay
+              une fois l'envoi confirmé par le serveur (jamais avant). */}
+          <form ref={reveal} onSubmit={onSubmit} style={{ ...r0, transitionDelay: ".1s", position: "relative" }}>
+            <div style={{
+              opacity: status === "sent" ? 0 : 1,
+              transform: status === "sent" ? "scale(0.96)" : "none",
+              pointerEvents: status === "sent" ? "none" : "auto",
+              transition: "opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1)",
+            }}>
+              <div className="ct-form-2">
+                <div>
+                  <label style={labelStyle} htmlFor="nom">Nom</label>
+                  <input className="ct-input" id="nom" name="nom" type="text" required
+                    placeholder="Votre nom" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
+                <div>
+                  <label style={labelStyle} htmlFor="entreprise">Entreprise</label>
+                  <input className="ct-input" id="entreprise" name="entreprise" type="text"
+                    placeholder="Votre société" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
+                <div>
+                  <label style={labelStyle} htmlFor="email">Email</label>
+                  <input className="ct-input" id="email" name="email" type="email" required
+                    placeholder="vous@entreprise.com" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
+                <div>
+                  <label style={labelStyle} htmlFor="telephone">Téléphone</label>
+                  <input className="ct-input" id="telephone" name="telephone" type="tel"
+                    placeholder="+33 ..." style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
               </div>
-              <div>
-                <label style={labelStyle} htmlFor="entreprise">Entreprise</label>
-                <input className="ct-input" id="entreprise" name="entreprise" type="text"
-                  placeholder="Votre société" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+
+              <div style={{ marginTop: 26 }}>
+                <label style={labelStyle} htmlFor="message">Message</label>
+                <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
+                  placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
+                  defaultValue={prefillMessage}
+                  style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+                  onFocus={onFocus} onBlur={onBlur} />
               </div>
-              <div>
-                <label style={labelStyle} htmlFor="email">Email</label>
-                <input className="ct-input" id="email" name="email" type="email" required
-                  placeholder="vous@entreprise.com" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="telephone">Téléphone</label>
-                <input className="ct-input" id="telephone" name="telephone" type="tel"
-                  placeholder="+33 ..." style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-              </div>
+
+              <button type="submit" disabled={status === "submitting"} style={{
+                marginTop: 40,
+                display: "inline-flex", alignItems: "center", gap: 14,
+                background: status === "submitting" ? "#3A4A41" : "#0B1310", color: "#fff", border: "none",
+                borderRadius: 100, padding: "16px 34px",
+                cursor: status === "submitting" ? "default" : "pointer",
+                fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700,
+                fontSize: 13, letterSpacing: ".06em",
+                transition: "transform .3s cubic-bezier(.22,1,.36,1), background .3s",
+              }}
+                onMouseEnter={(e) => { if (status !== "submitting") { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "#16241D"; } }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = status === "submitting" ? "#3A4A41" : "#0B1310"; }}
+              >
+                {status === "submitting" ? "Envoi en cours…" : status === "error" ? "Réessayer" : "Démarrer une conversation"}
+                {status !== "submitting" && <span style={{ fontSize: 16, lineHeight: 1 }}>→</span>}
+              </button>
+
+              {status === "error" && (
+                <p style={{
+                  marginTop: 16, fontFamily: "'Plus Jakarta Sans',sans-serif",
+                  fontSize: 13.5, lineHeight: 1.6, color: "#B4432F",
+                }}>
+                  {errorMsg}
+                </p>
+              )}
             </div>
 
-            <div style={{ marginTop: 26 }}>
-              <label style={labelStyle} htmlFor="message">Message</label>
-              <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
-                placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
-                defaultValue={prefillMessage}
-                style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
-                onFocus={onFocus} onBlur={onBlur} />
-            </div>
+            {status === "sent" && (
+              <div style={{
+                position: "absolute", inset: 0,
+                animation: "cardIn .8s cubic-bezier(.22,1,.36,1) both",
+                animationDelay: ".15s",
+              }}>
+                {/* Poussière dorée */}
+                <div style={{ position: "absolute", inset: "-40px 0 auto 0", height: 460, overflow: "hidden", pointerEvents: "none" }}>
+                  {dustParticles.map((p, i) => (
+                    <span key={i} style={{
+                      position: "absolute", top: 0, left: `${p.left}%`,
+                      width: p.size, height: p.size, borderRadius: "50%",
+                      background: GOLD, boxShadow: `0 0 6px ${GOLD}`,
+                      animation: `dustFall ${p.duration}s ease-in ${p.delay}s infinite`,
+                    }} />
+                  ))}
+                </div>
 
-            <button type="submit" style={{
-              marginTop: 40,
-              display: "inline-flex", alignItems: "center", gap: 14,
-              background: "#0B1310", color: "#fff", border: "none",
-              borderRadius: 100, padding: "16px 34px", cursor: "pointer",
-              fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700,
-              fontSize: 13, letterSpacing: ".06em",
-              transition: "transform .3s cubic-bezier(.22,1,.36,1), background .3s",
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "#16241D"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = "#0B1310"; }}
-            >
-              Démarrer une conversation
-              <span style={{ fontSize: 16, lineHeight: 1 }}>→</span>
-            </button>
+                <div style={{ position: "relative", display: "flex", gap: 22, alignItems: "flex-start" }}>
+                  <picture>
+                    <source srcSet="/images/babacar-niang.webp" type="image/webp" />
+                    <img
+                      src="/images/babacar-niang.jpg"
+                      alt="Babacar Niang, fondateur de Tropicaura"
+                      width={64} height={64}
+                      style={{
+                        flexShrink: 0, width: 64, height: 64, borderRadius: "50%",
+                        objectFit: "cover", border: `2px solid ${GOLD}`,
+                      }}
+                    />
+                  </picture>
+
+                  <div>
+                    <p style={{
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(15px,1.3vw,17px)",
+                      lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "6px 0 20px", maxWidth: 46 + "ch",
+                    }}>
+                      Merci d'avoir pris le temps de nous écrire. Chaque demande est lue personnellement.
+                      Je réponds moi-même à tous les messages afin de construire des partenariats solides
+                      dès le premier échange.
+                    </p>
+
+                    <div style={{ overflow: "hidden", width: signatureWriting ? "auto" : 0, transition: "width 1.8s cubic-bezier(.65,0,.35,1)" }}>
+                      <span style={{
+                        display: "block", whiteSpace: "nowrap",
+                        fontFamily: "'Dancing Script',cursive", fontWeight: 700,
+                        fontSize: 32, color: "#1A1A1A",
+                      }}>
+                        Babacar Niang
+                      </span>
+                    </div>
+                    <span style={{
+                      display: "block", marginTop: 4,
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700,
+                      letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(0,0,0,0.42)",
+                    }}>
+                      Founder, Tropicaura
+                    </span>
+
+                    <p style={{
+                      marginTop: 22, fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13,
+                      lineHeight: 1.6, fontStyle: "italic", color: "rgba(0,0,0,0.5)", maxWidth: 42 + "ch",
+                    }}>
+                      PS : Je n'ai pas encore une équipe de 50 personnes. Il y a de fortes chances que
+                      ce soit moi qui lise votre message 😊
+                    </p>
+
+                    <span style={{
+                      display: "block", marginTop: 34, marginBottom: 14,
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700,
+                      letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(0,0,0,0.42)",
+                    }}>
+                      En attendant ma réponse…
+                    </span>
+
+                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                      {[
+                        { label: "Découvrir nos produits", href: "/produits" },
+                        { label: "Lire nos insights",       href: "/insights" },
+                      ].map((c) => (
+                        <a key={c.href} href={c.href} style={{
+                          display: "inline-flex", alignItems: "center", gap: 8,
+                          padding: "12px 20px", borderRadius: 100,
+                          border: "1px solid rgba(0,0,0,0.18)", textDecoration: "none",
+                          fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12.5, fontWeight: 600,
+                          color: "#1A1A1A", transition: "border-color .25s, transform .25s",
+                        }}
+                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.5)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.18)"; e.currentTarget.style.transform = "none"; }}
+                        >
+                          {c.label} <span>→</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </section>
