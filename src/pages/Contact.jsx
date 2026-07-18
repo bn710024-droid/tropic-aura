@@ -435,9 +435,9 @@ export default function Contact() {
                     <img
                       src="/images/babacar-niang.jpg"
                       alt="Babacar Niang, fondateur de Tropicaura"
-                      width={92} height={92}
+                      width={140} height={140}
                       style={{
-                        flexShrink: 0, width: 92, height: 92, borderRadius: "50%",
+                        flexShrink: 0, width: 140, height: 140, borderRadius: "50%",
                         objectFit: "cover", border: `2px solid ${GOLD}`,
                       }}
                     />
