@@ -16,7 +16,7 @@ export const SITE_NAME = "Tropicaura";
 export const LEGAL_NAME = "Tropicaura B.C.";
 
 export const CONTACT_EMAIL = "contact@tropic-aura.com";
-export const CONTACT_PHONE = "+221 78 917 98 05";
+export const CONTACT_PHONE = "+221 77 881 20 18";
 export const LINKEDIN_URL = "https://www.linkedin.com/";
 
 export const ADDRESS = {

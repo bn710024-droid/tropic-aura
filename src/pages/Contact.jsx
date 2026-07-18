@@ -19,8 +19,8 @@ import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const EMAIL = "contact@tropic-aura.com";
-const PHONE = "+221 78 917 98 05";
-const WHATSAPP_URL = "https://wa.me/221789179805";
+const PHONE = "+221 77 881 20 18";
+const WHATSAPP_URL = "https://wa.me/221778812018";
 const GOLD  = "#D4AF6A";
 
 const PILIERS = [
@@ -292,7 +292,7 @@ export default function Contact() {
                 { l: "Email",        v: EMAIL, href: `mailto:${EMAIL}` },
                 { l: "Téléphone",    v: PHONE, href: `tel:${PHONE.replace(/\s/g, "")}` },
                 { l: "Localisation", v: "Dakar, Sénégal" },
-                { l: "Disponibilité", v: "Lun – Ven · 9h – 18h (GMT)" },
+                { l: "Disponibilité", v: "Tous les jours · 8h – 00h (GMT)" },
               ].map((c) => (
                 <div key={c.l}>
                   <span style={{
@@ -494,7 +494,7 @@ export default function Contact() {
                       lineHeight: 1.6, fontStyle: "italic", color: "rgba(0,0,0,0.5)", maxWidth: 42 + "ch",
                     }}>
                       PS : Je n'ai pas encore une équipe de 50 personnes. Il y a de fortes chances que
-                      ce soit moi qui lise votre message 😊
+                      ce soit moi qui lise votre message
                     </p>
 
                     <span style={{

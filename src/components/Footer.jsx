@@ -11,7 +11,7 @@
 // ============================================================
 
 const EMAIL = "contact@tropic-aura.com";
-const PHONE = "+221 78 917 98 05";
+const PHONE = "+221 77 881 20 18";
 const LINKEDIN = "https://www.linkedin.com/"; // ⚠️ à remplacer
 
 export default function Footer() {
