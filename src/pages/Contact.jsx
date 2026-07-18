@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -49,18 +49,6 @@ export default function Contact() {
   const prefillMessage = productParam
     ? `Bonjour, je souhaiterais recevoir une offre pour ${productParam}${originParam ? ` (origine : ${originParam})` : ""}. Voici les volumes recherchés…`
     : "";
-
-  // Particules dorées de la carte de remerciement — positions/délais figés
-  // une seule fois (pas régénérés à chaque re-render de status). Mélange de
-  // deux comportements (chute / flottement) pour un effet "poussière au
-  // soleil" plutôt qu'une pluie uniforme.
-  const dustParticles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
-    left: Math.random() * 100,
-    delay: Math.random() * 5,
-    duration: 4.5 + Math.random() * 3,
-    size: 3 + Math.random() * 3,
-    variant: i % 3 === 0 ? "float" : "fall",
-  })), []);
 
   // collecte des éléments à révéler
   const reveal = (el) => {
@@ -196,19 +184,6 @@ export default function Contact() {
         .ct-form-2{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
         .ct-pill  { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px,4vw,56px); }
         .ct-input::placeholder { color: rgba(0,0,0,0.30); }
-        @keyframes dustFall {
-          0%   { transform: translateY(-10%) translateX(0); opacity: 0; }
-          10%  { opacity: 1; }
-          70%  { opacity: .8; }
-          100% { transform: translateY(320px) translateX(14px); opacity: 0; }
-        }
-        @keyframes dustFloat {
-          0%   { transform: translateY(0) translateX(0); opacity: 0; }
-          15%  { opacity: .9; }
-          50%  { transform: translateY(-14px) translateX(8px); opacity: .5; }
-          85%  { opacity: .7; }
-          100% { transform: translateY(6px) translateX(-6px); opacity: 0; }
-        }
         @keyframes cardIn {
           from { opacity: 0; filter: blur(4px); transform: translateY(20px) scale(.97); }
           to   { opacity: 1; filter: blur(0); transform: none; }
@@ -421,18 +396,6 @@ export default function Contact() {
                     background: "linear-gradient(100deg, transparent, rgba(255,255,255,.12), transparent)",
                     animation: "cardShine 1.6s ease-out 1s 1 both",
                   }} />
-                </div>
-
-                {/* Poussière dorée — chute et flottement mêlés */}
-                <div style={{ position: "absolute", inset: "-40px 0 auto 0", height: 460, overflow: "hidden", pointerEvents: "none" }}>
-                  {dustParticles.map((p, i) => (
-                    <span key={i} style={{
-                      position: "absolute", top: 0, left: `${p.left}%`,
-                      width: p.size, height: p.size, borderRadius: "50%",
-                      background: GOLD, boxShadow: `0 0 6px ${GOLD}`,
-                      animation: `${p.variant === "float" ? "dustFloat" : "dustFall"} ${p.duration}s ease-in-out ${p.delay}s infinite`,
-                    }} />
-                  ))}
                 </div>
 
                 <div style={{ position: "relative", display: "flex", gap: 22, alignItems: "flex-start" }}>
