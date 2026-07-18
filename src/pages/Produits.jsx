@@ -28,31 +28,31 @@ const SECTIONS = [
   // ── Signature ──
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
-    png: "/png/prod-mangue.png", collection: "SIGNATURE", num: "01", name: "Mangue Kent",
+    png: "/png/prod-mangue.webp", collection: "SIGNATURE", num: "01", name: "Mangue Kent",
     desc: "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Juin – Mi-août", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
-    png: "/png/prod-avocat.png", collection: "SIGNATURE", num: "02", name: "Avocat",
+    png: "/png/prod-avocat.webp", collection: "SIGNATURE", num: "02", name: "Avocat",
     desc: "Maturation maîtrisée, texture crémeuse et qualité régulière. Sélectionné pour répondre aux exigences des chaînes d'approvisionnement internationales.",
     meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "ananas", side: "left", bg: "#6B5214",
-    png: "/png/prod-ananas.png", collection: "SIGNATURE", num: "03", name: "Ananas",
+    png: "/png/prod-ananas.webp", collection: "SIGNATURE", num: "03", name: "Ananas",
     desc: "Chair juteuse, profil aromatique intense et présentation soignée. Un produit tropical reconnu pour sa valeur ajoutée sur les marchés premium.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "papaye", side: "right", bg: "#7A3514",
-    png: "/png/prod-papaye.png", collection: "SIGNATURE", num: "04", name: "Papaye",
+    png: "/png/prod-papaye.webp", collection: "SIGNATURE", num: "04", name: "Papaye",
     desc: "Couleur éclatante, saveur équilibrée et qualité constante. Une référence tropicale adaptée aux circuits spécialisés et aux marchés exigeants.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "banane", side: "left", bg: "#0E2418",
-    png: "/png/prod-banane.png", collection: "SIGNATURE", num: "05", name: "Banane",
+    png: "/png/prod-banane.webp", collection: "SIGNATURE", num: "05", name: "Banane",
     desc: "Régularité des volumes, qualité homogène et gestion maîtrisée de la maturité. Un produit essentiel du commerce international.",
     meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
@@ -60,25 +60,25 @@ const SECTIONS = [
   // ── Saison ──
   {
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
-    png: "/png/prod-melon.png", collection: "SAISON", num: "06", name: "Melon",
+    png: "/png/prod-melon.webp", collection: "SAISON", num: "06", name: "Melon",
     desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
-    png: "/png/prod-pasteque.png", collection: "SAISON", num: "07", name: "Pastèque",
+    png: "/png/prod-pasteque.webp", collection: "SAISON", num: "07", name: "Pastèque",
     desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-vert", side: "right", bg: "#36511E",
-    png: "/png/prod-citron-vert.png", collection: "SAISON", num: "08", name: "Citron vert",
+    png: "/png/prod-citron-vert.webp", collection: "SAISON", num: "08", name: "Citron vert",
     desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "citron-jaune", side: "left", bg: "#6B5A14",
-    png: "/png/prod-citron-jaune.png", collection: "SAISON", num: "09", name: "Citron jaune",
+    png: "/png/prod-citron-jaune.webp", collection: "SAISON", num: "09", name: "Citron jaune",
     desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium" },
   },
@@ -86,13 +86,13 @@ const SECTIONS = [
   // ── Spécialités ──
   {
     type: "product", id: "gombo", side: "right", bg: "#243318",
-    png: "/png/prod-gombo.png", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
+    png: "/png/prod-gombo.webp", collection: "SPÉCIALITÉS", num: "10", name: "Gombo",
     desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium" },
   },
   {
     type: "product", id: "piment", side: "left", bg: "#2E4A1C",
-    png: "/png/prod-piment.png", collection: "SPÉCIALITÉS", num: "11", name: "Piments",
+    png: "/png/prod-piment.webp", collection: "SPÉCIALITÉS", num: "11", name: "Piments",
     desc: "Un assortiment de couleurs et de variétés — doux ou forts, selon les besoins. Fraîcheur maîtrisée et sélection rigoureuse pour des marchés à forte demande.",
     meta: { "Origine": "Sénégal", "Disponibilité": "Mars – Août", "Standard": "Export Premium" },
   },
@@ -334,8 +334,12 @@ export default function Produits() {
           .prod-meta  { gap: 18px 30px !important; }
           /* MOBILE : on coupe le flottement (transform animé + drop-shadow =
              re-rasterisation à chaque frame → micro-sauts au scroll sur iOS).
-             Ombre statique et plus légère → rasterisée une seule fois. */
-          .prod-float { animation: none !important; filter: drop-shadow(0 16px 22px rgba(0,0,0,0.42)) !important; }
+             filter:drop-shadow() sur un fond CSS à canal alpha est en plus un
+             bug de rendu documenté sur Android Chrome (le compositeur
+             rastérise mal la transparence : le fruit apparaît sur un bloc
+             opaque au lieu d'être détouré) — supprimé entièrement sur mobile
+             plutôt qu'allégé, pour les deux plateformes à la fois. */
+          .prod-float { animation: none !important; filter: none !important; }
         }
         @media (prefers-reduced-motion: reduce){ .prod-float { animation: none !important; } }
       `}</style>
