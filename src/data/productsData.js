@@ -18,6 +18,10 @@
 //    un contact humain plutôt que d'affirmer des faits non
 //    vérifiés (certifications précises, MOQ chiffré, Incoterms
 //    alternatifs...).
+//  - seasonMonths / peakMonths : encodage structuré (1-12) du champ
+//    `availability` déjà publié ci-dessus, pour la page /disponibilite.
+//    Aucune nouvelle donnée : simple ré-expression machine-lisible
+//    du texte existant ("Juin – Mi-août" → [6,7,8], etc.).
 // ============================================================
 
 // Dimensions réelles des fichiers PNG (lues via sharp) — nécessaires
@@ -67,6 +71,7 @@ export const PRODUCTS = [
       "Cultivée sous le soleil du Sénégal, la mangue exportée par Tropicaura est sélectionnée pour sa qualité gustative, sa tenue au transport et sa conformité aux exigences des importateurs internationaux. Selon la saison, nous proposons des mangues adaptées aux différents marchés et cahiers des charges.",
     origin: "Sénégal",
     availability: "Juin – Mi-août",
+    seasonMonths: [6, 7, 8],
     standard: "Export Premium",
     // Fond immersif "à l'intérieur du fruit" — voir ProductDetail.jsx.
     // Uniquement Mangue pour l'instant (seule photo fournie) ; les autres
@@ -93,6 +98,7 @@ export const PRODUCTS = [
       "Sélectionné au sein des principaux bassins de production d'Afrique de l'Ouest, l'avocat Tropicaura se distingue par sa maturation maîtrisée et sa texture crémeuse — deux critères déterminants pour les chaînes d'approvisionnement internationales. Une qualité régulière, disponible toute l'année, pensée pour s'intégrer aux programmes d'achat les plus exigeants.",
     origin: "Afrique de l'Ouest",
     availability: "Toute l'année",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/avocat-interior.webp", jpg: "/images/interior/avocat-interior.jpg" },
@@ -113,6 +119,7 @@ export const PRODUCTS = [
       "Récolté dans les terroirs tropicaux d'Afrique, l'ananas Tropicaura conjugue chair juteuse et intensité aromatique avec une tenue au transport pensée pour l'export longue distance. Présentation soignée et qualité constante en font une référence sur les marchés premium, toute l'année.",
     origin: "Afrique tropicale",
     availability: "Toute l'année",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/ananas-interior.webp", jpg: "/images/interior/ananas-interior.jpg" },
@@ -136,6 +143,7 @@ export const PRODUCTS = [
       "La papaye Tropicaura se reconnaît d'abord à sa couleur éclatante et à l'équilibre de sa saveur — deux repères recherchés par les circuits spécialisés. Nos équipes veillent à une qualité constante tout au long de l'année, pour répondre aux exigences des marchés les plus sélectifs.",
     origin: "Afrique tropicale",
     availability: "Toute l'année",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/papaye-interior.webp", jpg: "/images/interior/papaye-interior.jpg" },
@@ -156,6 +164,7 @@ export const PRODUCTS = [
       "Produit de volume par excellence, la banane Tropicaura repose sur une régularité d'approvisionnement et une gestion maîtrisée de la maturité — deux exigences essentielles pour la continuité des programmes d'achat internationaux. Une qualité homogène, disponible toute l'année.",
     origin: "Afrique tropicale",
     availability: "Toute l'année",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/banane-interior.webp", jpg: "/images/interior/banane-interior.jpg" },
@@ -176,6 +185,7 @@ export const PRODUCTS = [
       "Cultivé au Sénégal et récolté au meilleur stade de maturité, le melon Tropicaura offre une chair fondante et un équilibre sucré recherchés par les marchés européens en saison. Une spécialité de janvier à fin avril, portée par une fraîcheur qui ne se négocie pas.",
     origin: "Sénégal",
     availability: "Janvier – Fin avril",
+    seasonMonths: [1, 2, 3, 4],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/melon-interior.webp", jpg: "/images/interior/melon-interior.jpg" },
@@ -196,6 +206,7 @@ export const PRODUCTS = [
       "Cultivée au Sénégal, la pastèque Tropicaura se distingue par sa texture croquante et sa qualité visuelle — calibre régulier, coloris homogène — deux critères qui comptent dès la mise en rayon. Disponible de janvier à fin avril, elle répond aux pics de demande estivale sur les marchés européens.",
     origin: "Sénégal",
     availability: "Janvier – Fin avril",
+    seasonMonths: [1, 2, 3, 4],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/pasteque-interior.webp", jpg: "/images/interior/pasteque-interior.jpg" },
@@ -216,6 +227,8 @@ export const PRODUCTS = [
       "Le citron vert Tropicaura, cultivé au Sénégal, se distingue par ses arômes intenses et son acidité vive — des qualités recherchées aussi bien par la restauration que par l'industrie agroalimentaire. Disponible toute l'année, avec un pic de saison entre septembre et décembre.",
     origin: "Sénégal",
     availability: "Toute l'année (Pic : Septembre – Décembre)",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
+    peakMonths: [9, 10, 11, 12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/citron-vert-interior.webp", jpg: "/images/interior/citron-vert-interior.jpg" },
@@ -238,6 +251,8 @@ export const PRODUCTS = [
       "Là où le citron vert mise sur l'intensité, le citron jaune Tropicaura joue la régularité : équilibre aromatique et fraîcheur constante, cultivés au Sénégal. Disponible toute l'année avec un pic de saison entre septembre et décembre, il répond aux marchés recherchant qualité et constance.",
     origin: "Sénégal",
     availability: "Toute l'année (Pic : Septembre – Décembre)",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
+    peakMonths: [9, 10, 11, 12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/citron-jaune-interior.webp", jpg: "/images/interior/citron-jaune-interior.jpg" },
@@ -260,6 +275,7 @@ export const PRODUCTS = [
       "Le gombo Tropicaura est récolté avec soin au Sénégal pour préserver sa fraîcheur et sa tendreté jusqu'à destination — deux critères que nos équipes surveillent de près, car ils se dégradent vite. Disponible toute l'année, il trouve sa place sur de nombreux marchés internationaux.",
     origin: "Sénégal",
     availability: "Toute l'année",
+    seasonMonths: [1,2,3,4,5,6,7,8,9,10,11,12],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/gombo-interior.webp", jpg: "/images/interior/gombo-interior.jpg" },
@@ -282,6 +298,7 @@ export const PRODUCTS = [
       "Les piments Tropicaura sont disponibles en différentes variétés et niveaux de piquant selon les besoins du marché, avec une fraîcheur maîtrisée du Sénégal jusqu'à destination. Une sélection rigoureuse, disponible de mars à août, pensée pour s'adapter aux spécifications de chaque client.",
     origin: "Sénégal",
     availability: "Mars – Août",
+    seasonMonths: [3, 4, 5, 6, 7, 8],
     standard: "Export Premium",
     bgImage: {
       desktop: { webp: "/images/interior/piment-interior.webp", jpg: "/images/interior/piment-interior.jpg" },

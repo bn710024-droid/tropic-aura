@@ -5,6 +5,7 @@ import APropos      from "./pages/APropos";
 import Partenariats from "./pages/Partenariats";
 import Produits     from "./pages/Produits";
 import ProductDetail from "./pages/ProductDetail";
+import Disponibilite from "./pages/Disponibilite";
 import Contact      from "./pages/Contact";
 import Insights        from "./pages/Insights";
 import InsightSenegal      from "./pages/InsightSenegal";
@@ -54,6 +55,7 @@ export default function App() {
         <Route path="/produits" element={<Produits />} />
         <Route path="/products" element={<Produits />} />
         <Route path="/produits/:slug" element={<ProductDetail />} />
+        <Route path="/disponibilite" element={<Disponibilite />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/insights/senegal-origine-strategique" element={<InsightSenegal />} />

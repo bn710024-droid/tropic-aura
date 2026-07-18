@@ -34,9 +34,10 @@ const COLUMNS = [
     {
       label: "Produits", href: "/produits", img: "/menu-produits.jpg",
       subs: [
-        { label: "Signature",   href: "/produits?section=signature" },
-        { label: "Saison",      href: "/produits?section=saison" },
-        { label: "Spécialités", href: "/produits?section=specialites" },
+        { label: "Signature",     href: "/produits?section=signature" },
+        { label: "Saison",        href: "/produits?section=saison" },
+        { label: "Spécialités",   href: "/produits?section=specialites" },
+        { label: "Disponibilité", href: "/disponibilite" },
       ],
     },
   ],
