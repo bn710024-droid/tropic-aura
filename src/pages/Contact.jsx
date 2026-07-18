@@ -55,12 +55,15 @@ export default function Contact() {
     : "";
 
   // Particules dorées de la carte de remerciement — positions/délais figés
-  // une seule fois (pas régénérés à chaque re-render de status).
-  const dustParticles = useMemo(() => Array.from({ length: 20 }, () => ({
+  // une seule fois (pas régénérés à chaque re-render de status). Mélange de
+  // deux comportements (chute / flottement) pour un effet "poussière au
+  // soleil" plutôt qu'une pluie uniforme.
+  const dustParticles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
     left: Math.random() * 100,
     delay: Math.random() * 5,
     duration: 4.5 + Math.random() * 3,
     size: 3 + Math.random() * 3,
+    variant: i % 3 === 0 ? "float" : "fall",
   })), []);
 
   // collecte des éléments à révéler
@@ -148,8 +151,9 @@ export default function Contact() {
         return;
       }
       setStatus("sent");
-      // La signature "s'écrit" seule après un temps de lecture — voir carte de remerciement.
-      setTimeout(() => setSignatureWriting(true), 5500);
+      // La signature "s'écrit" seule après un court temps de lecture du
+      // message — voir carte de remerciement.
+      setTimeout(() => setSignatureWriting(true), 2400);
     } catch {
       setStatus("error");
       setErrorMsg("L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
@@ -199,12 +203,23 @@ export default function Contact() {
         @keyframes dustFall {
           0%   { transform: translateY(-10%) translateX(0); opacity: 0; }
           10%  { opacity: 1; }
-          90%  { opacity: 1; }
-          100% { transform: translateY(420px) translateX(14px); opacity: 0; }
+          70%  { opacity: .8; }
+          100% { transform: translateY(320px) translateX(14px); opacity: 0; }
+        }
+        @keyframes dustFloat {
+          0%   { transform: translateY(0) translateX(0); opacity: 0; }
+          15%  { opacity: .9; }
+          50%  { transform: translateY(-14px) translateX(8px); opacity: .5; }
+          85%  { opacity: .7; }
+          100% { transform: translateY(6px) translateX(-6px); opacity: 0; }
         }
         @keyframes cardIn {
-          from { opacity: 0; transform: translateY(16px) scale(.98); }
-          to   { opacity: 1; transform: none; }
+          from { opacity: 0; filter: blur(4px); transform: translateY(20px) scale(.97); }
+          to   { opacity: 1; filter: blur(0); transform: none; }
+        }
+        @keyframes cardShine {
+          from { transform: translateX(-160%) skewX(-12deg); }
+          to   { transform: translateX(160%) skewX(-12deg); }
         }
         @media (max-width: 820px){
           .ct-grid   { grid-template-columns: 1fr !important; gap: 48px !important; }
@@ -309,9 +324,10 @@ export default function Contact() {
           <form ref={reveal} onSubmit={onSubmit} style={{ ...r0, transitionDelay: ".1s", position: "relative" }}>
             <div style={{
               opacity: status === "sent" ? 0 : 1,
-              transform: status === "sent" ? "scale(0.96)" : "none",
+              filter: status === "sent" ? "blur(6px)" : "blur(0px)",
+              transform: status === "sent" ? "translateY(14px)" : "none",
               pointerEvents: status === "sent" ? "none" : "auto",
-              transition: "opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1)",
+              transition: "opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1), filter .6s ease",
             }}>
               <div className="ct-form-2">
                 <div>
@@ -374,18 +390,39 @@ export default function Contact() {
 
             {status === "sent" && (
               <div style={{
-                position: "absolute", inset: 0,
-                animation: "cardIn .8s cubic-bezier(.22,1,.36,1) both",
-                animationDelay: ".15s",
+                position: "absolute", inset: 0, overflow: "hidden",
+                animation: "cardIn .65s cubic-bezier(.22,1,.36,1) both",
+                animationDelay: ".12s",
               }}>
-                {/* Poussière dorée */}
+                {/* Halo doré discret derrière le texte — pas de flou sur le
+                    contenu lui-même (contrairement au glass-card rejeté
+                    ailleurs sur le site), juste une forme colorée floutée
+                    en arrière-plan. */}
+                <div style={{
+                  position: "absolute", left: "-10%", top: "-15%", width: "55%", height: "70%",
+                  background: `radial-gradient(closest-side, ${GOLD}3D, transparent)`,
+                  filter: "blur(50px)", pointerEvents: "none",
+                }} />
+
+                {/* Reflet unique qui traverse la carte une fois */}
+                <div style={{
+                  position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden",
+                }}>
+                  <div style={{
+                    position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
+                    background: "linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent)",
+                    animation: "cardShine 1.3s ease-out 1s 1 both",
+                  }} />
+                </div>
+
+                {/* Poussière dorée — chute et flottement mêlés */}
                 <div style={{ position: "absolute", inset: "-40px 0 auto 0", height: 460, overflow: "hidden", pointerEvents: "none" }}>
                   {dustParticles.map((p, i) => (
                     <span key={i} style={{
                       position: "absolute", top: 0, left: `${p.left}%`,
                       width: p.size, height: p.size, borderRadius: "50%",
                       background: GOLD, boxShadow: `0 0 6px ${GOLD}`,
-                      animation: `dustFall ${p.duration}s ease-in ${p.delay}s infinite`,
+                      animation: `${p.variant === "float" ? "dustFloat" : "dustFall"} ${p.duration}s ease-in-out ${p.delay}s infinite`,
                     }} />
                   ))}
                 </div>
@@ -423,12 +460,30 @@ export default function Contact() {
                         Babacar Niang
                       </span>
                     </div>
+
+                    {/* Fin trait doré — se dessine juste après la signature,
+                        comme si le document venait d'être paraphé. */}
+                    <div style={{
+                      width: signatureWriting ? 170 : 0, height: 1, background: GOLD,
+                      transition: "width 1s cubic-bezier(.65,0,.35,1) 1.8s",
+                    }} />
+
                     <span style={{
-                      display: "block", marginTop: 4,
+                      display: "block", marginTop: 8,
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700,
                       letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(0,0,0,0.42)",
                     }}>
                       Founder, Tropicaura
+                    </span>
+
+                    <span style={{
+                      display: "block", marginTop: 12,
+                      opacity: signatureWriting ? 1 : 0,
+                      transition: "opacity 1.4s ease 2s",
+                      fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, fontStyle: "italic",
+                      color: "rgba(0,0,0,0.55)",
+                    }}>
+                      Au plaisir d'échanger avec vous.
                     </span>
 
                     <p style={{
