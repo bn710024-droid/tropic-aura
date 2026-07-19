@@ -33,6 +33,7 @@ export const ROUTES = [
     parent: "/produits",
   })),
   { path: "/disponibilite", label: "Disponibilité", changefreq: "monthly", priority: 0.7, parent: "/produits" },
+  { path: "/politique-confidentialite", label: "Politique de confidentialité", changefreq: "yearly", priority: 0.3 },
   { path: "/about", label: "À Propos", changefreq: "monthly", priority: 0.8 },
   { path: "/partenariats", label: "Partenariats", changefreq: "monthly", priority: 0.8 },
   { path: "/insights", label: "Insights", changefreq: "weekly", priority: 0.7 },

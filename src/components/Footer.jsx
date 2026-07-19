@@ -177,12 +177,35 @@ export default function Footer() {
           }}>
             Construit pour les Partenariats de Long Terme.
           </span>
-          <span style={{
-            fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
-            letterSpacing: ".10em", color: "rgba(255,255,255,0.28)",
-          }}>
-            © 2026 Tropicaura B.C.
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <a
+              href="/politique-confidentialite"
+              style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
+                letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", textDecoration: "none",
+              }}
+              onMouseEnter={overOn} onMouseLeave={overOff}
+            >
+              Confidentialité
+            </a>
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-cookie-preferences"))}
+              style={{
+                fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
+                letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", background: "none",
+                border: "none", padding: 0, cursor: "pointer",
+              }}
+              onMouseEnter={overOn} onMouseLeave={overOff}
+            >
+              Gérer les cookies
+            </button>
+            <span style={{
+              fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
+              letterSpacing: ".10em", color: "rgba(255,255,255,0.28)",
+            }}>
+              © 2026 Tropicaura B.C.
+            </span>
+          </div>
         </div>
       </div>
 

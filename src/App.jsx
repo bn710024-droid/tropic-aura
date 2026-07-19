@@ -6,6 +6,7 @@ import Partenariats from "./pages/Partenariats";
 import Produits     from "./pages/Produits";
 import ProductDetail from "./pages/ProductDetail";
 import Disponibilite from "./pages/Disponibilite";
+import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import Contact      from "./pages/Contact";
 import Insights        from "./pages/Insights";
 import InsightSenegal      from "./pages/InsightSenegal";
@@ -13,6 +14,7 @@ import InsightPartenariats from "./pages/InsightPartenariats";
 import NotFound     from "./pages/NotFound";
 import LiquidMenu   from "./components/LiquidMenu";
 import Footer       from "./components/Footer";
+import CookieBanner from "./components/CookieBanner";
 import "./styles/global.css";
 
 // ============================================================
@@ -56,6 +58,7 @@ export default function App() {
         <Route path="/products" element={<Produits />} />
         <Route path="/produits/:slug" element={<ProductDetail />} />
         <Route path="/disponibilite" element={<Disponibilite />} />
+        <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/insights/senegal-origine-strategique" element={<InsightSenegal />} />
@@ -64,6 +67,7 @@ export default function App() {
       </Routes>
       {!isArticle && !isHome && <Footer />}
       {!isArticle && <LiquidMenu />}
+      <CookieBanner />
     </>
   );
 }
