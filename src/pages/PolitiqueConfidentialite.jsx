@@ -50,6 +50,11 @@ export default function PolitiqueConfidentialite() {
         ]}
       />
       <TopBar />
+      <img
+        src="/logo-mark.png"
+        alt="Tropicaura — Politique de confidentialité"
+        width={512} height={512} style={{ display: "none" }}
+      />
       <Breadcrumbs trail={trail} />
 
       <main style={{ background: "#F5F1E8", padding: "clamp(100px,14vh,160px) clamp(24px,8vw,140px) clamp(80px,12vh,140px)" }}>
