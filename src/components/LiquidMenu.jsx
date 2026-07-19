@@ -37,9 +37,13 @@ const COLUMNS = [
         { label: "Signature",     href: "/produits?section=signature" },
         { label: "Saison",        href: "/produits?section=saison" },
         { label: "Spécialités",   href: "/produits?section=specialites" },
-        { label: "Disponibilité", href: "/disponibilite" },
       ],
     },
+    // Rubrique de premier niveau (pas un sous-lien de Produits) : le calendrier
+    // mérite sa propre place dans le menu, au même niveau que les autres pages
+    // importantes. Réutilise la photo de Produits (thématiquement cohérente,
+    // pas de nouvelle image fabriquée).
+    { label: "Disponibilité", href: "/disponibilite", img: "/menu-produits.jpg" },
   ],
   [
     {

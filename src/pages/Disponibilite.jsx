@@ -25,7 +25,10 @@ import { PRODUCTS } from "../data/productsData";
 export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const GOLD = "#D4AF6A";
-const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+// Abréviations 3 lettres plutôt qu'une seule : "J" seul est ambigu (janvier,
+// juin, juillet partagent la même initiale) — illisible pour un planning que
+// l'on doit pouvoir lire d'un coup d'œil, pas déchiffrer.
+const MONTHS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 const MONTH_LABELS = [
   "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
   "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre",
@@ -91,22 +94,39 @@ export default function Disponibilite() {
           grid-template-columns: 200px repeat(12, 1fr) 150px;
           align-items: center;
           gap: 6px;
-          padding: 14px 0;
+          padding: 14px 16px;
+          margin: 0 -16px;
           border-top: 1px solid rgba(0,0,0,0.08);
+          border-radius: 8px;
+          transition: background-color .2s ease;
         }
+        /* Aucun état hover n'existait sur cette page (vérifié) — pour un
+           planning consulté ligne par ligne, un léger surlignage aide à suivre
+           la lecture horizontale sans distraire (même logique que le survol
+           des liens de coordonnées sur Contact.jsx). */
+        .avail-row:hover { background-color: rgba(0,0,0,0.035); }
         .avail-head {
           display: grid;
           grid-template-columns: 200px repeat(12, 1fr) 150px;
           gap: 6px;
-          padding: 0 0 10px;
+          padding: 0 16px 12px;
+          margin: 0 -16px;
         }
         .avail-cell {
           height: 22px; border-radius: 5px;
           background: rgba(0,0,0,0.06);
+          transition: transform .15s ease;
         }
+        .avail-row:hover .avail-cell { transform: scaleY(1.12); }
+        .avail-more {
+          color: #1A1A1A; text-decoration: none;
+          border-bottom: 1px solid rgba(0,0,0,0.3);
+          transition: border-color .2s ease;
+        }
+        .avail-more:hover { border-color: rgba(0,0,0,0.75); }
         @media (max-width: 860px) {
           .avail-head { display: none; }
-          .avail-row { grid-template-columns: 1fr; gap: 10px; padding: 22px 0; }
+          .avail-row { grid-template-columns: 1fr; gap: 10px; padding: 22px 16px; }
           .avail-row-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
         }
         .avail-row-grid { display: contents; }
@@ -164,9 +184,9 @@ export default function Disponibilite() {
           <div className="avail-head" aria-hidden="true">
             <span />
             {MONTHS.map((m, i) => (
-              <span key={i} style={{
+              <span key={i} title={MONTH_LABELS[i]} style={{
                 textAlign: "center", fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontSize: 11, fontWeight: 700, color: "rgba(0,0,0,0.4)",
+                fontSize: 11, fontWeight: 700, color: "rgba(0,0,0,0.4)", letterSpacing: ".02em",
               }}>{m}</span>
             ))}
             <span />
@@ -176,9 +196,13 @@ export default function Disponibilite() {
             const items = PRODUCTS.filter((p) => p.collection === coll);
             if (!items.length) return null;
             return (
-              <div key={coll} ref={reveal} style={r0}>
+              <div key={coll} ref={reveal} style={{ ...r0, marginTop: 44 }}>
+                {/* Filet doré : même repère visuel que Contact/ProductDetail
+                    (accentBar), absent jusqu'ici sur cette page — d'où le léger
+                    manque de rythme signalé face aux autres pages. */}
+                <div style={{ width: 36, height: 2, background: GOLD, marginBottom: 14, borderRadius: 2 }} />
                 <span style={{
-                  display: "block", marginTop: 30, marginBottom: 4,
+                  display: "block", marginBottom: 6,
                   fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10.5, fontWeight: 700,
                   letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)",
                 }}>
@@ -204,20 +228,24 @@ export default function Disponibilite() {
                         const active = p.seasonMonths?.includes(month);
                         const peak = p.peakMonths?.includes(month);
                         return (
-                          <div key={i} className="avail-cell" title={active ? MONTH_LABELS[i] : undefined} style={{
-                            background: active ? (peak ? p.accentColor : `${p.accentColor}99`) : "rgba(0,0,0,0.06)",
-                            border: peak ? `1.5px solid ${GOLD}` : "none",
-                          }} />
+                          <div
+                            key={i} className="avail-cell"
+                            title={`${MONTH_LABELS[i]}${active ? (peak ? " — pic de disponibilité" : " — disponible") : " — hors saison"}`}
+                            style={{
+                              background: active ? (peak ? p.accentColor : `${p.accentColor}99`) : "rgba(0,0,0,0.06)",
+                              border: peak ? `1.5px solid ${GOLD}` : "none",
+                            }}
+                          />
                         );
                       })}
                     </div>
 
                     <Link
                       to={`/contact?product=${encodeURIComponent(p.name)}&origin=${encodeURIComponent(p.origin)}&section=form`}
+                      className="avail-more"
                       style={{
                         justifySelf: "end", fontFamily: "'Plus Jakarta Sans',sans-serif",
-                        fontSize: 12, fontWeight: 700, color: "#1A1A1A", textDecoration: "none",
-                        borderBottom: "1px solid rgba(0,0,0,0.3)", whiteSpace: "nowrap",
+                        fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
                       }}
                     >
                       Demander une offre →
