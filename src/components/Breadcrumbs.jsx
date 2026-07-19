@@ -24,6 +24,7 @@ export default function Breadcrumbs({ trail }) {
   const color = "rgba(255,255,255,0.62)";
   const currentColor = "rgba(255,255,255,0.95)";
   const sepColor = "rgba(255,255,255,0.35)";
+  const goldAccent = "#D4AF6A";
 
   return (
     <nav
@@ -59,6 +60,7 @@ export default function Breadcrumbs({ trail }) {
       >
         {trail.map((item, i) => {
           const isLast = i === trail.length - 1;
+          const isHome = i === 0;
           return (
             <li key={item.path} style={{ display: "flex", alignItems: "center", gap: 6 }}>
               {i > 0 && <span aria-hidden="true" style={{ color: sepColor }}>/</span>}
@@ -69,10 +71,11 @@ export default function Breadcrumbs({ trail }) {
               ) : (
                 <Link
                   to={item.path}
-                  style={{ color, textDecoration: "none", transition: "color .2s ease" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = currentColor)}
+                  style={{ color, textDecoration: "none", transition: "color .2s ease", display: "inline-flex", alignItems: "center", gap: 5 }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = goldAccent)}
                   onMouseLeave={(e) => (e.currentTarget.style.color = color)}
                 >
+                  {isHome && <span aria-hidden="true" style={{ fontSize: 11 }}>⌂</span>}
                   {item.label}
                 </Link>
               )}

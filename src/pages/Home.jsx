@@ -524,8 +524,10 @@ export default function Home() {
         jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: "/", title: "Tropicaura", description: homeDescription })]}
       />
 
-      {/* Top bar avec logo + menu */}
-      <TopBar />
+      {/* Top bar complète (vitrine de l'entreprise) — les autres pages
+          restent minimalistes : logo + fil d'Ariane + bouton menu, voir
+          TopBar.jsx. */}
+      <TopBar variant="full" />
 
       {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
       <img

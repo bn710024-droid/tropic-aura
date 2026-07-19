@@ -416,18 +416,50 @@ export default function LiquidMenu() {
               opacity: 0, transform: "translateY(28px)",
               willChange: "transform,opacity",
               marginTop: "clamp(34px,6vh,64px)",
-              display: "flex", alignItems: "center", gap: 18,
+              display: "flex", flexDirection: "column", gap: 22,
             }}
           >
-            <div style={{ width: 26, height: 1, background: "rgba(255,255,255,0.16)" }} />
-            <span style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: 10, fontWeight: 500,
-              letterSpacing: ".24em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.26)",
-            }}>
-              Tropicaura · Commerce Tropical d'Excellence
-            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "clamp(20px,3vw,36px)", flexWrap: "wrap" }}>
+              {/* EN désactivé : pas encore de vraie version anglaise —
+                   état "à venir" honnête plutôt qu'un bouton silencieux. */}
+              <span
+                title="Version anglaise à venir"
+                style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  fontSize: 13, fontWeight: 600, letterSpacing: ".04em",
+                  color: "rgba(255,255,255,0.75)", cursor: "default",
+                }}
+              >
+                FR <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.3)" }}>|</span>{" "}
+                <span style={{ opacity: 0.4 }}>EN</span>
+              </span>
+              <button
+                onClick={() => goTo("/contact?section=form")}
+                style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  fontSize: 13, fontWeight: 700, letterSpacing: ".02em",
+                  color: "#0A0A0A", background: "#fff",
+                  border: "1.5px solid #fff", borderRadius: 100,
+                  padding: "10px 22px", cursor: "pointer",
+                  transition: "transform .25s ease, background-color .25s ease, color .25s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#0A0A0A"; }}
+              >
+                Demander un devis
+              </button>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+              <div style={{ width: 26, height: 1, background: "rgba(255,255,255,0.16)" }} />
+              <span style={{
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontSize: 10, fontWeight: 500,
+                letterSpacing: ".24em", textTransform: "uppercase",
+                color: "rgba(255,255,255,0.26)",
+              }}>
+                Tropicaura · Commerce Tropical d'Excellence
+              </span>
+            </div>
           </div>
         </nav>
       </div>

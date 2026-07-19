@@ -289,6 +289,74 @@ body::-webkit-scrollbar { display: none; }
   background: url(/logo-mark.png) center / contain no-repeat;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
 }
+/* ---------- NAV DESKTOP (TopBar) ---------- */
+/* Au-dessus de 1024px : nav horizontale complète, bouton menu fullscreen
+   masqué (la nav classique suffit). En dessous : expérience mobile
+   existante inchangée (bouton menu + LiquidMenu fullscreen). */
+.topbar-nav { display: none; }
+.topbar-menu-btn { display: flex; }
+@media (min-width: 1025px) {
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2vw, 32px);
+  }
+  /* Seule la variante "full" (Accueil) remplace le bouton menu par la nav
+     complète en desktop — les autres pages gardent le bouton à toute
+     largeur, pour préserver l'expérience immersive par page/produit. */
+  .topbar--full .topbar-menu-btn { display: none; }
+}
+.topbar-nav__link {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -.005em;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  position: relative;
+  padding-bottom: 3px;
+}
+.topbar-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: 0;
+  height: 1.5px;
+  background: #D4AF6A;
+  transition: right .3s cubic-bezier(.22,1,.36,1);
+}
+.topbar-nav__link:hover::after { right: 0; }
+.topbar-nav__lang {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  cursor: default;
+}
+.topbar-nav__lang-en { opacity: .4; }
+.topbar-nav__cta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .03em;
+  color: #0B1310;
+  background: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 11px 22px;
+  border-radius: 100px;
+  border: 1.5px solid #fff;
+  transition: transform .25s ease, background-color .25s ease, color .25s ease;
+}
+.topbar-nav__cta:hover {
+  transform: translateY(-1px);
+  background: transparent;
+  color: #fff;
+}
 .ghost__contact {
   position: relative;
   display: inline-flex;
