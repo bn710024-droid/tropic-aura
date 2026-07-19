@@ -43,6 +43,22 @@
     <!-- Logo de marque : présent en position fixe sur TOUTES les pages
          (TopBar) → préchargement pour éviter tout flash sans logo. -->
     <link rel="preload" as="image" href="/logo-mark.png" fetchpriority="high" />
+
+    <!-- Google Analytics 4 — chargé statiquement (pas via JS après montage
+         React) car les crawlers de vérification (Google Search Console,
+         Analytics) ne lisent que le HTML servi, pas le DOM post-hydratation.
+         %VITE_GA_MEASUREMENT_ID% est substitué au build par Vite depuis la
+         variable d'env Vercel — jamais de valeur en dur dans le code source.
+         Consentement RGPD par défaut refusé ; mis à jour via gtag('consent',
+         'update', ...) par le bandeau de cookies (voir lib/analytics.js). -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('consent', 'default', { analytics_storage: 'denied' });
+      gtag('config', '%VITE_GA_MEASUREMENT_ID%', { anonymize_ip: true });
+    </script>
   </head>
   <body>
     <div id="root"></div>

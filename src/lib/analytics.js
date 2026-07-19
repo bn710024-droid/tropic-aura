@@ -1,36 +1,16 @@
 // ============================================================
-//  analytics.js — Google Analytics 4 avec gestion du consentement.
+//  analytics.js — gestion du consentement pour Google Analytics 4.
 //
-//  Le script gtag.js est injecté si VITE_GA_MEASUREMENT_ID est
-//  configuré (Vercel → Environment Variables). Le consentement est
-//  géré via gtag('consent', 'default'|'update') — pas d'envoi de
-//  données avant acceptation, conforme RGPD/ePrivacy.
-//
-//  GA4 plutôt qu'Universal Analytics : UA est arrêté par Google
-//  depuis juillet 2023 (aucune nouvelle donnée collectée).
+//  Le tag gtag.js lui-même est chargé statiquement dans index.html
+//  (nécessaire pour que les crawlers de vérification Google le
+//  détectent — ils ne lisent que le HTML servi, pas le DOM
+//  post-hydratation React). Ce module ne gère QUE le consentement :
+//  gtag('consent', 'update', ...) pas d'envoi de données avant
+//  acceptation, conforme RGPD/ePrivacy.
 // ============================================================
 
-const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
-let loaded = false;
-
 export function loadAnalyticsIfConsented(consent) {
-  if (!GA_ID || loaded) return;
-  loaded = true;
-
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(script);
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  window.gtag = gtag;
-  gtag("js", new Date());
-  gtag("consent", "default", {
-    analytics_storage: consent?.analytics ? "granted" : "denied",
-  });
-  gtag("config", GA_ID, { anonymize_ip: true });
+  updateAnalyticsConsent(consent);
 }
 
 // Révoquer le consentement en cours de session (l'utilisateur rouvre les
