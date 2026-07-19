@@ -4,7 +4,7 @@
   "description": "Exportateur B2B premium de fruits et légumes frais d'Afrique de l'Ouest vers l'Europe, le Canada, le Royaume-Uni et le Moyen-Orient.",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "browser",
   "orientation": "portrait-primary",
   "background_color": "#0B0F0A",
   "theme_color": "#0B0F0A",
