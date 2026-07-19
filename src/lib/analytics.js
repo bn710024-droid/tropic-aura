@@ -1,18 +1,13 @@
 // ============================================================
-//  analytics.js — chargement conditionnel de Google Analytics 4.
+//  analytics.js — Google Analytics 4 avec gestion du consentement.
 //
-//  Le script gtag.js n'est injecté QUE si les deux conditions sont
-//  réunies :
-//    1. l'utilisateur a accepté la catégorie "analytics" (RGPD —
-//       aucun script tiers non essentiel avant consentement) ;
-//    2. VITE_GA_MEASUREMENT_ID est configuré (Vercel → Environment
-//       Variables). Tant que la propriété GA4 n'existe pas, cette
-//       variable est absente et rien ne se charge — pas d'erreur,
-//       pas de script fantôme.
+//  Le script gtag.js est injecté si VITE_GA_MEASUREMENT_ID est
+//  configuré (Vercel → Environment Variables). Le consentement est
+//  géré via gtag('consent', 'default'|'update') — pas d'envoi de
+//  données avant acceptation, conforme RGPD/ePrivacy.
 //
 //  GA4 plutôt qu'Universal Analytics : UA est arrêté par Google
-//  depuis juillet 2023 (aucune nouvelle donnée collectée) — ce
-//  n'est plus un choix, c'est la seule option disponible aujourd'hui.
+//  depuis juillet 2023 (aucune nouvelle donnée collectée).
 // ============================================================
 
 const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
@@ -20,7 +15,7 @@ const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 let loaded = false;
 
 export function loadAnalyticsIfConsented(consent) {
-  if (!GA_ID || !consent?.analytics || loaded) return;
+  if (!GA_ID || loaded) return;
   loaded = true;
 
   const script = document.createElement("script");
@@ -32,8 +27,9 @@ export function loadAnalyticsIfConsented(consent) {
   function gtag() { window.dataLayer.push(arguments); }
   window.gtag = gtag;
   gtag("js", new Date());
-  // anonymize_ip : conforme aux recommandations CNIL pour limiter la
-  // donnée personnelle collectée à ce qui est strictement nécessaire.
+  gtag("consent", "default", {
+    analytics_storage: consent?.analytics ? "granted" : "denied",
+  });
   gtag("config", GA_ID, { anonymize_ip: true });
 }
 
