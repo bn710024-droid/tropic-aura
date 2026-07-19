@@ -124,6 +124,7 @@ export default function Produits() {
   const photoRefs   = useRef([]);  // .prod-photo par section — point de départ du morph "En savoir plus"
   const dotRefs     = useRef([]);
   const lenisRef    = useRef(null);
+  const wrapperRef  = useRef(null);  // wrapper de scroll dédié mobile (html/body figés) — même pattern que Home.jsx : évite la danse de la barre d'URL iOS qui faisait "lutter" le scroll en remontant
   const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
   const [morphTarget, setMorphTarget] = useState(null);
 
@@ -138,7 +139,7 @@ export default function Produits() {
     const photoEl = photoRefs.current[i];
     const rect = (photoEl || e.currentTarget).getBoundingClientRect();
     setMorphTarget({ top: rect.top, left: rect.left, width: rect.width, height: rect.height, color: SECTIONS[i].bg });
-    setTimeout(() => navigate(href), 500);
+    setTimeout(() => navigate(href), 190);
   };
 
   useEffect(() => {
@@ -206,6 +207,10 @@ export default function Produits() {
       // 100vh) et pouvait faire "sauter" un titre. Elle est désormais gérée par
       // un IntersectionObserver (voir plus bas) — apparition fiable, composée par
       // le GPU via une transition CSS, indépendante de tout calcul de scroll.
+      // Les dots de navigation sont DESKTOP UNIQUEMENT (display:none sur mobile) :
+      // on saute entièrement leurs écritures de style sur mobile (!lenis) → plus
+      // aucun calcul/écriture inutile sur 13 éléments cachés à chaque frame de scroll.
+      if (!lenis) return;
       const active = Math.min(last, Math.max(0, Math.round(scroll / H)));
       dotRefs.current.forEach((dot, j) => {
         if (!dot) return;
@@ -217,31 +222,43 @@ export default function Produits() {
       });
     };
 
+    // Lecture du scroll : desktop = Lenis ; mobile = le WRAPPER dédié (html/body
+    // figés overflow:hidden → window.scrollY resterait bloqué à 0). Même pattern
+    // que Home.jsx. C'est le cœur du correctif "scroll qui lutte en remontant" :
+    // scroller un conteneur interne garde la barre d'URL iOS stable (pas de
+    // reflow dvh à chaque frame), au lieu de scroller le body.
     const readScroll = () => {
       if (lenis) {
         const s = lenis.animatedScroll;
         return Number.isFinite(s) ? s : (window.scrollY || 0);
       }
+      const w = wrapperRef.current;
+      if (w && w.scrollHeight > w.clientHeight) return w.scrollTop;
       return window.scrollY || 0;
     };
+
+    // DESKTOP : boucle rAF qui pilote Lenis + le fondu de couleur.
     const raf = (time) => {
-      if (lenis) lenis.raf(time);
+      lenis.raf(time);
       const scroll = readScroll();
       if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
       rafId = requestAnimationFrame(raf);
     };
 
-    // Filet de sécurité mobile (pas de Lenis) : requestAnimationFrame est throttlé
-    // par iOS Safari pendant un geste tactile actif (doigt posé, en train de
-    // glisser) — même mécanisme documenté/corrigé sur l'accueil. Un vrai
-    // événement 'scroll' natif ne l'est pas : il garde update() synchronisé
-    // même quand rAF accumule du retard (visible surtout en remontant vite).
-    const onNativeScroll = () => {
-      if (lenis) return;
-      const scroll = window.scrollY || 0;
-      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
+    // MOBILE : l'événement 'scroll' du wrapper déclenche, mais les écritures de
+    // style sont COALESCÉES dans un seul rAF par frame (calé sur le paint) — pas
+    // de boucle rAF permanente qui tourne dans le vide au repos. Fonction pure
+    // du scroll → rien ne bouge quand le doigt ne bouge pas.
+    let scrollRafId = 0;
+    const onWrapperScroll = () => {
+      if (scrollRafId) return;
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = 0;
+        const scroll = readScroll();
+        if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, secH); }
+      });
     };
-    if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
+    const wrapperEl = wrapperRef.current;
 
     // Restauration : priorité au saut ?section=<slug> explicite (lien de menu),
     // sinon on reprend la position quittée si elle existe.
@@ -249,19 +266,26 @@ export default function Produits() {
     const savedY = !hasSectionParam ? Number(sessionStorage.getItem(SCROLL_MEMORY_KEY)) : 0;
     if (savedY > 0) {
       if (lenis) lenis.scrollTo(savedY, { immediate: true });
+      else if (wrapperEl) wrapperEl.scrollTop = savedY;
       else window.scrollTo(0, savedY);
       lastScroll = savedY;
       update(savedY, secH);
     } else {
       update(0, secH);
     }
-    rafId = requestAnimationFrame(raf);
+
+    if (lenis) {
+      rafId = requestAnimationFrame(raf);
+    } else if (wrapperEl) {
+      wrapperEl.addEventListener('scroll', onWrapperScroll, { passive: true });
+    }
 
     return () => {
       cancelAnimationFrame(rafId);
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
       io.disconnect();
       window.removeEventListener("resize", onResize);
-      window.removeEventListener('scroll', onNativeScroll);
+      if (wrapperEl) wrapperEl.removeEventListener('scroll', onWrapperScroll);
       sessionStorage.setItem(SCROLL_MEMORY_KEY, String(readScroll()));
       if (lenis) lenis.destroy();
     };
@@ -269,9 +293,11 @@ export default function Produits() {
 
   const scrollTo = (i) => {
     const H = secHRef.current || window.innerHeight;
-    return lenisRef.current
-      ? lenisRef.current.scrollTo(i * H, { duration: 1.2 })
-      : window.scrollTo({ top: i * H, behavior: "smooth" });
+    if (lenisRef.current) return lenisRef.current.scrollTo(i * H, { duration: 1.2 });
+    // Mobile : c'est le wrapper qui scrolle (body figé) → viser son scrollTop.
+    const w = wrapperRef.current;
+    if (w && w.scrollHeight > w.clientHeight) { w.scrollTo({ top: i * H, behavior: "smooth" }); return; }
+    window.scrollTo({ top: i * H, behavior: "smooth" });
   };
 
   // Saut direct vers une collection via ?section=<slug> (déclenché par les
@@ -371,7 +397,13 @@ export default function Produits() {
         ))}
       </nav>
 
-      {/* Scènes */}
+      {/* Scènes — enveloppées dans le wrapper de scroll dédié : sur mobile c'est
+          CE conteneur qui défile (html/body figés), pas le body natif → la barre
+          d'URL iOS reste stable, plus de reflow dvh à chaque frame, le scroll ne
+          "lutte" plus en remontant. display:contents sur desktop (no-op, Lenis
+          inchangé). .bg-layer / .bg-depth / dots / morph restent HORS du wrapper
+          (siblings fixes) pour rester ancrés au viewport stable. */}
+      <div className="mobile-scroll-wrapper" ref={wrapperRef}>
       {SECTIONS.map((s, i) => {
         if (s.type === "besoin") {
           return (
@@ -531,6 +563,7 @@ export default function Produits() {
           </section>
         );
       })}
+      </div>
 
       {/* Voile de morph "En savoir plus" — même mécanisme que le CTA de Home.jsx */}
       {morphTarget && (

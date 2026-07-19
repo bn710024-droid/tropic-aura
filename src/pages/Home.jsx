@@ -505,8 +505,10 @@ export default function Home() {
       color,
     });
     requestAnimationFrame(() => { btn.classList.add('is-tapping'); });
-    setTimeout(() => { window.location.href = href; }, 500);
-    setTimeout(() => setMorphTarget(null), 700);
+    // Transition rapide (voir .cta-morph, 220ms) : navigation à ~190ms pour une
+    // réponse immédiate au clic. Rapidité > effet.
+    setTimeout(() => { window.location.href = href; }, 190);
+    setTimeout(() => setMorphTarget(null), 400);
   };
 
   const homeDescription =
