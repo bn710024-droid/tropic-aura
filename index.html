@@ -49,16 +49,13 @@
          Analytics) ne lisent que le HTML servi, pas le DOM post-hydratation.
          %VITE_GA_MEASUREMENT_ID% est substitué au build par Vite depuis la
          variable d'env Vercel — jamais de valeur en dur dans le code source.
+         Le script d'initialisation est un fichier EXTERNE (/ga-init.js), pas
+         inline : le CSP (script-src 'self' ...) bloque les scripts inline
+         sans nonce/hash, un fichier same-origin passe nativement.
          Consentement RGPD par défaut refusé ; mis à jour via gtag('consent',
          'update', ...) par le bandeau de cookies (voir lib/analytics.js). -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('consent', 'default', { analytics_storage: 'denied' });
-      gtag('config', '%VITE_GA_MEASUREMENT_ID%', { anonymize_ip: true });
-    </script>
+    <script src="/ga-init.js" data-ga-id="%VITE_GA_MEASUREMENT_ID%"></script>
   </head>
   <body>
     <div id="root"></div>
