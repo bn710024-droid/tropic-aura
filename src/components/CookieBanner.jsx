@@ -19,13 +19,14 @@ import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analyti
 // ============================================================
 
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+  // Initialiser `visible` basé sur le consentement réel, pas false → true après
+  // montage. Cela évite que le bandeau n'aparaisse brièvement avant de disparaître.
+  const [visible, setVisible] = useState(!hasDecided());
   const [customizing, setCustomizing] = useState(false);
   const [draft, setDraft] = useState({ analytics: false });
 
   useEffect(() => {
-    if (!hasDecided()) setVisible(true);
-    else loadAnalyticsIfConsented(getConsent());
+    if (hasDecided()) loadAnalyticsIfConsented(getConsent());
 
     const reopen = () => {
       setDraft({ analytics: !!getConsent()?.analytics });
