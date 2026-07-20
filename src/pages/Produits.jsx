@@ -323,7 +323,7 @@ export default function Produits() {
   }, []);
 
   const produitsDescription =
-    "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, sélectionnés pour l'export B2B premium vers l'Europe et au-delà.";
+    "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, pour l'export B2B premium.";
   const produitsTrail = buildBreadcrumbTrail("/produits");
 
   return (

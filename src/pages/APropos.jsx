@@ -373,7 +373,7 @@ export default function APropos() {
   }, []);
 
   const aboutDescription =
-    "Tropicaura relie producteurs, logisticiens et acheteurs internationaux autour d'une même exigence : qualité, traçabilité et conformité export en Afrique de l'Ouest.";
+    "Tropicaura relie producteurs, logisticiens et acheteurs internationaux autour d'une même exigence : qualité, traçabilité et conformité export.";
   const aboutTrail = buildBreadcrumbTrail("/about");
 
   return (

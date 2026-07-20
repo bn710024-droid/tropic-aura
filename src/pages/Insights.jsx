@@ -80,7 +80,7 @@ export default function Insights() {
   const iconStyle = { width: 20, height: 20, marginBottom: 10, opacity: 0.6 };
 
   const insightsDescription =
-    "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques, sourcing en Afrique de l'Ouest et fiabilité des partenariats fournisseurs.";
+    "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques et sourcing en Afrique de l'Ouest.";
   const insightsTrail = buildBreadcrumbTrail("/insights");
 
   return (
