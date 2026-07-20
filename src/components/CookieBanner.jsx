@@ -59,8 +59,6 @@ export default function CookieBanner() {
     setCustomizing(false);
   };
 
-  if (!visible) return null;
-
   const FONT = "'Plus Jakarta Sans',sans-serif";
   const btnBase = {
     fontFamily: FONT, fontSize: 13, fontWeight: 700, letterSpacing: ".02em",
@@ -72,11 +70,18 @@ export default function CookieBanner() {
   return (
     <div
       role="dialog" aria-modal="false" aria-label="Préférences cookies"
+      // Glissement doux depuis le bas plutôt qu'une apparition/disparition
+      // brutale — un pop-in/pop-out sans transition se ressent comme un
+      // "saut" au chargement de chaque page.
       style={{
         position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 400,
         background: "#0B1310", borderTop: "1px solid rgba(255,255,255,0.12)",
         padding: "22px clamp(20px,5vw,40px) calc(22px + env(safe-area-inset-bottom, 0px))",
         boxShadow: "0 -12px 40px rgba(0,0,0,0.35)",
+        transform: visible ? "translateY(0)" : "translateY(100%)",
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transition: "transform .4s cubic-bezier(.22,1,.36,1), opacity .35s ease",
       }}
     >
       <div style={{ maxWidth: 980, margin: "0 auto" }}>

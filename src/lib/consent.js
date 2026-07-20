@@ -12,12 +12,18 @@
 //        GA4 n'est chargé que si accepté ET qu'un Measurement ID
 //        est configuré (VITE_GA_MEASUREMENT_ID) — voir analytics.js.
 //
-//  Stockage : localStorage (persiste au-delà de la session, contrairement
-//  à sessionStorage, ce qui est le comportement attendu pour un choix
-//  de préférence cookies qui ne doit pas être redemandé à chaque visite).
+//  Stockage : localStorage EN PRIORITÉ + cookie de secours. Le site fait
+//  des rechargements complets de page entre les rubriques (voir App.jsx —
+//  <a href> classiques, pas de navigation client React Router), donc le
+//  choix doit survivre à un rechargement complet à coup sûr : certains
+//  réglages navigateur (mode privé strict, bloqueurs de traqueurs) peuvent
+//  effacer ou bloquer localStorage sans bloquer les cookies classiques
+//  (ou l'inverse) — lire/écrire les deux évite que le bandeau ne
+//  redemande le choix sur certaines pages/navigateurs.
 // ============================================================
 
 const STORAGE_KEY = "tropicaura-consent-v1";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 an
 
 export const CATEGORIES = {
   necessary: { label: "Nécessaires", locked: true },
@@ -26,20 +32,43 @@ export const CATEGORIES = {
 
 const DEFAULT_STATE = { necessary: true, analytics: false };
 
-export function getConsent() {
+function readCookie() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null; // aucun choix fait — le bandeau doit s'afficher
-    const parsed = JSON.parse(raw);
-    return { ...DEFAULT_STATE, ...parsed };
+    const match = document.cookie.match(new RegExp("(?:^|; )" + STORAGE_KEY + "=([^;]*)"));
+    return match ? JSON.parse(decodeURIComponent(match[1])) : null;
   } catch {
     return null;
   }
 }
 
+function writeCookie(value) {
+  try {
+    document.cookie = `${STORAGE_KEY}=${encodeURIComponent(JSON.stringify(value))}; max-age=${COOKIE_MAX_AGE}; path=/; SameSite=Lax`;
+  } catch {
+    // cookies désactivés — localStorage reste la source principale
+  }
+}
+
+export function getConsent() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+  } catch {
+    // localStorage bloqué — on retombe sur le cookie ci-dessous
+  }
+  const fromCookie = readCookie();
+  if (fromCookie) return { ...DEFAULT_STATE, ...fromCookie };
+  return null; // aucun choix fait nulle part — le bandeau doit s'afficher
+}
+
 export function setConsent(partial) {
   const next = { ...DEFAULT_STATE, ...getConsent(), ...partial, necessary: true };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // localStorage bloqué — le cookie ci-dessous prend le relais
+  }
+  writeCookie(next);
   window.dispatchEvent(new CustomEvent("consentchange", { detail: next }));
   return next;
 }
