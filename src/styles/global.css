@@ -252,19 +252,10 @@ body::-webkit-scrollbar { display: none; }
   pointer-events: none;          /* le fond ne bloque pas le scroll */
   background: transparent;
 }
-/* Bande sombre façon Combilo : valeurs RELEVÉES SUR LEUR VRAI SITE (inspection
-   directe de .topbar sur combilo.nl) — height: 3em ≈ 75px, background:
-   rgba(51,51,51,0.5), aucun dégradé (leur CSS ne contient aucune media query
-   qui change ces valeurs pour mobile) → même hauteur, même couleur partout. */
-.ghost::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 54px;
-  background: rgba(51, 51, 51, .20);
-  z-index: -1;
-  pointer-events: none;
-}
+/* Bande sombre façon Combilo retirée : le header doit rester transparent en
+   permanence (aucun fond, ni JS ni CSS), demande explicite — voir aussi le
+   retrait du fond au scroll dans TopBar.jsx. Les éléments (logo, nav, bouton)
+   restent tous visibles, posés directement sur la page sans bandeau derrière. */
 .ghost > * { pointer-events: auto; }
 .ghost__logo {
   /* Symbole (monogramme T détouré, or sur transparent) + wordmark. Le mark est
