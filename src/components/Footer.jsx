@@ -151,7 +151,6 @@ export default function Footer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               <a href={`mailto:${EMAIL}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{EMAIL}</a>
               <a href={`tel:${PHONE.replace(/\s/g, "")}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{PHONE}</a>
-              <a href={WHATSAPP} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>WhatsApp</a>
               <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>Instagram</a>
               <a href={LINKEDIN} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>LinkedIn</a>
             </div>
