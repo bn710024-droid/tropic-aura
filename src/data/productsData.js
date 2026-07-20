@@ -38,6 +38,7 @@ const BG_COLORS = {
   banane: "#0E2418",
   melon: "#2A1208",
   pasteque: "#5A2630",
+  "haricot-vert": "#22331C",
   "citron-vert": "#36511E",
   "citron-jaune": "#6B5A14",
   gombo: "#243318",
@@ -52,6 +53,7 @@ const IMAGE_DIMENSIONS = {
   banane: { width: 666, height: 1000 },
   melon: { width: 800, height: 603 },
   pasteque: { width: 667, height: 1000 },
+  "haricot-vert": { width: 1277, height: 809 },
   "citron-vert": { width: 235, height: 598 },
   "citron-jaune": { width: 512, height: 679 },
   gombo: { width: 270, height: 249 },
@@ -216,12 +218,33 @@ export const PRODUCTS = [
     accentColor: "#EF9090",
   },
   {
+    slug: "haricot-vert",
+    id: "haricot-vert",
+    name: "Haricot vert",
+    englishName: "Green Bean",
+    collection: "SAISON",
+    num: "08",
+    image: "/png/prod-haricots.webp",
+    description:
+      "Le haricot vert Tropicaura est récolté au Sénégal avec un contrôle rigoureux de la fraîcheur et de la tendreté — deux critères déterminants pour ce produit sensible au transport. Disponible de janvier à avril, il répond aux pics de demande européens sur cette fenêtre saisonnière.",
+    origin: "Sénégal",
+    availability: "Janvier – Avril",
+    seasonMonths: [1, 2, 3, 4],
+    standard: "Export Premium",
+    bgImage: {
+      desktop: { webp: "/images/interior/haricot-vert-interior.webp", jpg: "/images/interior/haricot-vert-interior.jpg" },
+      mobile: { webp: "/images/interior/haricot-vert-interior-mobile.webp", jpg: "/images/interior/haricot-vert-interior-mobile.jpg" },
+    },
+    // Vert tendre — thème Haricot vert.
+    accentColor: "#8FBF6A",
+  },
+  {
     slug: "citron-vert",
     id: "citron-vert",
     name: "Citron vert",
     englishName: "Lime",
     collection: "SAISON",
-    num: "08",
+    num: "09",
     image: "/png/prod-citron-vert.webp",
     description:
       "Le citron vert Tropicaura, cultivé au Sénégal, se distingue par ses arômes intenses et son acidité vive — des qualités recherchées aussi bien par la restauration que par l'industrie agroalimentaire. Disponible toute l'année, avec un pic de saison entre septembre et décembre.",
@@ -245,7 +268,7 @@ export const PRODUCTS = [
     name: "Citron jaune",
     englishName: "Lemon",
     collection: "SAISON",
-    num: "09",
+    num: "10",
     image: "/png/prod-citron-jaune.webp",
     description:
       "Là où le citron vert mise sur l'intensité, le citron jaune Tropicaura joue la régularité : équilibre aromatique et fraîcheur constante, cultivés au Sénégal. Disponible toute l'année avec un pic de saison entre septembre et décembre, il répond aux marchés recherchant qualité et constance.",
@@ -269,7 +292,7 @@ export const PRODUCTS = [
     name: "Gombo",
     englishName: "Okra",
     collection: "SPÉCIALITÉS",
-    num: "10",
+    num: "11",
     image: "/png/prod-gombo.webp",
     description:
       "Le gombo Tropicaura est récolté avec soin au Sénégal pour préserver sa fraîcheur et sa tendreté jusqu'à destination — deux critères que nos équipes surveillent de près, car ils se dégradent vite. Disponible toute l'année, il trouve sa place sur de nombreux marchés internationaux.",
@@ -292,7 +315,7 @@ export const PRODUCTS = [
     name: "Piments",
     englishName: "Chili Peppers",
     collection: "SPÉCIALITÉS",
-    num: "11",
+    num: "12",
     image: "/png/prod-piment.webp",
     description:
       "Les piments Tropicaura sont disponibles en différentes variétés et niveaux de piquant selon les besoins du marché, avec une fraîcheur maîtrisée du Sénégal jusqu'à destination. Une sélection rigoureuse, disponible de mars à août, pensée pour s'adapter aux spécifications de chaque client.",
@@ -313,6 +336,7 @@ export const PRODUCTS = [
 
 /** Contenu partagé, identique pour chaque page produit — évite la duplication de logique. */
 export const PRODUCT_SHARED = {
+  certification: "GlobalGAP",
   incoterms: ["EXW", "FOB Dakar", "CIF (selon la destination et les modalités convenues)"],
   incotermsNote:
     "Les conditions logistiques sont définies avec chaque partenaire afin de proposer la solution la plus adaptée au marché de destination.",
@@ -343,7 +367,7 @@ export const PRODUCT_SHARED = {
     },
     {
       q: "Proposez-vous des certifications qualité ?",
-      a: "Les certifications disponibles varient selon le produit et le programme. Contactez-nous pour connaître les certifications applicables à votre commande.",
+      a: "Oui, l'ensemble de nos produits est certifié GlobalGAP, garantissant le respect des bonnes pratiques agricoles reconnues à l'international.",
     },
     {
       q: "Vers quels marchés exportez-vous ?",

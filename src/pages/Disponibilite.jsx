@@ -171,7 +171,7 @@ export default function Disponibilite() {
             fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.8, fontWeight: 400,
             color: "rgba(255,255,255,0.74)", margin: 0, maxWidth: 620,
           }}>
-            Onze produits, leur disponibilité réelle mois par mois. De quoi construire
+            {PRODUCTS.length} produits, leur disponibilité réelle mois par mois. De quoi construire
             un programme d'achat sans mauvaise surprise de saison.
           </p>
         </div>

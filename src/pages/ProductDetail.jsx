@@ -106,6 +106,7 @@ export default function ProductDetail() {
     { label: "Origine", value: product.origin },
     { label: "Disponibilité", value: product.availability },
     { label: "Standard", value: product.standard },
+    { label: "Certification", value: PRODUCT_SHARED.certification },
   ];
 
   // Pas d'image OG dédiée par produit : les PNG détourés (fond transparent)
