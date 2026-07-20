@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 // Navigation desktop — mêmes destinations de premier niveau que LiquidMenu
 // (pas les sous-liens : une top nav horizontale n'a pas la place d'un
 // mega-menu, contrairement au panneau fullscreen mobile).
@@ -15,35 +13,18 @@ const NAV_LINKS = [
 
 export default function TopBar({ variant = "minimal" }) {
   const isFull = variant === "full";
-  const [scrolled, setScrolled] = useState(false);
 
   const handleMenuClick = () => {
     // Dispatch un événement personnalisé que LiquidMenu écoute
     window.dispatchEvent(new CustomEvent("topbar-menu-click"));
   };
 
-  // Fond du header : transparent en haut de page, léger voile dépoli dès
-  // qu'on scrolle — la nav desktop (texte blanc + ombre) reste lisible
-  // au-dessus de n'importe quelle section, sans avoir à détecter la
-  // couleur de fond de chaque section individuellement (ce que ferait un
-  // vrai mode clair/sombre par section — hors scope de cette passe).
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <header
       className={`ghost topbar${isFull ? " topbar--full" : ""}`}
       style={{
         zIndex: 650, display: "flex", justifyContent: "space-between", alignItems: "center",
-        background: scrolled ? "rgba(11,19,16,0.72)" : "transparent",
-        backdropFilter: scrolled ? "blur(14px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
-        transition: "background-color .45s ease, border-color .45s ease",
+        background: "transparent",
       }}
     >
       <a href="/" className="ghost__logo">Tropicaura</a>
