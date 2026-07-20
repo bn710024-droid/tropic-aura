@@ -12,7 +12,9 @@
 
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 77 881 20 18";
+const WHATSAPP = "https://wa.me/221789179805";
 const LINKEDIN = "https://www.linkedin.com/"; // ⚠️ à remplacer
+const INSTAGRAM = "https://www.instagram.com/tropicaura_export/";
 
 export default function Footer() {
   const revealRefs = useRef([]);
@@ -149,6 +151,8 @@ export default function Footer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               <a href={`mailto:${EMAIL}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{EMAIL}</a>
               <a href={`tel:${PHONE.replace(/\s/g, "")}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{PHONE}</a>
+              <a href={WHATSAPP} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>WhatsApp</a>
+              <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>Instagram</a>
               <a href={LINKEDIN} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>LinkedIn</a>
             </div>
           </div>
