@@ -512,7 +512,7 @@ export default function Home() {
   };
 
   const homeDescription =
-    "Tropicaura connecte les vergers d'Afrique de l'Ouest aux marchés internationaux. Export B2B premium de mangues, avocats, ananas, agrumes et légumes frais. FOB Port de Dakar.";
+    "Tropicaura connecte les vergers d'Afrique de l'Ouest aux marchés internationaux. Export B2B premium de mangues, avocats et légumes frais.";
 
   return (
     <>
