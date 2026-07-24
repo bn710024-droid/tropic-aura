@@ -1,4 +1,7 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -31,13 +34,16 @@ const MAX_MESSAGE_LENGTH = 2000;
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 const PILIERS = [
-  { titre: "Basé au Sénégal",          sous: "Au cœur des terroirs tropicaux d'Afrique de l'Ouest." },
-  { titre: "Orienté export",            sous: "Des standards pensés pour les marchés internationaux." },
-  { titre: "Marché européen",           sous: "Importateurs, distributeurs et grande distribution." },
-  { titre: "Partenariats à long terme", sous: "Une vision de la valeur durable, pas de l'opportunisme." },
+  { key: "senegal" },
+  { key: "export" },
+  { key: "europe" },
+  { key: "longTerm" },
 ];
 
 export default function Contact() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const revealRefs = useRef([]);
   const logoRef    = useRef(null);
   const messageRef = useRef(null);
@@ -58,7 +64,10 @@ export default function Contact() {
   const productParam = searchParams.get("product");
   const originParam  = searchParams.get("origin");
   const prefillMessage = productParam
-    ? `Bonjour, je souhaiterais recevoir une offre pour ${productParam}${originParam ? ` (origine : ${originParam})` : ""}. Voici les volumes recherchés…`
+    ? t("contact.form.prefill", {
+        product: productParam,
+        origin: originParam ? t("contact.form.prefillOrigin", { origin: originParam }) : "",
+      })
     : "";
 
   // Particules dorées de la carte de remerciement — positions/délais figés
@@ -172,7 +181,7 @@ export default function Contact() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
         setStatus("error");
-        setErrorMsg(data.error || "L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
+        setErrorMsg(data.error || t("contact.form.error"));
         // Jeton Turnstile à usage unique : on le réinitialise pour permettre
         // une nouvelle tentative sans recharger la page.
         window.turnstile?.reset();
@@ -185,7 +194,7 @@ export default function Contact() {
       setTimeout(() => setSignatureWriting(true), 2400);
     } catch {
       setStatus("error");
-      setErrorMsg("L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.");
+      setErrorMsg(t("contact.form.error"));
     }
   };
 
@@ -207,21 +216,23 @@ export default function Contact() {
 
   const r0 = { opacity: 0, transform: "translateY(26px)", transition: "opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1)" };
 
-  const contactDescription =
-    "Contactez Tropicaura pour vos besoins d'import de fruits et légumes frais d'Afrique de l'Ouest. Devis, volumes, Incoterms FOB Dakar — réponse sous 48h.";
-  const contactTrail = buildBreadcrumbTrail("/contact");
+  const contactDescription = t("contact.seo.description");
+  const contactPath = pathFor("contact", lang);
+  const contactTrail = buildBreadcrumbTrail(contactPath);
 
   return (
     <>
       <SEOHead
-        title="Contact — Demander une Offre Export"
+        title={t("contact.seo.title")}
         description={contactDescription}
-        path="/contact"
-        keywords={["contact export fruits", "devis import fruits Afrique", "fournisseur Sénégal contact"]}
+        path={contactPath}
+        keywords={lang === "en"
+          ? ["contact fresh produce exporter", "request quote fruit import Africa", "Senegal supplier contact"]
+          : ["contact export fruits", "devis import fruits Afrique", "fournisseur Sénégal contact"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/contact", title: "Contact", description: contactDescription, breadcrumb: true, pageType: "ContactPage" }),
-          breadcrumbListSchema(contactTrail, "/contact"),
+          webPageSchema({ path: contactPath, title: t("nav.contact"), description: contactDescription, breadcrumb: true, pageType: "ContactPage" }),
+          breadcrumbListSchema(contactTrail, contactPath),
         ]}
       />
       <style>{`
@@ -265,7 +276,7 @@ export default function Contact() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt="Tropicaura — Nous contacter pour vos besoins d'import fruits légumes" width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("contact.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={contactTrail} />
 
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
@@ -289,7 +300,7 @@ export default function Contact() {
             letterSpacing: "-.035em", color: "#fff", margin: "0 0 30px",
             maxWidth: 14 + "ch",
           }}>
-            Construisons quelque chose d'exceptionnel ensemble.
+            {t("contact.heroTitle")}
           </h1>
 
           <p ref={reveal} style={{ ...r0, transitionDelay: ".16s",
@@ -297,9 +308,7 @@ export default function Contact() {
             fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.8, fontWeight: 400,
             color: "rgba(255,255,255,0.74)", margin: 0, maxWidth: 620,
           }}>
-            Nous collaborons avec des importateurs, distributeurs et acteurs de la grande
-            distribution à travers l'Europe qui recherchent des produits premium, une
-            exécution fiable et une vision à long terme.
+            {t("contact.heroText")}
           </p>
         </div>
       </section>
@@ -317,15 +326,15 @@ export default function Contact() {
               fontSize: "clamp(24px,2.4vw,34px)", letterSpacing: "-.02em",
               color: "#1A1A1A", margin: "0 0 36px", lineHeight: 1.1,
             }}>
-              Parlons-en.
+              {t("contact.formHeading")}
             </h2>
 
             <div className="ct-coords" style={{ display: "flex", flexDirection: "column", gap: 30 }}>
               {[
-                { l: "Email",        v: EMAIL, href: `mailto:${EMAIL}` },
-                { l: "Téléphone",    v: PHONE, href: `tel:${PHONE.replace(/\s/g, "")}` },
-                { l: "Localisation", v: "Dakar, Sénégal" },
-                { l: "Disponibilité", v: "Tous les jours · 8h – 00h (GMT)" },
+                { l: t("contact.info.email"), v: EMAIL, href: `mailto:${EMAIL}` },
+                { l: t("contact.info.phone"), v: PHONE, href: `tel:${PHONE.replace(/\s/g, "")}` },
+                { l: t("contact.info.location"), v: t("contact.info.locationValue") },
+                { l: t("contact.info.availability"), v: t("contact.info.availabilityValue") },
               ].map((c) => (
                 <div key={c.l}>
                   <span style={{
@@ -371,32 +380,32 @@ export default function Contact() {
             }}>
               <div className="ct-form-2">
                 <div>
-                  <label style={labelStyle} htmlFor="nom">Nom</label>
+                  <label style={labelStyle} htmlFor="nom">{t("contact.form.name")}</label>
                   <input className="ct-input" id="nom" name="nom" type="text" required
-                    placeholder="Votre nom" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                    placeholder={t("contact.form.namePh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
                 <div>
-                  <label style={labelStyle} htmlFor="entreprise">Entreprise</label>
+                  <label style={labelStyle} htmlFor="entreprise">{t("contact.form.company")}</label>
                   <input className="ct-input" id="entreprise" name="entreprise" type="text"
-                    placeholder="Votre société" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                    placeholder={t("contact.form.companyPh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
                 <div>
-                  <label style={labelStyle} htmlFor="email">Email</label>
+                  <label style={labelStyle} htmlFor="email">{t("contact.form.email")}</label>
                   <input className="ct-input" id="email" name="email" type="email" required
-                    placeholder="vous@entreprise.com" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                    placeholder={t("contact.form.emailPh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
                 <div>
-                  <label style={labelStyle} htmlFor="telephone">Téléphone</label>
+                  <label style={labelStyle} htmlFor="telephone">{t("contact.form.phone")}</label>
                   <input className="ct-input" id="telephone" name="telephone" type="tel"
-                    placeholder="+33 ..." style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                    placeholder={t("contact.form.phonePh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
               </div>
 
               <div style={{ marginTop: 26 }}>
-                <label style={labelStyle} htmlFor="message">Message</label>
+                <label style={labelStyle} htmlFor="message">{t("contact.form.message")}</label>
                 <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
                   maxLength={MAX_MESSAGE_LENGTH}
-                  placeholder="Parlez-nous de votre projet, de vos volumes, de vos marchés…"
+                  placeholder={t("contact.form.messagePh")}
                   defaultValue={prefillMessage}
                   style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                   onFocus={onFocus} onBlur={onBlur} />
@@ -434,7 +443,7 @@ export default function Contact() {
                 onMouseEnter={(e) => { if (status !== "submitting") { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "#16241D"; } }}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = status === "submitting" ? "#3A4A41" : "#0B1310"; }}
               >
-                {status === "submitting" ? "Envoi en cours…" : status === "error" ? "Réessayer" : "Démarrer une conversation"}
+                {status === "submitting" ? t("contact.form.submitting") : status === "error" ? t("contact.form.retry") : t("contact.form.submit")}
                 {status !== "submitting" && <span style={{ fontSize: 16, lineHeight: 1 }}>→</span>}
               </button>
 
@@ -508,14 +517,13 @@ export default function Contact() {
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(15px,1.3vw,17px)",
                       lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "6px 0 12px", maxWidth: 46 + "ch",
                     }}>
-                      Merci d'avoir pris le temps de nous écrire.
+                      {t("contact.thanks.title")}
                     </p>
                     <p style={{
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(15px,1.3vw,17px)",
                       lineHeight: 1.75, fontWeight: 400, color: "#1A1A1A", margin: "0 0 20px", maxWidth: 46 + "ch",
                     }}>
-                      Chaque demande est lue personnellement. Je prends le temps d'étudier chaque projet
-                      afin de construire un partenariat durable dès le premier échange.
+                      {t("contact.thanks.text")}
                     </p>
 
                     <div style={{ overflow: "hidden", width: signatureWriting ? "auto" : 0, transition: "width 1.8s cubic-bezier(.65,0,.35,1)" }}>
@@ -541,7 +549,7 @@ export default function Contact() {
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700,
                       letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(0,0,0,0.42)",
                     }}>
-                      Founder, Tropicaura
+                      {t("contact.thanks.role")}
                     </span>
 
                     <span style={{
@@ -551,16 +559,15 @@ export default function Contact() {
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, fontStyle: "italic",
                       color: "rgba(0,0,0,0.55)",
                     }}>
-                      Chaque demande est étudiée personnellement.<br />
-                      Une réponse vous sera apportée dans les meilleurs délais.
+                      {t("contact.thanks.note1")}<br />
+                      {t("contact.thanks.note2")}
                     </span>
 
                     <p style={{
                       marginTop: 22, fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13,
                       lineHeight: 1.6, fontStyle: "italic", color: "rgba(0,0,0,0.5)", maxWidth: 42 + "ch",
                     }}>
-                      PS : Je n'ai pas encore une équipe de 50 personnes. Il y a de fortes chances que
-                      ce soit moi qui lise votre message
+                      {t("contact.thanks.ps")}
                     </p>
 
                     <span style={{
@@ -568,14 +575,14 @@ export default function Contact() {
                       fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700,
                       letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(0,0,0,0.42)",
                     }}>
-                      En attendant ma réponse…
+                      {t("contact.thanks.waiting")}
                     </span>
 
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {[
-                        { label: "WhatsApp",               href: WHATSAPP_URL, external: true },
-                        { label: "Découvrir nos produits", href: "/produits" },
-                        { label: "Lire nos insights",       href: "/insights" },
+                        { label: "WhatsApp", href: WHATSAPP_URL, external: true },
+                        { label: t("contact.thanks.products"), href: pathFor("products", lang) },
+                        { label: t("contact.thanks.insights"), href: pathFor("insights", lang) },
                       ].map((c) => (
                         <a key={c.href} href={c.href}
                           {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -618,17 +625,17 @@ export default function Contact() {
 
           <div className="ct-pill">
             {PILIERS.map((p, i) => (
-              <div key={p.titre} ref={reveal} style={{ ...r0, transitionDelay: `${0.06 * i}s` }}>
+              <div key={p.key} ref={reveal} style={{ ...r0, transitionDelay: `${0.06 * i}s` }}>
                 <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.16)", marginBottom: 20 }} />
                 <h3 style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700,
                   fontSize: "clamp(17px,1.5vw,21px)", letterSpacing: "-.01em",
                   color: "#fff", margin: "0 0 10px", lineHeight: 1.2,
-                }}>{p.titre}</h3>
+                }}>{t(`contact.pillars.${p.key}.title`)}</h3>
                 <p style={{
                   fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5,
                   lineHeight: 1.7, fontWeight: 400, color: "rgba(255,255,255,0.6)", margin: 0,
-                }}>{p.sous}</p>
+                }}>{t(`contact.pillars.${p.key}.sub`)}</p>
               </div>
             ))}
           </div>

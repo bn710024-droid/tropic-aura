@@ -161,5 +161,70 @@
       "description": "The Tropicaura collection: mangoes, avocados, pineapples, citrus and fresh vegetables from West Africa, for premium B2B export.",
       "logoAlt": "Tropicaura — premium fresh fruit and vegetable export collection"
     }
+  },
+  "contact": {
+    "seo": {
+      "title": "Contact — Request an Export Quote",
+      "description": "Contact Tropicaura for your fresh fruit and vegetable import needs from West Africa. Quotes, volumes, FOB Dakar Incoterms — reply within 48 hours.",
+      "logoAlt": "Tropicaura — contact us for your fresh produce import requirements"
+    },
+    "heroTitle": "Let's build something exceptional together.",
+    "heroText": "We work with importers, distributors and retail groups across Europe who are looking for premium produce, reliable execution and a long-term vision.",
+    "formHeading": "Let's talk.",
+    "info": {
+      "email": "Email",
+      "phone": "Phone",
+      "location": "Location",
+      "availability": "Availability",
+      "locationValue": "Dakar, Senegal",
+      "availabilityValue": "Every day · 8am – midnight (GMT)"
+    },
+    "pillars": {
+      "senegal": {
+        "title": "Based in Senegal",
+        "sub": "At the heart of West Africa's tropical growing regions."
+      },
+      "export": {
+        "title": "Export-focused",
+        "sub": "Standards built for international markets."
+      },
+      "europe": {
+        "title": "European market",
+        "sub": "Importers, distributors and major retail."
+      },
+      "longTerm": {
+        "title": "Long-term partnerships",
+        "sub": "A vision of lasting value, not opportunism."
+      }
+    },
+    "form": {
+      "name": "Full Name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "namePh": "Your name",
+      "companyPh": "Your company",
+      "emailPh": "you@company.com",
+      "phonePh": "+31 ...",
+      "messagePh": "Tell us about your project, your volumes and your markets…",
+      "submit": "Start a conversation",
+      "submitting": "Sending…",
+      "retry": "Try again",
+      "error": "Sending failed. Please try again, or email us directly at contact@tropic-aura.com.",
+      "prefill": "Hello, I would like to request a quote for {{product}}{{origin}}. The volumes we are looking for are…",
+      "prefillOrigin": " (origin: {{origin}})"
+    },
+    "thanks": {
+      "title": "Thank you for taking the time to write to us.",
+      "text": "Every enquiry is read personally. I take the time to study each project so we can build a lasting partnership from the very first exchange.",
+      "role": "Founder, Tropicaura",
+      "note1": "Every enquiry is reviewed personally.",
+      "note2": "You will receive a reply as soon as possible.",
+      "ps": "PS: I don't have a team of 50 yet. There's a good chance it's me reading your message.",
+      "waiting": "While you wait for my reply…",
+      "products": "Explore our products",
+      "insights": "Read our insights"
+    }
   }
 }

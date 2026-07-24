@@ -161,5 +161,70 @@
       "description": "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, pour l'export B2B premium.",
       "logoAlt": "Tropicaura — Collection de fruits et légumes d'export premium"
     }
+  },
+  "contact": {
+    "seo": {
+      "title": "Contact — Demander une Offre Export",
+      "description": "Contactez Tropicaura pour vos besoins d'import de fruits et légumes frais d'Afrique de l'Ouest. Devis, volumes, Incoterms FOB Dakar — réponse sous 48h.",
+      "logoAlt": "Tropicaura — Nous contacter pour vos besoins d'import fruits légumes"
+    },
+    "heroTitle": "Construisons quelque chose d'exceptionnel ensemble.",
+    "heroText": "Nous collaborons avec des importateurs, distributeurs et acteurs de la grande distribution à travers l'Europe qui recherchent des produits premium, une exécution fiable et une vision à long terme.",
+    "formHeading": "Parlons-en.",
+    "info": {
+      "email": "Email",
+      "phone": "Téléphone",
+      "location": "Localisation",
+      "availability": "Disponibilité",
+      "locationValue": "Dakar, Sénégal",
+      "availabilityValue": "Tous les jours · 8h – 00h (GMT)"
+    },
+    "pillars": {
+      "senegal": {
+        "title": "Basé au Sénégal",
+        "sub": "Au cœur des terroirs tropicaux d'Afrique de l'Ouest."
+      },
+      "export": {
+        "title": "Orienté export",
+        "sub": "Des standards pensés pour les marchés internationaux."
+      },
+      "europe": {
+        "title": "Marché européen",
+        "sub": "Importateurs, distributeurs et grande distribution."
+      },
+      "longTerm": {
+        "title": "Partenariats à long terme",
+        "sub": "Une vision de la valeur durable, pas de l'opportunisme."
+      }
+    },
+    "form": {
+      "name": "Nom",
+      "company": "Entreprise",
+      "email": "Email",
+      "phone": "Téléphone",
+      "message": "Message",
+      "namePh": "Votre nom",
+      "companyPh": "Votre société",
+      "emailPh": "vous@entreprise.com",
+      "phonePh": "+33 ...",
+      "messagePh": "Parlez-nous de votre projet, de vos volumes, de vos marchés…",
+      "submit": "Démarrer une conversation",
+      "submitting": "Envoi en cours…",
+      "retry": "Réessayer",
+      "error": "L'envoi a échoué. Réessayez ou écrivez-nous directement à contact@tropic-aura.com.",
+      "prefill": "Bonjour, je souhaiterais recevoir une offre pour {{product}}{{origin}}. Voici les volumes recherchés…",
+      "prefillOrigin": " (origine : {{origin}})"
+    },
+    "thanks": {
+      "title": "Merci d'avoir pris le temps de nous écrire.",
+      "text": "Chaque demande est lue personnellement. Je prends le temps d'étudier chaque projet afin de construire un partenariat durable dès le premier échange.",
+      "role": "Founder, Tropicaura",
+      "note1": "Chaque demande est étudiée personnellement.",
+      "note2": "Une réponse vous sera apportée dans les meilleurs délais.",
+      "ps": "PS : Je n'ai pas encore une équipe de 50 personnes. Il y a de fortes chances que ce soit moi qui lise votre message",
+      "waiting": "En attendant ma réponse…",
+      "products": "Découvrir nos produits",
+      "insights": "Lire nos insights"
+    }
   }
 }
