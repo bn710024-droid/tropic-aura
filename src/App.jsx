@@ -14,6 +14,7 @@ import InsightPartenariats from "./pages/InsightPartenariats";
 import NotFound     from "./pages/NotFound";
 import LiquidMenu   from "./components/LiquidMenu";
 import Footer       from "./components/Footer";
+import CookieBanner from "./components/CookieBanner";
 import "./styles/global.css";
 
 // ============================================================
@@ -66,6 +67,7 @@ export default function App() {
       </Routes>
       {!isArticle && !isHome && <Footer />}
       {!isArticle && <LiquidMenu />}
+      <CookieBanner />
     </>
   );
 }
