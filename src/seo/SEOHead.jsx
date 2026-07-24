@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 import {
   SITE_URL,
   SITE_NAME,
@@ -9,6 +10,10 @@ import {
   APPLICATION_NAME,
   LEGAL_NAME,
 } from "./siteConfig";
+import { langFromPath, alternatePath } from "../i18n/routing";
+
+// Locale Open Graph par langue (format facebook : langue_TERRITOIRE).
+const OG_LOCALES = { fr: DEFAULT_LOCALE, en: "en_US" };
 
 /**
  * SEOHead — équivalent React/Vite de la Metadata API de Next.js.
@@ -46,6 +51,14 @@ export default function SEOHead({
   const canonicalUrl = `${SITE_URL}${path}`;
   const schemas = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 
+  // ── Langue et alternantes ──
+  // La langue vient du chemin réel (pas d'un état) : SEOHead reste ainsi
+  // juste même si une page oublie de passer une prop de langue.
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  const frPath = alternatePath(pathname, "fr");
+  const enPath = alternatePath(pathname, "en");
+
   return (
     <Helmet>
       {/* ── Identité de base ── */}
@@ -69,13 +82,17 @@ export default function SEOHead({
       />
       <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow"} />
 
-      {/* ── hreflang — site actuellement 100% francophone : on ne
-          déclare volontairement PAS de version "en" tant qu'elle
-          n'existe pas réellement (éviterait des erreurs Search
-          Console de contenu non correspondant à la langue annoncée).
-          Auto-référence fr + x-default = pratique valide et honnête. ── */}
-      <link rel="alternate" hrefLang="fr" href={canonicalUrl} />
-      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
+      {/* ── hreflang ──
+          Déclarés UNIQUEMENT pour les langues où la page existe vraiment
+          (alternatePath renvoie null sinon, voir TRANSLATED_PAGES) :
+          annoncer une version absente produit des erreurs Search Console
+          et envoie l'utilisateur dans la mauvaise langue. Les balises sont
+          réciproques — chaque version pointe vers l'autre ET vers
+          elle-même, exigence de Google pour qu'un groupe hreflang soit
+          pris en compte. x-default → le français, langue par défaut. */}
+      {frPath && <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${frPath}`} />}
+      {enPath && <link rel="alternate" hrefLang="en" href={`${SITE_URL}${enPath}`} />}
+      <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${frPath || path}`} />
 
       {/* ── Open Graph ── */}
       <meta property="og:type" content={type} />
@@ -83,7 +100,9 @@ export default function SEOHead({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:locale" content={DEFAULT_LOCALE} />
+      <meta property="og:locale" content={OG_LOCALES[lang] || DEFAULT_LOCALE} />
+      {enPath && lang === "fr" && <meta property="og:locale:alternate" content={OG_LOCALES.en} />}
+      {frPath && lang === "en" && <meta property="og:locale:alternate" content={OG_LOCALES.fr} />}
       <meta property="og:image" content={image.url} />
       <meta property="og:image:width" content={String(image.width)} />
       <meta property="og:image:height" content={String(image.height)} />

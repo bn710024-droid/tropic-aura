@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "products": "Products",
+    "availability": "Availability",
+    "partnerships": "Partnerships",
+    "insights": "Insights",
+    "contact": "Contact",
+    "quote": "Request a Quote"
+  },
+  "home": {
+    "seo": {
+      "title": "Fresh Fruit & Vegetable Exporter from Senegal",
+      "description": "Senegal-based exporter of fresh fruits and vegetables: mangoes, avocados, limes, green beans and okra for international importers."
+    },
+    "scrollHint": "Scroll to explore",
+    "hero": {
+      "title": "Connecting Tropical Origins to Global Markets",
+      "desc": "Tropicaura links exceptional tropical origins to global markets through strong partnerships, quality-driven sourcing and a long-term vision for African trade.",
+      "mobileDesc": "We connect Africa's finest tropical produce to international markets through rigorous sourcing and lasting partnerships.",
+      "cta": "Discover Our Vision",
+      "mobileCta": "Discover"
+    },
+    "origins": {
+      "title": "Africa's Potential. Delivered Differently.",
+      "desc": "Behind every exceptional product lies an exceptional origin. Tropicaura exists to connect the richness of Africa's tropical regions to global market opportunities — where authenticity, quality and ambition meet.",
+      "mobileDesc": "We bring Africa's finest tropical origins to the markets where quality and trust make the difference.",
+      "cta": "Discover Our Story",
+      "mobileCta": "Discover"
+    },
+    "products": {
+      "title": "Selected for Demanding Markets.",
+      "desc": "Excellence begins long before a product reaches its destination. We focus on opportunities that meet the expectations of modern international markets, where quality, consistency and reliability are not advantages — they are requirements.",
+      "mobileDesc": "Every product is selected to meet international market standards for quality, consistency and reliability.",
+      "cta": "Explore Our Products",
+      "mobileCta": "Discover"
+    },
+    "partnerships": {
+      "title": "More Than Transactions.",
+      "desc": "The strongest supply chains are built on trust. We cultivate partnerships designed to create lasting value, connecting growers, logistics networks and international buyers around a shared commitment to excellence.",
+      "mobileDesc": "We build lasting partnerships between growers, logistics providers and international buyers to create shared value.",
+      "cta": "Our Partnership Approach",
+      "mobileCta": "Discover"
+    },
+    "vision": {
+      "title": "The future is built with partners who share the same standards.",
+      "mobileTitle": "The future is built with the right partners.",
+      "desc": "Tropicaura seeks partners who value quality, transparency and long-term vision as highly as commercial performance.",
+      "mobileDesc": "We work with companies that share our commitment to quality, transparency and long-term performance.",
+      "cta": "Discover Our Commitments",
+      "mobileCta": "Discover"
+    },
+    "contact": {
+      "title": "Let's Create New Opportunities.",
+      "desc": "Every strong partnership begins with a conversation. Whether you are exploring new sourcing opportunities or looking for a trusted presence in Africa, we are ready to listen.",
+      "mobileDesc": "Let's discuss your requirements and build a lasting partnership around African tropical produce.",
+      "cta": "Contact Our Team",
+      "mobileCta": "Discover"
+    }
+  },
+  "footer": {
+    "statement": "Connecting Exceptional Origins with Exceptional Partners.",
+    "tags": {
+      "location": "Dakar, Senegal",
+      "export": "Premium Produce Export",
+      "focus": "Europe-Focused Partnerships"
+    },
+    "brandDesc": "Tropical trade excellence, from Senegal to the world's most demanding markets.",
+    "brandDescMobile": "Premium export from Senegal to international markets.",
+    "colNavigation": "Navigation",
+    "colContact": "Contact",
+    "colLocation": "Location",
+    "location": "Dakar, Senegal",
+    "signature": "Built for Long-Term Partnerships.",
+    "privacy": "Privacy",
+    "cookies": "Cookie Preferences"
+  },
+  "a11y": {
+    "menu": "Menu",
+    "mainNav": "Main navigation",
+    "langSwitch": "Change language",
+    "toEnglish": "Switch to English",
+    "toFrench": "Passer en français"
+  }
+}

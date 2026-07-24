@@ -1,4 +1,7 @@
 ﻿import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 
 // ============================================================
 //  FOOTER — « L'épilogue »
@@ -17,6 +20,9 @@ const LINKEDIN = "https://www.linkedin.com/"; // ⚠️ à remplacer
 const INSTAGRAM = "https://www.instagram.com/tropicaura_export/";
 
 export default function Footer() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const revealRefs = useRef([]);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
@@ -90,22 +96,22 @@ export default function Footer() {
           fontSize: "clamp(30px, 5vw, 72px)", lineHeight: 1.06,
           letterSpacing: "-.035em", color: "#fff", margin: 0, maxWidth: 900,
         }}>
-          Connecter des Origines Exceptionnelles avec des Partenaires Exceptionnels.
+          {t("footer.statement")}
         </h2>
 
         <div ref={reveal} style={{
           ...r0(0.12), marginTop: "clamp(40px,6vh,64px)",
           display: "flex", flexWrap: "wrap", gap: "8px 26px",
         }}>
-          {["Dakar, Sénégal", "Export de Produits Premium", "Partenariats Axés sur l'Europe"].map((t, i) => (
-            <span key={t} style={{
+          {[t("footer.tags.location"), t("footer.tags.export"), t("footer.tags.focus")].map((label, i) => (
+            <span key={label} style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12, fontWeight: 500,
               letterSpacing: ".14em", textTransform: "uppercase",
               color: "rgba(255,255,255,0.42)",
               display: "inline-flex", alignItems: "center", gap: 26,
             }}>
               {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)", marginLeft: -26 }} />}
-              {t}
+              {label}
             </span>
           ))}
         </div>
@@ -130,24 +136,26 @@ export default function Footer() {
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 13.5, lineHeight: 1.7,
               fontWeight: 400, color: "rgba(255,255,255,0.45)", margin: 0, maxWidth: 240,
             }}>
-              <span className="only-desktop">Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.</span>
-              <span className="only-mobile">Export premium depuis le Sénégal vers les marchés internationaux.</span>
+              <span className="only-desktop">{t("footer.brandDesc")}</span>
+              <span className="only-mobile">{t("footer.brandDescMobile")}</span>
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <span style={colLabel}>Navigation</span>
+            <span style={colLabel}>{t("footer.colNavigation")}</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
-              {[["Products", "/produits"], ["About", "/about"], ["Insights", "/insights"], ["Contact", "/contact"]].map(([l, h]) => (
-                <a key={l} href={h} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{l}</a>
+              {["products", "about", "insights", "contact"].map((page) => (
+                <a key={page} href={pathFor(page, lang)} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>
+                  {t(`nav.${page}`)}
+                </a>
               ))}
             </div>
           </div>
 
           {/* Contact */}
           <div>
-            <span style={colLabel}>Contact</span>
+            <span style={colLabel}>{t("footer.colContact")}</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               <a href={`mailto:${EMAIL}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{EMAIL}</a>
               <a href={`tel:${PHONE.replace(/\s/g, "")}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{PHONE}</a>
@@ -158,12 +166,12 @@ export default function Footer() {
 
           {/* Localisation */}
           <div>
-            <span style={colLabel}>Location</span>
+            <span style={colLabel}>{t("footer.colLocation")}</span>
             <span style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 15, fontWeight: 500,
               color: "rgba(255,255,255,0.65)",
             }}>
-              Dakar, Sénégal
+              {t("footer.location")}
             </span>
           </div>
         </div>
@@ -178,18 +186,18 @@ export default function Footer() {
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.4vw,18px)",
             fontWeight: 600, letterSpacing: ".02em", color: "rgba(255,255,255,0.55)",
           }}>
-            Construit pour les Partenariats de Long Terme.
+            {t("footer.signature")}
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <a
-              href="/politique-confidentialite"
+              href={pathFor("privacy", lang)}
               style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
                 letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", textDecoration: "none",
               }}
               onMouseEnter={overOn} onMouseLeave={overOff}
             >
-              Confidentialité
+              {t("footer.privacy")}
             </a>
             <button
               onClick={() => window.dispatchEvent(new Event("open-cookie-preferences"))}
@@ -200,7 +208,7 @@ export default function Footer() {
               }}
               onMouseEnter={overOn} onMouseLeave={overOff}
             >
-              Gérer les cookies
+              {t("footer.cookies")}
             </button>
             <span style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,

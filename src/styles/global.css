@@ -351,7 +351,18 @@ body::-webkit-scrollbar { display: none; }
   white-space: nowrap;
   cursor: default;
 }
+/* État inactif : langue pas encore disponible pour cette page (voir TopBar). */
 .topbar-nav__lang-en { opacity: .4; }
+/* Sélecteur de langue actif — la langue courante est mise en gras et rendue
+   non cliquable en ligne (voir TopBar) ; l'autre reste un lien discret. */
+.topbar-nav__lang-link {
+  color: inherit;
+  text-decoration: none;
+  opacity: .6;
+  transition: opacity .25s ease;
+}
+.topbar-nav__lang-link:hover { opacity: 1; }
+.topbar-nav__lang-link[aria-current="true"] { opacity: 1; }
 .topbar-nav__cta {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;

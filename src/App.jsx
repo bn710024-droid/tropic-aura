@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { langFromPath } from "./i18n/routing";
 import Home         from "./pages/Home";
 import APropos      from "./pages/APropos";
 import Partenariats from "./pages/Partenariats";
@@ -31,6 +33,20 @@ import "./styles/global.css";
 export default function App() {
   const location = useLocation();
   const path = location.pathname;
+  const { i18n } = useTranslation();
+
+  // L'URL est la SOURCE DE VÉRITÉ de la langue (voir src/i18n/index.js) :
+  // on synchronise i18next dessus à chaque navigation. Un chargement direct
+  // sur /en/... ou un retour navigateur donne donc immédiatement la bonne
+  // langue, sans état applicatif à restaurer.
+  const lang = langFromPath(path);
+  if (i18n.language !== lang) i18n.changeLanguage(lang);
+
+  // L'attribut lang du <html> doit suivre : il pilote la synthèse vocale,
+  // la césure typographique et sert de signal de langue aux moteurs.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   // Auto-scroll vers le haut à chaque changement de route — SAUF si la page
   // cible a mémorisé sa propre position de scroll (voir Produits.jsx), auquel
@@ -43,8 +59,9 @@ export default function App() {
 
   const isArticle = path.startsWith("/insights/") && path !== "/insights";
   // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
-  // (le body y est figé) — on évite ici le doublon.
-  const isHome = path === "/";
+  // (le body y est figé) — on évite ici le doublon. Vaut pour ses deux
+  // langues : / (fr) et /en.
+  const isHome = path === "/" || path === "/en";
   // Idem pour une fiche produit : depuis l'ajout du wrapper de scroll dédié
   // mobile (fix du calque de fond qui se décalait au scroll sur iOS Safari),
   // ProductDetail.jsx rend aussi son propre <Footer /> DANS son wrapper.
@@ -53,6 +70,13 @@ export default function App() {
   return (
     <>
       <Routes>
+        {/* ── Version anglaise (préfixe /en) ──
+            Seules les pages réellement traduites sont déclarées ici : voir
+            TRANSLATED_PAGES dans src/i18n/routing.js. Une route /en/* non
+            traduite tomberait sur NotFound plutôt que d'afficher du français
+            sous une URL annoncée comme anglaise. */}
+        <Route path="/en" element={<Home />} />
+
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />
         <Route path="/a-propos" element={<APropos />} />

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import "./i18n";           // init i18next avant le premier rendu (ressources bundlées)
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

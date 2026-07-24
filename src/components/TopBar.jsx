@@ -1,18 +1,31 @@
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { alternatePath, langFromPath, pathFor } from "../i18n/routing";
+
 // Navigation desktop — mêmes destinations de premier niveau que LiquidMenu
 // (pas les sous-liens : une top nav horizontale n'a pas la place d'un
 // mega-menu, contrairement au panneau fullscreen mobile).
+// `key` = clé i18n du libellé + clé de page pour résoudre l'URL localisée.
 const NAV_LINKS = [
-  { label: "Accueil",       href: "/" },
-  { label: "À propos",      href: "/about" },
-  { label: "Produits",      href: "/produits" },
-  { label: "Disponibilité", href: "/disponibilite" },
-  { label: "Partenariats",  href: "/partenariats" },
-  { label: "Insights",      href: "/insights" },
-  { label: "Contact",       href: "/contact" },
+  { key: "home",         page: "home" },
+  { key: "about",        page: "about" },
+  { key: "products",     page: "products" },
+  { key: "availability", page: "availability" },
+  { key: "partnerships", page: "partnerships" },
+  { key: "insights",     page: "insights" },
+  { key: "contact",      page: "contact" },
 ];
 
 export default function TopBar({ variant = "minimal" }) {
   const isFull = variant === "full";
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  // Équivalent de la page courante dans l'autre langue — null si elle n'est
+  // pas encore traduite : le sélecteur s'affiche alors en état inactif plutôt
+  // que de mener à une page inexistante.
+  const otherLang = lang === "fr" ? "en" : "fr";
+  const switchHref = alternatePath(pathname, otherLang);
 
   const handleMenuClick = () => {
     // Dispatch un événement personnalisé que LiquidMenu écoute
@@ -27,7 +40,7 @@ export default function TopBar({ variant = "minimal" }) {
         background: "transparent",
       }}
     >
-      <a href="/" className="ghost__logo">Tropicaura</a>
+      <a href={pathFor("home", lang)} className="ghost__logo">Tropicaura</a>
 
       {/* ── Navigation desktop complète : réservée à l'Accueil (vitrine de
            l'entreprise). Les autres pages restent immersives — logo +
@@ -35,24 +48,61 @@ export default function TopBar({ variant = "minimal" }) {
            casser l'univers propre à chaque produit/section. Masquée sous
            1024px dans tous les cas (voir global.css). ── */}
       {isFull && (
-        <nav className="topbar-nav" aria-label="Navigation principale">
+        <nav className="topbar-nav" aria-label={t("a11y.mainNav")}>
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="topbar-nav__link">{l.label}</a>
+            <a key={l.key} href={pathFor(l.page, lang)} className="topbar-nav__link">
+              {t(`nav.${l.key}`)}
+            </a>
           ))}
-          {/* EN désactivé : pas encore de vraie version anglaise (voir
-               brief langues) — mieux vaut un état "à venir" honnête qu'un
-               bouton qui ne fait rien silencieusement. */}
-          <span className="topbar-nav__lang" title="Version anglaise à venir">
-            <strong>FR</strong><span aria-hidden="true"> | </span><span className="topbar-nav__lang-en">EN</span>
+          {/* Sélecteur FR/EN — un vrai <a> (pas un bouton JS) : la langue vit
+               dans l'URL, donc la bascule est une navigation. Indexable,
+               partageable, fonctionne au clic-droit « ouvrir dans un onglet ».
+               Si la page courante n'existe pas encore dans l'autre langue,
+               switchHref est null → état inactif explicite plutôt qu'un lien
+               mort ou une redirection surprise vers l'accueil. */}
+          <span className="topbar-nav__lang">
+            {switchHref ? (
+              <>
+                <a
+                  href={lang === "fr" ? undefined : switchHref}
+                  className="topbar-nav__lang-link"
+                  aria-current={lang === "fr" ? "true" : undefined}
+                  style={lang === "fr" ? { fontWeight: 700, pointerEvents: "none" } : undefined}
+                  hrefLang="fr"
+                >
+                  FR
+                </a>
+                <span aria-hidden="true"> | </span>
+                <a
+                  href={lang === "en" ? undefined : switchHref}
+                  className="topbar-nav__lang-link"
+                  aria-current={lang === "en" ? "true" : undefined}
+                  style={lang === "en" ? { fontWeight: 700, pointerEvents: "none" } : undefined}
+                  hrefLang="en"
+                >
+                  EN
+                </a>
+              </>
+            ) : (
+              <>
+                <strong>{lang.toUpperCase()}</strong>
+                <span aria-hidden="true"> | </span>
+                <span className="topbar-nav__lang-en" title={t("a11y.langSwitch")}>
+                  {otherLang.toUpperCase()}
+                </span>
+              </>
+            )}
           </span>
-          <a href="/contact?section=form" className="topbar-nav__cta">Demander un devis</a>
+          <a href={`${pathFor("contact", lang)}?section=form`} className="topbar-nav__cta">
+            {t("nav.quote")}
+          </a>
         </nav>
       )}
 
       <button
         id="topbar-menu-btn"
         onClick={handleMenuClick}
-        aria-label="Menu"
+        aria-label={t("a11y.menu")}
         className="topbar-menu-btn"
         style={{
           width: 40, height: 40,

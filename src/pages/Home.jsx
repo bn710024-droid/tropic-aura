@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Lenis from "lenis";
 import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
@@ -76,11 +77,6 @@ const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
     mobileBg: "#0E9F6E",
-    title: "Connecter les Terres Tropicales aux Marchés Mondiaux",
-    desc: "Tropicaura relie des origines tropicales d'exception aux marchés mondiaux grâce à des partenariats solides, une sélection axée sur la qualité et une vision long terme du commerce africain.",
-    mobileDesc: "Nous connectons les meilleurs produits tropicaux d'Afrique aux marchés internationaux grâce à une sélection exigeante et des partenariats durables.",
-    cta: "Découvrir Notre Vision",
-    mobileCta: "Découvrir",
     link: "/about",
     items: build(LAYOUTS[0], [
       IMAGES.ananas,
@@ -90,11 +86,6 @@ const SECTIONS = [
   {
     id: "origins", bg: "#E8631C",
     mobileBg: "#E8631C",
-    title: "Le Potentiel de l'Afrique. Livré Autrement.",
-    desc: "Derrière chaque fruit d'exception se cache une origine d'exception. Tropicaura existe pour connecter la richesse des régions tropicales d'Afrique aux opportunités des marchés mondiaux, là où l'authenticité, la qualité et l'ambition se rencontrent.",
-    mobileDesc: "Nous valorisons les meilleures origines tropicales d'Afrique en les reliant aux marchés où la qualité et la confiance font la différence.",
-    cta: "Découvrir Notre Histoire",
-    mobileCta: "Découvrir",
     link: "/about",
     items: build(LAYOUTS[1], [
       IMAGES.mangue,
@@ -105,11 +96,6 @@ const SECTIONS = [
   {
     id: "products", bg: "#F3B500",
     mobileBg: "#F3B500",
-    title: "Sélectionnés pour les Marchés Exigeants.",
-    desc: "L'excellence commence bien avant qu'un produit atteigne sa destination. Nous nous concentrons sur des opportunités capables de répondre aux attentes des marchés internationaux modernes, où la qualité, la régularité et la fiabilité ne sont pas des avantages — ce sont des exigences.",
-    mobileDesc: "Chaque produit est sélectionné pour répondre aux standards des marchés internationaux en matière de qualité, de régularité et de fiabilité.",
-    cta: "Explorer nos Produits",
-    mobileCta: "Découvrir",
     link: "/products",
     items: build(LAYOUTS[2], [
       IMAGES.ananas,
@@ -119,11 +105,6 @@ const SECTIONS = [
   {
     id: "partnerships", bg: "#1B7A3D",
     mobileBg: "#1B7A3D",
-    title: "Plus que des Transactions.",
-    desc: "Les chaînes d'approvisionnement les plus solides se construisent sur la confiance. Nous cultivons des partenariats conçus pour créer de la valeur durable, en reliant producteurs, réseaux logistiques et acheteurs internationaux autour d'un engagement commun envers l'excellence.",
-    mobileDesc: "Nous développons des partenariats durables entre producteurs, logisticiens et acheteurs internationaux pour créer une valeur partagée.",
-    cta: "Notre Approche Partenariale",
-    mobileCta: "Découvrir",
     link: "/partnerships",
     items: build(LAYOUTS[3], [
       IMAGES.avocat,
@@ -133,12 +114,6 @@ const SECTIONS = [
   {
     id: "vision", bg: "#C9912B",
     mobileBg: "#C9912B",
-    title: "L'avenir se construit avec des partenaires qui partagent les mêmes standards.",
-    mobileTitle: "L'avenir se construit avec les bons partenaires.",
-    desc: "Tropicaura recherche des acteurs qui accordent autant d'importance à la qualité, à la transparence et à la vision long terme qu'à la performance commerciale.",
-    mobileDesc: "Nous collaborons avec des entreprises qui partagent notre exigence de qualité, de transparence et de performance sur le long terme.",
-    cta: "Découvrir nos engagements",
-    mobileCta: "Découvrir",
     link: "/partenariats",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
@@ -148,11 +123,6 @@ const SECTIONS = [
   {
     id: "contact", bg: "#0D9488",
     mobileBg: "#0D9488",
-    title: "Créons de Nouvelles Opportunités.",
-    desc: "Chaque partenariat solide commence par une conversation. Que vous exploriez de nouvelles opportunités d'approvisionnement ou que vous recherchiez une présence de confiance en Afrique, nous sommes à votre écoute.",
-    mobileDesc: "Discutons de vos besoins et construisons ensemble un partenariat durable autour des produits tropicaux africains.",
-    cta: "Nous Contacter",
-    mobileCta: "Découvrir",
     link: "/contact",
     items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,
@@ -210,6 +180,7 @@ SECTIONS.reduce((acc, s, i) => { OFFSETS[i] = acc; return acc + s.items.length; 
 const SCROLL_MEMORY_KEY = "scrollpos:/";
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
   const bgRef = useRef(null);
   const scenesRef = useRef([]);
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
@@ -465,23 +436,26 @@ export default function Home() {
   // plus que Google résume l'activité en « courtier / négociant ».
   // Le slogan « vergers → marchés internationaux » reste le message de marque
   // à l'écran (hero) ; en SERP la priorité est la qualification, pas le slogan.
-  // NB : titre volontairement en français, comme la page. Un titre anglais sur
-  // une page française fait rebondir l'acheteur anglophone et se fait souvent
-  // réécrire par Google — il viendra avec la vraie version EN (+ hreflang).
-  // Longueurs tenues volontairement sous les limites d'affichage (titre ≤ 60,
-  // description ≤ 155) — des descriptions trop longues avaient déjà été
-  // signalées en erreur par Bing Webmaster Tools et corrigées.
-  const homeDescription =
-    "Exportateur sénégalais de fruits et légumes frais : mangues, avocats, citrons verts, haricots verts et gombo pour les importateurs internationaux.";
+  // Chaque langue a son titre/description propres (voir les fichiers i18n) :
+  // la version EN mène sur « Senegal » + « exporter », requête réelle des
+  // acheteurs anglophones. Longueurs tenues sous les limites d'affichage
+  // (titre ≤ 60, description ≤ 155) — des descriptions trop longues avaient
+  // déjà été signalées en erreur par Bing Webmaster Tools et corrigées.
+  const isEnglish = i18n.language === "en";
+  const homeDescription = t("home.seo.description");
+  const homePath = isEnglish ? "/en" : "/";
+  const homeKeywords = isEnglish
+    ? ["Senegal fruit exporter", "fresh produce exporter Senegal", "mango exporter Africa", "green beans okra export", "B2B fruit supplier West Africa", "FOB Dakar"]
+    : ["exportateur fruits Sénégal", "exportateur légumes Sénégal", "export mangue Sénégal", "fournisseur fruits frais Afrique", "Senegal fruit exporter", "export haricot vert gombo", "FOB Dakar"];
 
   return (
     <>
       <SEOHead
-        title="Exportateur de Fruits & Légumes du Sénégal"
+        title={t("home.seo.title")}
         description={homeDescription}
-        path="/"
-        keywords={["exportateur fruits Sénégal", "exportateur légumes Sénégal", "export mangue Sénégal", "fournisseur fruits frais Afrique", "Senegal fruit exporter", "export haricot vert gombo", "FOB Dakar"]}
-        jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: "/", title: "Tropicaura", description: homeDescription })]}
+        path={homePath}
+        keywords={homeKeywords}
+        jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: homePath, title: "Tropicaura", description: homeDescription })]}
       />
 
       {/* Top bar complète (vitrine de l'entreprise) — les autres pages
@@ -635,26 +609,26 @@ export default function Home() {
                 le H1 (voir audit "H1 unique par page"). */}
             {i === 0 ? (
               <h1 className="scene__title">
-                <span className="only-desktop">{s.title}</span>
-                <span className="only-mobile">{s.mobileTitle || s.title}</span>
+                <span className="only-desktop">{t(`home.${s.id}.title`)}</span>
+                <span className="only-mobile">{t(`home.${s.id}.mobileTitle`, { defaultValue: t(`home.${s.id}.title`) })}</span>
               </h1>
             ) : (
               <h2 className="scene__title">
-                <span className="only-desktop">{s.title}</span>
-                <span className="only-mobile">{s.mobileTitle || s.title}</span>
+                <span className="only-desktop">{t(`home.${s.id}.title`)}</span>
+                <span className="only-mobile">{t(`home.${s.id}.mobileTitle`, { defaultValue: t(`home.${s.id}.title`) })}</span>
               </h2>
             )}
             <p className="scene__desc">
-              <span className="only-desktop">{s.desc}</span>
-              <span className="only-mobile">{s.mobileDesc || s.desc}</span>
+              <span className="only-desktop">{t(`home.${s.id}.desc`)}</span>
+              <span className="only-mobile">{t(`home.${s.id}.mobileDesc`, { defaultValue: t(`home.${s.id}.desc`) })}</span>
             </p>
             <button
               className="scene__cta"
               onClick={(e) => handleCtaClick(e, s.link, i + 1)}
             >
               <span className="cta-label">
-                <span className="only-desktop">{s.cta}</span>
-                <span className="only-mobile">{s.mobileCta}</span>
+                <span className="only-desktop">{t(`home.${s.id}.cta`)}</span>
+                <span className="only-mobile">{t(`home.${s.id}.mobileCta`)}</span>
               </span>
               <span className="cta-arrow"><span>→</span></span>
             </button>
@@ -663,7 +637,7 @@ export default function Home() {
           {i === 0 && (
             <div className="scene__hint">
               <i />
-              <span>Défilez vers le bas</span>
+              <span>{t("home.scrollHint")}</span>
             </div>
           )}
         </section>
