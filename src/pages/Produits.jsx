@@ -351,13 +351,17 @@ export default function Produits() {
           margin-top: 28px;
           font-family: 'Plus Jakarta Sans', sans-serif;
           font-size: 11px; font-weight: 700; letter-spacing: .16em;
-          text-transform: uppercase; color: rgba(255,255,255,0.6);
+          /* 0.6 échouait le contraste WCAG AA (< 4.5:1) sur 4 des 14 couleurs de
+             fond produit (ex : Papaye #7A3514 → 4.30 ; les fonds bruns/dorés
+             étaient les pires). 0.85 passe sur toutes les couleurs avec une
+             marge confortable (≥ 5.4:1) — vérifié par calcul sur les 14 teintes. */
+          text-transform: uppercase; color: rgba(255,255,255,0.85);
           text-decoration: none;
-          border-bottom: 1px solid rgba(255,255,255,0.28);
+          border-bottom: 1px solid rgba(255,255,255,0.4);
           padding-bottom: 7px;
           transition: color .25s ease, border-color .25s ease;
         }
-        .prod-more:hover { color: #fff; border-color: rgba(255,255,255,0.75); }
+        .prod-more:hover { color: #fff; border-color: rgba(255,255,255,0.85); }
         .prod-more-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
         .prod-more:hover .prod-more-arrow { transform: translateX(5px); }
         @media (max-width: 820px){
