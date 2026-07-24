@@ -191,17 +191,6 @@ export default function Footer() {
             >
               Confidentialité
             </a>
-            <button
-              onClick={() => window.dispatchEvent(new Event("open-cookie-preferences"))}
-              style={{
-                fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
-                letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", background: "none",
-                border: "none", padding: 0, cursor: "pointer",
-              }}
-              onMouseEnter={overOn} onMouseLeave={overOff}
-            >
-              Gérer les cookies
-            </button>
             <span style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
               letterSpacing: ".10em", color: "rgba(255,255,255,0.28)",
