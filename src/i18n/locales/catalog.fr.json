@@ -1,0 +1,128 @@
+{
+  "collections": {
+    "SIGNATURE": "Signature",
+    "SAISON": "Saison",
+    "SPÉCIALITÉS": "Spécialités"
+  },
+  "standard": "Export Premium",
+  "shared": {
+    "certification": "GlobalGAP",
+    "incoterms": [
+      "EXW",
+      "FOB Dakar",
+      "CIF (selon la destination et les modalités convenues)"
+    ],
+    "incotermsNote": "Les conditions logistiques sont définies avec chaque partenaire afin de proposer la solution la plus adaptée au marché de destination.",
+    "packaging": "Conditionnement adapté au cahier des charges du client et aux exigences du marché de destination.",
+    "calibrage": "Défini conformément au cahier des charges et aux exigences commerciales du client.",
+    "transportSenegal": "Expédition maritime au départ du Port de Dakar (Sénégal) avec une gestion rigoureuse de la chaîne du froid pour les produits qui le nécessitent. Pour les expéditions urgentes, les produits premium ou les demandes spécifiques, des solutions de transport aérien peuvent également être organisées selon les besoins du client.",
+    "transportOtherAfrica": "Les expéditions sont organisées depuis le port d'origine le plus adapté, en fonction du pays de production et des contraintes logistiques. Pour les produits premium, les commandes urgentes ou les cahiers des charges spécifiques, des solutions de transport aérien peuvent également être proposées sur demande.",
+    "availabilityNote": "Les variétés proposées dépendent de la saison de récolte, des disponibilités et des exigences du marché de destination. Nos équipes sélectionnent la solution la plus adaptée à chaque demande.",
+    "customSolutions": "Chaque projet d'export présente des exigences spécifiques en matière de variété, de calibrage, de conditionnement et de logistique. Tropicaura élabore chaque offre en fonction du cahier des charges communiqué par le client afin de proposer une solution adaptée à son marché.",
+    "otherMarketsNote": "Nous étudions également les opportunités commerciales vers d'autres marchés en fonction des besoins de nos partenaires.",
+    "faq": [
+      {
+        "q": "Quel est le volume minimum de commande (MOQ) ?",
+        "a": "Le volume minimum dépend du produit, de la saison et de la destination. Contactez notre équipe pour obtenir une proposition adaptée à votre marché."
+      },
+      {
+        "q": "Quels Incoterms proposez-vous ?",
+        "a": "Nos expéditions peuvent être organisées en EXW, FOB Dakar ou CIF selon la destination et les besoins du client. Contactez notre équipe pour définir la solution logistique adaptée à votre marché."
+      },
+      {
+        "q": "Proposez-vous des certifications qualité ?",
+        "a": "Oui, l'ensemble de nos produits est certifié GlobalGAP, garantissant le respect des bonnes pratiques agricoles reconnues à l'international."
+      },
+      {
+        "q": "Vers quels marchés exportez-vous ?",
+        "a": "Nous développons un réseau de partenaires reliant l'Afrique de l'Ouest aux principaux marchés internationaux, notamment en Europe, en Amérique du Nord et au Moyen-Orient."
+      }
+    ]
+  },
+  "items": {
+    "mangue": {
+      "name": "Mangue Kent",
+      "description": "Cultivée sous le soleil du Sénégal, la mangue exportée par Tropicaura est sélectionnée pour sa qualité gustative, sa tenue au transport et sa conformité aux exigences des importateurs internationaux. Selon la saison, nous proposons des mangues adaptées aux différents marchés et cahiers des charges.",
+      "origin": "Sénégal",
+      "availability": "Juin – Mi-août",
+      "shortDesc": "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium."
+    },
+    "avocat": {
+      "name": "Avocat",
+      "description": "Sélectionné au sein des principaux bassins de production d'Afrique de l'Ouest, l'avocat Tropicaura se distingue par sa maturation maîtrisée et sa texture crémeuse — deux critères déterminants pour les chaînes d'approvisionnement internationales. Une qualité régulière, disponible toute l'année, pensée pour s'intégrer aux programmes d'achat les plus exigeants.",
+      "origin": "Afrique de l'Ouest",
+      "availability": "Toute l'année",
+      "shortDesc": "Maturation maîtrisée, texture crémeuse et qualité régulière. Sélectionné pour répondre aux exigences des chaînes d'approvisionnement internationales."
+    },
+    "ananas": {
+      "name": "Ananas",
+      "description": "Récolté dans les terroirs tropicaux d'Afrique, l'ananas Tropicaura conjugue chair juteuse et intensité aromatique avec une tenue au transport pensée pour l'export longue distance. Présentation soignée et qualité constante en font une référence sur les marchés premium, toute l'année.",
+      "origin": "Afrique tropicale",
+      "availability": "Toute l'année",
+      "shortDesc": "Chair juteuse, profil aromatique intense et présentation soignée. Un produit tropical reconnu pour sa valeur ajoutée sur les marchés premium."
+    },
+    "papaye": {
+      "name": "Papaye",
+      "description": "La papaye Tropicaura se reconnaît d'abord à sa couleur éclatante et à l'équilibre de sa saveur — deux repères recherchés par les circuits spécialisés. Nos équipes veillent à une qualité constante tout au long de l'année, pour répondre aux exigences des marchés les plus sélectifs.",
+      "origin": "Afrique tropicale",
+      "availability": "Toute l'année",
+      "shortDesc": "Couleur éclatante, saveur équilibrée et qualité constante. Une référence tropicale adaptée aux circuits spécialisés et aux marchés exigeants."
+    },
+    "banane": {
+      "name": "Banane",
+      "description": "Produit de volume par excellence, la banane Tropicaura repose sur une régularité d'approvisionnement et une gestion maîtrisée de la maturité — deux exigences essentielles pour la continuité des programmes d'achat internationaux. Une qualité homogène, disponible toute l'année.",
+      "origin": "Afrique tropicale",
+      "availability": "Toute l'année",
+      "shortDesc": "Régularité des volumes, qualité homogène et gestion maîtrisée de la maturité. Un produit essentiel du commerce international."
+    },
+    "melon": {
+      "name": "Melon",
+      "description": "Cultivé au Sénégal et récolté au meilleur stade de maturité, le melon Tropicaura offre une chair fondante et un équilibre sucré recherchés par les marchés européens en saison. Une spécialité de janvier à fin avril, portée par une fraîcheur qui ne se négocie pas.",
+      "origin": "Sénégal",
+      "availability": "Janvier – Fin avril",
+      "shortDesc": "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur."
+    },
+    "pasteque": {
+      "name": "Pastèque",
+      "description": "Cultivée au Sénégal, la pastèque Tropicaura se distingue par sa texture croquante et sa qualité visuelle — calibre régulier, coloris homogène — deux critères qui comptent dès la mise en rayon. Disponible de janvier à fin avril, elle répond aux pics de demande estivale sur les marchés européens.",
+      "origin": "Sénégal",
+      "availability": "Janvier – Fin avril",
+      "shortDesc": "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle."
+    },
+    "haricot-vert": {
+      "name": "Haricot vert",
+      "description": "Le haricot vert Tropicaura est récolté au Sénégal avec un contrôle rigoureux de la fraîcheur et de la tendreté — deux critères déterminants pour ce produit sensible au transport. Disponible de janvier à avril, il répond aux pics de demande européens sur cette fenêtre saisonnière.",
+      "origin": "Sénégal",
+      "availability": "Janvier – Avril",
+      "shortDesc": "Contrôle rigoureux de la fraîcheur et de la tendreté du champ jusqu'au transport. Une spécialité saisonnière recherchée sur sa fenêtre de disponibilité."
+    },
+    "citron-vert": {
+      "name": "Citron vert",
+      "description": "Le citron vert Tropicaura, cultivé au Sénégal, se distingue par ses arômes intenses et son acidité vive — des qualités recherchées aussi bien par la restauration que par l'industrie agroalimentaire. Disponible toute l'année, avec un pic de saison entre septembre et décembre.",
+      "origin": "Sénégal",
+      "availability": "Toute l'année (Pic : Septembre – Décembre)",
+      "shortDesc": "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire."
+    },
+    "citron-jaune": {
+      "name": "Citron jaune",
+      "description": "Là où le citron vert mise sur l'intensité, le citron jaune Tropicaura joue la régularité : équilibre aromatique et fraîcheur constante, cultivés au Sénégal. Disponible toute l'année avec un pic de saison entre septembre et décembre, il répond aux marchés recherchant qualité et constance.",
+      "origin": "Sénégal",
+      "availability": "Toute l'année (Pic : Septembre – Décembre)",
+      "shortDesc": "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité."
+    },
+    "gombo": {
+      "name": "Gombo",
+      "description": "Le gombo Tropicaura est récolté avec soin au Sénégal pour préserver sa fraîcheur et sa tendreté jusqu'à destination — deux critères que nos équipes surveillent de près, car ils se dégradent vite. Disponible toute l'année, il trouve sa place sur de nombreux marchés internationaux.",
+      "origin": "Sénégal",
+      "availability": "Toute l'année",
+      "shortDesc": "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux."
+    },
+    "piment": {
+      "name": "Piments",
+      "description": "Les piments Tropicaura sont disponibles en différentes variétés et niveaux de piquant selon les besoins du marché, avec une fraîcheur maîtrisée du Sénégal jusqu'à destination. Une sélection rigoureuse, disponible de mars à août, pensée pour s'adapter aux spécifications de chaque client.",
+      "origin": "Sénégal",
+      "availability": "Mars – Août",
+      "shortDesc": "Un assortiment de couleurs et de variétés — doux ou forts, selon les besoins. Fraîcheur maîtrisée et sélection rigoureuse pour des marchés à forte demande."
+    }
+  }
+}

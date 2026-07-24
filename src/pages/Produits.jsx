@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { langFromPath, pathFor } from "../i18n/routing";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -21,86 +23,60 @@ export const PAGE_ENTRY_COLOR = { desktop: "#0E100E", mobile: "#0E100E" };
 const SECTIONS = [
   {
     type: "intro", id: "cover", bg: "#0E100E",
-    kicker: "LE SHOWROOM", title: "La Collection.",
-    text: "Une sélection tropicale d'exception, présentée comme une exposition. Chaque produit est choisi pour sa qualité, sa régularité et sa capacité à répondre aux marchés les plus exigeants.",
   },
 
   // ── Signature ──
   {
     type: "product", id: "mangue", side: "left", bg: "#5E2A12",
-    png: "/png/prod-mangue.webp", collection: "SIGNATURE", num: "01", name: "Mangue Kent",
-    desc: "Chair peu fibreuse, excellente tenue après récolte et forte appréciation des marchés européens. Une référence incontournable pour les programmes export premium.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Juin – Mi-août", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-mangue.webp", collection: "SIGNATURE", num: "01",
   },
   {
     type: "product", id: "avocat", side: "right", bg: "#1C3326",
-    png: "/png/prod-avocat.webp", collection: "SIGNATURE", num: "02", name: "Avocat",
-    desc: "Maturation maîtrisée, texture crémeuse et qualité régulière. Sélectionné pour répondre aux exigences des chaînes d'approvisionnement internationales.",
-    meta: { "Origine": "Afrique de l'Ouest", "Disponibilité": "Toute l'année", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-avocat.webp", collection: "SIGNATURE", num: "02",
   },
   {
     type: "product", id: "ananas", side: "left", bg: "#6B5214",
-    png: "/png/prod-ananas.webp", collection: "SIGNATURE", num: "03", name: "Ananas",
-    desc: "Chair juteuse, profil aromatique intense et présentation soignée. Un produit tropical reconnu pour sa valeur ajoutée sur les marchés premium.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-ananas.webp", collection: "SIGNATURE", num: "03",
   },
   {
     type: "product", id: "papaye", side: "right", bg: "#7A3514",
-    png: "/png/prod-papaye.webp", collection: "SIGNATURE", num: "04", name: "Papaye",
-    desc: "Couleur éclatante, saveur équilibrée et qualité constante. Une référence tropicale adaptée aux circuits spécialisés et aux marchés exigeants.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-papaye.webp", collection: "SIGNATURE", num: "04",
   },
   {
     type: "product", id: "banane", side: "left", bg: "#0E2418",
-    png: "/png/prod-banane.webp", collection: "SIGNATURE", num: "05", name: "Banane",
-    desc: "Régularité des volumes, qualité homogène et gestion maîtrisée de la maturité. Un produit essentiel du commerce international.",
-    meta: { "Origine": "Afrique tropicale", "Disponibilité": "Toute l'année", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-banane.webp", collection: "SIGNATURE", num: "05",
   },
 
   // ── Saison ──
   {
     type: "product", id: "melon", side: "right", bg: "#2A1208", shadow: "drop-shadow(0 18px 28px rgba(0,0,0,0.28))",
-    png: "/png/prod-melon.webp", collection: "SAISON", num: "06", name: "Melon",
-    desc: "Chair fondante, sucre équilibré et récolte au meilleur stade de maturité. Une spécialité saisonnière recherchée pour sa fraîcheur.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-melon.webp", collection: "SAISON", num: "06",
   },
   {
     type: "product", id: "pasteque", side: "left", bg: "#5A2630",
-    png: "/png/prod-pasteque.webp", collection: "SAISON", num: "07", name: "Pastèque",
-    desc: "Texture croquante, forte teneur en eau et qualité visuelle remarquable. Une référence estivale appréciée pour sa fraîcheur naturelle.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Fin avril", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-pasteque.webp", collection: "SAISON", num: "07",
   },
   {
     type: "product", id: "haricot-vert", side: "right", bg: "#22331C",
-    png: "/png/prod-haricots.webp", collection: "SAISON", num: "08", name: "Haricot vert",
-    desc: "Contrôle rigoureux de la fraîcheur et de la tendreté du champ jusqu'au transport. Une spécialité saisonnière recherchée sur sa fenêtre de disponibilité.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Janvier – Avril", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-haricots.webp", collection: "SAISON", num: "08",
   },
   {
     type: "product", id: "citron-vert", side: "left", bg: "#36511E",
-    png: "/png/prod-citron-vert.webp", collection: "SAISON", num: "09", name: "Citron vert",
-    desc: "Arômes intenses, acidité vive et excellente polyvalence. Une référence incontournable pour la restauration et l'industrie agroalimentaire.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-citron-vert.webp", collection: "SAISON", num: "09",
   },
   {
     type: "product", id: "citron-jaune", side: "right", bg: "#6B5A14",
-    png: "/png/prod-citron-jaune.webp", collection: "SAISON", num: "10", name: "Citron jaune",
-    desc: "Équilibre aromatique, fraîcheur constante et présentation soignée. Adapté aux marchés recherchant qualité et régularité.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année (Pic: Septembre – Décembre)", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-citron-jaune.webp", collection: "SAISON", num: "10",
   },
 
   // ── Spécialités ──
   {
     type: "product", id: "gombo", side: "left", bg: "#243318",
-    png: "/png/prod-gombo.webp", collection: "SPÉCIALITÉS", num: "11", name: "Gombo",
-    desc: "Récolté avec soin pour préserver sa fraîcheur et sa tendreté. Une spécialité maraîchère appréciée sur de nombreux marchés internationaux.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Toute l'année", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-gombo.webp", collection: "SPÉCIALITÉS", num: "11",
   },
   {
     type: "product", id: "piment", side: "right", bg: "#2E4A1C",
-    png: "/png/prod-piment.webp", collection: "SPÉCIALITÉS", num: "12", name: "Piments",
-    desc: "Un assortiment de couleurs et de variétés — doux ou forts, selon les besoins. Fraîcheur maîtrisée et sélection rigoureuse pour des marchés à forte demande.",
-    meta: { "Origine": "Sénégal", "Disponibilité": "Mars – Août", "Standard": "Export Premium", "Certification": "GlobalGAP" },
+    png: "/png/prod-piment.webp", collection: "SPÉCIALITÉS", num: "12",
   },
 
   // ── Besoin spécifique ──
@@ -124,6 +100,9 @@ const SCROLL_MEMORY_KEY = "scrollpos:/produits";
 
 // ============================================================
 export default function Produits() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const navigate    = useNavigate();
   const bgRef       = useRef(null);
   const contentRefs = useRef([]);
@@ -329,21 +308,23 @@ export default function Produits() {
     return () => clearTimeout(t);
   }, []);
 
-  const produitsDescription =
-    "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, pour l'export B2B premium.";
-  const produitsTrail = buildBreadcrumbTrail("/produits");
+  const produitsDescription = t("productsPage.seo.description");
+  const produitsPath = pathFor("products", lang);
+  const produitsTrail = buildBreadcrumbTrail(produitsPath);
 
   return (
     <>
       <SEOHead
-        title="Nos Produits — Fruits & Légumes Export Premium"
+        title={t("productsPage.seo.title")}
         description={produitsDescription}
-        path="/produits"
-        keywords={["mangue export", "avocat export", "ananas export", "citron vert export", "gombo export", "fruits tropicaux B2B"]}
+        path={produitsPath}
+        keywords={lang === "en"
+          ? ["mango export", "avocado export", "pineapple export", "lime export", "okra export", "B2B tropical fruit supplier"]
+          : ["mangue export", "avocat export", "ananas export", "citron vert export", "gombo export", "fruits tropicaux B2B"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/produits", title: "Produits", description: produitsDescription, breadcrumb: true }),
-          breadcrumbListSchema(produitsTrail, "/produits"),
+          webPageSchema({ path: produitsPath, title: t("nav.products"), description: produitsDescription, breadcrumb: true }),
+          breadcrumbListSchema(produitsTrail, produitsPath),
         ]}
       />
       <style>{`
@@ -401,7 +382,7 @@ export default function Produits() {
       `}</style>
 
       <TopBar />
-      <img src="/logo-mark.png" alt="Tropicaura — Collection de fruits et légumes d'export premium" width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("productsPage.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={produitsTrail} />
 
       {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
@@ -415,8 +396,8 @@ export default function Produits() {
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",
       }}>
         {SECTIONS.map((s, i) => (
-          <button key={s.id} ref={(el) => (dotRefs.current[i] = el)} onClick={() => scrollTo(i)} title={s.name || s.title}
-            aria-label={`Aller à ${s.name || s.title}`}
+          <button key={s.id} ref={(el) => (dotRefs.current[i] = el)} onClick={() => scrollTo(i)} title={s.type === "product" ? t(`catalog.items.${s.id}.name`) : t("productsPage.title")}
+            aria-label={t("productsPage.goTo", { name: s.type === "product" ? t(`catalog.items.${s.id}.name`) : t("productsPage.title") })}
             style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.32)", border: "none", cursor: "pointer", padding: 0, transition: "width .25s, height .25s, background .25s, box-shadow .25s", display: "block" }} />
         ))}
       </nav>
@@ -463,14 +444,14 @@ export default function Produits() {
                     fontSize: 11, fontWeight: 700, letterSpacing: ".30em",
                     textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: 20,
                   }}>
-                    Besoin Spécifique
+                    {t("productsPage.custom.kicker")}
                   </span>
                   <h2 style={{
                     fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
                     fontSize: "clamp(26px,3.2vw,46px)", lineHeight: 1.08,
                     letterSpacing: "-.03em", color: "#fff", margin: "0 0 20px", maxWidth: 500,
                   }}>
-                    Vous recherchez un produit qui ne figure pas dans notre collection ?
+                    {t("productsPage.custom.title")}
                   </h2>
                   <div style={{ width: 36, height: 2, background: "rgba(255,255,255,0.5)", margin: "0 0 24px", borderRadius: 2 }} />
                   <p style={{
@@ -478,7 +459,7 @@ export default function Produits() {
                     fontSize: "clamp(14px,1.2vw,16px)", lineHeight: 1.78,
                     color: "rgba(255,255,255,0.78)", margin: "0 0 16px", maxWidth: 480,
                   }}>
-                    Grâce à notre réseau de producteurs et de partenaires agricoles en Afrique de l'Ouest, nous pouvons accompagner des demandes spécifiques selon vos besoins.
+                    {t("productsPage.custom.text")}
                   </p>
                   <p style={{
                     fontFamily: "'Plus Jakarta Sans',sans-serif",
@@ -492,10 +473,10 @@ export default function Produits() {
                     fontSize: "clamp(14px,1.15vw,16px)", fontWeight: 700,
                     color: "#fff", margin: "0 0 36px", letterSpacing: "-.01em",
                   }}>
-                    Produit spécifique. Solution sur mesure.
+                    {t("productsPage.custom.tagline")}
                   </p>
-                  <button className="scene__cta" onClick={() => window.location.href = "/contact"}>
-                    <span className="cta-label">Discutons de votre projet</span>
+                  <button className="scene__cta" onClick={() => window.location.href = pathFor("contact", lang)}>
+                    <span className="cta-label">{t("productsPage.custom.cta")}</span>
                     <span className="cta-arrow"><span>→</span></span>
                   </button>
                 </div>
@@ -508,10 +489,10 @@ export default function Produits() {
           return (
             <section key={s.id} className="scene" style={{ justifyContent: "center" }}>
               <div ref={(el) => (contentRefs.current[i] = el)} style={{ opacity: 1, textAlign: "center", maxWidth: "min(760px,86vw)", padding: "0 clamp(24px,6vw,60px)" }}>
-                <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".30em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: 22 }}>{s.kicker}</span>
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: "clamp(44px, 7vw, 92px)", lineHeight: 1.02, letterSpacing: "-.04em", color: "#fff", margin: "0 0 22px" }}>{s.title}</h1>
-                <p style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.3vw,16px)", lineHeight: 1.8, color: "rgba(255,255,255,0.80)", margin: "0 auto", maxWidth: 580 }}>{s.text}</p>
-                <div className="scene__hint" style={{ marginTop: 40 }}><i /><span>Défilez vers le bas</span></div>
+                <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".30em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: 22 }}>{t("productsPage.kicker")}</span>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: "clamp(44px, 7vw, 92px)", lineHeight: 1.02, letterSpacing: "-.04em", color: "#fff", margin: "0 0 22px" }}>{t("productsPage.title")}</h1>
+                <p style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.3vw,16px)", lineHeight: 1.8, color: "rgba(255,255,255,0.80)", margin: "0 auto", maxWidth: 580 }}>{t("productsPage.intro")}</p>
+                <div className="scene__hint" style={{ marginTop: 40 }}><i /><span>{t("productsPage.scrollHint")}</span></div>
               </div>
             </section>
           );
@@ -543,7 +524,7 @@ export default function Produits() {
                 <div
                   className="prod-float"
                   role="img"
-                  aria-label={s.name}
+                  aria-label={t(`catalog.items.${s.id}.name`)}
                   style={{
                     position: "relative", zIndex: 1,
                     width: "112%", height: "100%",
@@ -559,17 +540,25 @@ export default function Produits() {
 
               {/* Texte éditorial */}
               <div className="prod-text" style={{ flex: 1, minWidth: 0 }}>
-                <h2 className="prod-name" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, lineHeight: 1.04, letterSpacing: "-.03em", color: "#fff", margin: "0 0 18px", textShadow: "0 4px 30px rgba(0,0,0,0.30)" }}>{s.name}</h2>
+                <h2 className="prod-name" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, lineHeight: 1.04, letterSpacing: "-.03em", color: "#fff", margin: "0 0 18px", textShadow: "0 4px 30px rgba(0,0,0,0.30)" }}>{t(`catalog.items.${s.id}.name`)}</h2>
 
                 <div style={{ width: 36, height: 2, background: "rgba(255,255,255,0.5)", margin: "0 0 22px", borderRadius: 2 }} />
 
-                <p style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.25vw,16px)", lineHeight: 1.78, fontWeight: 400, color: "rgba(255,255,255,0.86)", margin: "0 0 30px", maxWidth: 480 }}>{s.desc}</p>
+                <p style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.25vw,16px)", lineHeight: 1.78, fontWeight: 400, color: "rgba(255,255,255,0.86)", margin: "0 0 30px", maxWidth: 480 }}>{t(`catalog.items.${s.id}.shortDesc`)}</p>
 
                 {/* Méta éditoriale : label / valeur */}
                 <div className="prod-meta" style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px,2.6vw,46px)" }}>
-                  {Object.entries(s.meta).map(([k, v]) => (
+                  {/* Même source que la fiche produit (catalogue i18n) : plus de
+                      duplication du couple origine/disponibilité entre la vitrine
+                      et /produits/:slug — une seule valeur à mettre à jour. */}
+                  {[
+                    ["origin", t(`catalog.items.${s.id}.origin`)],
+                    ["availability", t(`catalog.items.${s.id}.availability`)],
+                    ["standard", t("catalog.standard")],
+                    ["certification", t("catalog.shared.certification")],
+                  ].map(([k, v]) => (
                     <div key={k}>
-                      <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(255,255,255,0.48)", marginBottom: 7 }}>{k}</span>
+                      <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(255,255,255,0.48)", marginBottom: 7 }}>{t(`product.specs.${k}`)}</span>
                       <span style={{ display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(14px,1.15vw,16px)", fontWeight: 500, color: "rgba(255,255,255,0.92)" }}>{v}</span>
                     </div>
                   ))}
@@ -579,8 +568,8 @@ export default function Produits() {
                     onClick joue le morph puis navigue — le <a href> reste intact
                     (React Router Link), aucun impact sur le crawl/SEO. */}
                 <Link
-                  to={`/produits/${s.id}`}
-                  aria-label={`Voir la fiche complète de ${s.name}`}
+                  to={`${produitsPath}/${s.id}`}
+                  aria-label={t("productsPage.viewSheet", { name: t(`catalog.items.${s.id}.name`) })}
                   className="prod-more"
                   onClick={(e) => handleMoreClick(e, i, `/produits/${s.id}`)}
                 >

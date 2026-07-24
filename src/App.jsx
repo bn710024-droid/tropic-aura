@@ -65,7 +65,9 @@ export default function App() {
   // Idem pour une fiche produit : depuis l'ajout du wrapper de scroll dédié
   // mobile (fix du calque de fond qui se décalait au scroll sur iOS Safari),
   // ProductDetail.jsx rend aussi son propre <Footer /> DANS son wrapper.
-  const isProductDetail = path.startsWith("/produits/") && path !== "/produits";
+  const isProductDetail =
+    (path.startsWith("/produits/") && path !== "/produits") ||
+    (path.startsWith("/en/products/") && path !== "/en/products");
 
   return (
     <>
@@ -76,6 +78,8 @@ export default function App() {
             traduite tomberait sur NotFound plutôt que d'afficher du français
             sous une URL annoncée comme anglaise. */}
         <Route path="/en" element={<Home />} />
+        <Route path="/en/products" element={<Produits />} />
+        <Route path="/en/products/:slug" element={<ProductDetail />} />
 
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />

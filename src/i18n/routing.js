@@ -23,6 +23,14 @@ export const ROUTES = {
   availability: { fr: "/disponibilite", en: "/en/availability" },
   partnerships: { fr: "/partenariats", en: "/en/partnerships" },
   insights: { fr: "/insights", en: "/en/insights" },
+  insightSenegal: {
+    fr: "/insights/senegal-origine-strategique",
+    en: "/en/insights/senegal-strategic-origin",
+  },
+  insightSupplier: {
+    fr: "/insights/fournisseur-stable-opportuniste",
+    en: "/en/insights/reliable-vs-opportunistic-supplier",
+  },
   contact: { fr: "/contact", en: "/en/contact" },
   privacy: { fr: "/politique-confidentialite", en: "/en/privacy" },
 };
@@ -31,7 +39,7 @@ export const ROUTES = {
 // n'est pas traduite, on ne déclare NI hreflang="en" NI de lien vers elle :
 // annoncer une version qui n'existe pas génère des erreurs Search Console
 // et envoie l'utilisateur sur une page dans la mauvaise langue.
-export const TRANSLATED_PAGES = ["home"];
+export const TRANSLATED_PAGES = ["home", "products"];
 
 /** Langue portée par un chemin : /en ou /en/... → "en", sinon "fr". */
 export function langFromPath(pathname) {

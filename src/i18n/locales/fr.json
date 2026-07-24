@@ -82,5 +82,84 @@
     "langSwitch": "Changer de langue",
     "toEnglish": "Switch to English",
     "toFrench": "Passer en français"
+  },
+  "menu": {
+    "aboutSubs": {
+      "vision": "Notre Vision",
+      "aujourdhui": "Nos Fondations",
+      "demain": "Notre Développement",
+      "ambition": "Créer Plus de Valeur",
+      "avenir": "Notre Réseau International",
+      "engagement": "Notre Engagement"
+    },
+    "productsSubs": {
+      "signature": "Signature",
+      "saison": "Saison",
+      "specialites": "Spécialités"
+    },
+    "partnershipsSubs": {
+      "vision": "Notre vision",
+      "parcours": "Le parcours",
+      "expedition": "Notre expédition",
+      "conclusion": "Devenir partenaire"
+    },
+    "insightsSubs": {
+      "senegal": "Sénégal, origine stratégique",
+      "supplier": "Fournisseur stable vs opportuniste"
+    },
+    "contactSubs": {
+      "form": "Nous contacter",
+      "partnership": "Demande de partenariat"
+    }
+  },
+  "product": {
+    "specsHeading": "Spécifications export",
+    "exportMarkets": "Marchés d'export",
+    "commercialHeading": "Conditions commerciales & logistique",
+    "incoterms": "Incoterms proposés",
+    "calibrage": "Calibrage",
+    "packaging": "Conditionnement",
+    "transport": "Transport",
+    "faqHeading": "Questions fréquentes",
+    "relatedHeading": "Autres produits de notre collection",
+    "relatedNav": "Produits associés",
+    "requestOffer": "Demander une offre",
+    "requestOfferAria": "Demander une offre pour {{name}}",
+    "backToCollection": "← Toute la collection",
+    "contactUs": "Nous contacter",
+    "readInsights": "Lire nos insights",
+    "seoTitle": "{{name}} — Export B2B {{englishName}}",
+    "seoDesc": "{{name}} ({{englishName}}) — {{description}} Origine : {{origin}}. Disponibilité : {{availability}}. Incoterms : {{incoterms}}.",
+    "imageAlt": "{{name}} ({{englishName}}) — export premium Tropicaura",
+    "specs": {
+      "tradeName": "Nom commercial",
+      "collection": "Collection",
+      "origin": "Origine",
+      "availability": "Disponibilité",
+      "standard": "Standard",
+      "certification": "Certification"
+    },
+    "availabilityHeading": "Disponibilité & adaptation",
+    "customHeading": "Solutions sur mesure"
+  },
+  "productsPage": {
+    "kicker": "LE SHOWROOM",
+    "title": "La Collection.",
+    "intro": "Une sélection tropicale d'exception, présentée comme une exposition. Chaque produit est choisi pour sa qualité, sa régularité et sa capacité à répondre aux marchés les plus exigeants.",
+    "scrollHint": "Défilez vers le bas",
+    "viewSheet": "Voir la fiche complète de {{name}}",
+    "goTo": "Aller à {{name}}",
+    "custom": {
+      "kicker": "Besoin Spécifique",
+      "title": "Vous recherchez un produit qui ne figure pas dans notre collection ?",
+      "text": "Grâce à notre réseau de producteurs et de partenaires agricoles en Afrique de l'Ouest, nous pouvons accompagner des demandes spécifiques selon vos besoins.",
+      "tagline": "Produit spécifique. Solution sur mesure.",
+      "cta": "Discutons de votre projet"
+    },
+    "seo": {
+      "title": "Nos Produits — Fruits & Légumes Export Premium",
+      "description": "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, pour l'export B2B premium.",
+      "logoAlt": "Tropicaura — Collection de fruits et légumes d'export premium"
+    }
   }
 }

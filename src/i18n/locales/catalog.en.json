@@ -1,0 +1,128 @@
+{
+  "collections": {
+    "SIGNATURE": "Signature",
+    "SAISON": "Seasonal",
+    "SPÉCIALITÉS": "Specialities"
+  },
+  "standard": "Premium Export",
+  "shared": {
+    "certification": "GlobalGAP",
+    "incoterms": [
+      "EXW",
+      "FOB Dakar",
+      "CIF (depending on destination and agreed terms)"
+    ],
+    "incotermsNote": "Logistics terms are defined with each partner to provide the solution best suited to the destination market.",
+    "packaging": "Packaging tailored to the customer's specifications and to the requirements of the destination market.",
+    "calibrage": "Defined in line with the customer's specifications and commercial requirements.",
+    "transportSenegal": "Sea freight from the Port of Dakar (Senegal), with rigorous cold chain management for products that require it. For urgent shipments, premium produce or specific requests, air freight can also be arranged according to customer needs.",
+    "transportOtherAfrica": "Shipments are arranged from the most suitable port of origin, depending on the country of production and logistical constraints. For premium produce, urgent orders or specific requirements, air freight can also be offered on request.",
+    "availabilityNote": "The varieties offered depend on the harvest season, availability and the requirements of the destination market. Our teams select the solution best suited to each enquiry.",
+    "customSolutions": "Every export project has its own requirements in terms of variety, sizing, packaging and logistics. Tropicaura builds each offer around the specifications provided by the customer, to deliver a solution matched to their market.",
+    "otherMarketsNote": "We also assess commercial opportunities in other markets according to our partners' needs.",
+    "faq": [
+      {
+        "q": "What is the minimum order quantity (MOQ)?",
+        "a": "The minimum volume depends on the product, the season and the destination. Contact our team for a proposal matched to your market."
+      },
+      {
+        "q": "Which Incoterms do you offer?",
+        "a": "Shipments can be arranged EXW, FOB Dakar or CIF depending on the destination and the customer's needs. Contact our team to define the logistics solution suited to your market."
+      },
+      {
+        "q": "Do you hold quality certifications?",
+        "a": "Yes — all our produce is GlobalGAP certified, guaranteeing compliance with internationally recognised good agricultural practices."
+      },
+      {
+        "q": "Which markets do you export to?",
+        "a": "We are building a partner network connecting West Africa to the main international markets, particularly in Europe, North America and the Middle East."
+      }
+    ]
+  },
+  "items": {
+    "mangue": {
+      "name": "Kent Mango",
+      "description": "Grown under the Senegalese sun, mangoes exported by Tropicaura are selected for their eating quality, their resilience in transit and their compliance with international importer requirements. Depending on the season, we supply varieties matched to different markets and specifications.",
+      "origin": "Senegal",
+      "availability": "June – Mid-August",
+      "shortDesc": "Low-fibre flesh, excellent post-harvest shelf life and strong recognition on European markets. A benchmark product for premium export programmes."
+    },
+    "avocat": {
+      "name": "Avocado",
+      "description": "Sourced from West Africa's main growing regions, the Tropicaura avocado stands out for its controlled ripening and creamy texture — two decisive criteria for international supply chains. Consistent quality, available year-round, designed to fit the most demanding buying programmes.",
+      "origin": "West Africa",
+      "availability": "Year-round",
+      "shortDesc": "Controlled ripening, creamy texture and consistent quality. Selected to meet the requirements of international supply chains."
+    },
+    "ananas": {
+      "name": "Pineapple",
+      "description": "Harvested in Africa's tropical growing regions, the Tropicaura pineapple combines juicy flesh and aromatic intensity with the resilience required for long-distance export. Careful presentation and consistent quality make it a benchmark on premium markets, all year round.",
+      "origin": "Tropical Africa",
+      "availability": "Year-round",
+      "shortDesc": "Juicy flesh, intense aromatic profile and careful presentation. A tropical product valued for the margin it adds on premium markets."
+    },
+    "papaye": {
+      "name": "Papaya",
+      "description": "The Tropicaura papaya is recognised first by its vivid colour and balanced flavour — two markers sought by specialist channels. Our teams maintain consistent quality throughout the year, to meet the requirements of the most selective markets.",
+      "origin": "Tropical Africa",
+      "availability": "Year-round",
+      "shortDesc": "Vivid colour, balanced flavour and consistent quality. A tropical reference suited to specialist channels and demanding markets."
+    },
+    "banane": {
+      "name": "Banana",
+      "description": "A volume product by definition, the Tropicaura banana is built on supply consistency and controlled ripeness management — two essential requirements for the continuity of international buying programmes. Uniform quality, available year-round.",
+      "origin": "Tropical Africa",
+      "availability": "Year-round",
+      "shortDesc": "Volume consistency, uniform quality and controlled ripeness management. An essential product in international trade."
+    },
+    "melon": {
+      "name": "Melon",
+      "description": "Grown in Senegal and harvested at optimal maturity, the Tropicaura melon offers the tender flesh and sweet balance sought by European markets in season. A speciality from January to late April, built on freshness that is not open to compromise.",
+      "origin": "Senegal",
+      "availability": "January – Late April",
+      "shortDesc": "Tender flesh, balanced sweetness and harvesting at peak maturity. A seasonal speciality sought for its freshness."
+    },
+    "pasteque": {
+      "name": "Watermelon",
+      "description": "Grown in Senegal, the Tropicaura watermelon stands out for its crisp texture and visual quality — consistent sizing, uniform colouring — two criteria that count from the moment it reaches the shelf. Available from January to late April, it meets peak summer demand on European markets.",
+      "origin": "Senegal",
+      "availability": "January – Late April",
+      "shortDesc": "Crisp texture, high water content and outstanding visual quality. A summer reference valued for its natural freshness."
+    },
+    "haricot-vert": {
+      "name": "Green Beans",
+      "description": "Tropicaura green beans are harvested in Senegal under strict control of freshness and tenderness — two decisive criteria for a product this sensitive to transport. Available from January to April, they meet European demand peaks within that seasonal window.",
+      "origin": "Senegal",
+      "availability": "January – April",
+      "shortDesc": "Strict control of freshness and tenderness, from field to transport. A seasonal speciality in demand throughout its availability window."
+    },
+    "citron-vert": {
+      "name": "Lime",
+      "description": "Grown in Senegal, the Tropicaura lime stands out for its intense aroma and sharp acidity — qualities sought by foodservice and the food processing industry alike. Available year-round, with a seasonal peak between September and December.",
+      "origin": "Senegal",
+      "availability": "Year-round (Peak: September – December)",
+      "shortDesc": "Intense aroma, sharp acidity and excellent versatility. An essential reference for foodservice and the food processing industry."
+    },
+    "citron-jaune": {
+      "name": "Lemon",
+      "description": "Where the lime delivers intensity, the Tropicaura lemon delivers consistency: balanced aroma and steady freshness, grown in Senegal. Available year-round with a seasonal peak between September and December, it serves markets that require both quality and reliability.",
+      "origin": "Senegal",
+      "availability": "Year-round (Peak: September – December)",
+      "shortDesc": "Balanced aroma, steady freshness and careful presentation. Suited to markets that require quality and consistency."
+    },
+    "gombo": {
+      "name": "Okra",
+      "description": "Tropicaura okra is carefully harvested in Senegal to preserve its freshness and tenderness all the way to destination — two criteria our teams monitor closely, as they deteriorate quickly. Available year-round, it serves a wide range of international markets.",
+      "origin": "Senegal",
+      "availability": "Year-round",
+      "shortDesc": "Carefully harvested to preserve freshness and tenderness. A vegetable speciality valued across many international markets."
+    },
+    "piment": {
+      "name": "Chilli Peppers",
+      "description": "Tropicaura chilli peppers are available in a range of varieties and heat levels according to market requirements, with freshness controlled from Senegal through to destination. A rigorous selection, available from March to August, designed to match each customer's specifications.",
+      "origin": "Senegal",
+      "availability": "March – August",
+      "shortDesc": "A range of colours and varieties — mild or hot, according to requirements. Controlled freshness and rigorous selection for high-demand markets."
+    }
+  }
+}

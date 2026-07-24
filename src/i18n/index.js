@@ -20,14 +20,20 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import fr from "./locales/fr.json";
 import en from "./locales/en.json";
+// Catalogue produit dans des fichiers dédiés : 12 produits × (nom, description,
+// origine, disponibilité) + textes partagés (incoterms, transport, FAQ…)
+// alourdiraient trop les fichiers d'interface. Le FR est GÉNÉRÉ depuis
+// productsData.js (voir scripts) pour rester la copie exacte du contenu publié.
+import catalogFr from "./locales/catalog.fr.json";
+import catalogEn from "./locales/catalog.en.json";
 
 export const DEFAULT_LANG = "fr";
 export const SUPPORTED_LANGS = ["fr", "en"];
 
 i18n.use(initReactI18next).init({
   resources: {
-    fr: { translation: fr },
-    en: { translation: en },
+    fr: { translation: { ...fr, catalog: catalogFr } },
+    en: { translation: { ...en, catalog: catalogEn } },
   },
   lng: DEFAULT_LANG,
   fallbackLng: DEFAULT_LANG,

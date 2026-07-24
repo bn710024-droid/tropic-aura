@@ -82,5 +82,84 @@
     "langSwitch": "Change language",
     "toEnglish": "Switch to English",
     "toFrench": "Passer en français"
+  },
+  "menu": {
+    "aboutSubs": {
+      "vision": "Our Vision",
+      "aujourdhui": "Our Foundations",
+      "demain": "Our Growth",
+      "ambition": "Creating More Value",
+      "avenir": "Our International Network",
+      "engagement": "Our Commitment"
+    },
+    "productsSubs": {
+      "signature": "Signature",
+      "saison": "Seasonal",
+      "specialites": "Specialities"
+    },
+    "partnershipsSubs": {
+      "vision": "Our Vision",
+      "parcours": "The Journey",
+      "expedition": "Our Shipping",
+      "conclusion": "Become a Partner"
+    },
+    "insightsSubs": {
+      "senegal": "Senegal, a Strategic Origin",
+      "supplier": "Reliable vs Opportunistic Supplier"
+    },
+    "contactSubs": {
+      "form": "Get in Touch",
+      "partnership": "Partnership Enquiry"
+    }
+  },
+  "product": {
+    "specsHeading": "Export Specifications",
+    "exportMarkets": "Export Markets",
+    "commercialHeading": "Commercial Terms & Logistics",
+    "incoterms": "Incoterms Offered",
+    "calibrage": "Sizing",
+    "packaging": "Packaging",
+    "transport": "Shipping",
+    "faqHeading": "Frequently Asked Questions",
+    "relatedHeading": "More from our collection",
+    "relatedNav": "Related products",
+    "requestOffer": "Request a Quote",
+    "requestOfferAria": "Request a quote for {{name}}",
+    "backToCollection": "← Back to the collection",
+    "contactUs": "Contact Us",
+    "readInsights": "Read our insights",
+    "seoTitle": "{{name}} — B2B Export from Senegal",
+    "seoDesc": "{{name}} — {{description}} Origin: {{origin}}. Availability: {{availability}}. Incoterms: {{incoterms}}.",
+    "imageAlt": "{{name}} — premium export produce by Tropicaura",
+    "specs": {
+      "tradeName": "Trade name",
+      "collection": "Collection",
+      "origin": "Origin",
+      "availability": "Availability",
+      "standard": "Standard",
+      "certification": "Certification"
+    },
+    "availabilityHeading": "Availability & Flexibility",
+    "customHeading": "Tailored Solutions"
+  },
+  "productsPage": {
+    "kicker": "THE SHOWROOM",
+    "title": "The Collection.",
+    "intro": "An exceptional tropical selection, presented as an exhibition. Every product is chosen for its quality, its consistency and its ability to meet the most demanding markets.",
+    "scrollHint": "Scroll to explore",
+    "viewSheet": "View the full product sheet for {{name}}",
+    "goTo": "Go to {{name}}",
+    "custom": {
+      "kicker": "Specific Requirement",
+      "title": "Looking for a product that is not in our collection?",
+      "text": "Through our network of growers and agricultural partners across West Africa, we can support specific requests according to your requirements.",
+      "tagline": "Specific product. Tailored solution.",
+      "cta": "Let's discuss your project"
+    },
+    "seo": {
+      "title": "Our Products — Premium Fresh Fruit & Vegetable Export",
+      "description": "The Tropicaura collection: mangoes, avocados, pineapples, citrus and fresh vegetables from West Africa, for premium B2B export.",
+      "logoAlt": "Tropicaura — premium fresh fruit and vegetable export collection"
+    }
   }
 }

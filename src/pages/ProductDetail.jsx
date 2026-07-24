@@ -1,12 +1,15 @@
 import { useRef, useEffect } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, Navigate, useLocation } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Footer from "../components/Footer";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, productSchema, faqPageSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
-import { getProductBySlug, getRelatedProducts, getTransportText, PRODUCT_SHARED } from "../data/productsData";
+import { useTranslation } from "react-i18next";
+import { getProductBySlug } from "../data/productsData";
+import { useLocalizedProduct, useRelatedProducts, useProductShared } from "../data/useLocalizedProducts";
+import { langFromPath, pathFor } from "../i18n/routing";
 import { EXPORT_MARKETS } from "../seo/siteConfig";
 
 const FONT = "'Plus Jakarta Sans',sans-serif";
@@ -40,7 +43,15 @@ const sectionReveal = { opacity: 0, transform: "translateY(24px)", transition: "
 // ============================================================
 export default function ProductDetail() {
   const { slug } = useParams();
-  const product = getProductBySlug(slug);
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  // `product` porte les textes traduits ; `productRaw` garde les valeurs
+  // françaises servant de clés (origin → choix du texte transport).
+  const product = useLocalizedProduct(slug);
+  const productRaw = getProductBySlug(slug);
+  const related = useRelatedProducts(slug, 3);
+  const shared = useProductShared();
   const ctaRef = useRef(null);
   const revealRefs = useRef([]);
   const reveal = (el) => {
@@ -73,7 +84,7 @@ export default function ProductDetail() {
     return () => document.documentElement.style.removeProperty("--page-entry-color");
   }, [product?.bg]);
 
-  if (!product) return <Navigate to="/produits" replace />;
+  if (!product) return <Navigate to={pathFor("products", lang)} replace />;
 
   // Effet magnétique : le CTA suit légèrement le curseur (max ~10px),
   // grossit au survol, se compresse au clic — cf. cahier des charges
@@ -99,24 +110,33 @@ export default function ProductDetail() {
     if (ctaRef.current) ctaRef.current.style.transform = "translate(0,0) scale(1.02)";
   };
 
-  const path = `/produits/${product.slug}`;
+  // Le chemin suit la langue : /produits/:slug (fr) ou /en/products/:slug (en).
+  const path = `${pathFor("products", lang)}/${product.slug}`;
   const accentColor = product.accentColor || GOLD;
   // Multiplicateur d'opacité des overlays, réglé par photo : les fonds très
   // clairs (agrumes, ananas) ont besoin de plus de contraste, ceux déjà
   // sombres du bon côté (gombo, piment) un peu moins. Voir productsData.js.
   const overlayIntensity = product.bgOverlayIntensity || 1;
   const ov = (base) => Math.min(0.92, base * overlayIntensity);
-  const related = getRelatedProducts(product.slug, 3);
   const trail = buildBreadcrumbTrail(path);
-  const description = `${product.name} (${product.englishName}) — ${product.description} Origine : ${product.origin}. Disponibilité : ${product.availability}. Incoterms : ${PRODUCT_SHARED.incoterms.join(", ")}.`.slice(0, 300);
+  // En anglais, name est déjà le nom commercial international (« Green Beans ») :
+  // répéter englishName entre parenthèses ferait doublon. La clé EN l'omet donc.
+  const description = t("product.seoDesc", {
+    name: product.name,
+    englishName: product.englishName,
+    description: product.description,
+    origin: product.originLabel,
+    availability: product.availabilityLabel,
+    incoterms: shared.incoterms.join(", "),
+  }).slice(0, 300);
 
   const specs = [
-    { label: "Nom commercial", value: `${product.name} (${product.englishName})` },
-    { label: "Collection", value: product.collection.charAt(0) + product.collection.slice(1).toLowerCase() },
-    { label: "Origine", value: product.origin },
-    { label: "Disponibilité", value: product.availability },
-    { label: "Standard", value: product.standard },
-    { label: "Certification", value: PRODUCT_SHARED.certification },
+    { label: t("product.specs.tradeName"), value: lang === "en" ? product.name : `${product.name} (${product.englishName})` },
+    { label: t("product.specs.collection"), value: product.collectionLabel },
+    { label: t("product.specs.origin"), value: product.originLabel },
+    { label: t("product.specs.availability"), value: product.availabilityLabel },
+    { label: t("product.specs.standard"), value: product.standardLabel },
+    { label: t("product.specs.certification"), value: shared.certification },
   ];
 
   // Pas d'image OG dédiée par produit : les PNG détourés (fond transparent)
@@ -128,17 +148,17 @@ export default function ProductDetail() {
   return (
     <>
       <SEOHead
-        title={`${product.name} — Export B2B ${product.englishName}`}
+        title={t("product.seoTitle", { name: product.name, englishName: product.englishName })}
         description={description}
         path={path}
-        keywords={[product.name, product.englishName, "export", "Sénégal", "Afrique de l'Ouest", "B2B", product.collection.toLowerCase()]}
+        keywords={[product.name, product.englishName, "export", lang === "en" ? "Senegal" : "Sénégal", lang === "en" ? "West Africa" : "Afrique de l'Ouest", "B2B", product.collection.toLowerCase()]}
         type="product"
         jsonLd={[
           organizationSchema(),
           webPageSchema({ path, title: product.name, description, breadcrumb: true }),
           breadcrumbListSchema(trail, path),
-          productSchema(product, PRODUCT_SHARED.incoterms),
-          faqPageSchema(PRODUCT_SHARED.faq),
+          productSchema(product, shared.incoterms),
+          faqPageSchema(shared.faq),
         ]}
       />
 
@@ -220,7 +240,7 @@ export default function ProductDetail() {
               <img
                 className="pd-hero-img"
                 src={product.image}
-                alt={`${product.name} (${product.englishName}) — export premium Tropicaura`}
+                alt={t("product.imageAlt", { name: product.name, englishName: product.englishName })}
                 width={product.width}
                 height={product.height}
                 loading="eager"
@@ -311,8 +331,8 @@ export default function ProductDetail() {
               `}</style>
               <Link
                 ref={ctaRef}
-                to={`/contact?product=${encodeURIComponent(product.name)}&origin=${encodeURIComponent(product.origin)}&section=form`}
-                aria-label={`Demander une offre pour ${product.name}`}
+                to={`${pathFor("contact", lang)}?product=${encodeURIComponent(product.name)}&origin=${encodeURIComponent(product.originLabel)}&section=form`}
+                aria-label={t("product.requestOfferAria", { name: product.name })}
                 className="cta-magnetic"
                 onMouseMove={handleCtaMove}
                 onMouseLeave={handleCtaLeave}
@@ -337,7 +357,7 @@ export default function ProductDetail() {
                 }}
               >
                 <span className="cta-shine" aria-hidden="true" />
-                Demander une offre <span className="cta-arrow" aria-hidden="true">→</span>
+                {t("product.requestOffer")} <span className="cta-arrow" aria-hidden="true">→</span>
               </Link>
             </div>
           </section>
@@ -357,7 +377,7 @@ export default function ProductDetail() {
                 }}
               >
                 <span style={accentBar(accentColor)} aria-hidden="true" />
-                Spécifications export
+                {t("product.specsHeading")}
               </h2>
               <dl
                 style={{
@@ -408,7 +428,7 @@ export default function ProductDetail() {
                   margin: "44px 0 16px",
                 }}
               >
-                Marchés d'export
+                {t("product.exportMarkets")}
               </h3>
               <ul
                 style={{
@@ -447,7 +467,7 @@ export default function ProductDetail() {
                   maxWidth: 620,
                 }}
               >
-                {PRODUCT_SHARED.otherMarketsNote}
+                {shared.otherMarketsNote}
               </p>
             </div>
           </section>
@@ -467,7 +487,7 @@ export default function ProductDetail() {
                 }}
               >
                 <span style={accentBar(accentColor)} aria-hidden="true" />
-                Conditions commerciales & logistique
+                {t("product.commercialHeading")}
               </h2>
               <div
                 style={{
@@ -488,10 +508,10 @@ export default function ProductDetail() {
                       margin: "0 0 10px",
                     }}
                   >
-                    Incoterms proposés
+                    {t("product.incoterms")}
                   </h3>
                   <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-                    {PRODUCT_SHARED.incoterms.map((inc) => (
+                    {shared.incoterms.map((inc) => (
                       <li
                         key={inc}
                         style={{
@@ -514,7 +534,7 @@ export default function ProductDetail() {
                       margin: "12px 0 0",
                     }}
                   >
-                    {PRODUCT_SHARED.incotermsNote}
+                    {shared.incotermsNote}
                   </p>
                 </div>
 
@@ -530,10 +550,10 @@ export default function ProductDetail() {
                       margin: "0 0 10px",
                     }}
                   >
-                    Calibrage
+                    {t("product.calibrage")}
                   </h3>
                   <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-                    {PRODUCT_SHARED.calibrage}
+                    {shared.calibrage}
                   </p>
                 </div>
 
@@ -549,10 +569,10 @@ export default function ProductDetail() {
                       margin: "0 0 10px",
                     }}
                   >
-                    Conditionnement
+                    {t("product.packaging")}
                   </h3>
                   <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-                    {PRODUCT_SHARED.packaging}
+                    {shared.packaging}
                   </p>
                 </div>
 
@@ -568,10 +588,10 @@ export default function ProductDetail() {
                       margin: "0 0 10px",
                     }}
                   >
-                    Transport
+                    {t("product.transport")}
                   </h3>
                   <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-                    {getTransportText(product)}
+                    {shared.transportFor(productRaw)}
                   </p>
                 </div>
 
@@ -587,10 +607,10 @@ export default function ProductDetail() {
                       margin: "0 0 10px",
                     }}
                   >
-                    Disponibilité & adaptation
+                    {t("product.availabilityHeading")}
                   </h3>
                   <p style={{ fontFamily: FONT, fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-                    {PRODUCT_SHARED.availabilityNote}
+                    {shared.availabilityNote}
                   </p>
                 </div>
               </div>
@@ -615,10 +635,10 @@ export default function ProductDetail() {
                     letterSpacing: "-.01em",
                   }}
                 >
-                  Solutions sur mesure
+                  {t("product.customHeading")}
                 </h3>
                 <p style={{ fontFamily: FONT, fontSize: 14.5, lineHeight: 1.75, color: "rgba(255,255,255,0.75)", margin: 0, maxWidth: 720 }}>
-                  {PRODUCT_SHARED.customSolutions}
+                  {shared.customSolutions}
                 </p>
               </div>
             </div>
@@ -639,10 +659,10 @@ export default function ProductDetail() {
                 }}
               >
                 <span style={accentBar(accentColor)} aria-hidden="true" />
-                Questions fréquentes
+                {t("product.faqHeading")}
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {PRODUCT_SHARED.faq.map((item) => (
+                {shared.faq.map((item) => (
                   <details
                     key={item.q}
                     style={{
@@ -699,9 +719,9 @@ export default function ProductDetail() {
                   letterSpacing: "-.02em",
                 }}
               >
-                Autres produits de notre collection
+                {t("product.relatedHeading")}
               </h2>
-              <nav aria-label="Produits associés">
+              <nav aria-label={t("product.relatedNav")}>
                 <style>{`
                   @keyframes fadeInScale {
                     from { opacity: 0; transform: scale(0.98); }
@@ -731,7 +751,7 @@ export default function ProductDetail() {
                   {related.map((r) => (
                     <li key={r.slug}>
                       <Link
-                        to={`/produits/${r.slug}`}
+                        to={`${pathFor("products", lang)}/${r.slug}`}
                         style={{
                           display: "flex",
                           flexDirection: "column",
@@ -772,22 +792,22 @@ export default function ProductDetail() {
 
               <div style={{ marginTop: 36, display: "flex", gap: 16, flexWrap: "wrap" }}>
                 <Link
-                  to="/produits"
+                  to={pathFor("products", lang)}
                   style={{ fontFamily: FONT, fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}
                 >
-                  ← Toute la collection
+                  {t("product.backToCollection")}
                 </Link>
                 <Link
-                  to="/contact"
+                  to={pathFor("contact", lang)}
                   style={{ fontFamily: FONT, fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}
                 >
-                  Nous contacter
+                  {t("product.contactUs")}
                 </Link>
                 <Link
-                  to="/insights"
+                  to={pathFor("insights", lang)}
                   style={{ fontFamily: FONT, fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}
                 >
-                  Lire nos insights
+                  {t("product.readInsights")}
                 </Link>
               </div>
             </div>

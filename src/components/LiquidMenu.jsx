@@ -1,4 +1,7 @@
 ﻿import { useRef, useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
@@ -17,56 +20,49 @@
 // paramètre ?section=<id> est lu au montage par chaque page pour sauter
 // directement au bon endroit — voir la logique dans APropos.jsx,
 // Partenariats.jsx, Produits.jsx, Contact.jsx.
+// Libellés résolus via i18n (nav.* / menu.*Subs.*) et URLs via pathFor() :
+// une même définition sert les deux langues. `page` = clé de src/i18n/routing.js,
+// `section` = ancre ?section=<id> lue au montage par la page cible.
 const COLUMNS = [
   [
-    { label: "Accueil",  href: "/",         img: "/menu-accueil.jpg" },
+    { navKey: "home", page: "home", img: "/menu-accueil.jpg" },
     {
-      label: "À Propos", href: "/about",    img: "/menu-apropos.jpg",
-      subs: [
-        { label: "Notre Vision",               href: "/about?section=vision" },
-        { label: "Nos Fondations",             href: "/about?section=aujourdhui" },
-        { label: "Notre Développement",        href: "/about?section=demain" },
-        { label: "Créer Plus de Valeur",       href: "/about?section=ambition" },
-        { label: "Notre Réseau International", href: "/about?section=avenir" },
-        { label: "Notre Engagement",           href: "/about?section=engagement" },
-      ],
+      navKey: "about", page: "about", img: "/menu-apropos.jpg",
+      subsKey: "aboutSubs",
+      subs: ["vision", "aujourdhui", "demain", "ambition", "avenir", "engagement"],
     },
     {
-      label: "Produits", href: "/produits", img: "/menu-produits.jpg",
-      subs: [
-        { label: "Signature",     href: "/produits?section=signature" },
-        { label: "Saison",        href: "/produits?section=saison" },
-        { label: "Spécialités",   href: "/produits?section=specialites" },
-      ],
+      navKey: "products", page: "products", img: "/menu-produits.jpg",
+      subsKey: "productsSubs",
+      subs: ["signature", "saison", "specialites"],
     },
     // Rubrique de premier niveau (pas un sous-lien de Produits) : le calendrier
     // mérite sa propre place dans le menu, au même niveau que les autres pages
     // importantes. Réutilise la photo de Produits (thématiquement cohérente,
     // pas de nouvelle image fabriquée).
-    { label: "Disponibilité", href: "/disponibilite", img: "/menu-produits.jpg" },
+    { navKey: "availability", page: "availability", img: "/menu-produits.jpg" },
   ],
   [
     {
-      label: "Partenariats", href: "/partenariats", img: "/menu-partenariats.jpg",
+      navKey: "partnerships", page: "partnerships", img: "/menu-partenariats.jpg",
+      subsKey: "partnershipsSubs",
+      subs: ["vision", "parcours", "expedition", "conclusion"],
+    },
+    {
+      navKey: "insights", page: "insights", img: "/menu-visual.jpg",
+      subsKey: "insightsSubs",
+      // Articles : pages à part entière (pas des ancres) → `page` explicite.
       subs: [
-        { label: "Notre vision",       href: "/partenariats?section=vision" },
-        { label: "Le parcours",        href: "/partenariats?section=parcours" },
-        { label: "Notre expédition",   href: "/partenariats?section=expedition" },
-        { label: "Devenir partenaire", href: "/partenariats?section=conclusion" },
+        { key: "senegal", page: "insightSenegal" },
+        { key: "supplier", page: "insightSupplier" },
       ],
     },
     {
-      label: "Insights", href: "/insights", img: "/menu-visual.jpg",
+      navKey: "contact", page: "contact", img: "/menu-contact.jpg",
+      subsKey: "contactSubs",
       subs: [
-        { label: "Sénégal, origine stratégique",       href: "/insights/senegal-origine-strategique" },
-        { label: "Fournisseur stable vs opportuniste", href: "/insights/fournisseur-stable-opportuniste" },
-      ],
-    },
-    {
-      label: "Contact", href: "/contact", img: "/menu-contact.jpg",
-      subs: [
-        { label: "Nous contacter",         href: "/contact?section=form"          },
-        { label: "Demande de partenariat", href: "/partenariats?section=conclusion" },
+        { key: "form", section: "form" },
+        { key: "partnership", page: "partnerships", section: "conclusion" },
       ],
     },
   ],
@@ -80,6 +76,9 @@ const easeIn  = (t) => t * t * t;
 
 // ============================================================
 export default function LiquidMenu() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
   const imgWrapRef = useRef(null);
@@ -348,14 +347,14 @@ export default function LiquidMenu() {
             {COLUMNS.map((col, ci) => (
               <div key={ci} style={{ display: "flex", flexDirection: "column", gap: "clamp(22px,3.2vh,40px)", flex: 1 }}>
                 {col.map((g) => (
-                  <div key={g.label}>
+                  <div key={g.navKey}>
                     {/* Rubrique principale */}
                     <div
                       ref={(el) => (itemRefs.current[ri++] = el)}
                       style={{ opacity: 0, transform: "translateY(28px)", willChange: "transform,opacity" }}
                     >
                       <button
-                        onClick={() => goTo(g.href)}
+                        onClick={() => goTo(pathFor(g.page, lang))}
                         onMouseEnter={(e) => { setImage(g.img); e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.transform = "translateX(6px)"; }}
                         onMouseLeave={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateX(0)"; }}
                         style={{
@@ -369,21 +368,28 @@ export default function LiquidMenu() {
                           userSelect: "none",
                         }}
                       >
-                        {g.label}
+                        {t(`nav.${g.navKey}`)}
                       </button>
                     </div>
 
                     {/* Sous-liens */}
                     {g.subs && (
                       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 7 }}>
-                        {g.subs.map((s) => (
+                        {g.subs.map((raw) => {
+                          // Un sous-lien est soit une simple ancre de la page parente
+                          // (chaîne = id de section), soit un objet ciblant une autre
+                          // page et/ou une ancre précise.
+                          const s = typeof raw === "string" ? { key: raw, section: raw } : raw;
+                          const base = pathFor(s.page || g.page, lang);
+                          const href = s.section ? `${base}?section=${s.section}` : base;
+                          return (
                           <div
-                            key={s.label}
+                            key={s.key}
                             ref={(el) => (itemRefs.current[ri++] = el)}
                             style={{ opacity: 0, transform: "translateY(20px)", willChange: "transform,opacity" }}
                           >
                             <button
-                              onClick={() => goTo(s.href)}
+                              onClick={() => goTo(href)}
                               onMouseEnter={(e) => { setImage(g.img); e.currentTarget.style.color = "rgba(255,255,255,0.92)"; e.currentTarget.style.transform = "translateX(6px)"; }}
                               onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.transform = "translateX(0)"; }}
                               style={{
@@ -397,10 +403,11 @@ export default function LiquidMenu() {
                                 userSelect: "none",
                               }}
                             >
-                              {s.label}
+                              {t(`menu.${g.subsKey}.${s.key}`)}
                             </button>
                           </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>
