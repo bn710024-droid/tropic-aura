@@ -72,6 +72,29 @@ body::-webkit-scrollbar { display: none; }
   mix-blend-mode: soft-light;
 }
 
+/* ── MOBILE : même éclairage SANS mix-blend-mode ──
+   Les WebView WebKit limitées (navigateur intégré Google/GSA sur iOS, certains
+   in-app browsers Android) ratent les blend modes sur une couche fixed plein
+   écran : la couche se compose alors en mode NORMAL → la vignette (noir .88 !)
+   et le halo blanc se peignent littéralement par-dessus la page — écran
+   assombri avec un ovale lumineux au centre (le "néon" signalé), et
+   re-compositing visible ("le fond saute") pendant le scroll. Les alphas
+   ci-dessous sont recalibrés pour un compositing normal : même intention
+   visuelle (halo doux + vignette + bande haute), rendu identique partout car
+   un simple dégradé ne peut pas être raté. */
+@media (max-width: 768px) {
+  .bg-depth {
+    mix-blend-mode: normal;
+    background:
+      radial-gradient(66% 52% at 50% 42%,
+        rgba(255, 255, 255, .07), rgba(255, 255, 255, 0) 60%),
+      radial-gradient(132% 124% at 50% 42%,
+        rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, .14) 72%, rgba(0, 0, 0, .32) 100%),
+      linear-gradient(to bottom,
+        rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, 0) 15%);
+  }
+}
+
 /* Grain de film fin sur la couleur de fond → texture premium/éditoriale qui
    supprime l'aspect couleur-plate "néon". Statique + fixed → rasterisé une
    seule fois, aucun coût au scroll (important sur iOS). */
@@ -747,7 +770,11 @@ body::-webkit-scrollbar { display: none; }
   }
 
   .ghost__logo { font-size: 17px !important; gap: 9px; }
-  .ghost__logo::before { width: 24px; height: 24px; }
+  /* filter:none — le drop-shadow du monogramme est un filter CSS, la même
+     famille de rendu que les WebView WebKit limitées ratent (halo/ghosting
+     autour du logo). text-shadow (le wordmark) est un autre chemin de rendu,
+     sûr partout — conservé. */
+  .ghost__logo::before { width: 24px; height: 24px; filter: none; }
 
   /* Indicateur scroll — inutile sur mobile */
   .scene__hint { display: none; }

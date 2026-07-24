@@ -57,23 +57,25 @@ export default function TopBar({ variant = "minimal" }) {
         style={{
           width: 40, height: 40,
           borderRadius: "50%",
-          backgroundColor: "rgba(255,255,255,0.08)",
+          /* Pas de backdrop-filter : sur les WebView WebKit limitées (Google
+             iOS), un backdrop blur au-dessus d'un fond animé se re-rasterise
+             mal → ghosting/halo près du logo. Un fond rgba légèrement plus
+             présent donne la même lisibilité sans aucun filtre au rendu. */
+          backgroundColor: "rgba(255,255,255,0.12)",
           border: "1.5px solid rgba(255,255,255,0.2)",
           cursor: "pointer",
           alignItems: "center", justifyContent: "center",
           padding: 0,
           position: "relative",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
           transition: "background-color .25s, border-color .25s",
           marginRight: "clamp(10px,2.5vw,24px)",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
+          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)";
           e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)";
+          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
           e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
         }}
       >

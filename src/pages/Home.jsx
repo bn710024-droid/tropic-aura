@@ -2,6 +2,7 @@
 import Lenis from "lenis";
 import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
+import { FRUITS_MID, FRUITS_SOFT, BLUR_PAD_RATIO, blurredFruitSrc } from "../data/mobileFruits";
 import Footer from "../components/Footer";
 import TopBar from "../components/TopBar";
 import SEOHead from "../seo/SEOHead";
@@ -185,64 +186,9 @@ const SECTIONS = [
 const PARALLAX_MID = 0.28;   // plan NET (petits sujets)
 const PARALLAX_SOFT = 0.18;  // plan FLOU (gros, premier plan)
 
-// PLAN NET — petits sujets parfaitement nets, en cadre sur les deux bords.
-const FRUITS_MID = [
-  // ── bord GAUCHE (bord droit ≤ ~24%) ──
-  { src: "/png/m/mangue.png",       topVh: 12,  left: "3%",  size: 58, blur: 0, opacity: 1, rot: -5 },
-  { src: "/png/m/fraises.png",      topVh: 40,  left: "2%",  size: 54, blur: 0, opacity: 1, rot: 8 },
-  { src: "/png/m/citron-vert.png",  topVh: 72,  left: "5%",  size: 50, blur: 0, opacity: 1, rot: -12 },
-  { src: "/png/m/myrtilles.png",    topVh: 96,  left: "4%",  size: 52, blur: 0, opacity: 1, rot: 6 },
-  { src: "/png/m/avocat.png",       topVh: 128, left: "3%",  size: 56, blur: 0, opacity: 1, rot: -9 },
-  { src: "/png/m/citron-jaune.png", topVh: 162, left: "6%",  size: 46, blur: 0, opacity: 1, rot: 14 },
-  { src: "/png/m/coco.png",         topVh: 196, left: "2%",  size: 54, blur: 0, opacity: 1, rot: -6 },
-  { src: "/png/m/orange.png",       topVh: 230, left: "5%",  size: 50, blur: 0, opacity: 1, rot: 10 },
-  { src: "/png/m/fraises.png",      topVh: 264, left: "3%",  size: 56, blur: 0, opacity: 1, rot: -14 },
-  { src: "/png/m/myrtilles.png",    topVh: 300, left: "4%",  size: 52, blur: 0, opacity: 1, rot: 18 },
-  { src: "/png/m/avocat.png",       topVh: 338, left: "2%",  size: 54, blur: 0, opacity: 1, rot: -4 },
-  // ── bord DROITE (bord gauche ≥ ~76%) ──
-  { src: "/png/m/citron-jaune.png", topVh: 6,   left: "85%", size: 52, blur: 0, opacity: 1, rot: 7 },
-  { src: "/png/m/orange.png",       topVh: 34,  left: "80%", size: 56, blur: 0, opacity: 1, rot: -8 },
-  { src: "/png/m/mangue.png",       topVh: 66,  left: "86%", size: 48, blur: 0, opacity: 1, rot: 12 },
-  { src: "/png/m/myrtilles.png",    topVh: 98,  left: "82%", size: 52, blur: 0, opacity: 1, rot: -15 },
-  { src: "/png/m/citron-vert.png",  topVh: 130, left: "87%", size: 46, blur: 0, opacity: 1, rot: 5 },
-  { src: "/png/m/avocat.png",       topVh: 165, left: "80%", size: 56, blur: 0, opacity: 1, rot: -18 },
-  { src: "/png/m/coco.png",         topVh: 205, left: "85%", size: 50, blur: 0, opacity: 1, rot: 11 },
-  { src: "/png/m/orange.png",       topVh: 240, left: "83%", size: 52, blur: 0, opacity: 1, rot: -6 },
-  { src: "/png/m/fraises.png",      topVh: 278, left: "86%", size: 48, blur: 0, opacity: 1, rot: 20 },
-  { src: "/png/m/myrtilles.png",    topVh: 318, left: "82%", size: 52, blur: 0, opacity: 1, rot: -10 },
-  // ── CENTRE — un fruit DERRIÈRE le texte par section (le texte passe par-dessus,
-  //    z:1 < texte z:10). Légèrement flous + semi-transparents → le blanc reste
-  //    lisible. Ils NE SUIVENT PAS le texte : parallaxe 0.5×, ils dérivent (Combilo).
-  //    topVh ≈ 49 + 50×section → tombe derrière le titre de chaque section au scroll.
-  { src: "/png/m/orange.png",       topVh: 50,  left: "46%", size: 72, blur: 7, opacity: 0.3,  rot: -8 },
-  { src: "/png/m/orange.png",       topVh: 100, left: "40%", size: 72, blur: 5, opacity: 0.58, rot: 10 },
-  { src: "/png/m/avocat.png",       topVh: 150, left: "52%", size: 74, blur: 4, opacity: 0.6,  rot: -12 },
-  { src: "/png/m/fraises.png",      topVh: 200, left: "43%", size: 68, blur: 6, opacity: 0.56, rot: 8 },
-  { src: "/png/m/papaye.png",       topVh: 250, left: "50%", size: 78, blur: 5, opacity: 0.58, rot: -6 },
-  { src: "/png/m/citron-vert.png",  topVh: 300, left: "42%", size: 70, blur: 6, opacity: 0.56, rot: 14 },
-];
-
-// PLAN FLOU — fruits de premier plan flous (profondeur de champ), en cadre sur
-// les deux bords, format moyen pour tenir dans les bandes latérales sans mordre
-// le texte ni sortir en sliver. Bord droit ≤ ~22% (gauche) / bord gauche ≥ ~78% (droite).
-const FRUITS_SOFT = [
-  // ── bord GAUCHE ──
-  { src: "/png/m/banane.png",        topVh: 10,  left: "0%", size: 74, blur: 10, opacity: 0.5,  rot: 15 },
-  { src: "/png/m/ananas.png",        topVh: 62,  left: "1%", size: 76, blur: 10, opacity: 0.5,  rot: 8 },
-  { src: "/png/m/mangue.png",        topVh: 118, left: "0%", size: 72, blur: 11, opacity: 0.5,  rot: -14 },
-  { src: "/png/m/pasteque.png",      topVh: 175, left: "2%", size: 70, blur: 10, opacity: 0.5,  rot: -9 },
-  { src: "/png/m/papaye.png",        topVh: 228, left: "0%", size: 74, blur: 11, opacity: 0.5,  rot: 13 },
-  { src: "/png/m/melon-jaune.png",   topVh: 90,  left: "8%", size: 46, blur: 8,  opacity: 0.42, rot: -7 },
-  { src: "/png/m/citron-vert.png",   topVh: 200, left: "9%", size: 44, blur: 8,  opacity: 0.42, rot: 19 },
-  // ── bord DROITE ──
-  { src: "/png/m/fraises.png",       topVh: 34,  left: "78%", size: 74, blur: 10, opacity: 0.5,  rot: -12 },
-  { src: "/png/m/ananas.png",        topVh: 92,  left: "78%", size: 76, blur: 10, opacity: 0.5,  rot: 8 },
-  { src: "/png/m/melon-jaune.png",   topVh: 150, left: "79%", size: 72, blur: 11, opacity: 0.5,  rot: 14 },
-  { src: "/png/m/pasteque.png",      topVh: 208, left: "80%", size: 70, blur: 10, opacity: 0.5,  rot: -19 },
-  { src: "/png/m/banane.png",        topVh: 262, left: "79%", size: 72, blur: 11, opacity: 0.5,  rot: 21 },
-  { src: "/png/m/orange.png",        topVh: 130, left: "88%", size: 44, blur: 8,  opacity: 0.42, rot: -6 },
-  { src: "/png/m/fruit-passion.png", topVh: 245, left: "89%", size: 42, blur: 8,  opacity: 0.42, rot: -18 },
-];
+// PLANS NET/FLOU : manifeste partagé dans src/data/mobileFruits.js (source
+// unique, utilisée aussi par scripts/generate-blurred-fruits.mjs qui pré-cuit
+// le flou dans des WebP — voir le rationale complet là-bas).
 
 const hexToRgb = (h) => {
   const n = parseInt(h.slice(1), 16);
@@ -544,114 +490,64 @@ export default function Home() {
 
       {/* Plan MID — rivière principale pleine largeur, SOUS le texte (z:1),
           parallaxe inverse 0.5× pilotée par la boucle rAF + listener scroll natif. */}
+      {/* Fruits flous : image PRÉ-FLOUTÉE (WebP généré par
+          scripts/generate-blurred-fruits.mjs, marge transparente incluse) au
+          lieu de filter:blur() au rendu. Trois parades runtime successives
+          (padding, conteneur, couche GPU — d384738/3ca7194/82971d2) n'ont pas
+          suffi sur les WebView WebKit limitées (Google iOS) : le flou revenait
+          en halo carré au re-compositing après navigation. Un flou cuit dans
+          le fichier ne peut pas être raté — il n'y a plus rien à calculer.
+          Géométrie : l'image inclut une marge de blur×BLUR_PAD_RATIO par côté,
+          d'où le décalage top/left et la largeur augmentée — le fruit visible
+          garde exactement sa position/taille d'origine. */}
       <div className="fruits-layer-mobile" ref={fruitsLayerRef}>
         {FRUITS_MID.map((f, j) => {
-          const common = {
-            top: `${f.topVh}vh`,
-            left: f.left,
-            transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
-          };
-          // Fruit NET (pas de flou) : <img> direct, aucun risque de halo carré.
-          if (!f.blur) {
-            return (
-              <img
-                key={j}
-                className="global-fruit"
-                src={f.src}
-                alt=""
-                loading="eager"
-                decoding="async"
-                draggable={false}
-                style={{ ...common, width: f.size, opacity: f.opacity ?? 1 }}
-              />
-            );
-          }
-          // Fruit FLOU : le flou est porté par un CONTENEUR plus grand que le
-          // fruit, avec un padding transparent réel (≈ 3× le rayon de flou).
-          // Ainsi le flou se dissipe entièrement DANS ce padding avant le bord
-          // de la boîte — le découpage net que certains WebKit limités (WebView
-          // Google iOS, hors Safari) appliquent au bord de l'élément tombe alors
-          // sur une zone déjà transparente → plus de halo carré. Position
-          // recentrée du padding pour garder le fruit exactement au même endroit.
-          const pad = f.blur * 3;
-          // translateZ(0) : couche GPU dédiée et STABLE pour ce fruit flou. Le
-          // flou est alors rasterisé UNE fois à la taille de la boîte (padding
-          // inclus) et simplement composé ensuite — il n'est plus re-découpé
-          // quand WebKit ré-assemble ses couches après une navigation (bug
-          // observé : carrés absents au 1er chargement, revenus après un
-          // aller-retour Produits → Accueil sur WebView iOS). Rotation conservée.
-          const blurTransform = `${f.rot ? `rotate(${f.rot}deg) ` : ""}translateZ(0)`;
+          const pad = f.blur ? f.blur * BLUR_PAD_RATIO : 0;
           return (
-            <div
+            <img
               key={j}
               className="global-fruit"
+              src={f.blur ? blurredFruitSrc(f) : f.src}
+              alt=""
+              loading="eager"
+              decoding="async"
+              draggable={false}
               style={{
-                top: `calc(${f.topVh}vh - ${pad}px)`,
-                left: `calc(${f.left} - ${pad}px)`,
+                top: pad ? `calc(${f.topVh}vh - ${pad}px)` : `${f.topVh}vh`,
+                left: pad ? `calc(${f.left} - ${pad}px)` : f.left,
                 width: f.size + pad * 2,
-                padding: pad,
-                boxSizing: "border-box",
-                filter: `blur(${f.blur}px)`,
                 opacity: f.opacity ?? 1,
-                transform: blurTransform,
-                WebkitTransform: blurTransform,
-                willChange: "filter, transform",
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
+                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
               }}
-            >
-              <img
-                src={f.src}
-                alt=""
-                loading="eager"
-                decoding="async"
-                draggable={false}
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
-            </div>
+            />
           );
         })}
       </div>
 
       {/* Plan SOFT — profondeur de champ : gros fruits très flous, SOUS le texte
           (z:2 < scene z:10), plus lents (0.35×) — la lourdeur flottante Combilo.
-          Règle absolue : aucun fruit ne passe jamais devant une lettre ou un CTA. */}
+          Règle absolue : aucun fruit ne passe jamais devant une lettre ou un CTA.
+          Tous pré-floutés (voir commentaire du plan MID ci-dessus). */}
       <div className="fruits-layer-mobile fruits-layer-mobile--soft" ref={fruitsSoftRef}>
         {FRUITS_SOFT.map((f, j) => {
-          // Même correctif que le plan MID (conteneur + padding transparent qui
-          // absorbe le flou avant le bord + couche GPU stable translateZ(0) qui
-          // survit au re-compositing après navigation) — tous les fruits SOFT
-          // sont flous (8-11px), donc tous passent par ce conteneur.
-          const pad = f.blur * 3;
-          const blurTransform = `${f.rot ? `rotate(${f.rot}deg) ` : ""}translateZ(0)`;
+          const pad = f.blur * BLUR_PAD_RATIO;
           return (
-            <div
+            <img
               key={j}
               className="global-fruit"
+              src={blurredFruitSrc(f)}
+              alt=""
+              loading="eager"
+              decoding="async"
+              draggable={false}
               style={{
                 top: `calc(${f.topVh}vh - ${pad}px)`,
                 left: `calc(${f.left} - ${pad}px)`,
                 width: f.size + pad * 2,
-                padding: pad,
-                boxSizing: "border-box",
-                filter: `blur(${f.blur}px)`,
                 opacity: f.opacity,
-                transform: blurTransform,
-                WebkitTransform: blurTransform,
-                willChange: "filter, transform",
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
+                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
               }}
-            >
-              <img
-                src={f.src}
-                alt=""
-                loading="eager"
-                decoding="async"
-                draggable={false}
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
-            </div>
+            />
           );
         })}
       </div>

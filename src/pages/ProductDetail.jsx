@@ -165,6 +165,13 @@ export default function ProductDetail() {
             @media (prefers-reduced-motion: reduce) {
               .fruit-bg-img { animation: none; }
             }
+            /* Mobile : pas de filter (drop-shadow) sur l'image hero — même
+               politique que .prod-float sur Produits.jsx : les WebView WebKit
+               limitées rasterisent mal les filter CSS (bloc/halo carré autour
+               du produit détouré). Desktop conserve l'ombre. */
+            @media (max-width: 768px) {
+              .pd-hero-img { filter: none !important; }
+            }
           `}</style>
           <picture>
             <source media="(max-width: 768px)" srcSet={product.bgImage.mobile.webp} type="image/webp" />
@@ -211,6 +218,7 @@ export default function ProductDetail() {
           >
             <div style={{ flex: "1 1 340px", display: "flex", justifyContent: "center" }}>
               <img
+                className="pd-hero-img"
                 src={product.image}
                 alt={`${product.name} (${product.englishName}) — export premium Tropicaura`}
                 width={product.width}
