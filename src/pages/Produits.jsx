@@ -509,12 +509,16 @@ export default function Produits() {
             >
               {/* Fruit détouré flottant (dépasse du cadre, ombre douce) */}
               <div className="prod-photo" ref={(el) => (photoRefs.current[i] = el)}>
-                {/* Halo lumineux (couleur du fond photo) → masque le halo de détourage */}
+                {/* Halo lumineux (couleur du fond photo) → masque le halo de détourage.
+                    Pas de filter:blur() ici : le dégradé atteint déjà 0% d'opacité à 78%
+                    de son rayon (marge de 22% totalement transparente avant le bord de la
+                    boîte) — le flou était donc inutile pour l'effet visuel, et certains
+                    WebKit limités (WebView Google sur iOS) le découpent net à la bordure
+                    de l'élément, créant un halo carré façon néon au lieu d'un dégradé doux. */}
                 {s.glow && (
                   <div aria-hidden="true" style={{
                     position: "absolute", inset: "2% 4%", zIndex: 0, pointerEvents: "none",
                     background: `radial-gradient(closest-side, ${s.glow}E6 0%, ${s.glow}99 44%, ${s.glow}00 78%)`,
-                    filter: "blur(6px)",
                   }} />
                 )}
                 {/* Fond CSS (pas un <img>) → pas de bouton "recherche visuelle" du navigateur */}

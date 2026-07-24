@@ -545,50 +545,67 @@ export default function Home() {
       {/* Plan MID — rivière principale pleine largeur, SOUS le texte (z:1),
           parallaxe inverse 0.5× pilotée par la boucle rAF + listener scroll natif. */}
       <div className="fruits-layer-mobile" ref={fruitsLayerRef}>
-        {FRUITS_MID.map((f, j) => (
-          <img
-            key={j}
-            className="global-fruit"
-            src={f.src}
-            alt=""
-            loading="eager"
-            decoding="async"
-            draggable={false}
-            style={{
-              top: `${f.topVh}vh`,
-              left: f.left,
-              width: f.size,
-              filter: f.blur ? `blur(${f.blur}px)` : undefined,
-              opacity: f.opacity ?? 1,
-              transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
-            }}
-          />
-        ))}
+        {FRUITS_MID.map((f, j) => {
+          // Marge (px) proportionnelle au flou : certains WebKit limités (WebView
+          // Google sur iOS, hors Safari) découpent filter:blur() net à la bordure
+          // de la boîte de l'élément au lieu de le laisser s'estomper — visible
+          // comme un halo carré sur une image à silhouette irrégulière. Agrandir
+          // la boîte (marge ≈ 3× le rayon de flou de chaque côté) donne au flou
+          // la place de retomber à ~0 opacité avant d'atteindre le bord réel.
+          // Position recentrée en conséquence (marge symétrique) → aucun décalage
+          // visuel, la rotation continue de pivoter autour du même centre.
+          const pad = f.blur ? f.blur * 3 : 0;
+          return (
+            <img
+              key={j}
+              className="global-fruit"
+              src={f.src}
+              alt=""
+              loading="eager"
+              decoding="async"
+              draggable={false}
+              style={{
+                top: pad ? `calc(${f.topVh}vh - ${pad}px)` : `${f.topVh}vh`,
+                left: pad ? `calc(${f.left} - ${pad}px)` : f.left,
+                width: f.size + pad * 2,
+                filter: f.blur ? `blur(${f.blur}px)` : undefined,
+                opacity: f.opacity ?? 1,
+                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Plan SOFT — profondeur de champ : gros fruits très flous, SOUS le texte
           (z:2 < scene z:10), plus lents (0.35×) — la lourdeur flottante Combilo.
           Règle absolue : aucun fruit ne passe jamais devant une lettre ou un CTA. */}
       <div className="fruits-layer-mobile fruits-layer-mobile--soft" ref={fruitsSoftRef}>
-        {FRUITS_SOFT.map((f, j) => (
-          <img
-            key={j}
-            className="global-fruit"
-            src={f.src}
-            alt=""
-            loading="eager"
-            decoding="async"
-            draggable={false}
-            style={{
-              top: `${f.topVh}vh`,
-              left: f.left,
-              width: f.size,
-              filter: `blur(${f.blur}px)`,
-              opacity: f.opacity,
-              transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
-            }}
-          />
-        ))}
+        {FRUITS_SOFT.map((f, j) => {
+          // Même correctif que le plan MID ci-dessus (voir commentaire) — le plan
+          // SOFT a un flou plus fort (8-11px), donc une marge encore plus visible
+          // était nécessaire ici en priorité.
+          const pad = f.blur * 3;
+          return (
+            <img
+              key={j}
+              className="global-fruit"
+              src={f.src}
+              alt=""
+              loading="eager"
+              decoding="async"
+              draggable={false}
+              style={{
+                top: `calc(${f.topVh}vh - ${pad}px)`,
+                left: `calc(${f.left} - ${pad}px)`,
+                width: f.size + pad * 2,
+                filter: `blur(${f.blur}px)`,
+                opacity: f.opacity,
+                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Voile de morph CTA mobile — un seul, position/couleur pilotées par morphTarget */}
