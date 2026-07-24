@@ -45,6 +45,10 @@ export default function App() {
   // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
   // (le body y est figé) — on évite ici le doublon.
   const isHome = path === "/";
+  // Idem pour une fiche produit : depuis l'ajout du wrapper de scroll dédié
+  // mobile (fix du calque de fond qui se décalait au scroll sur iOS Safari),
+  // ProductDetail.jsx rend aussi son propre <Footer /> DANS son wrapper.
+  const isProductDetail = path.startsWith("/produits/") && path !== "/produits";
 
   return (
     <>
@@ -65,7 +69,7 @@ export default function App() {
         <Route path="/insights/fournisseur-stable-opportuniste" element={<InsightPartenariats />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isArticle && !isHome && <Footer />}
+      {!isArticle && !isHome && !isProductDetail && <Footer />}
       {!isArticle && <LiquidMenu />}
       <CookieBanner />
     </>

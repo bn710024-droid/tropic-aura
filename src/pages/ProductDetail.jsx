@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
+import Footer from "../components/Footer";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, productSchema, faqPageSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
@@ -178,6 +179,13 @@ export default function ProductDetail() {
         </div>
       )}
 
+      {/* ── Wrapper de scroll dédié mobile — même pattern que Home/Produits (voir
+          global.css) : sur iOS Safari, cette page n'avait jamais reçu ce
+          traitement, ce qui laissait le calque de fond (position:fixed
+          ci-dessus) ambigu vis-à-vis du scroller racine WebKit → il se
+          décalait visiblement pendant le scroll et le rubber-band en haut de
+          page. Desktop : display:contents (no-op total). ── */}
+      <div className="mobile-scroll-wrapper">
       <main style={{ background: product.bgImage ? "transparent" : product.bg, minHeight: "100vh", position: "relative", zIndex: 1 }}>
         <article>
           {/* ── Hero produit ── */}
@@ -769,6 +777,13 @@ export default function ProductDetail() {
           </section>
         </article>
       </main>
+      {/* Footer DANS le wrapper : sur mobile le body est figé (voir global.css),
+          ce wrapper est le vrai scroller — le footer doit vivre ici pour être
+          atteignable (même raison que Home.jsx). Sur desktop le wrapper est
+          display:contents (no-op), donc le footer d'ici remplace simplement
+          celui qu'App.jsx aurait rendu (voir exclusion isProductDetail). */}
+      <Footer />
+      </div>
     </>
   );
 }
