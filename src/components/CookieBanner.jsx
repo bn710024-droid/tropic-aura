@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORIES, getConsent, setConsent, acceptAll, rejectAll, hasDecided } from "../lib/consent";
 import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analytics";
@@ -19,46 +19,85 @@ import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analyti
 // ============================================================
 
 export default function CookieBanner() {
-  // Initialiser `visible` basé sur le consentement réel, pas false → true après
-  // montage. Cela évite que le bandeau n'aparaisse brièvement avant de disparaître.
-  const [visible, setVisible] = useState(!hasDecided());
+  // ── Anti-flash : deux états distincts ──────────────────────────
+  //  `mounted` = le bandeau existe-t-il dans le DOM. Faux dès le
+  //  premier rendu pour un visiteur qui a DÉJÀ décidé → on retourne
+  //  `null`, aucun élément caché avec transition ne traîne dans le
+  //  DOM, donc il est PHYSIQUEMENT impossible qu'il « apparaisse puis
+  //  reparte » au chargement d'une page (le bug signalé sur PC).
+  //  `shown` = état animé (glissement). On monte caché, puis on
+  //  déclenche l'entrée à la frame suivante (rAF) pour un vrai
+  //  glissement, et on démonte APRÈS l'animation de sortie.
+  const [mounted, setMounted] = useState(() => !hasDecided());
+  const [shown, setShown] = useState(false);
   const [customizing, setCustomizing] = useState(false);
   const [draft, setDraft] = useState({ analytics: false });
+  const exitTimer = useRef(0);
+  const enterTimer = useRef(0);
+
+  // Déclenche le glissement d'entrée APRÈS le premier paint caché. On
+  // combine rAF (fluide quand l'onglet est visible) et un setTimeout de
+  // secours : rAF est gelé quand l'onglet est en arrière-plan, le timer
+  // garantit malgré tout l'entrée quand l'utilisateur revient.
+  const slideIn = () => {
+    requestAnimationFrame(() => setShown(true));
+    window.clearTimeout(enterTimer.current);
+    enterTimer.current = window.setTimeout(() => setShown(true), 60);
+  };
 
   useEffect(() => {
-    if (hasDecided()) loadAnalyticsIfConsented(getConsent());
+    if (hasDecided()) {
+      loadAnalyticsIfConsented(getConsent());
+    } else {
+      slideIn();
+    }
 
     const reopen = () => {
+      window.clearTimeout(exitTimer.current);
       setDraft({ analytics: !!getConsent()?.analytics });
       setCustomizing(true);
-      setVisible(true);
+      setMounted(true);
+      slideIn();
     };
     window.addEventListener("open-cookie-preferences", reopen);
-    return () => window.removeEventListener("open-cookie-preferences", reopen);
+    return () => {
+      window.removeEventListener("open-cookie-preferences", reopen);
+      window.clearTimeout(exitTimer.current);
+      window.clearTimeout(enterTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Sortie animée puis démontage (le délai couvre la transition de .4s).
+  const dismiss = () => {
+    setShown(false);
+    setCustomizing(false);
+    window.clearTimeout(exitTimer.current);
+    exitTimer.current = window.setTimeout(() => setMounted(false), 450);
+  };
 
   const handleAcceptAll = () => {
     const c = acceptAll();
     loadAnalyticsIfConsented(c);
     updateAnalyticsConsent(c);
-    setVisible(false);
-    setCustomizing(false);
+    dismiss();
   };
 
   const handleRejectAll = () => {
     const c = rejectAll();
     updateAnalyticsConsent(c);
-    setVisible(false);
-    setCustomizing(false);
+    dismiss();
   };
 
   const handleSaveCustom = () => {
     const c = setConsent(draft);
     loadAnalyticsIfConsented(c);
     updateAnalyticsConsent(c);
-    setVisible(false);
-    setCustomizing(false);
+    dismiss();
   };
+
+  // Rien dans le DOM tant que le bandeau n'est pas monté → zéro flash.
+  if (!mounted) return null;
 
   const FONT = "'Plus Jakarta Sans',sans-serif";
   const btnBase = {
@@ -79,9 +118,9 @@ export default function CookieBanner() {
         background: "#0B1310", borderTop: "1px solid rgba(255,255,255,0.12)",
         padding: "22px clamp(20px,5vw,40px) calc(22px + env(safe-area-inset-bottom, 0px))",
         boxShadow: "0 -12px 40px rgba(0,0,0,0.35)",
-        transform: visible ? "translateY(0)" : "translateY(100%)",
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? "auto" : "none",
+        transform: shown ? "translateY(0)" : "translateY(100%)",
+        opacity: shown ? 1 : 0,
+        pointerEvents: shown ? "auto" : "none",
         transition: "transform .4s cubic-bezier(.22,1,.36,1), opacity .35s ease",
       }}
     >

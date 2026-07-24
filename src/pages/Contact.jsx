@@ -20,7 +20,7 @@ export const PAGE_ENTRY_COLOR = { desktop: "#0B1310", mobile: "#0B1310" };
 
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 77 881 20 18";
-const WHATSAPP_URL = "https://wa.me/221778812018";
+const WHATSAPP_URL = "https://wa.me/221789179805";
 const GOLD  = "#D4AF6A";
 const MAX_MESSAGE_LENGTH = 2000;
 // Tant que cette variable n'est pas définie (Vercel → Settings →
