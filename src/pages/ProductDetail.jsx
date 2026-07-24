@@ -64,6 +64,15 @@ export default function ProductDetail() {
     return () => io.disconnect();
   }, [product?.slug]);
 
+  // Couleur au rebond (rubber-band iOS) — voir global.css, body:has(.mobile-scroll-wrapper).
+  // Sans ça, ces pages héritaient du vert du hero Home (fallback codé en dur
+  // côté CSS) au lieu de la couleur réelle du produit affiché.
+  useEffect(() => {
+    if (!product) return;
+    document.documentElement.style.setProperty("--page-entry-color", product.bg);
+    return () => document.documentElement.style.removeProperty("--page-entry-color");
+  }, [product?.bg]);
+
   if (!product) return <Navigate to="/produits" replace />;
 
   // Effet magnétique : le CTA suit légèrement le curseur (max ~10px),

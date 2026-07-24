@@ -498,7 +498,14 @@ body::-webkit-scrollbar { display: none; }
   body:has(.mobile-scroll-wrapper) {
     height: 100dvh;
     overflow: hidden;
-    background: #0E9F6E; /* section 1 — évite le flash au rubber-band scroll */
+    /* Couleur au rebond (rubber-band iOS) — variable posée par CHAQUE page au
+       montage (voir PAGE_ENTRY_COLOR dans Home.jsx/Produits.jsx/ProductDetail.jsx).
+       Ce sélecteur :has() est global (n'importe quelle page avec le wrapper le
+       déclenche) : #0E9F6E (vert du hero Home) était codé en dur ici et
+       s'affichait donc aussi au rebond sur Produits/ProductDetail — un aplat
+       vert vif hors contexte, sans rapport avec la couleur réelle de la page.
+       Fallback #0E9F6E conservé pour Home, qui n'a pas besoin de la définir. */
+    background: var(--page-entry-color, #0E9F6E);
   }
 
   /* ── Wrapper de scroll dédié — le VRAI scroller mobile ──

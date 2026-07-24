@@ -134,6 +134,13 @@ export default function Produits() {
   const secHRef     = useRef(0);   // hauteur RÉELLE d'une section (= CSS 100vh, stable)
   const [morphTarget, setMorphTarget] = useState(null);
 
+  // Couleur au rebond (rubber-band iOS) — voir global.css, body:has(.mobile-scroll-wrapper).
+  // Sans ça, cette page héritait du vert du hero Home (fallback codé en dur côté CSS).
+  useEffect(() => {
+    document.documentElement.style.setProperty("--page-entry-color", PAGE_ENTRY_COLOR.mobile);
+    return () => document.documentElement.style.removeProperty("--page-entry-color");
+  }, []);
+
   // "Entrer dans le fruit" : au clic sur En savoir plus, l'image du produit
   // grossit en un voile plein écran (couleur de fond du produit) avant la
   // navigation — même mécanisme que le CTA de Home.jsx (.cta-morph), réutilisé
