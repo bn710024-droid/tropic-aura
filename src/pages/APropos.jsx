@@ -5,6 +5,10 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import ExportRouteMap from "../components/ExportRouteMap";
 import AboutMobileSection from "./about/AboutMobileSection";
 import { GOLD, BLACK, IVORY, FOREST, SAGE, STONE, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
+import { useLocalizedSections } from "../i18n/useSections";
 import { buildMotionCSS, buildKenBurnsCSS } from "../motion";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
@@ -47,6 +51,12 @@ const fadeOutMult = (scroll, start, span) =>
 
 // ============================================================
 export default function APropos() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  // SECTIONS reste la source STRUCTURELLE (couleurs, photos, indices utilisés
+  // par le moteur d'animation) ; SECTIONS_T n'en change que les textes.
+  const SECTIONS_T = useLocalizedSections(SECTIONS, "about.sections");
   const bgRef      = useRef(null);
   const logoRef    = useRef(null);
   const dotRefs    = useRef([]);
@@ -372,21 +382,23 @@ export default function APropos() {
     return () => clearTimeout(t);
   }, []);
 
-  const aboutDescription =
-    "Tropicaura relie producteurs, logisticiens et acheteurs internationaux autour d'une même exigence : qualité, traçabilité et conformité export.";
-  const aboutTrail = buildBreadcrumbTrail("/about");
+  const aboutDescription = t("about.seo.description");
+  const aboutPath = pathFor("about", lang);
+  const aboutTrail = buildBreadcrumbTrail(aboutPath);
 
   return (
     <>
       <SEOHead
-        title="À Propos — Notre Vision de l'Export Agroalimentaire"
+        title={t("about.seo.title")}
         description={aboutDescription}
-        path="/about"
-        keywords={["export Afrique de l'Ouest", "traçabilité export", "réseau producteurs Sénégal", "entreprise export B2B"]}
+        path={aboutPath}
+        keywords={lang === "en"
+          ? ["West Africa export", "export traceability", "Senegal grower network", "B2B export company"]
+          : ["export Afrique de l'Ouest", "traçabilité export", "réseau producteurs Sénégal", "entreprise export B2B"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/about", title: "À Propos", description: aboutDescription, breadcrumb: true, pageType: "AboutPage" }),
-          breadcrumbListSchema(aboutTrail, "/about"),
+          webPageSchema({ path: aboutPath, title: t("nav.about"), description: aboutDescription, breadcrumb: true, pageType: "AboutPage" }),
+          breadcrumbListSchema(aboutTrail, aboutPath),
         ]}
       />
       <style>{`
@@ -456,7 +468,7 @@ export default function APropos() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt="Tropicaura — Notre vision de l'export agroalimentaire" width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("about.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={aboutTrail} />
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}
@@ -468,7 +480,7 @@ export default function APropos() {
         transform: "translateY(-50%)", zIndex: 150,
         display: "flex", flexDirection: "column", gap: 12, pointerEvents: "auto",
       }}>
-        {SECTIONS.map((s, i) => (
+        {SECTIONS_T.map((s, i) => (
           <button
             key={s.id}
             ref={(el) => (dotRefs.current[i] = el)}
@@ -494,11 +506,11 @@ export default function APropos() {
         <div className="vision-text-col" ref={s1TextRef} style={{ opacity: 0 }}>
           <span className="vision-num">{SECTIONS[0].num}</span>
           <span className="vision-kicker" style={{ color: "rgba(242,233,216,0.68)", marginTop: 6, display: "block" }}>
-            {SECTIONS[0].kicker}
+            {SECTIONS_T[0].kicker}
           </span>
-          <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS[0].title}</h1>
+          <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS_T[0].title}</h1>
           <div className="vision-desc-group">
-            {SECTIONS[0].desc.map((p, i) => (
+            {SECTIONS_T[0].desc.map((p, i) => (
               <p
                 key={i}
                 className={`vision-desc${SECTIONS[0].descHighlight === i ? " vision-desc--gold" : ""}`}
@@ -516,7 +528,7 @@ export default function APropos() {
             style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(201,168,76,0.35)` }}
           >
             <div className="vision-photo-inner" ref={s1PhotoInnerRef}>
-              <img src="/images/about/vision-verger.jpg" alt="Verger de manguiers" className="vision-photo-img" style={{ objectPosition: "50% 12%" }} />
+              <img src="/images/about/vision-verger.jpg" alt={SECTIONS_T[0].photoAlt} className="vision-photo-img" style={{ objectPosition: "50% 12%" }} />
               <div className="vision-photo-wash" style={{
                 background: "linear-gradient(155deg, rgba(18,42,30,0.12) 0%, rgba(14,32,21,0.22) 100%)",
               }} />
@@ -525,7 +537,7 @@ export default function APropos() {
         </div>
         <div className="vision-hint" ref={s1HintRef} style={{ opacity: 0, color: "rgba(242,233,216,0.75)" }}>
           <span className="vision-hint-arrow">↓</span>
-          {SECTIONS[0].hint}
+          {SECTIONS_T[0].hint}
         </div>
       </section>
       </div>
@@ -536,15 +548,15 @@ export default function APropos() {
         <div className="vision-text-col">
           <span className="vision-num">{SECTIONS[1].num}</span>
           <span className="vision-kicker" style={{ color: "rgba(23,48,31,0.62)", marginTop: 6, display: "block" }}>
-            {SECTIONS[1].kicker}
+            {SECTIONS_T[1].kicker}
           </span>
           {/* SEO : h2 (le h1 unique de la page est en Section 01 ci-dessus). */}
           <h2 className="vision-title" ref={s2TitleRef} style={{ color: "#17301F", opacity: 0 }}>
-            {SECTIONS[1].title}
+            {SECTIONS_T[1].title}
           </h2>
           <div className="vision-line" style={{ background: GOLD }} />
           <div className="vision-desc-group" ref={s2DescRef} style={{ opacity: 0 }}>
-            {SECTIONS[1].desc.map((p, i) => (
+            {SECTIONS_T[1].desc.map((p, i) => (
               <p
                 key={i}
                 className={`vision-desc${SECTIONS[1].descHighlight === i ? " vision-desc--gold" : ""}`}
@@ -570,7 +582,7 @@ export default function APropos() {
             style={{ clipPath: "inset(100% 0 0 0)", border: `1px solid rgba(23,48,31,0.18)` }}
           >
             <div className="vision-photo-inner" ref={s2PhotoInnerRef}>
-              <img src="/images/about/today-atelier.jpg" alt="Atelier de conditionnement" className="vision-photo-img" />
+              <img src="/images/about/today-atelier.jpg" alt={SECTIONS_T[1].photoAlt} className="vision-photo-img" />
               <div className="vision-photo-wash" style={{
                 background: "linear-gradient(155deg, rgba(242,233,216,0.04) 0%, rgba(23,48,31,0.12) 100%)",
               }} />
@@ -581,7 +593,7 @@ export default function APropos() {
       </div>
 
       {/* ══ SECTIONS 03+ — génériques (texte + photo), et scène-citation isolée ══ */}
-      {SECTIONS.slice(2).map((s, k) => (
+      {SECTIONS_T.slice(2).map((s, k) => (
         <div className="vision-chapter-wrap" key={s.id}>
         {s.type === "quote" ? (
           /* ── Scène-citation : respiration typographique entre deux sections,
@@ -666,7 +678,7 @@ export default function APropos() {
 
       {/* ══ Arbre mobile — scènes "page turn" (Motion System), aucun scroll verrouillé ══ */}
       <div className="about-mobile-tree">
-        {SECTIONS.map((s, i) => (
+        {SECTIONS_T.map((s, i) => (
           <AboutMobileSection key={s.id} section={s} isFirst={i === 0} />
         ))}
       </div>

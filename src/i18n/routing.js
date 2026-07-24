@@ -39,7 +39,7 @@ export const ROUTES = {
 // n'est pas traduite, on ne déclare NI hreflang="en" NI de lien vers elle :
 // annoncer une version qui n'existe pas génère des erreurs Search Console
 // et envoie l'utilisateur sur une page dans la mauvaise langue.
-export const TRANSLATED_PAGES = ["home", "products", "contact", "availability"];
+export const TRANSLATED_PAGES = ["home", "products", "contact", "availability", "about", "partnerships"];
 
 /** Langue portée par un chemin : /en ou /en/... → "en", sinon "fr". */
 export function langFromPath(pathname) {

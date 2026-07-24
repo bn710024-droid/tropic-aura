@@ -3,6 +3,10 @@ import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { SECTIONS, GOLD } from "./partenariats/partnershipTheme";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
+import { useLocalizedSections } from "../i18n/useSections";
 import PartnershipTimeline from "../components/PartnershipTimeline";
 import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
 import ConclusionConstellation from "./partenariats/ConclusionConstellation";
@@ -27,7 +31,7 @@ const N = SECTIONS.length;
 // la première scène (hero) est un fond noir plein.
 export const PAGE_ENTRY_COLOR = { desktop: "#0B0F0A", mobile: "#0B0F0A" };
 
-function SceneContent({ s }) {
+function SceneContent({ s, lang, t }) {
   switch (s.type) {
     case "hero":
       return (
@@ -35,7 +39,7 @@ function SceneContent({ s }) {
           <h1 className="pw-hero-title">{s.title}</h1>
           <p className="pw-hero-subtitle">{s.subtitle}</p>
           <div className="pw-hero-hint">
-            <span>Défiler pour découvrir</span>
+            <span>{t("partnerships.scrollHint")}</span>
             <i className="pw-hero-hint-line" />
             <span className="pw-hero-hint-arrow">↓</span>
           </div>
@@ -95,7 +99,7 @@ function SceneContent({ s }) {
       return (
         <>
           {s.paragraphs.map((p, i) => <p key={i} className="pw-conclusion-text">{p}</p>)}
-          <a href={s.buttonHref} className="pw-button ms-glow">
+          <a href={pathFor("contact", lang)} className="pw-button ms-glow">
             {s.button} <span>→</span>
           </a>
         </>
@@ -106,6 +110,11 @@ function SceneContent({ s }) {
 }
 
 export default function Partenariats() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  // Structure (couleurs, photos, type de scène) depuis le thème ; textes via i18n.
+  const SECTIONS_T = useLocalizedSections(SECTIONS, "partnerships.sections");
   const bgRefs      = useRef([]);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
@@ -229,21 +238,23 @@ export default function Partenariats() {
     return () => clearTimeout(t);
   }, []);
 
-  const partnershipsDescription =
-    "Tropicaura construit des partenariats commerciaux durables — transparence, préparation et fiabilité à chaque expédition depuis le port de Dakar.";
-  const partnershipsTrail = buildBreadcrumbTrail("/partenariats");
+  const partnershipsDescription = t("partnerships.seo.description");
+  const partnershipsPath = pathFor("partnerships", lang);
+  const partnershipsTrail = buildBreadcrumbTrail(partnershipsPath);
 
   return (
     <>
       <SEOHead
-        title="Partenariats B2B — Devenir Importateur ou Distributeur"
+        title={t("partnerships.seo.title")}
         description={partnershipsDescription}
-        path="/partenariats"
-        keywords={["partenariat import export", "devenir distributeur fruits", "fournisseur fiable Afrique", "partenaire commercial Sénégal"]}
+        path={partnershipsPath}
+        keywords={lang === "en"
+          ? ["import export partnership", "become fruit distributor", "reliable Africa supplier", "Senegal trade partner"]
+          : ["partenariat import export", "devenir distributeur fruits", "fournisseur fiable Afrique", "partenaire commercial Sénégal"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/partenariats", title: "Partenariats", description: partnershipsDescription, breadcrumb: true }),
-          breadcrumbListSchema(partnershipsTrail, "/partenariats"),
+          webPageSchema({ path: partnershipsPath, title: t("nav.partnerships"), description: partnershipsDescription, breadcrumb: true }),
+          breadcrumbListSchema(partnershipsTrail, partnershipsPath),
         ]}
       />
       <style>{`
@@ -367,7 +378,7 @@ export default function Partenariats() {
           @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
         `}</style>
 
-        {SECTIONS.map((s, i) => (
+        {SECTIONS_T.map((s, i) => (
           <div
             key={s.id + "-bg"}
             ref={(el) => (bgRefs.current[i] = el)}
@@ -378,7 +389,7 @@ export default function Partenariats() {
         <div className="bg-depth" />
 
         <nav className="dots-nav" aria-label="Navigation par section" style={{ position:"fixed", right:"clamp(14px,2vw,28px)", top:"50%", transform:"translateY(-50%)", zIndex:150, display:"flex", flexDirection:"column", gap:12, pointerEvents:"auto" }}>
-          {SECTIONS.map((s, i) => (
+          {SECTIONS_T.map((s, i) => (
             <button
               key={s.id}
               ref={(el) => (dotRefs.current[i] = el)}
@@ -390,7 +401,7 @@ export default function Partenariats() {
           ))}
         </nav>
 
-        {SECTIONS.map((s, i) => (
+        {SECTIONS_T.map((s, i) => (
           <section key={s.id} data-index={i} className="scene" data-type={s.type}>
             {s.type === "hero" && (
               <>
@@ -407,14 +418,14 @@ export default function Partenariats() {
                 transform:    i === 0 ? "translateY(0)" : "translateY(24px)",
               }}
             >
-              <SceneContent s={s} />
+              <SceneContent s={s} lang={lang} t={t} />
             </div>
           </section>
         ))}
       </div>
 
       <div className="partenariats-mobile-tree">
-        {SECTIONS.map((s, i) => (
+        {SECTIONS_T.map((s, i) => (
           <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} />
         ))}
       </div>

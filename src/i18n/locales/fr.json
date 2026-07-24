@@ -271,5 +271,125 @@
       "available": " — disponible",
       "off": " — hors saison"
     }
+  },
+  "about": {
+    "sections": {
+      "vision": {
+        "kicker": "NOTRE VISION",
+        "title": "Construire davantage qu'une entreprise d'export.",
+        "desc": [
+          "Nous ne cherchons pas uniquement à exporter des fruits. Nous cherchons à augmenter la valeur créée à partir de chaque récolte africaine.",
+          "Notre vision est de construire progressivement un réseau reliant les producteurs, les partenaires logistiques et les acheteurs internationaux autour d'une même exigence : qualité, traçabilité, conformité et création de valeur à chaque étape de la chaîne."
+        ],
+        "photoAlt": "Verger de manguiers",
+        "hint": "Défiler pour découvrir"
+      },
+      "aujourdhui": {
+        "kicker": "NOS FONDATIONS",
+        "title": "Chaque exportation réussie repose sur une organisation rigoureuse.",
+        "desc": [
+          "Notre priorité est de construire des bases solides. Nous développons progressivement un réseau de producteurs et de partenaires partageant les mêmes exigences de qualité, de traçabilité et de fiabilité afin de répondre durablement aux attentes des marchés internationaux.",
+          "Chaque produit que nous commercialisons doit satisfaire des standards élevés de sélection, de préparation, de conformité documentaire et de coordination logistique."
+        ],
+        "photoAlt": "Atelier de conditionnement"
+      },
+      "demain": {
+        "kicker": "NOTRE DÉVELOPPEMENT",
+        "title": "Préparer aujourd'hui les capacités de demain.",
+        "desc": [
+          "Notre développement ne repose pas uniquement sur l'augmentation des volumes. Il repose sur le renforcement progressif de nos compétences, de nos partenariats et de nos capacités opérationnelles afin d'accompagner une croissance durable sur les marchés internationaux.",
+          "Chaque étape construite aujourd'hui prépare les opportunités de demain."
+        ],
+        "photoAlt": "Ligne de conditionnement Tropicaura"
+      },
+      "ambition": {
+        "kicker": "CRÉER PLUS DE VALEUR",
+        "title": "Aller au-delà de l'exportation.",
+        "desc": [
+          "À long terme, notre ambition est de développer nos propres capacités de transformation afin de créer davantage de valeur localement.",
+          "En réduisant progressivement les pertes post-récolte, en valorisant les récoltes et en développant nos propres produits et marques, nous souhaitons offrir aux marchés internationaux des produits à plus forte valeur ajoutée tout en renforçant durablement la compétitivité de notre filière.",
+          "Nous considérons les producteurs comme des partenaires essentiels de cette ambition. Une chaîne de valeur durable ne peut exister sans une croissance partagée avec celles et ceux qui cultivent les produits que nous exportons."
+        ],
+        "photoAlt": "Site industriel Tropicaura"
+      },
+      "avenir": {
+        "kicker": "NOTRE RÉSEAU INTERNATIONAL",
+        "title": "Relier l'Afrique aux marchés du monde.",
+        "desc": [
+          "Depuis Dakar, nous développons progressivement un réseau de partenaires commerciaux et logistiques reliant les producteurs africains aux principaux marchés internationaux.",
+          "Notre objectif est de faciliter la circulation des produits grâce à une organisation fondée sur la transparence, la préparation et la fiabilité, afin de construire des relations durables avec nos partenaires partout dans le monde."
+        ],
+        "photoAlt": "Port de Dakar"
+      },
+      "engagement": {
+        "kicker": "NOTRE ENGAGEMENT",
+        "title": "La confiance se construit dans le temps.",
+        "desc": [
+          "Nous croyons que les partenariats durables reposent sur la transparence, la constance et le respect des engagements.",
+          "Chaque collaboration doit créer de la valeur pour l'ensemble des acteurs de la chaîne : producteurs, partenaires logistiques, distributeurs et acheteurs internationaux.",
+          "Notre ambition est de construire une entreprise reconnue non seulement pour la qualité des produits qu'elle commercialise, mais aussi pour la qualité des relations qu'elle entretient avec chacun de ses partenaires."
+        ],
+        "photoAlt": "Équipe Tropicaura et partenaire dans un verger de manguiers"
+      }
+    },
+    "seo": {
+      "title": "À Propos — Notre Vision de l'Export Agroalimentaire",
+      "description": "Tropicaura relie producteurs, logisticiens et acheteurs internationaux autour d'une même exigence : qualité, traçabilité et conformité export.",
+      "logoAlt": "Tropicaura — Notre vision de l'export agroalimentaire"
+    }
+  },
+  "partnerships": {
+    "sections": {
+      "hero": {
+        "title": "Des partenariats qui se construisent dans la durée.",
+        "subtitle": "Nous croyons que les meilleures collaborations naissent de la confiance, se construisent par les actions et grandissent avec le temps.",
+        "photoAlt": "Deux partenaires Tropicaura marchant dans un verger de manguiers au coucher du soleil"
+      },
+      "vision": {
+        "kicker": "NOTRE VISION",
+        "statement": "Nous savons qu'un partenariat ne se construit pas en une expédition. Il se construit au fil des conversations, des décisions prises ensemble et des engagements respectés.",
+        "actions": [
+          {
+            "title": "Comprendre vos objectifs",
+            "text": "Nous prenons le temps de comprendre vos marchés, vos marges, vos contraintes logistiques et vos volumes."
+          },
+          {
+            "title": "Préparer chaque expédition",
+            "text": "Chaque commande est préparée avec rigueur et le même niveau d'exigence."
+          },
+          {
+            "title": "Être présents après la livraison",
+            "text": "Notre accompagnement continue bien après le départ du conteneur."
+          },
+          {
+            "title": "Construire une relation durable",
+            "text": "Nous préférons une collaboration de long terme à une transaction ponctuelle."
+          }
+        ]
+      },
+      "parcours": {
+        "kicker": "NOTRE MANIÈRE DE TRAVAILLER",
+        "title": "Le parcours d'un partenariat"
+      },
+      "expedition": {
+        "title": "Chaque conteneur quitte notre station de conditionnement avec le même niveau d'exigence, qu'il s'agisse de votre première commande ou de votre cinquantième.",
+        "photoAlt": "Conteneur rempli de cartons de mangues, prêt à quitter la station de conditionnement",
+        "paragraphs": [
+          "Derrière chaque conteneur se trouvent des dizaines de contrôles, de décisions et d'échanges qui permettent d'expédier chaque commande dans les meilleures conditions."
+        ]
+      },
+      "conclusion": {
+        "button": "Devenir partenaire",
+        "paragraphs": [
+          "Les meilleures collaborations commencent souvent par une simple conversation.",
+          "Si vous recherchez un partenaire fiable pour construire une relation durable, nous serions ravis d'échanger avec vous."
+        ]
+      }
+    },
+    "seo": {
+      "title": "Partenariats B2B — Devenir Importateur ou Distributeur",
+      "description": "Tropicaura construit des partenariats commerciaux durables — transparence, préparation et fiabilité à chaque expédition depuis le port de Dakar."
+    },
+    "scrollHint": "Défiler pour découvrir"
   }
 }

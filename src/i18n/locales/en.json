@@ -271,5 +271,125 @@
       "available": " — available",
       "off": " — out of season"
     }
+  },
+  "about": {
+    "sections": {
+      "vision": {
+        "kicker": "OUR VISION",
+        "title": "Building more than an export business.",
+        "desc": [
+          "We are not simply looking to export fruit. We are looking to increase the value created from every African harvest.",
+          "Our vision is to progressively build a network connecting growers, logistics partners and international buyers around a shared standard: quality, traceability, compliance and value creation at every step of the chain."
+        ],
+        "photoAlt": "Mango orchard",
+        "hint": "Scroll to explore"
+      },
+      "aujourdhui": {
+        "kicker": "OUR FOUNDATIONS",
+        "title": "Every successful export rests on rigorous organisation.",
+        "desc": [
+          "Our priority is to build solid foundations. We are progressively developing a network of growers and partners who share the same standards of quality, traceability and reliability, so we can meet the expectations of international markets over the long term.",
+          "Every product we bring to market must meet high standards of selection, preparation, documentary compliance and logistical coordination."
+        ],
+        "photoAlt": "Packing facility"
+      },
+      "demain": {
+        "kicker": "OUR GROWTH",
+        "title": "Building today the capacity for tomorrow.",
+        "desc": [
+          "Our growth is not based on volume alone. It rests on progressively strengthening our skills, our partnerships and our operational capacity, in order to support sustainable growth on international markets.",
+          "Every step built today prepares tomorrow's opportunities."
+        ],
+        "photoAlt": "Tropicaura packing line"
+      },
+      "ambition": {
+        "kicker": "CREATING MORE VALUE",
+        "title": "Going beyond exporting.",
+        "desc": [
+          "In the long term, our ambition is to develop our own processing capacity, in order to create more value locally.",
+          "By progressively reducing post-harvest losses, adding value to harvests and developing our own products and brands, we aim to offer international markets higher value-added products while sustainably strengthening the competitiveness of our sector.",
+          "We see growers as essential partners in this ambition. A sustainable value chain cannot exist without shared growth with those who cultivate the produce we export."
+        ],
+        "photoAlt": "Tropicaura industrial site"
+      },
+      "avenir": {
+        "kicker": "OUR INTERNATIONAL NETWORK",
+        "title": "Connecting Africa to global markets.",
+        "desc": [
+          "From Dakar, we are progressively building a network of commercial and logistics partners connecting African growers to the main international markets.",
+          "Our aim is to keep produce moving through an organisation built on transparency, preparation and reliability, so we can establish lasting relationships with our partners worldwide."
+        ],
+        "photoAlt": "Port of Dakar"
+      },
+      "engagement": {
+        "kicker": "OUR COMMITMENT",
+        "title": "Trust is built over time.",
+        "desc": [
+          "We believe lasting partnerships rest on transparency, consistency and honouring commitments.",
+          "Every collaboration must create value for everyone in the chain: growers, logistics partners, distributors and international buyers.",
+          "Our ambition is to build a company recognised not only for the quality of the produce it supplies, but also for the quality of the relationships it maintains with each of its partners."
+        ],
+        "photoAlt": "Tropicaura team and partner in a mango orchard"
+      }
+    },
+    "seo": {
+      "title": "About — Our Vision for Fresh Produce Export",
+      "description": "Tropicaura connects growers, logistics partners and international buyers around one standard: quality, traceability and export compliance.",
+      "logoAlt": "Tropicaura — our vision for fresh produce export"
+    }
+  },
+  "partnerships": {
+    "sections": {
+      "hero": {
+        "title": "Partnerships built to last.",
+        "subtitle": "We believe the best collaborations start with trust, are built through actions and grow over time.",
+        "photoAlt": "Two Tropicaura partners walking through a mango orchard at sunset"
+      },
+      "vision": {
+        "kicker": "OUR VISION",
+        "statement": "We know a partnership is not built in a single shipment. It is built through conversations, decisions taken together and commitments kept.",
+        "actions": [
+          {
+            "title": "Understanding your objectives",
+            "text": "We take the time to understand your markets, your margins, your logistical constraints and your volumes."
+          },
+          {
+            "title": "Preparing every shipment",
+            "text": "Every order is prepared with rigour and the same level of exacting standards."
+          },
+          {
+            "title": "Being there after delivery",
+            "text": "Our support continues well after the container has left."
+          },
+          {
+            "title": "Building a lasting relationship",
+            "text": "We would rather build a long-term collaboration than close a one-off transaction."
+          }
+        ]
+      },
+      "parcours": {
+        "kicker": "HOW WE WORK",
+        "title": "The journey of a partnership"
+      },
+      "expedition": {
+        "title": "Every container leaves our packing station to the same standard, whether it is your first order or your fiftieth.",
+        "photoAlt": "Container loaded with cartons of mangoes, ready to leave the packing station",
+        "paragraphs": [
+          "Behind every container are dozens of checks, decisions and exchanges that make it possible to ship each order in the best possible conditions."
+        ]
+      },
+      "conclusion": {
+        "paragraphs": [
+          "The best collaborations often start with a simple conversation.",
+          "If you are looking for a reliable partner to build a lasting relationship with, we would be glad to hear from you."
+        ],
+        "button": "Become a Partner"
+      }
+    },
+    "seo": {
+      "title": "B2B Partnerships — Become an Importer or Distributor",
+      "description": "Tropicaura builds lasting commercial partnerships — transparency, preparation and reliability on every shipment from the Port of Dakar."
+    },
+    "scrollHint": "Scroll to explore"
   }
 }
