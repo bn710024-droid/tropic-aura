@@ -574,12 +574,18 @@ export default function Home() {
           // sur une zone déjà transparente → plus de halo carré. Position
           // recentrée du padding pour garder le fruit exactement au même endroit.
           const pad = f.blur * 3;
+          // translateZ(0) : couche GPU dédiée et STABLE pour ce fruit flou. Le
+          // flou est alors rasterisé UNE fois à la taille de la boîte (padding
+          // inclus) et simplement composé ensuite — il n'est plus re-découpé
+          // quand WebKit ré-assemble ses couches après une navigation (bug
+          // observé : carrés absents au 1er chargement, revenus après un
+          // aller-retour Produits → Accueil sur WebView iOS). Rotation conservée.
+          const blurTransform = `${f.rot ? `rotate(${f.rot}deg) ` : ""}translateZ(0)`;
           return (
             <div
               key={j}
               className="global-fruit"
               style={{
-                ...common,
                 top: `calc(${f.topVh}vh - ${pad}px)`,
                 left: `calc(${f.left} - ${pad}px)`,
                 width: f.size + pad * 2,
@@ -587,6 +593,11 @@ export default function Home() {
                 boxSizing: "border-box",
                 filter: `blur(${f.blur}px)`,
                 opacity: f.opacity ?? 1,
+                transform: blurTransform,
+                WebkitTransform: blurTransform,
+                willChange: "filter, transform",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
               }}
             >
               <img
@@ -608,9 +619,11 @@ export default function Home() {
       <div className="fruits-layer-mobile fruits-layer-mobile--soft" ref={fruitsSoftRef}>
         {FRUITS_SOFT.map((f, j) => {
           // Même correctif que le plan MID (conteneur + padding transparent qui
-          // absorbe le flou avant le bord) — tous les fruits SOFT sont flous
-          // (8-11px), donc tous passent par ce conteneur.
+          // absorbe le flou avant le bord + couche GPU stable translateZ(0) qui
+          // survit au re-compositing après navigation) — tous les fruits SOFT
+          // sont flous (8-11px), donc tous passent par ce conteneur.
           const pad = f.blur * 3;
+          const blurTransform = `${f.rot ? `rotate(${f.rot}deg) ` : ""}translateZ(0)`;
           return (
             <div
               key={j}
@@ -623,7 +636,11 @@ export default function Home() {
                 boxSizing: "border-box",
                 filter: `blur(${f.blur}px)`,
                 opacity: f.opacity,
-                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+                transform: blurTransform,
+                WebkitTransform: blurTransform,
+                willChange: "filter, transform",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
               }}
             >
               <img
