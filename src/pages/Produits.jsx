@@ -365,7 +365,14 @@ export default function Produits() {
         .prod-more-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
         .prod-more:hover .prod-more-arrow { transform: translateX(5px); }
         @media (max-width: 820px){
-          .prod-row   { flex-direction: column !important; gap: 18px !important; padding: 96px clamp(22px,7vw,40px) 60px !important; justify-content:center !important; }
+          /* padding-top inclut env(safe-area-inset-top) : sur iPhone à encoche/
+             Dynamic Island, cette zone ajoute 47-59px RÉELS que 96px seuls ne
+             couvraient pas — le header fixe (même formule dans .ghost, voir
+             global.css) débordait alors sur le texte des sections dont le
+             contenu, plus long que 100dvh, se fait pousser vers le haut par le
+             centrage vertical (justify-content:center). Aucun changement sur
+             les appareils sans encoche (env(...) = 0). */
+          .prod-row   { flex-direction: column !important; gap: 18px !important; padding: calc(96px + env(safe-area-inset-top, 0px)) clamp(22px,7vw,40px) 60px !important; justify-content:center !important; }
           /* Image en dvh (pas vh) : la section fait 100dvh (zone visible réelle),
              donc l'image doit se mesurer sur la MÊME base, sinon elle est trop
              haute (36vh = 36% du viewport LARGE) et pousse le texte hors écran
