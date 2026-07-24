@@ -1,4 +1,7 @@
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import { Link } from "react-router-dom";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
@@ -28,15 +31,16 @@ const GOLD = "#D4AF6A";
 // Abréviations 3 lettres plutôt qu'une seule : "J" seul est ambigu (janvier,
 // juin, juillet partagent la même initiale) — illisible pour un planning que
 // l'on doit pouvoir lire d'un coup d'œil, pas déchiffrer.
-const MONTHS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"];
-const MONTH_LABELS = [
-  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre",
-];
-
 const COLLECTIONS = ["SIGNATURE", "SAISON", "SPÉCIALITÉS"];
 
 export default function Disponibilite() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  // Mois traduits (tableaux i18n) : le calendrier est la donnée la plus lue
+  // par un acheteur — « Aoû » n'a aucun sens pour un importateur anglophone.
+  const MONTHS = t("availability.months", { returnObjects: true });
+  const MONTH_LABELS = t("availability.monthsFull", { returnObjects: true });
   const revealRefs = useRef([]);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
@@ -71,21 +75,23 @@ export default function Disponibilite() {
 
   const r0 = { opacity: 0, transform: "translateY(24px)", transition: "opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1)" };
 
-  const description =
-    "Calendrier de disponibilité par produit — mangue, avocat, agrumes, gombo, piments et fruits d'Afrique de l'Ouest exportés par Tropicaura, mois par mois.";
-  const trail = buildBreadcrumbTrail("/disponibilite");
+  const description = t("availability.seo.description");
+  const availabilityPath = pathFor("availability", lang);
+  const trail = buildBreadcrumbTrail(availabilityPath);
 
   return (
     <>
       <SEOHead
-        title="Calendrier de Disponibilité — Saisonnalité des Produits"
+        title={t("availability.seo.title")}
         description={description}
-        path="/disponibilite"
-        keywords={["saisonnalité fruits export", "calendrier mangue Sénégal", "disponibilité fruits tropicaux export"]}
+        path={availabilityPath}
+        keywords={lang === "en"
+          ? ["fruit export seasonality", "Senegal mango calendar", "tropical produce availability"]
+          : ["saisonnalité fruits export", "calendrier mangue Sénégal", "disponibilité fruits tropicaux export"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/disponibilite", title: "Disponibilité", description, breadcrumb: true }),
-          breadcrumbListSchema(trail, "/disponibilite"),
+          webPageSchema({ path: availabilityPath, title: t("nav.availability"), description, breadcrumb: true }),
+          breadcrumbListSchema(trail, availabilityPath),
         ]}
       />
       <style>{`
@@ -138,7 +144,7 @@ export default function Disponibilite() {
       <TopBar />
       <img
         src="/logo-mark.png"
-        alt="Tropicaura — Calendrier de disponibilité des fruits et légumes d'export"
+        alt={t("availability.seo.logoAlt")}
         width={512} height={512} style={{ display: "none" }}
       />
       <Breadcrumbs trail={trail} />
@@ -155,7 +161,7 @@ export default function Disponibilite() {
             fontSize: 11, fontWeight: 700, letterSpacing: ".30em",
             textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 28,
           }}>
-            Planifier votre approvisionnement
+            {t("availability.kicker")}
           </span>
 
           <h1 ref={reveal} style={{ ...r0, transitionDelay: ".08s",
@@ -163,7 +169,7 @@ export default function Disponibilite() {
             fontSize: "clamp(36px, 5.4vw, 76px)", lineHeight: 1.06,
             letterSpacing: "-.03em", color: "#fff", margin: "0 0 26px", maxWidth: "16ch",
           }}>
-            Un calendrier, pas des promesses.
+            {t("availability.title")}
           </h1>
 
           <p ref={reveal} style={{ ...r0, transitionDelay: ".16s",
@@ -171,8 +177,7 @@ export default function Disponibilite() {
             fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.8, fontWeight: 400,
             color: "rgba(255,255,255,0.74)", margin: 0, maxWidth: 620,
           }}>
-            {PRODUCTS.length} produits, leur disponibilité réelle mois par mois. De quoi construire
-            un programme d'achat sans mauvaise surprise de saison.
+            {t("availability.intro", { count: PRODUCTS.length })}
           </p>
         </div>
       </section>
@@ -206,16 +211,16 @@ export default function Disponibilite() {
                   fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10.5, fontWeight: 700,
                   letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)",
                 }}>
-                  {coll === "SIGNATURE" ? "Signature" : coll === "SAISON" ? "Saison" : "Spécialités"}
+                  {t(`catalog.collections.${coll}`)}
                 </span>
 
                 {items.map((p) => (
                   <div key={p.slug} className="avail-row">
                     <div>
-                      <Link to={`/produits/${p.slug}`} style={{
+                      <Link to={`${pathFor("products", lang)}/${p.slug}`} style={{
                         fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700, fontSize: 15,
                         color: "#1A1A1A", textDecoration: "none",
-                      }}>{p.name}</Link>
+                      }}>{t(`catalog.items.${p.slug}.name`)}</Link>
                       <span style={{
                         display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif",
                         fontSize: 11.5, color: "rgba(0,0,0,0.45)", marginTop: 2,
@@ -230,7 +235,7 @@ export default function Disponibilite() {
                         return (
                           <div
                             key={i} className="avail-cell"
-                            title={`${MONTH_LABELS[i]}${active ? (peak ? " — pic de disponibilité" : " — disponible") : " — hors saison"}`}
+                            title={`${MONTH_LABELS[i]}${active ? (peak ? t("availability.state.peak") : t("availability.state.available")) : t("availability.state.off")}`}
                             style={{
                               background: active ? (peak ? p.accentColor : `${p.accentColor}99`) : "rgba(0,0,0,0.06)",
                               border: peak ? `1.5px solid ${GOLD}` : "none",
@@ -241,14 +246,14 @@ export default function Disponibilite() {
                     </div>
 
                     <Link
-                      to={`/contact?product=${encodeURIComponent(p.name)}&origin=${encodeURIComponent(p.origin)}&section=form`}
+                      to={`${pathFor("contact", lang)}?product=${encodeURIComponent(t(`catalog.items.${p.slug}.name`))}&origin=${encodeURIComponent(t(`catalog.items.${p.slug}.origin`))}&section=form`}
                       className="avail-more"
                       style={{
                         justifySelf: "end", fontFamily: "'Plus Jakarta Sans',sans-serif",
                         fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
                       }}
                     >
-                      Demander une offre →
+                      {t("availability.requestOffer")}
                     </Link>
                   </div>
                 ))}
@@ -260,9 +265,7 @@ export default function Disponibilite() {
             marginTop: 40, fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12.5,
             lineHeight: 1.7, color: "rgba(0,0,0,0.45)", maxWidth: 640,
           }}>
-            Fenêtres indicatives, sujettes aux aléas de récolte et de saison. Les liserés dorés
-            signalent un pic de disponibilité. Pour un calendrier ferme sur votre volume et
-            votre marché, contactez-nous directement.
+            {t("availability.note")}
           </p>
         </div>
       </section>

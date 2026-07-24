@@ -226,5 +226,50 @@
       "products": "Découvrir nos produits",
       "insights": "Lire nos insights"
     }
+  },
+  "availability": {
+    "seo": {
+      "title": "Calendrier de Disponibilité — Saisonnalité des Produits",
+      "description": "Calendrier de disponibilité par produit — mangue, avocat, agrumes, gombo, piments et fruits d'Afrique de l'Ouest exportés par Tropicaura.",
+      "logoAlt": "Tropicaura — Calendrier de disponibilité des fruits et légumes d'export"
+    },
+    "kicker": "Planifier votre approvisionnement",
+    "title": "Un calendrier, pas des promesses.",
+    "intro": "{{count}} produits, leur disponibilité réelle mois par mois. De quoi construire un programme d'achat sans mauvaise surprise de saison.",
+    "note": "Fenêtres indicatives, sujettes aux aléas de récolte et de saison. Les liserés dorés signalent un pic de disponibilité. Pour un calendrier ferme sur votre volume et votre marché, contactez-nous directement.",
+    "requestOffer": "Demander une offre →",
+    "months": [
+      "Jan",
+      "Fév",
+      "Mar",
+      "Avr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aoû",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Déc"
+    ],
+    "monthsFull": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ],
+    "state": {
+      "peak": " — pic de disponibilité",
+      "available": " — disponible",
+      "off": " — hors saison"
+    }
   }
 }

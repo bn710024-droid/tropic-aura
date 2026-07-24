@@ -226,5 +226,50 @@
       "products": "Explore our products",
       "insights": "Read our insights"
     }
+  },
+  "availability": {
+    "seo": {
+      "title": "Availability Calendar — Product Seasonality",
+      "description": "Month-by-month availability calendar — mangoes, avocados, citrus, okra, chillies and other West African produce exported by Tropicaura.",
+      "logoAlt": "Tropicaura — availability calendar for export fruits and vegetables"
+    },
+    "kicker": "Plan your sourcing",
+    "title": "A calendar, not promises.",
+    "intro": "{{count}} products and their real availability, month by month. Everything you need to build a buying programme without seasonal surprises.",
+    "note": "Indicative windows, subject to harvest and seasonal conditions. Gold edges indicate a peak availability period. For a firm calendar based on your volume and market, contact us directly.",
+    "requestOffer": "Request a quote →",
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "monthsFull": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "state": {
+      "peak": " — peak availability",
+      "available": " — available",
+      "off": " — out of season"
+    }
   }
 }
