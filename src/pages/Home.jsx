@@ -546,33 +546,58 @@ export default function Home() {
           parallaxe inverse 0.5× pilotée par la boucle rAF + listener scroll natif. */}
       <div className="fruits-layer-mobile" ref={fruitsLayerRef}>
         {FRUITS_MID.map((f, j) => {
-          // Marge (px) proportionnelle au flou : certains WebKit limités (WebView
-          // Google sur iOS, hors Safari) découpent filter:blur() net à la bordure
-          // de la boîte de l'élément au lieu de le laisser s'estomper — visible
-          // comme un halo carré sur une image à silhouette irrégulière. Agrandir
-          // la boîte (marge ≈ 3× le rayon de flou de chaque côté) donne au flou
-          // la place de retomber à ~0 opacité avant d'atteindre le bord réel.
-          // Position recentrée en conséquence (marge symétrique) → aucun décalage
-          // visuel, la rotation continue de pivoter autour du même centre.
-          const pad = f.blur ? f.blur * 3 : 0;
+          const common = {
+            top: `${f.topVh}vh`,
+            left: f.left,
+            transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
+          };
+          // Fruit NET (pas de flou) : <img> direct, aucun risque de halo carré.
+          if (!f.blur) {
+            return (
+              <img
+                key={j}
+                className="global-fruit"
+                src={f.src}
+                alt=""
+                loading="eager"
+                decoding="async"
+                draggable={false}
+                style={{ ...common, width: f.size, opacity: f.opacity ?? 1 }}
+              />
+            );
+          }
+          // Fruit FLOU : le flou est porté par un CONTENEUR plus grand que le
+          // fruit, avec un padding transparent réel (≈ 3× le rayon de flou).
+          // Ainsi le flou se dissipe entièrement DANS ce padding avant le bord
+          // de la boîte — le découpage net que certains WebKit limités (WebView
+          // Google iOS, hors Safari) appliquent au bord de l'élément tombe alors
+          // sur une zone déjà transparente → plus de halo carré. Position
+          // recentrée du padding pour garder le fruit exactement au même endroit.
+          const pad = f.blur * 3;
           return (
-            <img
+            <div
               key={j}
               className="global-fruit"
-              src={f.src}
-              alt=""
-              loading="eager"
-              decoding="async"
-              draggable={false}
               style={{
-                top: pad ? `calc(${f.topVh}vh - ${pad}px)` : `${f.topVh}vh`,
-                left: pad ? `calc(${f.left} - ${pad}px)` : f.left,
+                ...common,
+                top: `calc(${f.topVh}vh - ${pad}px)`,
+                left: `calc(${f.left} - ${pad}px)`,
                 width: f.size + pad * 2,
-                filter: f.blur ? `blur(${f.blur}px)` : undefined,
+                padding: pad,
+                boxSizing: "border-box",
+                filter: `blur(${f.blur}px)`,
                 opacity: f.opacity ?? 1,
-                transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
               }}
-            />
+            >
+              <img
+                src={f.src}
+                alt=""
+                loading="eager"
+                decoding="async"
+                draggable={false}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
           );
         })}
       </div>
@@ -582,28 +607,34 @@ export default function Home() {
           Règle absolue : aucun fruit ne passe jamais devant une lettre ou un CTA. */}
       <div className="fruits-layer-mobile fruits-layer-mobile--soft" ref={fruitsSoftRef}>
         {FRUITS_SOFT.map((f, j) => {
-          // Même correctif que le plan MID ci-dessus (voir commentaire) — le plan
-          // SOFT a un flou plus fort (8-11px), donc une marge encore plus visible
-          // était nécessaire ici en priorité.
+          // Même correctif que le plan MID (conteneur + padding transparent qui
+          // absorbe le flou avant le bord) — tous les fruits SOFT sont flous
+          // (8-11px), donc tous passent par ce conteneur.
           const pad = f.blur * 3;
           return (
-            <img
+            <div
               key={j}
               className="global-fruit"
-              src={f.src}
-              alt=""
-              loading="eager"
-              decoding="async"
-              draggable={false}
               style={{
                 top: `calc(${f.topVh}vh - ${pad}px)`,
                 left: `calc(${f.left} - ${pad}px)`,
                 width: f.size + pad * 2,
+                padding: pad,
+                boxSizing: "border-box",
                 filter: `blur(${f.blur}px)`,
                 opacity: f.opacity,
                 transform: f.rot ? `rotate(${f.rot}deg)` : undefined,
               }}
-            />
+            >
+              <img
+                src={f.src}
+                alt=""
+                loading="eager"
+                decoding="async"
+                draggable={false}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
           );
         })}
       </div>
