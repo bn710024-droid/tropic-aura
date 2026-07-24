@@ -44,6 +44,12 @@ export function organizationSchema() {
     "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
     legalName: LEGAL_NAME,
+    // Description explicite de l'entité : sans elle, Google déduisait l'activité
+    // du seul contenu de page et pouvait la résumer en « courtier / négociant ».
+    // Formulation volontairement directe — producteur-exportateur basé au Sénégal,
+    // vendant à des importateurs — pour verrouiller la compréhension du métier.
+    description:
+      "Tropicaura est un exportateur sénégalais de fruits et légumes frais. Basée à Dakar, l'entreprise approvisionne les importateurs internationaux en mangues, avocats, citrons verts, haricots verts, gombo et melons, avec des solutions logistiques maritimes et aériennes.",
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
@@ -65,6 +71,7 @@ export function organizationSchema() {
       name: m.country,
     })),
     knowsAbout: [
+      "Export de fruits et légumes du Sénégal",
       "Export de fruits tropicaux",
       "Export de légumes frais",
       "Commerce international agroalimentaire",

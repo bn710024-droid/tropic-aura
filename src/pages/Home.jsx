@@ -457,16 +457,30 @@ export default function Home() {
     setTimeout(() => setMorphTarget(null), 400);
   };
 
+  // SEO — le titre et la description mènent avec « Exportateur » + « Sénégal » :
+  // c'est la requête à intention d'achat réelle des importateurs (« exportateur
+  // fruits Sénégal », « Senegal mango exporter »), là où « Afrique de l'Ouest »
+  // est trop vague et n'était porté par aucune recherche. Nommer explicitement
+  // le métier (exportateur, pas intermédiaire) et les produits phares évite en
+  // plus que Google résume l'activité en « courtier / négociant ».
+  // Le slogan « vergers → marchés internationaux » reste le message de marque
+  // à l'écran (hero) ; en SERP la priorité est la qualification, pas le slogan.
+  // NB : titre volontairement en français, comme la page. Un titre anglais sur
+  // une page française fait rebondir l'acheteur anglophone et se fait souvent
+  // réécrire par Google — il viendra avec la vraie version EN (+ hreflang).
+  // Longueurs tenues volontairement sous les limites d'affichage (titre ≤ 60,
+  // description ≤ 155) — des descriptions trop longues avaient déjà été
+  // signalées en erreur par Bing Webmaster Tools et corrigées.
   const homeDescription =
-    "Tropicaura connecte les vergers d'Afrique de l'Ouest aux marchés internationaux. Export B2B premium de mangues, avocats et légumes frais.";
+    "Exportateur sénégalais de fruits et légumes frais : mangues, avocats, citrons verts, haricots verts et gombo pour les importateurs internationaux.";
 
   return (
     <>
       <SEOHead
-        title="Export Premium de Fruits & Légumes d'Afrique de l'Ouest"
+        title="Exportateur de Fruits & Légumes du Sénégal"
         description={homeDescription}
         path="/"
-        keywords={["export fruits Afrique", "export légumes Sénégal", "mangue export", "avocat export", "fournisseur B2B fruits tropicaux", "FOB Dakar"]}
+        keywords={["exportateur fruits Sénégal", "exportateur légumes Sénégal", "export mangue Sénégal", "fournisseur fruits frais Afrique", "Senegal fruit exporter", "export haricot vert gombo", "FOB Dakar"]}
         jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: "/", title: "Tropicaura", description: homeDescription })]}
       />
 

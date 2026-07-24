@@ -40,7 +40,9 @@ export default function SEOHead({
   publishedTime,
   modifiedTime,
 }) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Export Premium de fruits & légumes d'Afrique de l'Ouest`;
+  // Repli aligné sur le positionnement SEO : « exportateur » + « Sénégal »
+  // (requête d'achat réelle des importateurs), pas « Afrique de l'Ouest ».
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Exportateur de fruits & légumes du Sénégal`;
   const canonicalUrl = `${SITE_URL}${path}`;
   const schemas = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 
