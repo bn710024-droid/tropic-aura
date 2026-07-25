@@ -17,19 +17,20 @@ export const LEGAL_NAME = "Tropicaura B.C.";
 
 export const CONTACT_EMAIL = "contact@tropic-aura.com";
 export const CONTACT_PHONE = "+221 77 881 20 18";
-// ⚠️ Aucune page LinkedIn d'entreprise n'existe encore : la valeur était
-// "https://www.linkedin.com/" (l'accueil du réseau, pas un profil), ce qui
-// se retrouvait tel quel dans le sameAs des données structurées. Déclarer un
-// lien générique comme profil officiel est un signal FAUX pour Google, qui
-// s'en sert justement pour rattacher l'entité à son Knowledge Graph.
-// Laissé vide tant que la page n'existe pas — un sameAs court mais exact vaut
-// mieux qu'un sameAs pointant vers un site entier.
+// PROFILS SOCIAUX OFFICIELS
+//
+// Ces URLs alimentent le champ sameAs des données structurées, que Google
+// utilise pour rattacher l'entité à son Knowledge Graph et la distinguer
+// d'homonymes (l'aperçu IA confondait Tropicaura avec des marques de voyage
+// et de décoration). Règle : n'inscrire ici QUE des profils réellement
+// détenus et publics. Un lien générique — l'accueil d'un réseau plutôt
+// qu'une page d'entreprise — est un signal faux qui dessert l'identification.
+//
+// LinkedIn : retiré, le compte ayant été banni par la plateforme. La constante
+// est conservée vide pour documenter l'absence et permettre une réintroduction
+// immédiate le jour où une page d'entreprise existe ; les valeurs vides sont
+// filtrées à la génération du schema.
 export const LINKEDIN_URL = "";
-
-// Profils réellement détenus par l'entreprise. Le sameAs des données
-// structurées sert à Google pour confirmer l'identité de l'entité et la
-// distinguer d'homonymes (cf. l'aperçu IA qui confondait Tropicaura avec des
-// marques de voyage et de décoration).
 export const INSTAGRAM_URL = "https://www.instagram.com/tropicaura_export/";
 
 export const ADDRESS = {

@@ -16,7 +16,10 @@ import { langFromPath, pathFor } from "../i18n/routing";
 const EMAIL = "contact@tropic-aura.com";
 const PHONE = "+221 77 881 20 18";
 const WHATSAPP = "https://wa.me/221789179805";
-const LINKEDIN = "https://www.linkedin.com/"; // ⚠️ à remplacer
+// LinkedIn retiré : le compte a été banni par la plateforme. Le lien pointait
+// de toute façon vers l'accueil du réseau, pas vers une page Tropicaura —
+// un lien social qui ne mène nulle part coûte plus en crédibilité qu'il ne
+// rapporte. À réintroduire uniquement le jour où une vraie page existe.
 const INSTAGRAM = "https://www.instagram.com/tropicaura_export/";
 
 export default function Footer() {
@@ -160,7 +163,6 @@ export default function Footer() {
               <a href={`mailto:${EMAIL}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{EMAIL}</a>
               <a href={`tel:${PHONE.replace(/\s/g, "")}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{PHONE}</a>
               <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>Instagram</a>
-              <a href={LINKEDIN} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>LinkedIn</a>
             </div>
           </div>
 
