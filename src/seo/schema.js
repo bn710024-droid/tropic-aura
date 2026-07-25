@@ -21,6 +21,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
   LINKEDIN_URL,
+  INSTAGRAM_URL,
   ADDRESS,
   EXPORT_MARKETS,
   LOGO_URL,
@@ -50,6 +51,13 @@ export function organizationSchema() {
     // vendant à des importateurs — pour verrouiller la compréhension du métier.
     description:
       "Tropicaura est un exportateur sénégalais de fruits et légumes frais. Basée à Dakar, l'entreprise approvisionne les importateurs internationaux en mangues, avocats, citrons verts, haricots verts, gombo et melons, avec des solutions logistiques maritimes et aériennes.",
+    // Champ prévu par schema.org pour distinguer une entité d'autres portant un
+    // nom voisin. Nécessaire ici : l'aperçu IA de Google mélangeait Tropicaura
+    // avec des marques de voyage et de décoration, et qualifiait l'activité de
+    // « négoce et courtage » — terme repris d'un annuaire tiers, qui positionne
+    // l'entreprise en intermédiaire plutôt qu'en exportateur.
+    disambiguatingDescription:
+      "Exportateur de fruits et légumes frais basé à Dakar (Sénégal), vendant directement aux importateurs, grossistes et distributeurs internationaux. À ne pas confondre avec des marques homonymes de voyage ou de décoration.",
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
@@ -60,7 +68,10 @@ export function organizationSchema() {
     image: LOGO_URL,
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE,
-    sameAs: [LINKEDIN_URL].filter(Boolean),
+    // Seuls les profils RÉELLEMENT détenus : un lien générique (l'accueil d'un
+    // réseau social) ne prouve rien à Google et brouille l'identification de
+    // l'entité. filter(Boolean) écarte donc les constantes laissées vides.
+    sameAs: [INSTAGRAM_URL, LINKEDIN_URL].filter(Boolean),
     address: {
       "@type": "PostalAddress",
       addressLocality: ADDRESS.locality,

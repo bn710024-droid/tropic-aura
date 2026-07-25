@@ -17,7 +17,20 @@ export const LEGAL_NAME = "Tropicaura B.C.";
 
 export const CONTACT_EMAIL = "contact@tropic-aura.com";
 export const CONTACT_PHONE = "+221 77 881 20 18";
-export const LINKEDIN_URL = "https://www.linkedin.com/";
+// ⚠️ Aucune page LinkedIn d'entreprise n'existe encore : la valeur était
+// "https://www.linkedin.com/" (l'accueil du réseau, pas un profil), ce qui
+// se retrouvait tel quel dans le sameAs des données structurées. Déclarer un
+// lien générique comme profil officiel est un signal FAUX pour Google, qui
+// s'en sert justement pour rattacher l'entité à son Knowledge Graph.
+// Laissé vide tant que la page n'existe pas — un sameAs court mais exact vaut
+// mieux qu'un sameAs pointant vers un site entier.
+export const LINKEDIN_URL = "";
+
+// Profils réellement détenus par l'entreprise. Le sameAs des données
+// structurées sert à Google pour confirmer l'identité de l'entité et la
+// distinguer d'homonymes (cf. l'aperçu IA qui confondait Tropicaura avec des
+// marques de voyage et de décoration).
+export const INSTAGRAM_URL = "https://www.instagram.com/tropicaura_export/";
 
 export const ADDRESS = {
   locality: "Dakar",
