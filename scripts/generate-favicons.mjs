@@ -24,6 +24,14 @@ const BRAND_DARK = { r: 11, g: 15, b: 10, alpha: 1 };
 const TARGETS = [
   { name: "favicon-16x16.png", size: 16, background: { r: 0, g: 0, b: 0, alpha: 0 } },
   { name: "favicon-32x32.png", size: 32, background: { r: 0, g: 0, b: 0, alpha: 0 } },
+  // 48x48 : taille de référence exigée par Google pour afficher un favicon
+  // dans les résultats de recherche. Sa documentation demande un carré
+  // MULTIPLE DE 48 ; sans aucun fichier conforme, Search retombe sur l'icône
+  // de globe générique — ce qui était le cas ici (seuls 16 et 32 étaient
+  // déclarés). Fond de marque plutôt que transparent : sur la ligne de
+  // résultat, Google pose l'icône sur un cercle blanc, où un logo doré
+  // détouré devenait illisible.
+  { name: "favicon-48x48.png", size: 48, background: BRAND_DARK },
   { name: "apple-touch-icon.png", size: 180, background: BRAND_DARK },
   { name: "android-chrome-192x192.png", size: 192, background: { r: 0, g: 0, b: 0, alpha: 0 } },
   { name: "android-chrome-512x512.png", size: 512, background: { r: 0, g: 0, b: 0, alpha: 0 } },
