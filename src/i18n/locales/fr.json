@@ -131,6 +131,7 @@
     "seoTitle": "{{name}} — Export B2B {{englishName}}",
     "seoDesc": "{{name}} ({{englishName}}) — {{description}} Origine : {{origin}}. Disponibilité : {{availability}}. Incoterms : {{incoterms}}.",
     "imageAlt": "{{name}} ({{englishName}}) — export premium Tropicaura",
+    "bgImageAlt": "Gros plan sur l'intérieur de {{name}} ({{englishName}}), fraîcheur et texture du fruit exporté par Tropicaura",
     "specs": {
       "tradeName": "Nom commercial",
       "collection": "Collection",

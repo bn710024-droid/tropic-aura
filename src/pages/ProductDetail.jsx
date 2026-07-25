@@ -200,7 +200,7 @@ export default function ProductDetail() {
             <img
               className="fruit-bg-img"
               src={product.bgImage.desktop.jpg}
-              alt=""
+              alt={t("product.bgImageAlt", { name: product.name, englishName: product.englishName })}
               loading="eager"
               fetchpriority="high"
               decoding="async"

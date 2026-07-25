@@ -131,6 +131,7 @@
     "seoTitle": "{{name}} — B2B Export from Senegal",
     "seoDesc": "{{name}} — {{description}} Origin: {{origin}}. Availability: {{availability}}. Incoterms: {{incoterms}}.",
     "imageAlt": "{{name}} — premium export produce by Tropicaura",
+    "bgImageAlt": "Close-up of the inside of {{name}}, showing the freshness and texture of the produce exported by Tropicaura",
     "specs": {
       "tradeName": "Trade name",
       "collection": "Collection",
