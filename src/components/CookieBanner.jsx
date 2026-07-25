@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import { CATEGORIES, getConsent, setConsent, acceptAll, rejectAll, hasDecided } from "../lib/consent";
 import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analytics";
 
@@ -21,6 +22,12 @@ import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analyti
 
 export default function CookieBanner() {
   const { t } = useTranslation();
+  // Le lien « En savoir plus » doit rester dans la langue de la page : depuis
+  // /en/*, pointer vers /politique-confidentialite sortait le visiteur
+  // anglophone de sa version et donnait à Googlebot un lien inter-langues
+  // parasite sur toutes les pages du site (le bandeau est global).
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   // ── Anti-flash : deux états distincts ──────────────────────────
   //  `mounted` = le bandeau existe-t-il dans le DOM. Faux dès le
   //  premier rendu pour un visiteur qui a DÉJÀ décidé → on retourne
@@ -132,7 +139,7 @@ export default function CookieBanner() {
           color: "rgba(255,255,255,0.82)", margin: "0 0 16px", maxWidth: 640,
         }}>
           {t("cookies.text")}{" "}
-          <Link to="/politique-confidentialite" style={{ color: "#D4AF6A", textDecoration: "underline" }}>
+          <Link to={pathFor("privacy", lang)} style={{ color: "#D4AF6A", textDecoration: "underline" }}>
             {t("cookies.learnMore")}
           </Link>
         </p>

@@ -1,6 +1,15 @@
 User-agent: *
 Allow: /
 Disallow: /404
+# Chemins techniques injectés par Cloudflare, jamais du contenu. L'option
+# « Email Address Obfuscation » remplace chaque lien mailto: du site par
+# /cdn-cgi/l/email-protection#<hash>, qui répond 404 aux robots (le lien
+# n'est déchiffré qu'en JavaScript, côté navigateur). Comme l'adresse figure
+# dans le pied de page, ce lien mort apparaissait sur TOUTES les pages et
+# remontait en « erreur HTTP 400-499 » dans Bing Webmaster Tools.
+# L'exclure ici évite que les moteurs le suivent ; le lien reste
+# parfaitement fonctionnel pour les visiteurs.
+Disallow: /cdn-cgi/
 
 # Crawlers IA explicitement autorisés (déjà couverts par le wildcard
 # ci-dessus — ces lignes documentent une ouverture volontaire plutôt

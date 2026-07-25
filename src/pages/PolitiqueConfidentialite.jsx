@@ -36,7 +36,11 @@ export default function PolitiqueConfidentialite() {
   const { pathname } = useLocation();
   const lang = langFromPath(pathname);
   const description = t("privacy.seo.description");
-  const trail = buildBreadcrumbTrail("/politique-confidentialite");
+  // Chemin suivant la langue : figé en français, /en/privacy déclarait une
+  // URL canonique française — Google aurait alors fusionné les deux versions
+  // sur la seule page FR, rendant la page anglaise inindexable.
+  const privacyPath = pathFor("privacy", lang);
+  const trail = buildBreadcrumbTrail(privacyPath);
 
   const h2 = { fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: 20, margin: "40px 0 14px", color: "#1A1A1A" };
   const p = { fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 14.5, lineHeight: 1.75, color: "rgba(0,0,0,0.68)", margin: "0 0 14px" };
@@ -47,11 +51,11 @@ export default function PolitiqueConfidentialite() {
       <SEOHead
         title={t("privacy.seo.title")}
         description={description}
-        path="/politique-confidentialite"
+        path={privacyPath}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/politique-confidentialite", title: "Politique de confidentialité", description, breadcrumb: true }),
-          breadcrumbListSchema(trail, "/politique-confidentialite"),
+          webPageSchema({ path: privacyPath, title: t("privacy.title"), description, breadcrumb: true }),
+          breadcrumbListSchema(trail, privacyPath),
         ]}
       />
       <TopBar />
