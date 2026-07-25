@@ -12,6 +12,7 @@ import PartnershipMobileSection from "./partenariats/PartnershipMobileSection";
 import ConclusionConstellation from "./partenariats/ConclusionConstellation";
 import { ICONS } from "./partenariats/icons";
 import { buildMotionCSS, buildKenBurnsCSS, buildGlowPulseCSS } from "../motion";
+import useIsDesktopViewport from "../lib/useIsDesktopViewport";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
@@ -31,12 +32,16 @@ const N = SECTIONS.length;
 // la première scène (hero) est un fond noir plein.
 export const PAGE_ENTRY_COLOR = { desktop: "#0B0F0A", mobile: "#0B0F0A" };
 
-function SceneContent({ s, lang, t }) {
+function SceneContent({ s, lang, t, isDesktopViewport }) {
   switch (s.type) {
-    case "hero":
+    case "hero": {
+      // Arbre mobile monté en permanence à côté de celui-ci (CSS pur) —
+      // seul l'arbre réellement visible doit porter le <h1> de la page
+      // (voir PartnershipMobileSection + useIsDesktopViewport).
+      const HeroTitleTag = isDesktopViewport ? "h1" : "div";
       return (
         <>
-          <h1 className="pw-hero-title">{s.title}</h1>
+          <HeroTitleTag className="pw-hero-title">{s.title}</HeroTitleTag>
           <p className="pw-hero-subtitle">{s.subtitle}</p>
           <div className="pw-hero-hint">
             <span>{t("partnerships.scrollHint")}</span>
@@ -45,6 +50,7 @@ function SceneContent({ s, lang, t }) {
           </div>
         </>
       );
+    }
     case "vision":
       return (
         <>
@@ -115,6 +121,9 @@ export default function Partenariats() {
   const lang = langFromPath(pathname);
   // Structure (couleurs, photos, type de scène) depuis le thème ; textes via i18n.
   const SECTIONS_T = useLocalizedSections(SECTIONS, "partnerships.sections");
+  // Les arbres desktop et mobile sont tous deux montés en permanence
+  // (CSS pur) — seul celui réellement visible doit porter le <h1>.
+  const isDesktopViewport = useIsDesktopViewport();
   const bgRefs      = useRef([]);
   const contentRefs = useRef([]);
   const dotRefs     = useRef([]);
@@ -418,7 +427,7 @@ export default function Partenariats() {
                 transform:    i === 0 ? "translateY(0)" : "translateY(24px)",
               }}
             >
-              <SceneContent s={s} lang={lang} t={t} />
+              <SceneContent s={s} lang={lang} t={t} isDesktopViewport={isDesktopViewport} />
             </div>
           </section>
         ))}
@@ -426,7 +435,7 @@ export default function Partenariats() {
 
       <div className="partenariats-mobile-tree">
         {SECTIONS_T.map((s, i) => (
-          <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} />
+          <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} isDesktopViewport={isDesktopViewport} />
         ))}
       </div>
     </>

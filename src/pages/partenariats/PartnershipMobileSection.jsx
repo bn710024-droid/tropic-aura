@@ -8,17 +8,21 @@ import { ICONS } from "./icons";
 // de scroll natif continu, jamais de position:sticky, jamais de scroll
 // verrouillé. Chaque section se révèle via le rideau + la cascade de
 // couches (Motion System) quand elle entre dans le viewport.
-export default function PartnershipMobileSection({ section }) {
+export default function PartnershipMobileSection({ section, isDesktopViewport }) {
   const { t } = useTranslation();
   const s = section;
 
   if (s.type === "hero") {
+    // Arbre desktop monté en permanence à côté de celui-ci (CSS pur) —
+    // seul l'arbre réellement visible doit porter le <h1> de la page
+    // (voir Partenariats.jsx / SceneContent + useIsDesktopViewport).
+    const HeroTitleTag = isDesktopViewport ? "div" : "h1";
     return (
       <MotionScene id={`partner-${s.id}`} as="div" className="pm-hero" rootMargin="-5% 0px -20% 0px">
         <img src={s.photo} alt={s.photoAlt} className="pm-hero-photo ms-ken-burns" />
         <div className="pm-hero-overlay" />
         <div className="pm-hero-text">
-          <h1 className="ms-layer ms-layer--title pm-hero-title">{s.title}</h1>
+          <HeroTitleTag className="ms-layer ms-layer--title pm-hero-title">{s.title}</HeroTitleTag>
           <p className="ms-layer ms-layer--text pm-hero-subtitle" style={{ transitionDelay: "260ms" }}>{s.subtitle}</p>
           <div className="ms-layer ms-layer--icon pm-hero-hint" style={{ transitionDelay: "380ms" }}>
             <span>{t("partnerships.scrollHint")}</span><span className="pm-hero-hint-arrow">↓</span>

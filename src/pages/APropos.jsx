@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { langFromPath, pathFor } from "../i18n/routing";
 import { useLocalizedSections } from "../i18n/useSections";
 import { buildMotionCSS, buildKenBurnsCSS } from "../motion";
+import useIsDesktopViewport from "../lib/useIsDesktopViewport";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
@@ -57,6 +58,11 @@ export default function APropos() {
   // SECTIONS reste la source STRUCTURELLE (couleurs, photos, indices utilisés
   // par le moteur d'animation) ; SECTIONS_T n'en change que les textes.
   const SECTIONS_T = useLocalizedSections(SECTIONS, "about.sections");
+  // Les arbres desktop et mobile (page turn) sont tous deux montés en
+  // permanence (CSS pur, cf. about-desktop-tree / about-mobile-tree) —
+  // seul celui réellement visible doit porter le <h1> de la page, sinon
+  // les deux copies (texte identique) créent deux H1 dans le DOM.
+  const isDesktopViewport = useIsDesktopViewport();
   const bgRef      = useRef(null);
   const logoRef    = useRef(null);
   const dotRefs    = useRef([]);
@@ -508,7 +514,10 @@ export default function APropos() {
           <span className="vision-kicker" style={{ color: "rgba(242,233,216,0.68)", marginTop: 6, display: "block" }}>
             {SECTIONS_T[0].kicker}
           </span>
-          <h1 className="vision-title" style={{ color: IVORY }}>{SECTIONS_T[0].title}</h1>
+          {(() => {
+            const Section1TitleTag = isDesktopViewport ? "h1" : "div";
+            return <Section1TitleTag className="vision-title" style={{ color: IVORY }}>{SECTIONS_T[0].title}</Section1TitleTag>;
+          })()}
           <div className="vision-desc-group">
             {SECTIONS_T[0].desc.map((p, i) => (
               <p
@@ -679,7 +688,7 @@ export default function APropos() {
       {/* ══ Arbre mobile — scènes "page turn" (Motion System), aucun scroll verrouillé ══ */}
       <div className="about-mobile-tree">
         {SECTIONS_T.map((s, i) => (
-          <AboutMobileSection key={s.id} section={s} isFirst={i === 0} />
+          <AboutMobileSection key={s.id} section={s} isFirst={i === 0 && !isDesktopViewport} />
         ))}
       </div>
     </>

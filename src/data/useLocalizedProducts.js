@@ -31,6 +31,7 @@ function localize(product, t) {
     ...product,
     name: t(`${k}.name`),
     description: t(`${k}.description`),
+    shortDesc: t(`${k}.shortDesc`),
     originLabel: t(`${k}.origin`),
     availabilityLabel: t(`${k}.availability`),
     standardLabel: t("catalog.standard"),

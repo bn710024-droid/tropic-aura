@@ -119,16 +119,12 @@ export default function ProductDetail() {
   const overlayIntensity = product.bgOverlayIntensity || 1;
   const ov = (base) => Math.min(0.92, base * overlayIntensity);
   const trail = buildBreadcrumbTrail(path);
-  // En anglais, name est déjà le nom commercial international (« Green Beans ») :
-  // répéter englishName entre parenthèses ferait doublon. La clé EN l'omet donc.
-  const description = t("product.seoDesc", {
-    name: product.name,
-    englishName: product.englishName,
-    description: product.description,
-    origin: product.originLabel,
-    availability: product.availabilityLabel,
-    incoterms: shared.incoterms.join(", "),
-  }).slice(0, 300);
+  // Meta description = shortDesc (catalog.items.<slug>.shortDesc) : un texte
+  // court déjà rédigé à la main par produit (même source que les cartes de
+  // Produits.jsx), naturel et distinct. L'ancien template concaténait
+  // description + origine + disponibilité + incoterms puis tronquait
+  // mécaniquement à 300 caractères, coupant parfois en plein mot.
+  const description = product.shortDesc;
 
   const specs = [
     { label: t("product.specs.tradeName"), value: lang === "en" ? product.name : `${product.name} (${product.englishName})` },

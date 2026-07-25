@@ -606,12 +606,14 @@ export default function Home() {
             {/* SEO : un seul <h1> par page (première scène) — les scènes
                 suivantes utilisent <h2> pour la même classe CSS afin de
                 préserver une hiérarchie de titres valide sans dupliquer
-                le H1 (voir audit "H1 unique par page"). */}
+                le H1 (voir audit "H1 unique par page"). Pas de variante
+                only-desktop/only-mobile ici (contrairement aux scènes
+                suivantes) : la scène "hero" n'a pas de mobileTitle propre,
+                donc les deux copies affichaient un texte identique —
+                rendu une seule fois pour ne pas dupliquer le texte du H1
+                dans le DOM. */}
             {i === 0 ? (
-              <h1 className="scene__title">
-                <span className="only-desktop">{t(`home.${s.id}.title`)}</span>
-                <span className="only-mobile">{t(`home.${s.id}.mobileTitle`, { defaultValue: t(`home.${s.id}.title`) })}</span>
-              </h1>
+              <h1 className="scene__title">{t(`home.${s.id}.title`)}</h1>
             ) : (
               <h2 className="scene__title">
                 <span className="only-desktop">{t(`home.${s.id}.title`)}</span>
