@@ -1,5 +1,8 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, articleSchema } from "../seo/schema";
@@ -10,6 +13,9 @@ const WHITE = "#FFFFFF";
 const BG    = "#090F0A";
 
 export default function InsightPartenariats() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const revealRefs = useRef([]);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
@@ -55,10 +61,9 @@ export default function InsightPartenariats() {
     </ul>
   );
 
-  const articlePath = "/insights/fournisseur-stable-opportuniste";
-  const articleTitle = "Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest";
-  const articleDescription =
-    "Certaines relations commerciales se développent pendant plusieurs années. D'autres s'arrêtent après une seule saison. La différence ne repose pas uniquement sur le produit.";
+  const articlePath = pathFor("insightSupplier", lang);
+  const articleTitle = t("insights.articles.supplier.title");
+  const articleDescription = t("insights.articles.supplier.desc");
   const articleTrail = buildBreadcrumbTrail(articlePath);
   const publishedTime = "2026-06-01";
 
@@ -291,9 +296,7 @@ export default function InsightPartenariats() {
             fontSize: "clamp(28px,3.4vw,52px)", lineHeight: 1.05,
             letterSpacing: "-.04em", color: WHITE,
             margin: "14px 0 32px", maxWidth: 820,
-          }}>
-            Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest
-          </h1>
+          }}>{t("articleSupplier.b1")}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             {[["Tropicaura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
@@ -313,159 +316,64 @@ export default function InsightPartenariats() {
       {/* ══ Corps ══ */}
       <div className="art-body">
 
-        <p ref={reveal} className="art-intro art-intro-lead" style={r(0.04)}>
-          L'Afrique de l'Ouest attire aujourd'hui un intérêt croissant de la part des importateurs
-          internationaux. La région bénéficie d'un potentiel agricole important, d'une proximité
-          géographique avantageuse avec l'Europe et d'une montée progressive des standards de qualité
-          destinés à l'export.
-        </p>
-        <p ref={reveal} className="art-intro" style={r(0.07)}>
-          Dans ce contexte, de nombreux acheteurs cherchent à développer de nouvelles relations
-          commerciales afin de diversifier leurs origines d'approvisionnement et sécuriser leurs volumes.
-          Cependant, toutes les collaborations ne produisent pas les mêmes résultats.
-        </p>
-        <p ref={reveal} className="art-intro" style={r(0.09)}>
-          Certaines relations commerciales se développent pendant plusieurs années et génèrent une
-          croissance mutuelle. D'autres s'arrêtent après une seule saison. La différence ne repose
-          pas uniquement sur le produit — elle repose souvent sur la capacité d'un fournisseur à
-          construire une relation professionnelle durable.
-        </p>
+        <p ref={reveal} className="art-intro art-intro-lead" style={r(0.04)}>{t("articleSupplier.b2")}</p>
+        <p ref={reveal} className="art-intro" style={r(0.07)}>{t("articleSupplier.b3")}</p>
+        <p ref={reveal} className="art-intro" style={r(0.09)}>{t("articleSupplier.b4")}</p>
 
         {/* ── 1 ── */}
-        <h2 ref={reveal} className="art-h2 art-h2-first" style={r(0)}>
-          La stabilité commence bien avant la première expédition
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Lorsqu'un importateur recherche un partenaire, l'attention se porte naturellement sur
-          les produits, les prix ou les volumes disponibles. Pourtant, les collaborations les plus
-          solides se construisent généralement avant même le premier chargement.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>La qualité des échanges initiaux joue un rôle essentiel :</p>
-        <Ul items={["clarté des informations ;","rapidité des réponses ;","compréhension des besoins ;","capacité à communiquer de manière professionnelle."]} />
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Les entreprises les plus fiables ne cherchent pas à promettre davantage qu'elles ne peuvent
-          réellement livrer. Elles privilégient une communication réaliste et transparente dès le départ.
-        </p>
+        <h2 ref={reveal} className="art-h2 art-h2-first" style={r(0)}>{t("articleSupplier.b5")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b6")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b7")}</p>
+        <Ul items={t("articleSupplier.list1", { returnObjects: true })} />
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b8")}</p>
 
         {/* ── 2 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Les promesses attirent, l'exécution construit la confiance
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Dans le commerce international, il est relativement facile d'annoncer des volumes importants,
-          des prix compétitifs ou des délais ambitieux. La véritable différence apparaît lorsque
-          les opérations commencent.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>Un fournisseur stable est capable de :</p>
-        <Ul items={["respecter ses engagements ;","communiquer rapidement en cas d'imprévu ;","maintenir une qualité cohérente ;","fournir une documentation complète ;","accompagner le client tout au long du processus."]} />
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          À l'inverse, les difficultés apparaissent souvent lorsque les attentes créées au départ
-          ne correspondent pas à la réalité opérationnelle. La confiance se construit davantage
-          par l'exécution que par les promesses.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSupplier.b9")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b10")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b11")}</p>
+        <Ul items={t("articleSupplier.list2", { returnObjects: true })} />
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b12")}</p>
 
         {/* ── 3 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          La régularité vaut souvent plus qu'une excellente saison
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Le commerce des produits frais dépend de nombreux facteurs : climat, récoltes, logistique,
-          disponibilité des emballages, conditions de transport. Dans cet environnement, la perfection
-          n'existe pas.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Les acheteurs expérimentés savent qu'ils ne recherchent pas nécessairement un partenaire
-          parfait. Ils recherchent un partenaire capable de maintenir un niveau de performance
-          constant dans la durée.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          La régularité devient alors un avantage concurrentiel majeur. Une relation stable sur
-          plusieurs saisons crée généralement davantage de valeur qu'une opération exceptionnelle
-          suivie de résultats irréguliers.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSupplier.b13")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b14")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b15")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b16")}</p>
 
         {/* ── 4 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          La transparence réduit les risques pour toutes les parties
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Les chaînes d'approvisionnement internationales comportent toujours une part d'incertitude.
-          Retards portuaires, contraintes climatiques, fluctuations de marché ou difficultés logistiques
-          peuvent survenir à tout moment. La manière dont ces situations sont gérées influence
-          directement la qualité de la relation commerciale.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>Les partenaires les plus appréciés sont souvent ceux qui :</p>
-        <Ul items={["communiquent rapidement ;","partagent les informations pertinentes ;","signalent les difficultés dès leur apparition ;","proposent des solutions concrètes."]} />
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          La transparence permet aux différentes parties d'anticiper les risques plutôt que de les subir.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSupplier.b17")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b18")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b19")}</p>
+        <Ul items={t("articleSupplier.list3", { returnObjects: true })} />
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b20")}</p>
 
         {/* ── 5 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Une vision à long terme transforme la nature du partenariat
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Les collaborations les plus performantes ne reposent pas uniquement sur une transaction.
-          Elles reposent sur une vision commune. Lorsque producteurs, exportateurs, logisticiens
-          et importateurs travaillent dans une logique de long terme, les bénéfices dépassent
-          largement le cadre d'une seule opération.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>Cette approche favorise :</p>
-        <Ul items={["une meilleure planification ;","davantage de stabilité ;","une amélioration continue des processus ;","une confiance mutuelle renforcée."]} />
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Dans un secteur où les relations humaines restent fondamentales, cette dimension devient
-          particulièrement importante.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSupplier.b21")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b22")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b23")}</p>
+        <Ul items={t("articleSupplier.list4", { returnObjects: true })} />
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b24")}</p>
 
         {/* ── 6 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          L'évolution du commerce international favorise les partenaires fiables
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Les marchés européens évoluent. Les exigences liées à la qualité, à la traçabilité,
-          à la conformité réglementaire et à la visibilité logistique deviennent de plus en plus
-          importantes. Dans ce contexte, les entreprises capables d'offrir :
-        </p>
-        <Ul items={["de la cohérence ;","de la transparence ;","de la réactivité ;","de la prévisibilité ;"]} />
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          renforcent progressivement leur position sur le marché. La fiabilité devient un facteur
-          de différenciation aussi important que le produit lui-même.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSupplier.b25")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b26")}</p>
+        <Ul items={t("articleSupplier.list5", { returnObjects: true })} />
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSupplier.b27")}</p>
 
         {/* ══ Perspective Tropicaura ══ */}
         <div ref={reveal} className="ta-block" style={r(0.04)}>
           <span className="ta-label">Perspective Tropicaura</span>
-          <p className="ta-p">
-            Chez Tropicaura, nous croyons que les partenariats durables se construisent autour
-            d'une idée simple : créer de la valeur pour l'ensemble des acteurs de la chaîne
-            d'approvisionnement.
-          </p>
-          <p className="ta-p">
-            Notre ambition est de contribuer au développement de relations commerciales fondées
-            sur la confiance, la transparence et l'excellence opérationnelle.
-          </p>
-          <p className="ta-p">
-            Nous sommes convaincus que l'avenir du commerce tropical africain reposera autant
-            sur la qualité des produits que sur la qualité des relations qui les accompagnent.
-          </p>
+          <p className="ta-p">{t("articleSupplier.b28")}</p>
+          <p className="ta-p">{t("articleSupplier.b29")}</p>
+          <p className="ta-p">{t("articleSupplier.b30")}</p>
         </div>
 
         {/* ══ Conclusion ══ */}
         <div ref={reveal} className="art-conclusion" style={r(0.04)}>
-          <h2 className="art-conclusion-h2">La stabilité comme fondation de la croissance</h2>
-          <p className="art-p">
-            Dans un environnement international de plus en plus exigeant, la stabilité devient
-            un actif stratégique.
-          </p>
-          <p className="art-p">
-            Les fournisseurs capables de construire des relations durables, d'exécuter leurs
-            engagements avec rigueur et de communiquer avec transparence créent les conditions
-            nécessaires à une croissance solide et pérenne.
-          </p>
-          <p className="art-p">
-            Au-delà des volumes, des prix ou des saisons, ce sont souvent ces qualités qui
-            distinguent les partenariats qui durent de ceux qui disparaissent rapidement.
-          </p>
+          <h2 className="art-conclusion-h2">{t("articleSupplier.b31")}</h2>
+          <p className="art-p">{t("articleSupplier.b32")}</p>
+          <p className="art-p">{t("articleSupplier.b33")}</p>
+          <p className="art-p">{t("articleSupplier.b34")}</p>
         </div>
 
       </div>
@@ -475,10 +383,7 @@ export default function InsightPartenariats() {
         <div className="art-outro-bg" />
         <div className="art-outro-overlay" />
         <div className="art-outro-content">
-          <p className="art-outro-quote">
-            Les relations commerciales les plus fortes ne se construisent pas sur une transaction
-            réussie. Elles se construisent sur la capacité à réussir ensemble, saison après saison.
-          </p>
+          <p className="art-outro-quote">{t("articleSupplier.b35")}</p>
           <div className="art-outro-nav">
             <div className="art-outro-line" />
             <a href="/insights" className="art-outro-link">← Toutes les analyses</a>

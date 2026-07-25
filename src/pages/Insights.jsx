@@ -1,4 +1,7 @@
 ﻿import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import Lenis from "lenis";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -11,25 +14,12 @@ import { buildBreadcrumbTrail } from "../seo/routesRegistry";
 //  5 articles · thumbnail + catégorie + titre + description + méta
 // ============================================================
 
+// Structure seule — titres, descriptions et méta éditoriale vivent dans les
+// fichiers i18n (insights.articles.<key>) ; l'URL est résolue par pathFor()
+// pour suivre la langue active.
 const ARTICLES = [
-  {
-    category: "Marchés",
-    title: "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux",
-    desc: "Position géographique, accès maritime, saisonnalité complémentaire et amélioration des infrastructures créent de nouvelles opportunités pour les importateurs à la recherche de partenaires fiables.",
-    readTime: "7 min",
-    date: "Juin 2026",
-    img: "/menu-apropos.jpg",
-    href: "/insights/senegal-origine-strategique",
-  },
-  {
-    category: "Partenariats",
-    title: "Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest",
-    desc: "Certaines relations commerciales se développent pendant plusieurs années. D'autres s'arrêtent après une seule saison. La différence ne repose pas uniquement sur le produit.",
-    readTime: "7 min",
-    date: "Juin 2026",
-    img: "/menu-partenariats.jpg",
-    href: "/insights/fournisseur-stable-opportuniste",
-  },
+  { key: "senegal",  page: "insightSenegal",  img: "/menu-apropos.jpg" },
+  { key: "supplier", page: "insightSupplier", img: "/menu-partenariats.jpg" },
 ];
 
 const GOLD  = "#C9A84C";
@@ -38,6 +28,9 @@ const MUTED = "rgba(255,255,255,0.46)";
 const BG    = "#090F0A";
 
 export default function Insights() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const revealRefs = useRef([]);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
@@ -79,21 +72,23 @@ export default function Insights() {
   /* Icônes SVG inline (document · horloge · globe) */
   const iconStyle = { width: 20, height: 20, marginBottom: 10, opacity: 0.6 };
 
-  const insightsDescription =
-    "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques et sourcing en Afrique de l'Ouest.";
-  const insightsTrail = buildBreadcrumbTrail("/insights");
+  const insightsDescription = t("insights.seo.description");
+  const insightsPath = pathFor("insights", lang);
+  const insightsTrail = buildBreadcrumbTrail(insightsPath);
 
   return (
     <div style={{ background: BG, minHeight: "100vh" }}>
       <SEOHead
-        title="Insights — Analyses du Commerce Tropical International"
+        title={t("insights.seo.title")}
         description={insightsDescription}
-        path="/insights"
-        keywords={["sourcing Afrique de l'Ouest", "commerce international fruits", "fournisseur fiable export"]}
+        path={insightsPath}
+        keywords={lang === "en"
+          ? ["West Africa sourcing", "international fruit trade", "reliable export supplier"]
+          : ["sourcing Afrique de l'Ouest", "commerce international fruits", "fournisseur fiable export"]}
         jsonLd={[
           organizationSchema(),
-          webPageSchema({ path: "/insights", title: "Insights", description: insightsDescription, breadcrumb: true }),
-          breadcrumbListSchema(insightsTrail, "/insights"),
+          webPageSchema({ path: insightsPath, title: t("nav.insights"), description: insightsDescription, breadcrumb: true }),
+          breadcrumbListSchema(insightsTrail, insightsPath),
         ]}
       />
       <style>{`
@@ -215,7 +210,7 @@ export default function Insights() {
 
             {/* Haut */}
             <div>
-              <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom: 22 }}>Perspectives</span>
+              <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom: 22 }}>{t("insights.kicker")}</span>
               <h1 ref={reveal} style={{
                 ...r(0.07),
                 fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800,
@@ -223,7 +218,7 @@ export default function Insights() {
                 lineHeight:1.15, letterSpacing:"-.025em",
                 color:WHITE, margin:0,
               }}>
-                Les analyses qui éclairent le commerce tropical international.
+                {t("insights.title")}
               </h1>
               <p ref={reveal} style={{
                 ...r(0.13),
@@ -231,7 +226,7 @@ export default function Insights() {
                 fontSize:"clamp(12px, .95vw, 13.5px)", lineHeight:1.75,
                 color:MUTED, margin:"18px 0 0",
               }}>
-                Marchés européens, stratégies d'approvisionnement, logistique export
+                {t("insights.subtitle")}
                 et développement de filières tropicales performantes.
               </p>
             </div>
@@ -248,7 +243,7 @@ export default function Insights() {
                   <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:"clamp(26px,2.4vw,34px)", letterSpacing:"-.04em", color:WHITE, lineHeight:1 }}>
                     {ARTICLES.length}
                   </span>
-                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>Analyses publiées</span>
+                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>{t("insights.published")}</span>
                 </div>
                 {/* Stat 2 */}
                 <div className="ins-stat">
@@ -270,7 +265,7 @@ export default function Insights() {
                   <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:"clamp(11px,1vw,13px)", letterSpacing:"-.01em", color:WHITE, lineHeight:1.2 }}>
                     Afrique<br/>→ Europe
                   </span>
-                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>Des opportunités qui connectent</span>
+                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>{t("insights.connecting")}</span>
                 </div>
               </div>
 
@@ -290,13 +285,14 @@ export default function Insights() {
 
         {/* ════ PANNEAU DROIT ════ */}
         <div className="ins-right">
-          <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom:28 }}>À la une</span>
+          <span ref={reveal} style={{ ...r(0), ...lbl, marginBottom:28 }}>{t("insights.featured")}</span>
 
           <div id="analyses">
             {ARTICLES.map((a, i) => {
-              const Tag = a.href ? "a" : "article";
+              const href = pathFor(a.page, lang);
+              const Tag = href ? "a" : "article";
               return (
-              <Tag key={i} ref={reveal} className="ins-row" style={r(i * 0.06)} {...(a.href ? { href: a.href } : {})}>
+              <Tag key={i} ref={reveal} className="ins-row" style={r(i * 0.06)} {...(href ? { href } : {})}>
                 {/* Thumbnail */}
                 <div
                   className="ins-row-img"
@@ -304,14 +300,14 @@ export default function Insights() {
                 />
                 {/* Contenu */}
                 <div>
-                  <span style={{ ...lbl, fontSize:8.5, marginBottom:0 }}>{a.category}</span>
-                  <h2 className="ins-row-title">{a.title}</h2>
-                  <p className="ins-row-desc">{a.desc}</p>
+                  <span style={{ ...lbl, fontSize:8.5, marginBottom:0 }}>{t(`insights.articles.${a.key}.category`)}</span>
+                  <h2 className="ins-row-title">{t(`insights.articles.${a.key}.title`)}</h2>
+                  <p className="ins-row-desc">{t(`insights.articles.${a.key}.desc`)}</p>
                 </div>
                 {/* Méta */}
                 <div className="ins-row-meta">
-                  <span style={{ display:"block" }}>{a.readTime} de lecture</span>
-                  <span style={{ display:"block", marginTop:4 }}>{a.date}</span>
+                  <span style={{ display:"block" }}>{t(`insights.articles.${a.key}.readTime`)} {t("insights.readTimeSuffix")}</span>
+                  <span style={{ display:"block", marginTop:4 }}>{t(`insights.articles.${a.key}.date`)}</span>
                 </div>
               </Tag>
               );
@@ -321,7 +317,7 @@ export default function Insights() {
           {/* Voir toutes */}
           <div ref={reveal} className="ins-voir" style={r(0.3)}>
             <div className="ins-voir-line" />
-            <a href="#analyses" className="ins-voir-link">Voir toutes les analyses</a>
+            <a href="#analyses" className="ins-voir-link">{t("insights.seeAll")}</a>
             <span className="ins-voir-arrow">→</span>
           </div>
         </div>

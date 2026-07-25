@@ -84,6 +84,9 @@ export default function App() {
         <Route path="/en/availability" element={<Disponibilite />} />
         <Route path="/en/about" element={<APropos />} />
         <Route path="/en/partnerships" element={<Partenariats />} />
+        <Route path="/en/insights" element={<Insights />} />
+        <Route path="/en/insights/senegal-strategic-origin" element={<InsightSenegal />} />
+        <Route path="/en/insights/reliable-vs-opportunistic-supplier" element={<InsightPartenariats />} />
 
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />

@@ -1,5 +1,8 @@
 ﻿import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, articleSchema } from "../seo/schema";
@@ -10,6 +13,9 @@ const WHITE = "#FFFFFF";
 const BG    = "#090F0A";
 
 export default function InsightSenegal() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   const revealRefs = useRef([]);
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
@@ -49,47 +55,16 @@ export default function InsightSenegal() {
     textTransform: "uppercase", color: GOLD, display: "inline-block",
   };
 
-  const BULLETS_1 = [
-    "Une meilleure préservation de la fraîcheur des produits.",
-    "Une réduction des risques logistiques.",
-    "Une meilleure maîtrise de la chaîne du froid.",
-    "Une plus grande flexibilité pour les importateurs.",
-  ];
-  const BULLETS_2 = [
-    "De prolonger leur saison commerciale.",
-    "De maintenir une présence continue sur leurs marchés.",
-    "De réduire leur dépendance à une seule origine.",
-  ];
-  const BULLETS_3 = [
-    "les stations de conditionnement,",
-    "les systèmes de traçabilité,",
-    "les infrastructures portuaires,",
-    "les procédures phytosanitaires,",
-  ];
-  const BULLETS_4 = [
-    "la qualité des produits,",
-    "la disponibilité des volumes,",
-    "la réactivité des opérateurs,",
-    "la proximité logistique.",
-  ];
-  const BULLETS_5 = [
-    "les avocats,",
-    "les melons,",
-    "les pastèques,",
-    "les citrons verts,",
-    "les légumes spécialisés comme le gombo.",
-  ];
-  const BULLETS_6 = [
-    "une communication transparente,",
-    "une exécution fiable,",
-    "une documentation rigoureuse,",
-    "une capacité à résoudre les problèmes rapidement.",
-  ];
+  // BULLETS_1 : libellés dans les fichiers i18n (articleSenegal.BULLETS_1)
+  // BULLETS_2 : libellés dans les fichiers i18n (articleSenegal.BULLETS_2)
+  // BULLETS_3 : libellés dans les fichiers i18n (articleSenegal.BULLETS_3)
+  // BULLETS_4 : libellés dans les fichiers i18n (articleSenegal.BULLETS_4)
+  // BULLETS_5 : libellés dans les fichiers i18n (articleSenegal.BULLETS_5)
+  // BULLETS_6 : libellés dans les fichiers i18n (articleSenegal.BULLETS_6)
 
-  const articlePath = "/insights/senegal-origine-strategique";
-  const articleTitle = "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux";
-  const articleDescription =
-    "Position géographique, accès maritime, saisonnalité complémentaire et amélioration des infrastructures créent de nouvelles opportunités pour les importateurs à la recherche de partenaires fiables.";
+  const articlePath = pathFor("insightSenegal", lang);
+  const articleTitle = t("insights.articles.senegal.title");
+  const articleDescription = t("insights.articles.senegal.desc");
   const articleTrail = buildBreadcrumbTrail(articlePath);
   const publishedTime = "2026-06-01";
 
@@ -344,9 +319,7 @@ export default function InsightSenegal() {
             fontSize: "clamp(30px,3.6vw,56px)", lineHeight: 1.05,
             letterSpacing: "-.04em", color: WHITE,
             margin: "14px 0 32px", maxWidth: 820,
-          }}>
-            Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux
-          </h1>
+          }}>{t("articleSenegal.b1")}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             {[["Tropicaura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
@@ -366,184 +339,80 @@ export default function InsightSenegal() {
       {/* ══ Corps ══ */}
       <div className="art-body">
 
-        <p ref={reveal} className="art-intro art-intro-lead" style={r(0.04)}>
-          Le commerce international des fruits frais évolue rapidement. Face à la recherche constante
-          de nouvelles origines fiables, compétitives et capables de répondre aux exigences croissantes
-          des marchés européens, le Sénégal s'impose progressivement comme une destination stratégique
-          pour l'approvisionnement en fruits tropicaux.
-        </p>
-        <p ref={reveal} className="art-intro" style={r(0.07)}>
-          Longtemps dominé par certaines régions d'Amérique latine ou d'Asie, le marché européen
-          observe aujourd'hui avec un intérêt grandissant le potentiel de l'Afrique de l'Ouest.
-          Au cœur de cette dynamique, le Sénégal bénéficie d'atouts naturels, logistiques et
-          commerciaux particulièrement attractifs.
-        </p>
+        <p ref={reveal} className="art-intro art-intro-lead" style={r(0.04)}>{t("articleSenegal.b2")}</p>
+        <p ref={reveal} className="art-intro" style={r(0.07)}>{t("articleSenegal.b3")}</p>
 
         {/* ── 1 ── */}
-        <h2 ref={reveal} className="art-h2 art-h2-first" style={r(0)}>
-          Une position géographique privilégiée
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          L'un des premiers avantages du Sénégal réside dans sa proximité avec l'Europe.
-          Comparé à d'autres origines tropicales situées à plusieurs semaines de navigation,
-          le Sénégal offre des délais de transit plus courts vers les principaux ports européens
-          tels qu'Anvers, Rotterdam, Algeciras ou Marseille.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>Cette proximité permet :</p>
+        <h2 ref={reveal} className="art-h2 art-h2-first" style={r(0)}>{t("articleSenegal.b4")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b5")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b6")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_1.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_1", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Pour les produits périssables, chaque jour gagné durant le transport représente
-          un avantage commercial important.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b7")}</p>
 
         {/* ── 2 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Une saisonnalité complémentaire aux autres origines
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Le Sénégal dispose également d'un calendrier de production particulièrement intéressant.
-          Certaines variétés de mangues, notamment la Keitt et la Kent, arrivent sur le marché
-          à des périodes où l'offre mondiale est plus limitée.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>Cette complémentarité permet aux importateurs :</p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b8")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b9")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b10")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_2.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_2", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Dans un contexte où les distributeurs recherchent une disponibilité régulière tout au
-          long de l'année, cette caractéristique devient un argument majeur.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b11")}</p>
 
         {/* ── 3 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Des infrastructures export en constante amélioration
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Au cours des dernières années, le secteur agricole sénégalais a connu d'importantes
-          évolutions. Les investissements réalisés dans :
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b12")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b13")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_3.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_3", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          ont permis d'améliorer significativement les standards de qualité destinés à l'export.
-          Aujourd'hui, de nombreux acteurs du secteur travaillent selon des exigences conformes
-          aux attentes des marchés européens.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Cette professionnalisation renforce la crédibilité du pays auprès des acheteurs internationaux.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b14")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b15")}</p>
 
         {/* ── 4 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Une origine encore compétitive
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Alors que les coûts de production augmentent dans plusieurs régions du monde, le Sénégal
-          conserve une compétitivité intéressante sur certains produits.
-          Cette compétitivité ne repose pas uniquement sur les prix. Elle s'appuie également sur :
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b16")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b17")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_4.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_4", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Pour les importateurs européens, la recherche d'une origine ne consiste plus seulement
-          à trouver le prix le plus bas, mais à identifier le meilleur équilibre entre qualité,
-          fiabilité et coût global.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b18")}</p>
 
         {/* ── 5 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Une diversité croissante de produits
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Si la mangue demeure l'une des principales références exportées, le potentiel sénégalais
-          ne se limite pas à un seul produit. Les marchés internationaux observent également avec intérêt :
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b19")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b20")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_5.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_5", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Cette diversification permet de construire des partenariats plus solides et d'élargir
-          les opportunités commerciales entre producteurs, exportateurs et distributeurs.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b21")}</p>
 
         {/* ── 6 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          La confiance devient le véritable avantage concurrentiel
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Dans le commerce international moderne, la qualité seule ne suffit plus.
-          Les importateurs recherchent désormais :
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b22")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b23")}</p>
         <ul ref={reveal} className="art-ul" style={r(0.06)}>
-          {BULLETS_6.map(t => <li key={t} className="art-li">{t}</li>)}
+          {t("articleSenegal.BULLETS_6", { returnObjects: true }).map((item) => <li key={item} className="art-li">{item}</li>)}
         </ul>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Le Sénégal voit émerger une nouvelle génération d'acteurs export capables de répondre
-          à ces attentes. Cette évolution contribue à renforcer l'image du pays comme partenaire
-          commercial crédible sur le long terme.
-        </p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b24")}</p>
 
         {/* ══ Perspective Tropicaura ══ */}
         <div ref={reveal} className="ta-block" style={r(0.04)}>
           <span className="ta-label">Perspective Tropicaura</span>
-          <p className="ta-p">
-            Cette évolution s'appuie également sur l'émergence de sociétés capables de connecter
-            efficacement les producteurs locaux aux exigences des marchés internationaux.
-          </p>
-          <p className="ta-p">
-            Chez Tropicaura, nous croyons que la valeur ne réside pas uniquement dans le produit
-            lui-même, mais dans la qualité de l'exécution, la transparence des échanges et la
-            capacité à construire des relations durables entre les différents acteurs de la chaîne
-            d'approvisionnement.
-          </p>
-          <p className="ta-p">
-            Notre ambition est de contribuer à cette nouvelle génération du commerce tropical africain :
-            plus structurée, plus fiable et davantage orientée vers le long terme.
-          </p>
+          <p className="ta-p">{t("articleSenegal.b25")}</p>
+          <p className="ta-p">{t("articleSenegal.b26")}</p>
+          <p className="ta-p">{t("articleSenegal.b27")}</p>
         </div>
 
         {/* ── 7 ── */}
-        <h2 ref={reveal} className="art-h2" style={r(0)}>
-          Une opportunité qui ne fait que commencer
-        </h2>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          L'intérêt croissant des marchés européens pour l'Afrique de l'Ouest n'est pas une tendance
-          passagère. La combinaison de facteurs géographiques, logistiques, agricoles et humains
-          positionne aujourd'hui le Sénégal parmi les origines les plus prometteuses du commerce
-          tropical international.
-        </p>
-        <p ref={reveal} className="art-p" style={r(0.04)}>
-          Pour les importateurs à la recherche de nouvelles opportunités d'approvisionnement, comme
-          pour les producteurs souhaitant accéder à davantage de marchés, le pays dispose désormais
-          des fondations nécessaires pour jouer un rôle de plus en plus important dans les années
-          à venir.
-        </p>
+        <h2 ref={reveal} className="art-h2" style={r(0)}>{t("articleSenegal.b28")}</h2>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b29")}</p>
+        <p ref={reveal} className="art-p" style={r(0.04)}>{t("articleSenegal.b30")}</p>
 
         {/* ══ Conclusion ══ */}
         <div ref={reveal} className="art-conclusion" style={r(0.04)}>
-          <h2 className="art-conclusion-h2">Le Sénégal, une origine d'avenir</h2>
-          <p className="art-p">
-            Le Sénégal dispose aujourd'hui de nombreux atouts pour devenir l'une des origines de
-            référence du commerce tropical vers l'Europe.
-          </p>
-          <p className="art-p">
-            Sa proximité géographique, sa saisonnalité stratégique, l'amélioration continue de ses
-            infrastructures et la montée en compétence de ses acteurs créent un environnement
-            favorable à des partenariats durables.
-          </p>
-          <p className="art-p">
-            Chez Tropicaura, nous sommes convaincus que l'avenir du commerce tropical repose sur
-            des relations solides entre producteurs, exportateurs, logisticiens et importateurs.
-          </p>
-          <p className="art-p">
-            Notre mission est de faciliter ces connexions et de contribuer au développement d'une
-            chaîne d'approvisionnement plus fiable, plus transparente et plus performante entre
-            l'Afrique et l'Europe.
-          </p>
+          <h2 className="art-conclusion-h2">{t("articleSenegal.b31")}</h2>
+          <p className="art-p">{t("articleSenegal.b32")}</p>
+          <p className="art-p">{t("articleSenegal.b33")}</p>
+          <p className="art-p">{t("articleSenegal.b34")}</p>
+          <p className="art-p">{t("articleSenegal.b35")}</p>
         </div>
 
       </div>
@@ -553,10 +422,7 @@ export default function InsightSenegal() {
         <div className="art-outro-bg" />
         <div className="art-outro-overlay" />
         <div className="art-outro-content">
-          <p className="art-outro-quote">
-            Les meilleures opportunités naissent lorsque les bons partenaires avancent dans la
-            même direction.
-          </p>
+          <p className="art-outro-quote">{t("articleSenegal.b36")}</p>
           <div className="art-outro-nav">
             <div className="art-outro-line" />
             <a href="/insights" className="art-outro-link">← Toutes les analyses</a>

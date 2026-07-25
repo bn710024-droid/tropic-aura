@@ -391,5 +391,177 @@
       "description": "Tropicaura construit des partenariats commerciaux durables — transparence, préparation et fiabilité à chaque expédition depuis le port de Dakar."
     },
     "scrollHint": "Défiler pour découvrir"
+  },
+  "insights": {
+    "seo": {
+      "title": "Insights — Analyses du Commerce Tropical International",
+      "description": "Analyses et perspectives Tropicaura sur le commerce tropical international : origines stratégiques et sourcing en Afrique de l'Ouest."
+    },
+    "kicker": "Perspectives",
+    "title": "Les analyses qui éclairent le commerce tropical international.",
+    "subtitle": "Marchés européens, stratégies d'approvisionnement, logistique export",
+    "published": "Analyses publiées",
+    "connecting": "Des opportunités qui connectent",
+    "featured": "À la une",
+    "seeAll": "Voir toutes les analyses",
+    "readTimeSuffix": "de lecture",
+    "articles": {
+      "senegal": {
+        "category": "Marchés",
+        "title": "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux",
+        "desc": "Position géographique, accès maritime, saisonnalité complémentaire et amélioration des infrastructures créent de nouvelles opportunités pour les importateurs à la recherche de partenaires fiables.",
+        "readTime": "7 min",
+        "date": "Juin 2026"
+      },
+      "supplier": {
+        "category": "Partenariats",
+        "title": "Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest",
+        "desc": "Certaines relations commerciales se développent pendant plusieurs années. D'autres s'arrêtent après une seule saison. La différence ne repose pas uniquement sur le produit.",
+        "readTime": "7 min",
+        "date": "Juin 2026"
+      }
+    }
+  },
+  "articleSenegal": {
+    "b1": "Pourquoi le Sénégal devient une origine stratégique pour les fruits tropicaux",
+    "b2": "Le commerce international des fruits frais évolue rapidement. Face à la recherche constante de nouvelles origines fiables, compétitives et capables de répondre aux exigences croissantes des marchés européens, le Sénégal s'impose progressivement comme une destination stratégique pour l'approvisionnement en fruits tropicaux.",
+    "b3": "Longtemps dominé par certaines régions d'Amérique latine ou d'Asie, le marché européen observe aujourd'hui avec un intérêt grandissant le potentiel de l'Afrique de l'Ouest. Au cœur de cette dynamique, le Sénégal bénéficie d'atouts naturels, logistiques et commerciaux particulièrement attractifs.",
+    "b4": "Une position géographique privilégiée",
+    "b5": "L'un des premiers avantages du Sénégal réside dans sa proximité avec l'Europe. Comparé à d'autres origines tropicales situées à plusieurs semaines de navigation, le Sénégal offre des délais de transit plus courts vers les principaux ports européens tels qu'Anvers, Rotterdam, Algeciras ou Marseille.",
+    "b6": "Cette proximité permet :",
+    "b7": "Pour les produits périssables, chaque jour gagné durant le transport représente un avantage commercial important.",
+    "b8": "Une saisonnalité complémentaire aux autres origines",
+    "b9": "Le Sénégal dispose également d'un calendrier de production particulièrement intéressant. Certaines variétés de mangues, notamment la Keitt et la Kent, arrivent sur le marché à des périodes où l'offre mondiale est plus limitée.",
+    "b10": "Cette complémentarité permet aux importateurs :",
+    "b11": "Dans un contexte où les distributeurs recherchent une disponibilité régulière tout au long de l'année, cette caractéristique devient un argument majeur.",
+    "b12": "Des infrastructures export en constante amélioration",
+    "b13": "Au cours des dernières années, le secteur agricole sénégalais a connu d'importantes évolutions. Les investissements réalisés dans :",
+    "b14": "ont permis d'améliorer significativement les standards de qualité destinés à l'export. Aujourd'hui, de nombreux acteurs du secteur travaillent selon des exigences conformes aux attentes des marchés européens.",
+    "b15": "Cette professionnalisation renforce la crédibilité du pays auprès des acheteurs internationaux.",
+    "b16": "Une origine encore compétitive",
+    "b17": "Alors que les coûts de production augmentent dans plusieurs régions du monde, le Sénégal conserve une compétitivité intéressante sur certains produits. Cette compétitivité ne repose pas uniquement sur les prix. Elle s'appuie également sur :",
+    "b18": "Pour les importateurs européens, la recherche d'une origine ne consiste plus seulement à trouver le prix le plus bas, mais à identifier le meilleur équilibre entre qualité, fiabilité et coût global.",
+    "b19": "Une diversité croissante de produits",
+    "b20": "Si la mangue demeure l'une des principales références exportées, le potentiel sénégalais ne se limite pas à un seul produit. Les marchés internationaux observent également avec intérêt :",
+    "b21": "Cette diversification permet de construire des partenariats plus solides et d'élargir les opportunités commerciales entre producteurs, exportateurs et distributeurs.",
+    "b22": "La confiance devient le véritable avantage concurrentiel",
+    "b23": "Dans le commerce international moderne, la qualité seule ne suffit plus. Les importateurs recherchent désormais :",
+    "b24": "Le Sénégal voit émerger une nouvelle génération d'acteurs export capables de répondre à ces attentes. Cette évolution contribue à renforcer l'image du pays comme partenaire commercial crédible sur le long terme.",
+    "b25": "Cette évolution s'appuie également sur l'émergence de sociétés capables de connecter efficacement les producteurs locaux aux exigences des marchés internationaux.",
+    "b26": "Chez Tropicaura, nous croyons que la valeur ne réside pas uniquement dans le produit lui-même, mais dans la qualité de l'exécution, la transparence des échanges et la capacité à construire des relations durables entre les différents acteurs de la chaîne d'approvisionnement.",
+    "b27": "Notre ambition est de contribuer à cette nouvelle génération du commerce tropical africain : plus structurée, plus fiable et davantage orientée vers le long terme.",
+    "b28": "Une opportunité qui ne fait que commencer",
+    "b29": "L'intérêt croissant des marchés européens pour l'Afrique de l'Ouest n'est pas une tendance passagère. La combinaison de facteurs géographiques, logistiques, agricoles et humains positionne aujourd'hui le Sénégal parmi les origines les plus prometteuses du commerce tropical international.",
+    "b30": "Pour les importateurs à la recherche de nouvelles opportunités d'approvisionnement, comme pour les producteurs souhaitant accéder à davantage de marchés, le pays dispose désormais des fondations nécessaires pour jouer un rôle de plus en plus important dans les années à venir.",
+    "b31": "Le Sénégal, une origine d'avenir",
+    "b32": "Le Sénégal dispose aujourd'hui de nombreux atouts pour devenir l'une des origines de référence du commerce tropical vers l'Europe.",
+    "b33": "Sa proximité géographique, sa saisonnalité stratégique, l'amélioration continue de ses infrastructures et la montée en compétence de ses acteurs créent un environnement favorable à des partenariats durables.",
+    "b34": "Chez Tropicaura, nous sommes convaincus que l'avenir du commerce tropical repose sur des relations solides entre producteurs, exportateurs, logisticiens et importateurs.",
+    "b35": "Notre mission est de faciliter ces connexions et de contribuer au développement d'une chaîne d'approvisionnement plus fiable, plus transparente et plus performante entre l'Afrique et l'Europe.",
+    "b36": "Les meilleures opportunités naissent lorsque les bons partenaires avancent dans la même direction.",
+    "BULLETS_1": [
+      "Une meilleure préservation de la fraîcheur des produits.",
+      "Une réduction des risques logistiques.",
+      "Une meilleure maîtrise de la chaîne du froid.",
+      "Une plus grande flexibilité pour les importateurs."
+    ],
+    "BULLETS_2": [
+      "De prolonger leur saison commerciale.",
+      "De maintenir une présence continue sur leurs marchés.",
+      "De réduire leur dépendance à une seule origine."
+    ],
+    "BULLETS_3": [
+      "les stations de conditionnement,",
+      "les systèmes de traçabilité,",
+      "les infrastructures portuaires,",
+      "les procédures phytosanitaires,"
+    ],
+    "BULLETS_4": [
+      "la qualité des produits,",
+      "la disponibilité des volumes,",
+      "la réactivité des opérateurs,",
+      "la proximité logistique."
+    ],
+    "BULLETS_5": [
+      "les avocats,",
+      "les melons,",
+      "les pastèques,",
+      "les citrons verts,",
+      "les légumes spécialisés comme le gombo."
+    ],
+    "BULLETS_6": [
+      "une communication transparente,",
+      "une exécution fiable,",
+      "une documentation rigoureuse,",
+      "une capacité à résoudre les problèmes rapidement."
+    ]
+  },
+  "articleSupplier": {
+    "b1": "Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest",
+    "b2": "L'Afrique de l'Ouest attire aujourd'hui un intérêt croissant de la part des importateurs internationaux. La région bénéficie d'un potentiel agricole important, d'une proximité géographique avantageuse avec l'Europe et d'une montée progressive des standards de qualité destinés à l'export.",
+    "b3": "Dans ce contexte, de nombreux acheteurs cherchent à développer de nouvelles relations commerciales afin de diversifier leurs origines d'approvisionnement et sécuriser leurs volumes. Cependant, toutes les collaborations ne produisent pas les mêmes résultats.",
+    "b4": "Certaines relations commerciales se développent pendant plusieurs années et génèrent une croissance mutuelle. D'autres s'arrêtent après une seule saison. La différence ne repose pas uniquement sur le produit — elle repose souvent sur la capacité d'un fournisseur à construire une relation professionnelle durable.",
+    "b5": "La stabilité commence bien avant la première expédition",
+    "b6": "Lorsqu'un importateur recherche un partenaire, l'attention se porte naturellement sur les produits, les prix ou les volumes disponibles. Pourtant, les collaborations les plus solides se construisent généralement avant même le premier chargement.",
+    "b7": "La qualité des échanges initiaux joue un rôle essentiel :",
+    "b8": "Les entreprises les plus fiables ne cherchent pas à promettre davantage qu'elles ne peuvent réellement livrer. Elles privilégient une communication réaliste et transparente dès le départ.",
+    "b9": "Les promesses attirent, l'exécution construit la confiance",
+    "b10": "Dans le commerce international, il est relativement facile d'annoncer des volumes importants, des prix compétitifs ou des délais ambitieux. La véritable différence apparaît lorsque les opérations commencent.",
+    "b11": "Un fournisseur stable est capable de :",
+    "b12": "À l'inverse, les difficultés apparaissent souvent lorsque les attentes créées au départ ne correspondent pas à la réalité opérationnelle. La confiance se construit davantage par l'exécution que par les promesses.",
+    "b13": "La régularité vaut souvent plus qu'une excellente saison",
+    "b14": "Le commerce des produits frais dépend de nombreux facteurs : climat, récoltes, logistique, disponibilité des emballages, conditions de transport. Dans cet environnement, la perfection n'existe pas.",
+    "b15": "Les acheteurs expérimentés savent qu'ils ne recherchent pas nécessairement un partenaire parfait. Ils recherchent un partenaire capable de maintenir un niveau de performance constant dans la durée.",
+    "b16": "La régularité devient alors un avantage concurrentiel majeur. Une relation stable sur plusieurs saisons crée généralement davantage de valeur qu'une opération exceptionnelle suivie de résultats irréguliers.",
+    "b17": "La transparence réduit les risques pour toutes les parties",
+    "b18": "Les chaînes d'approvisionnement internationales comportent toujours une part d'incertitude. Retards portuaires, contraintes climatiques, fluctuations de marché ou difficultés logistiques peuvent survenir à tout moment. La manière dont ces situations sont gérées influence directement la qualité de la relation commerciale.",
+    "b19": "Les partenaires les plus appréciés sont souvent ceux qui :",
+    "b20": "La transparence permet aux différentes parties d'anticiper les risques plutôt que de les subir.",
+    "b21": "Une vision à long terme transforme la nature du partenariat",
+    "b22": "Les collaborations les plus performantes ne reposent pas uniquement sur une transaction. Elles reposent sur une vision commune. Lorsque producteurs, exportateurs, logisticiens et importateurs travaillent dans une logique de long terme, les bénéfices dépassent largement le cadre d'une seule opération.",
+    "b23": "Cette approche favorise :",
+    "b24": "Dans un secteur où les relations humaines restent fondamentales, cette dimension devient particulièrement importante.",
+    "b25": "L'évolution du commerce international favorise les partenaires fiables",
+    "b26": "Les marchés européens évoluent. Les exigences liées à la qualité, à la traçabilité, à la conformité réglementaire et à la visibilité logistique deviennent de plus en plus importantes. Dans ce contexte, les entreprises capables d'offrir :",
+    "b27": "renforcent progressivement leur position sur le marché. La fiabilité devient un facteur de différenciation aussi important que le produit lui-même.",
+    "b28": "Chez Tropicaura, nous croyons que les partenariats durables se construisent autour d'une idée simple : créer de la valeur pour l'ensemble des acteurs de la chaîne d'approvisionnement.",
+    "b29": "Notre ambition est de contribuer au développement de relations commerciales fondées sur la confiance, la transparence et l'excellence opérationnelle.",
+    "b30": "Nous sommes convaincus que l'avenir du commerce tropical africain reposera autant sur la qualité des produits que sur la qualité des relations qui les accompagnent.",
+    "b31": "La stabilité comme fondation de la croissance",
+    "b32": "Dans un environnement international de plus en plus exigeant, la stabilité devient un actif stratégique.",
+    "b33": "Les fournisseurs capables de construire des relations durables, d'exécuter leurs engagements avec rigueur et de communiquer avec transparence créent les conditions nécessaires à une croissance solide et pérenne.",
+    "b34": "Au-delà des volumes, des prix ou des saisons, ce sont souvent ces qualités qui distinguent les partenariats qui durent de ceux qui disparaissent rapidement.",
+    "b35": "Les relations commerciales les plus fortes ne se construisent pas sur une transaction réussie. Elles se construisent sur la capacité à réussir ensemble, saison après saison.",
+    "list1": [
+      "clarté des informations ;",
+      "rapidité des réponses ;",
+      "compréhension des besoins ;",
+      "capacité à communiquer de manière professionnelle."
+    ],
+    "list2": [
+      "respecter ses engagements ;",
+      "communiquer rapidement en cas d'imprévu ;",
+      "maintenir une qualité cohérente ;",
+      "fournir une documentation complète ;",
+      "accompagner le client tout au long du processus."
+    ],
+    "list3": [
+      "communiquent rapidement ;",
+      "partagent les informations pertinentes ;",
+      "signalent les difficultés dès leur apparition ;",
+      "proposent des solutions concrètes."
+    ],
+    "list4": [
+      "une meilleure planification ;",
+      "davantage de stabilité ;",
+      "une amélioration continue des processus ;",
+      "une confiance mutuelle renforcée."
+    ],
+    "list5": [
+      "de la cohérence ;",
+      "de la transparence ;",
+      "de la réactivité ;",
+      "de la prévisibilité ;"
+    ]
   }
 }

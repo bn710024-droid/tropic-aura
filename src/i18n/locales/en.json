@@ -391,5 +391,177 @@
       "description": "Tropicaura builds lasting commercial partnerships — transparency, preparation and reliability on every shipment from the Port of Dakar."
     },
     "scrollHint": "Scroll to explore"
+  },
+  "insights": {
+    "seo": {
+      "title": "Insights — International Tropical Trade Analysis",
+      "description": "Tropicaura analysis and perspectives on international tropical trade: strategic origins and sourcing across West Africa."
+    },
+    "kicker": "Perspectives",
+    "title": "The analysis that brings clarity to international tropical trade.",
+    "subtitle": "European markets, sourcing strategies, export logistics",
+    "published": "Published analysis",
+    "connecting": "Opportunities that connect",
+    "featured": "Featured",
+    "seeAll": "See all analysis",
+    "readTimeSuffix": "read",
+    "articles": {
+      "senegal": {
+        "category": "Markets",
+        "title": "Why Senegal is becoming a strategic origin for tropical fruit",
+        "desc": "Geographic position, maritime access, complementary seasonality and improving infrastructure are creating new opportunities for importers looking for reliable partners.",
+        "readTime": "7 min",
+        "date": "June 2026"
+      },
+      "supplier": {
+        "category": "Partnerships",
+        "title": "What separates a reliable supplier from an opportunistic one in West Africa",
+        "desc": "Some commercial relationships develop over many years. Others stop after a single season. The difference does not rest on the product alone.",
+        "readTime": "7 min",
+        "date": "June 2026"
+      }
+    }
+  },
+  "articleSenegal": {
+    "b1": "Why Senegal is becoming a strategic origin for tropical fruit",
+    "b2": "International trade in fresh fruit is changing fast. As buyers search continuously for new origins that are reliable, competitive and able to meet the rising demands of European markets, Senegal is steadily establishing itself as a strategic sourcing destination for tropical fruit.",
+    "b3": "Long dominated by certain regions of Latin America and Asia, the European market is now looking with growing interest at the potential of West Africa. At the heart of that shift, Senegal benefits from particularly attractive natural, logistical and commercial advantages.",
+    "b4": "A privileged geographic position",
+    "b5": "One of Senegal's first advantages lies in its proximity to Europe. Compared with other tropical origins several weeks of sailing away, Senegal offers shorter transit times to the main European ports such as Antwerp, Rotterdam, Algeciras and Marseille.",
+    "b6": "This proximity delivers:",
+    "b7": "For perishable produce, every day saved in transit is a significant commercial advantage.",
+    "b8": "Seasonality that complements other origins",
+    "b9": "Senegal also has a particularly interesting production calendar. Certain mango varieties — notably Keitt and Kent — reach the market at times when global supply is more limited.",
+    "b10": "This complementarity allows importers:",
+    "b11": "At a time when retailers are looking for consistent availability throughout the year, this becomes a major selling point.",
+    "b12": "Export infrastructure in continuous improvement",
+    "b13": "Over recent years, Senegal's agricultural sector has undergone significant change. Investment in:",
+    "b14": "has substantially raised the quality standards applied to export. Today, many operators in the sector work to requirements aligned with the expectations of European markets.",
+    "b15": "This professionalisation strengthens the country's credibility with international buyers.",
+    "b16": "An origin that remains competitive",
+    "b17": "While production costs are rising in several parts of the world, Senegal retains attractive competitiveness on certain products. That competitiveness does not rest on price alone. It also builds on:",
+    "b18": "For European importers, choosing an origin is no longer about finding the lowest price, but about identifying the best balance between quality, reliability and total cost.",
+    "b19": "A growing diversity of products",
+    "b20": "While mango remains one of the leading exported references, Senegal's potential is not limited to a single product. International markets are also watching with interest:",
+    "b21": "This diversification makes it possible to build stronger partnerships and to widen commercial opportunities between growers, exporters and distributors.",
+    "b22": "Trust becomes the real competitive advantage",
+    "b23": "In modern international trade, quality alone is no longer enough. Importers now look for:",
+    "b24": "Senegal is seeing a new generation of export operators emerge that can meet these expectations. That shift is reinforcing the country's image as a credible long-term trading partner.",
+    "b25": "It also rests on the emergence of companies able to connect local growers effectively to the requirements of international markets.",
+    "b26": "At Tropicaura, we believe value does not lie in the product alone, but in the quality of execution, the transparency of exchanges and the ability to build lasting relationships between everyone in the supply chain.",
+    "b27": "Our ambition is to contribute to this new generation of African tropical trade: better structured, more reliable and more focused on the long term.",
+    "b28": "An opportunity that is only beginning",
+    "b29": "European markets' growing interest in West Africa is not a passing trend. The combination of geographic, logistical, agricultural and human factors now places Senegal among the most promising origins in international tropical trade.",
+    "b30": "For importers looking for new sourcing opportunities, as well as for growers seeking access to more markets, the country now has the foundations it needs to play an increasingly important role in the years ahead.",
+    "b31": "Senegal, an origin for the future",
+    "b32": "Senegal today holds many of the assets needed to become one of the reference origins in tropical trade towards Europe.",
+    "b33": "Its geographic proximity, its strategic seasonality, the continuous improvement of its infrastructure and the rising expertise of its operators together create an environment favourable to lasting partnerships.",
+    "b34": "At Tropicaura, we are convinced that the future of tropical trade rests on solid relationships between growers, exporters, logistics providers and importers.",
+    "b35": "Our mission is to make those connections easier, and to help develop a supply chain between Africa and Europe that is more reliable, more transparent and more effective.",
+    "b36": "The best opportunities arise when the right partners move in the same direction.",
+    "BULLETS_1": [
+      "Better preservation of product freshness.",
+      "Reduced logistical risk.",
+      "Tighter control of the cold chain.",
+      "A lower carbon footprint in transit."
+    ],
+    "BULLETS_2": [
+      "To extend their commercial season.",
+      "To maintain a continuous presence in their markets.",
+      "To reduce dependence on a single origin."
+    ],
+    "BULLETS_3": [
+      "packing stations,",
+      "traceability systems,",
+      "port infrastructure,",
+      "phytosanitary procedures,"
+    ],
+    "BULLETS_4": [
+      "product quality,",
+      "volume availability,",
+      "operator responsiveness,",
+      "logistical proximity."
+    ],
+    "BULLETS_5": [
+      "avocados,",
+      "melons,",
+      "watermelons,",
+      "limes,",
+      "speciality vegetables such as okra."
+    ],
+    "BULLETS_6": [
+      "transparent communication,",
+      "reliable execution,",
+      "rigorous documentation,",
+      "the ability to solve problems quickly."
+    ]
+  },
+  "articleSupplier": {
+    "b1": "What separates a reliable supplier from an opportunistic one in West Africa",
+    "b2": "West Africa is attracting growing interest from international importers. The region benefits from significant agricultural potential, an advantageous geographic proximity to Europe and a steady rise in the quality standards applied to export.",
+    "b3": "Against that backdrop, many buyers are looking to develop new commercial relationships in order to diversify their sourcing origins and secure their volumes. Not every collaboration, however, produces the same results.",
+    "b4": "Some commercial relationships develop over several years and generate mutual growth. Others stop after a single season. The difference does not rest on the product alone — it usually rests on a supplier's ability to build a lasting professional relationship.",
+    "b5": "Reliability starts well before the first shipment",
+    "b6": "When an importer looks for a partner, attention naturally goes to products, prices and available volumes. Yet the strongest collaborations are usually built before the first load is even shipped.",
+    "b7": "The quality of those first exchanges plays an essential role:",
+    "b8": "The most reliable companies do not try to promise more than they can genuinely deliver. They favour realistic, transparent communication from the outset.",
+    "b9": "Promises attract, execution builds trust",
+    "b10": "In international trade, it is relatively easy to announce large volumes, competitive prices or ambitious lead times. The real difference appears once operations begin.",
+    "b11": "A reliable supplier is able to:",
+    "b12": "Conversely, problems often arise when the expectations created at the start do not match operational reality. Trust is built through execution far more than through promises.",
+    "b13": "Consistency is often worth more than one excellent season",
+    "b14": "Trade in fresh produce depends on many factors: weather, harvests, logistics, packaging availability, transport conditions. In that environment, perfection does not exist.",
+    "b15": "Experienced buyers know they are not necessarily looking for a perfect partner. They are looking for a partner able to sustain a consistent level of performance over time.",
+    "b16": "Consistency then becomes a major competitive advantage. A stable relationship across several seasons generally creates more value than one exceptional operation followed by irregular results.",
+    "b17": "Transparency reduces risk for everyone",
+    "b18": "International supply chains always carry a degree of uncertainty. Port delays, weather constraints, market swings or logistical difficulties can arise at any time. How those situations are handled directly shapes the quality of the commercial relationship.",
+    "b19": "The most valued partners are often those who:",
+    "b20": "Transparency allows each party to anticipate risks rather than simply absorb them.",
+    "b21": "A long-term view changes the nature of the partnership",
+    "b22": "The best-performing collaborations do not rest on a transaction. They rest on a shared vision. When growers, exporters, logistics providers and importers work with a long-term mindset, the benefits reach far beyond any single operation.",
+    "b23": "This approach encourages:",
+    "b24": "In a sector where human relationships remain fundamental, this dimension becomes particularly important.",
+    "b25": "The evolution of international trade favours reliable partners",
+    "b26": "European markets are changing. Requirements around quality, traceability, regulatory compliance and logistical visibility are becoming increasingly important. In that context, companies able to offer:",
+    "b27": "are progressively strengthening their market position. Reliability is becoming a differentiator as important as the product itself.",
+    "b28": "At Tropicaura, we believe lasting partnerships are built around a simple idea: creating value for everyone in the supply chain.",
+    "b29": "Our ambition is to help develop commercial relationships founded on trust, transparency and operational excellence.",
+    "b30": "We are convinced that the future of African tropical trade will rest as much on the quality of the produce as on the quality of the relationships that carry it.",
+    "b31": "Reliability as the foundation for growth",
+    "b32": "In an increasingly demanding international environment, reliability is becoming a strategic asset.",
+    "b33": "Suppliers able to build lasting relationships, deliver on their commitments rigorously and communicate transparently create the conditions for solid, sustainable growth.",
+    "b34": "Beyond volumes, prices or seasons, it is often these qualities that separate the partnerships that last from those that quickly disappear.",
+    "b35": "The strongest commercial relationships are not built on one successful transaction. They are built on the ability to succeed together, season after season.",
+    "list1": [
+      "clarity of information;",
+      "speed of response;",
+      "understanding of requirements;",
+      "the ability to communicate professionally."
+    ],
+    "list2": [
+      "honour its commitments;",
+      "communicate quickly when the unexpected happens;",
+      "maintain consistent quality;",
+      "provide complete documentation;",
+      "support the customer throughout the process."
+    ],
+    "list3": [
+      "communicate quickly;",
+      "share relevant information;",
+      "flag difficulties as soon as they appear;",
+      "propose concrete solutions."
+    ],
+    "list4": [
+      "better planning;",
+      "greater stability;",
+      "continuous improvement of processes;",
+      "stronger mutual trust."
+    ],
+    "list5": [
+      "consistency;",
+      "transparency;",
+      "responsiveness;",
+      "predictability;"
+    ]
   }
 }
