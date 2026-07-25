@@ -1,7 +1,7 @@
 ﻿import { useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { langFromPath, pathFor } from "../i18n/routing";
+import { langFromPath, pathFor, alternatePath } from "../i18n/routing";
 
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
@@ -79,6 +79,8 @@ export default function LiquidMenu() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = langFromPath(pathname);
+  // Équivalent de la page courante dans l'autre langue (null si non traduite).
+  const switchHref = alternatePath(pathname, lang === "fr" ? "en" : "fr");
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
   const imgWrapRef = useRef(null);
@@ -427,18 +429,56 @@ export default function LiquidMenu() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "clamp(20px,3vw,36px)", flexWrap: "wrap" }}>
-              {/* EN désactivé : pas encore de vraie version anglaise —
-                   état "à venir" honnête plutôt qu'un bouton silencieux. */}
+              {/* Sélecteur de langue — ICI et pas seulement dans la TopBar :
+                   la nav complète (avec son sélecteur) n'existe que sur
+                   l'accueil ; partout ailleurs la barre est en mode minimal.
+                   Sans ce sélecteur dans le menu, un visiteur arrivé
+                   directement sur une fiche produit ou un article n'avait
+                   AUCUN moyen de passer à l'autre langue.
+                   `switchHref` vaut null si la page courante n'est pas encore
+                   traduite → on affiche alors l'état inactif plutôt qu'un lien
+                   mort ou un renvoi surprise vers l'accueil. */}
               <span
-                title="Version anglaise à venir"
                 style={{
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: 13, fontWeight: 600, letterSpacing: ".04em",
-                  color: "rgba(255,255,255,0.75)", cursor: "default",
+                  color: "rgba(255,255,255,0.75)",
                 }}
               >
-                FR <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.3)" }}>|</span>{" "}
-                <span style={{ opacity: 0.4 }}>EN</span>
+                {["fr", "en"].map((code, i) => {
+                  const isCurrent = code === lang;
+                  const target = isCurrent ? null : switchHref;
+                  return (
+                    <span key={code}>
+                      {i > 0 && (
+                        <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.3)" }}> | </span>
+                      )}
+                      {target ? (
+                        <button
+                          onClick={() => goTo(target)}
+                          hrefLang={code}
+                          style={{
+                            font: "inherit", letterSpacing: "inherit",
+                            background: "none", border: "none", padding: 0,
+                            color: "inherit", opacity: 0.5, cursor: "pointer",
+                            transition: "opacity .25s ease",
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
+                        >
+                          {code.toUpperCase()}
+                        </button>
+                      ) : (
+                        <span
+                          aria-current={isCurrent ? "true" : undefined}
+                          style={{ opacity: isCurrent ? 1 : 0.4 }}
+                        >
+                          {code.toUpperCase()}
+                        </span>
+                      )}
+                    </span>
+                  );
+                })}
               </span>
               <button
                 onClick={() => goTo(`${pathFor("contact", lang)}?section=form`)}

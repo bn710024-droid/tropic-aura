@@ -92,6 +92,25 @@ export function pathFor(pageKey, lang) {
  */
 export function alternatePath(pathname, targetLang) {
   if (!SUPPORTED_LANGS.includes(targetLang)) return null;
+
+  // Fiches produit : chemins paramétrés (/produits/<slug>), absents de la
+  // table ci-dessus. Sans ce cas explicite, pageKeyFromPath renvoyait null et
+  // le sélecteur de langue se désactivait sur les 12 fiches produit — soit
+  // les pages les plus consultées par un acheteur.
+  const products = ROUTES.products;
+  for (const [from, to] of [
+    [products.fr, products.en],
+    [products.en, products.fr],
+  ]) {
+    if (pathname.startsWith(`${from}/`)) {
+      const slug = pathname.slice(from.length + 1).replace(/\/$/, "");
+      if (!slug || slug.includes("/")) break;
+      const targetBase = targetLang === DEFAULT_LANG ? products.fr : products.en;
+      if (targetLang !== DEFAULT_LANG && !TRANSLATED_PAGES.includes("products")) return null;
+      return `${targetBase}/${slug}`;
+    }
+  }
+
   const key = pageKeyFromPath(pathname);
   if (!key) return null;
   if (targetLang !== DEFAULT_LANG && !TRANSLATED_PAGES.includes(key)) return null;
