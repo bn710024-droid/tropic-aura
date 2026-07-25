@@ -14,16 +14,7 @@ Disallow: /cdn-cgi/
 # Crawlers IA explicitement autorisés (déjà couverts par le wildcard
 # ci-dessus — ces lignes documentent une ouverture volontaire plutôt
 # que de changer un comportement).
-User-agent: Google-Extended
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
 Allow: /
 
 User-agent: anthropic-ai
