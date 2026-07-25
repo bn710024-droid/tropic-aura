@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import MotionScene from "../../motion/MotionScene";
 import PartnershipTimeline from "../../components/PartnershipTimeline";
 import ConclusionConstellation from "./ConclusionConstellation";
@@ -8,6 +9,7 @@ import { ICONS } from "./icons";
 // verrouillé. Chaque section se révèle via le rideau + la cascade de
 // couches (Motion System) quand elle entre dans le viewport.
 export default function PartnershipMobileSection({ section }) {
+  const { t } = useTranslation();
   const s = section;
 
   if (s.type === "hero") {
@@ -19,7 +21,7 @@ export default function PartnershipMobileSection({ section }) {
           <h1 className="ms-layer ms-layer--title pm-hero-title">{s.title}</h1>
           <p className="ms-layer ms-layer--text pm-hero-subtitle" style={{ transitionDelay: "260ms" }}>{s.subtitle}</p>
           <div className="ms-layer ms-layer--icon pm-hero-hint" style={{ transitionDelay: "380ms" }}>
-            <span>Défiler pour découvrir</span><span className="pm-hero-hint-arrow">↓</span>
+            <span>{t("partnerships.scrollHint")}</span><span className="pm-hero-hint-arrow">↓</span>
           </div>
         </div>
       </MotionScene>

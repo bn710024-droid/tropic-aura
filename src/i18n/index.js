@@ -27,8 +27,10 @@ import en from "./locales/en.json";
 import catalogFr from "./locales/catalog.fr.json";
 import catalogEn from "./locales/catalog.en.json";
 
-export const DEFAULT_LANG = "fr";
-export const SUPPORTED_LANGS = ["fr", "en"];
+// Définis dans routing.js (module sans dépendance, utilisable au build) et
+// ré-exportés ici pour que le reste de l'app garde un point d'entrée unique.
+export { DEFAULT_LANG, SUPPORTED_LANGS } from "./routing";
+import { DEFAULT_LANG } from "./routing";
 
 i18n.use(initReactI18next).init({
   resources: {

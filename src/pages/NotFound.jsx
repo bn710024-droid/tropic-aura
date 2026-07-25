@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { langFromPath, pathFor } from "../i18n/routing";
 import TopBar from "../components/TopBar";
 import SEOHead from "../seo/SEOHead";
 
@@ -8,11 +10,14 @@ import SEOHead from "../seo/SEOHead";
 //  renvoie un code HTTP 404 réel côté Vercel via vercel.json.
 // ============================================================
 export default function NotFound() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
   return (
     <>
       <SEOHead
-        title="Page introuvable (404)"
-        description="Cette page n'existe pas ou plus. Retrouvez nos produits, notre entreprise et nos partenariats depuis l'accueil Tropicaura."
+        title={t("notFound.seoTitle")}
+        description={t("notFound.seoDesc")}
         path="/404"
         noindex
       />
@@ -49,10 +54,10 @@ export default function NotFound() {
             maxWidth: 480,
           }}
         >
-          Cette page n'existe pas ou plus. Retrouvez nos produits, notre entreprise et nos partenariats depuis l'accueil.
+          {t("notFound.text")}
         </p>
         <Link
-          to="/"
+          to={pathFor("home", lang)}
           style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif",
             fontWeight: 700,
@@ -65,7 +70,7 @@ export default function NotFound() {
             textDecoration: "none",
           }}
         >
-          ← Retour à l'accueil
+          {t("notFound.back")}
         </Link>
       </main>
     </>

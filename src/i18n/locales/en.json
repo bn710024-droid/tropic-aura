@@ -160,7 +160,8 @@
       "title": "Our Products — Premium Fresh Fruit & Vegetable Export",
       "description": "The Tropicaura collection: mangoes, avocados, pineapples, citrus and fresh vegetables from West Africa, for premium B2B export.",
       "logoAlt": "Tropicaura — premium fresh fruit and vegetable export collection"
-    }
+    },
+    "learnMore": "Learn more"
   },
   "contact": {
     "seo": {
@@ -563,5 +564,51 @@
       "responsiveness;",
       "predictability;"
     ]
+  },
+  "privacy": {
+    "seo": {
+      "title": "Privacy Policy",
+      "description": "Tropicaura B.C. privacy policy — data collected through the contact form, cookies and your GDPR rights.",
+      "logoAlt": "Tropicaura — Privacy policy"
+    },
+    "title": "Privacy policy",
+    "controllerIntro": "is the data controller for the processing described below. For any question regarding your data, contact us at",
+    "formHeading": "Contact form",
+    "formP1": "When you complete our contact form, the information you enter (name, company, email, phone, message) is sent to us by email through the Resend service, for the sole purpose of responding to your business enquiry. It is not used for any other purpose and is never sold.",
+    "formP2": "To limit automated submissions (spam), our server applies rate limiting based on your IP address. That address is held in memory for a window of no more than 10 minutes, is never retained beyond that, and is never cross-referenced with other data.",
+    "cookiesHeading": "Cookies and audience measurement",
+    "necessaryLabel": "Necessary:",
+    "necessaryText": " a technical scroll-position value is stored temporarily in your browser (sessionStorage) to restore your place on the page if you navigate back. It never leaves your device and is not a tracking cookie.",
+    "analyticsLabel": "Audience measurement (optional):",
+    "analyticsText": " if you accept it via the cookie banner, Google Analytics 4 helps us understand which pages are viewed, in aggregate form. IP addresses are anonymised before processing. You can withdraw this consent at any time from the “Cookie Preferences” link at the bottom of the page.",
+    "botHeading": "Bot protection",
+    "botText": "An anti-bot check (Cloudflare Turnstile) may be used on the contact form to prevent automated submissions. This service is provided by Cloudflare.",
+    "rightsHeading": "Your rights",
+    "rightsText": "Under the General Data Protection Regulation (GDPR), you have the right to access, rectify and erase data concerning you. To exercise this right, write to us at"
+  },
+  "notFound": {
+    "description": "This page does not exist, or no longer does. Browse our products, our company and our contact details.",
+    "seoTitle": "Page not found (404)",
+    "seoDesc": "This page does not exist, or no longer does. Find our products, our company and our partnerships from the Tropicaura home page.",
+    "text": "This page does not exist, or no longer does. Find our products, our company and our partnerships from the home page.",
+    "back": "← Back to home"
+  },
+  "cookies": {
+    "dialogLabel": "Cookie preferences",
+    "text": "Tropicaura uses cookies that are strictly necessary for the site to work and, only if you accept, an audience measurement tool to understand which pages interest our visitors. Nothing else.",
+    "learnMore": "Learn more",
+    "rejectAll": "Reject all",
+    "acceptAll": "Accept all",
+    "customise": "Customise",
+    "back": "Back",
+    "save": "Save my choices",
+    "alwaysOn": " (always on)",
+    "categories": {
+      "necessary": "Necessary",
+      "analytics": "Audience measurement"
+    }
+  },
+  "breadcrumb": {
+    "label": "Breadcrumb"
   }
 }

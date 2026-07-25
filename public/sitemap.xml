@@ -1,117 +1,400 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.tropic-aura.com/</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/mangue</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/mangue"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/mangue"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/mangue"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/mangue</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/mangue"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/mangue"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/mangue"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/avocat</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/avocat"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/avocat"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/avocat"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/avocat</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/avocat"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/avocat"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/avocat"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/ananas</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/ananas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/ananas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/ananas"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/ananas</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/ananas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/ananas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/ananas"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/papaye</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/papaye"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/papaye"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/papaye"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/papaye</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/papaye"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/papaye"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/papaye"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/banane</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/banane"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/banane"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/banane"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/banane</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/banane"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/banane"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/banane"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/melon</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/melon"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/melon"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/melon"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/melon</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/melon"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/melon"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/melon"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/pasteque</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/pasteque"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/pasteque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/pasteque"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/pasteque</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/pasteque"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/pasteque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/pasteque"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/produits/haricot-vert</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/haricot-vert"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/haricot-vert"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/haricot-vert"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/haricot-vert</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/haricot-vert"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/haricot-vert"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/haricot-vert"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/citron-vert</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/citron-vert"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/citron-vert"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/citron-vert"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/citron-vert</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/citron-vert"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/citron-vert"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/citron-vert"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/citron-jaune</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/citron-jaune"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/citron-jaune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/citron-jaune"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/citron-jaune</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/citron-jaune"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/citron-jaune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/citron-jaune"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/gombo</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/gombo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/gombo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/gombo"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/gombo</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/gombo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/gombo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/gombo"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/produits/piment</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/piment"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/piment"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/piment"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/products/piment</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/produits/piment"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/products/piment"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/produits/piment"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/disponibilite</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/disponibilite"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/availability"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/disponibilite"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/availability</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/disponibilite"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/availability"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/disponibilite"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/politique-confidentialite</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/politique-confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/politique-confidentialite"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/privacy</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/politique-confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/politique-confidentialite"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/about</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/about"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/about</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/about"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/partenariats</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/partenariats"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/partnerships"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/partenariats"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/partnerships</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/partenariats"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/partnerships"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/partenariats"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/insights</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/insights</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/insights/senegal-origine-strategique</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights/senegal-origine-strategique"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights/senegal-strategic-origin"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights/senegal-origine-strategique"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/insights/senegal-strategic-origin</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights/senegal-origine-strategique"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights/senegal-strategic-origin"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights/senegal-origine-strategique"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/insights/fournisseur-stable-opportuniste</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights/fournisseur-stable-opportuniste"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights/reliable-vs-opportunistic-supplier"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights/fournisseur-stable-opportuniste"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/insights/reliable-vs-opportunistic-supplier</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/insights/fournisseur-stable-opportuniste"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/insights/reliable-vs-opportunistic-supplier"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/insights/fournisseur-stable-opportuniste"/>
   </url>
   <url>
     <loc>https://www.tropic-aura.com/contact</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/contact"/>
+  </url>
+  <url>
+    <loc>https://www.tropic-aura.com/en/contact</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.tropic-aura.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tropic-aura.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tropic-aura.com/contact"/>
   </url>
 </urlset>

@@ -441,7 +441,7 @@ export default function LiquidMenu() {
                 <span style={{ opacity: 0.4 }}>EN</span>
               </span>
               <button
-                onClick={() => goTo("/contact?section=form")}
+                onClick={() => goTo(`${pathFor("contact", lang)}?section=form`)}
                 style={{
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: 13, fontWeight: 700, letterSpacing: ".02em",
@@ -453,7 +453,7 @@ export default function LiquidMenu() {
                 onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#fff"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#0A0A0A"; }}
               >
-                Demander un devis
+                {t("nav.quote")}
               </button>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 18 }}>

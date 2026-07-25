@@ -57,7 +57,12 @@ export default function App() {
     if (!hasMemory) window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const isArticle = path.startsWith("/insights/") && path !== "/insights";
+  // Un article (les deux langues) masque Footer et LiquidMenu : il porte sa
+  // propre navigation de fin de lecture. Sans la branche /en/, la version
+  // anglaise afficherait un footer que la française n'a pas.
+  const isArticle =
+    (path.startsWith("/insights/") && path !== "/insights") ||
+    (path.startsWith("/en/insights/") && path !== "/en/insights");
   // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
   // (le body y est figé) — on évite ici le doublon. Vaut pour ses deux
   // langues : / (fr) et /en.
@@ -87,6 +92,7 @@ export default function App() {
         <Route path="/en/insights" element={<Insights />} />
         <Route path="/en/insights/senegal-strategic-origin" element={<InsightSenegal />} />
         <Route path="/en/insights/reliable-vs-opportunistic-supplier" element={<InsightPartenariats />} />
+        <Route path="/en/privacy" element={<PolitiqueConfidentialite />} />
 
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />

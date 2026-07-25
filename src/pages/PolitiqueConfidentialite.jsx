@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { langFromPath, pathFor } from "../i18n/routing";
 import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SEOHead from "../seo/SEOHead";
@@ -29,8 +32,10 @@ import { LEGAL_NAME, CONTACT_EMAIL, ADDRESS } from "../seo/siteConfig";
 // ============================================================
 
 export default function PolitiqueConfidentialite() {
-  const description =
-    "Politique de confidentialité de Tropicaura B.C. — données collectées via le formulaire de contact, cookies, mesure d'audience.";
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const lang = langFromPath(pathname);
+  const description = t("privacy.seo.description");
   const trail = buildBreadcrumbTrail("/politique-confidentialite");
 
   const h2 = { fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: 20, margin: "40px 0 14px", color: "#1A1A1A" };
@@ -40,7 +45,7 @@ export default function PolitiqueConfidentialite() {
   return (
     <>
       <SEOHead
-        title="Politique de Confidentialité"
+        title={t("privacy.seo.title")}
         description={description}
         path="/politique-confidentialite"
         jsonLd={[
@@ -52,54 +57,42 @@ export default function PolitiqueConfidentialite() {
       <TopBar />
       <img
         src="/logo-mark.png"
-        alt="Tropicaura — Politique de confidentialité"
+        alt={t("privacy.seo.logoAlt")}
         width={512} height={512} style={{ display: "none" }}
       />
       <Breadcrumbs trail={trail} />
 
       <main style={{ background: "#F5F1E8", padding: "clamp(100px,14vh,160px) clamp(24px,8vw,140px) clamp(80px,12vh,140px)" }}>
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: "clamp(30px,4vw,44px)", letterSpacing: "-.02em", color: "#1A1A1A", margin: "0 0 28px" }}>
-            Politique de confidentialité
-          </h1>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800, fontSize: "clamp(30px,4vw,44px)", letterSpacing: "-.02em", color: "#1A1A1A", margin: "0 0 28px" }}>{t("privacy.title")}</h1>
 
           <p style={p}>
-            {LEGAL_NAME}, {ADDRESS.locality}, {ADDRESS.countryName}, est responsable du traitement des
-            données décrites ci-dessous. Pour toute question relative à vos données, contactez-nous à{" "}
+            {LEGAL_NAME}, {ADDRESS.locality}, {ADDRESS.countryName}, {t("privacy.controllerIntro")}{" "}
             <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#8A6A2E" }}>{CONTACT_EMAIL}</a>.
           </p>
 
-          <h2 style={h2}>Formulaire de contact</h2>
+          <h2 style={h2}>{t("privacy.formHeading")}</h2>
           <p style={p}>
-            Lorsque vous remplissez notre formulaire de contact, les informations que vous saisissez
-            (nom, entreprise, email, téléphone, message) nous sont transmises par email via le service
-            Resend, à seule fin de répondre à votre demande commerciale. Elles ne sont utilisées à
-            aucune autre fin et ne sont pas revendues.
+            {t("privacy.formP1")}
           </p>
           <p style={p}>
-            Pour limiter les soumissions automatisées (spam), notre serveur applique une limitation de
-            fréquence basée sur votre adresse IP. Cette adresse est utilisée en mémoire pendant une
-            fenêtre de 10 minutes maximum et n'est jamais conservée au-delà, ni croisée avec d'autres
-            données.
+            {t("privacy.formP2")}
           </p>
 
-          <h2 style={h2}>Cookies et mesure d'audience</h2>
+          <h2 style={h2}>{t("privacy.cookiesHeading")}</h2>
           <ul style={{ margin: "0 0 14px", paddingLeft: 20 }}>
-            <li style={li}><strong>Nécessaires :</strong> une donnée technique de position de défilement est conservée temporairement dans votre navigateur (sessionStorage) pour restaurer votre place sur la page en cas de retour en arrière. Elle ne quitte jamais votre appareil et n'est pas un cookie de suivi.</li>
-            <li style={li}><strong>Mesure d'audience (optionnelle) :</strong> si vous l'acceptez via le bandeau de cookies, Google Analytics 4 nous aide à comprendre quelles pages sont consultées, de façon agrégée. L'adresse IP est anonymisée avant traitement. Vous pouvez retirer ce consentement à tout moment depuis le lien "Gérer les cookies" en bas de page.</li>
+            <li style={li}><strong>{t("privacy.necessaryLabel")}</strong>{t("privacy.necessaryText")}</li>
+            <li style={li}><strong>{t("privacy.analyticsLabel")}</strong>{t("privacy.analyticsText")}</li>
           </ul>
 
-          <h2 style={h2}>Protection anti-robots</h2>
+          <h2 style={h2}>{t("privacy.botHeading")}</h2>
           <p style={p}>
-            Une vérification anti-robots (Cloudflare Turnstile) peut être utilisée sur le formulaire de
-            contact pour empêcher les soumissions automatisées. Ce service est fourni par Cloudflare.
+            {t("privacy.botText")}
           </p>
 
-          <h2 style={h2}>Vos droits</h2>
+          <h2 style={h2}>{t("privacy.rightsHeading")}</h2>
           <p style={p}>
-            Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un
-            droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer
-            ce droit, écrivez-nous à <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#8A6A2E" }}>{CONTACT_EMAIL}</a>.
+            {t("privacy.rightsText")}{" "}<a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#8A6A2E" }}>{CONTACT_EMAIL}</a>.
           </p>
         </div>
       </main>

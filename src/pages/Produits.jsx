@@ -573,7 +573,7 @@ export default function Produits() {
                   className="prod-more"
                   onClick={(e) => handleMoreClick(e, i, `/produits/${s.id}`)}
                 >
-                  En savoir plus <span className="prod-more-arrow" aria-hidden="true">→</span>
+                  {t("productsPage.learnMore")} <span className="prod-more-arrow" aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>

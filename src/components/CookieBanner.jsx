@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { CATEGORIES, getConsent, setConsent, acceptAll, rejectAll, hasDecided } from "../lib/consent";
 import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analytics";
@@ -19,6 +20,7 @@ import { loadAnalyticsIfConsented, updateAnalyticsConsent } from "../lib/analyti
 // ============================================================
 
 export default function CookieBanner() {
+  const { t } = useTranslation();
   // ── Anti-flash : deux états distincts ──────────────────────────
   //  `mounted` = le bandeau existe-t-il dans le DOM. Faux dès le
   //  premier rendu pour un visiteur qui a DÉJÀ décidé → on retourne
@@ -109,7 +111,7 @@ export default function CookieBanner() {
 
   return (
     <div
-      role="dialog" aria-modal="false" aria-label="Préférences cookies"
+      role="dialog" aria-modal="false" aria-label={t("cookies.dialogLabel")}
       // Glissement doux depuis le bas plutôt qu'une apparition/disparition
       // brutale — un pop-in/pop-out sans transition se ressent comme un
       // "saut" au chargement de chaque page.
@@ -129,11 +131,9 @@ export default function CookieBanner() {
           fontFamily: FONT, fontSize: 13.5, lineHeight: 1.65,
           color: "rgba(255,255,255,0.82)", margin: "0 0 16px", maxWidth: 640,
         }}>
-          Tropicaura utilise des cookies strictement nécessaires au fonctionnement du site,
-          et, seulement si vous l'acceptez, un outil de mesure d'audience pour comprendre
-          quelles pages intéressent nos visiteurs. Rien d'autre.{" "}
+          {t("cookies.text")}{" "}
           <Link to="/politique-confidentialite" style={{ color: "#D4AF6A", textDecoration: "underline" }}>
-            En savoir plus
+            {t("cookies.learnMore")}
           </Link>
         </p>
 
@@ -149,7 +149,7 @@ export default function CookieBanner() {
                 fontFamily: FONT, fontSize: 13, color: "rgba(255,255,255,0.85)",
                 opacity: cat.locked ? 0.55 : 1,
               }}>
-                <span>{cat.label}{cat.locked ? " (toujours actif)" : ""}</span>
+                <span>{t(`cookies.categories.${key}`)}{cat.locked ? t("cookies.alwaysOn") : ""}</span>
                 <input
                   type="checkbox"
                   checked={cat.locked ? true : draft.analytics}
@@ -171,7 +171,7 @@ export default function CookieBanner() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
-                Tout refuser
+                {t("cookies.rejectAll")}
               </button>
               <button
                 onClick={handleAcceptAll}
@@ -179,7 +179,7 @@ export default function CookieBanner() {
                 onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-1px)")}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = "none")}
               >
-                Tout accepter
+                {t("cookies.acceptAll")}
               </button>
               <button
                 onClick={() => { setDraft({ analytics: !!getConsent()?.analytics }); setCustomizing(true); }}
@@ -188,7 +188,7 @@ export default function CookieBanner() {
                   border: "1.5px solid transparent", flex: "0 0 auto", minWidth: 0,
                 }}
               >
-                Personnaliser
+                {t("cookies.customise")}
               </button>
             </>
           ) : (
@@ -197,13 +197,13 @@ export default function CookieBanner() {
                 onClick={() => setCustomizing(false)}
                 style={{ ...btnBase, background: "transparent", color: "rgba(255,255,255,0.7)", flex: "0 0 auto", minWidth: 0 }}
               >
-                Retour
+                {t("cookies.back")}
               </button>
               <button
                 onClick={handleSaveCustom}
                 style={{ ...btnBase, background: "#fff", color: "#0B1310", border: "1.5px solid #fff" }}
               >
-                Enregistrer mes choix
+                {t("cookies.save")}
               </button>
             </>
           )}

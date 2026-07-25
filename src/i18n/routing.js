@@ -9,9 +9,18 @@
 //  Cette table est la source unique utilisée pour :
 //    - le sélecteur de langue (aller sur l'équivalent, pas l'accueil),
 //    - les balises hreflang réciproques de SEOHead,
-//    - la construction des liens internes selon la langue active.
+//    - la construction des liens internes selon la langue active,
+//    - la génération du sitemap bilingue (scripts/generate-sitemap.mjs).
+//
+//  Ce module ne dépend d'AUCUN autre : il est importé aussi bien par
+//  l'application que par des scripts Node au build. C'est pourquoi
+//  DEFAULT_LANG / SUPPORTED_LANGS sont définis ICI (et ré-exportés par
+//  index.js) plutôt que l'inverse — importer index.js chargerait i18next
+//  et les fichiers de traduction dans un contexte de build qui n'en a
+//  aucun besoin.
 // ============================================================
-import { DEFAULT_LANG, SUPPORTED_LANGS } from "./index";
+export const DEFAULT_LANG = "fr";
+export const SUPPORTED_LANGS = ["fr", "en"];
 
 // Clé de page → chemin dans chaque langue. Toute page traduite doit
 // figurer ici ; une page absente n'est simplement pas proposée en EN
@@ -39,7 +48,7 @@ export const ROUTES = {
 // n'est pas traduite, on ne déclare NI hreflang="en" NI de lien vers elle :
 // annoncer une version qui n'existe pas génère des erreurs Search Console
 // et envoie l'utilisateur sur une page dans la mauvaise langue.
-export const TRANSLATED_PAGES = ["home", "products", "contact", "availability", "about", "partnerships", "insights", "insightSenegal", "insightSupplier"];
+export const TRANSLATED_PAGES = ["home", "products", "contact", "availability", "about", "partnerships", "insights", "insightSenegal", "insightSupplier", "privacy"];
 
 /** Langue portée par un chemin : /en ou /en/... → "en", sinon "fr". */
 export function langFromPath(pathname) {

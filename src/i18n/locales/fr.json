@@ -160,7 +160,8 @@
       "title": "Nos Produits — Fruits & Légumes Export Premium",
       "description": "La collection Tropicaura : mangues, avocats, ananas, agrumes et légumes frais d'Afrique de l'Ouest, pour l'export B2B premium.",
       "logoAlt": "Tropicaura — Collection de fruits et légumes d'export premium"
-    }
+    },
+    "learnMore": "En savoir plus"
   },
   "contact": {
     "seo": {
@@ -563,5 +564,51 @@
       "de la réactivité ;",
       "de la prévisibilité ;"
     ]
+  },
+  "privacy": {
+    "seo": {
+      "title": "Politique de Confidentialité",
+      "description": "Politique de confidentialité de Tropicaura B.C. — données collectées via le formulaire de contact, cookies et droits RGPD.",
+      "logoAlt": "Tropicaura — Politique de confidentialité"
+    },
+    "title": "Politique de confidentialité",
+    "controllerIntro": "est responsable du traitement des données décrites ci-dessous. Pour toute question relative à vos données, contactez-nous à",
+    "formHeading": "Formulaire de contact",
+    "formP1": "Lorsque vous remplissez notre formulaire de contact, les informations que vous saisissez (nom, entreprise, email, téléphone, message) nous sont transmises par email via le service Resend, à seule fin de répondre à votre demande commerciale. Elles ne sont utilisées à aucune autre fin et ne sont pas revendues.",
+    "formP2": "Pour limiter les soumissions automatisées (spam), notre serveur applique une limitation de fréquence basée sur votre adresse IP. Cette adresse est utilisée en mémoire pendant une fenêtre de 10 minutes maximum et n'est jamais conservée au-delà, ni croisée avec d'autres données.",
+    "cookiesHeading": "Cookies et mesure d'audience",
+    "necessaryLabel": "Nécessaires :",
+    "necessaryText": " une donnée technique de position de défilement est conservée temporairement dans votre navigateur (sessionStorage) pour restaurer votre place sur la page en cas de retour en arrière. Elle ne quitte jamais votre appareil et n'est pas un cookie de suivi.",
+    "analyticsLabel": "Mesure d'audience (optionnelle) :",
+    "analyticsText": " si vous l'acceptez via le bandeau de cookies, Google Analytics 4 nous aide à comprendre quelles pages sont consultées, de façon agrégée. L'adresse IP est anonymisée avant traitement. Vous pouvez retirer ce consentement à tout moment depuis le lien « Gérer les cookies » en bas de page.",
+    "botHeading": "Protection anti-robots",
+    "botText": "Une vérification anti-robots (Cloudflare Turnstile) peut être utilisée sur le formulaire de contact pour empêcher les soumissions automatisées. Ce service est fourni par Cloudflare.",
+    "rightsHeading": "Vos droits",
+    "rightsText": "Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, écrivez-nous à"
+  },
+  "notFound": {
+    "description": "Cette page n'existe pas ou plus. Retrouvez nos produits, notre entreprise et nos contacts.",
+    "seoTitle": "Page introuvable (404)",
+    "seoDesc": "Cette page n'existe pas ou plus. Retrouvez nos produits, notre entreprise et nos partenariats depuis l'accueil Tropicaura.",
+    "text": "Cette page n'existe pas ou plus. Retrouvez nos produits, notre entreprise et nos partenariats depuis l'accueil.",
+    "back": "← Retour à l'accueil"
+  },
+  "cookies": {
+    "dialogLabel": "Préférences cookies",
+    "text": "Tropicaura utilise des cookies strictement nécessaires au fonctionnement du site, et, seulement si vous l'acceptez, un outil de mesure d'audience pour comprendre quelles pages intéressent nos visiteurs. Rien d'autre.",
+    "learnMore": "En savoir plus",
+    "rejectAll": "Tout refuser",
+    "acceptAll": "Tout accepter",
+    "customise": "Personnaliser",
+    "back": "Retour",
+    "save": "Enregistrer mes choix",
+    "alwaysOn": " (toujours actif)",
+    "categories": {
+      "necessary": "Nécessaires",
+      "analytics": "Mesure d'audience"
+    }
+  },
+  "breadcrumb": {
+    "label": "Fil d'Ariane"
   }
 }

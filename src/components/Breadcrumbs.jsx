@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // ============================================================
 //  <Breadcrumbs /> — fil d'Ariane accessible et discret.
@@ -19,6 +20,7 @@ import { Link } from "react-router-dom";
 //  précis (page courante) — voir routesRegistry.buildBreadcrumbTrail.
 // ============================================================
 export default function Breadcrumbs({ trail }) {
+  const { t } = useTranslation();
   if (!trail || trail.length < 2) return null; // rien à afficher sur la home
 
   const color = "rgba(255,255,255,0.62)";
@@ -28,7 +30,7 @@ export default function Breadcrumbs({ trail }) {
 
   return (
     <nav
-      aria-label="Fil d'Ariane"
+      aria-label={t("breadcrumb.label")}
       style={{
         position: "fixed",
         top: 62,
