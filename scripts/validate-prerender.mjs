@@ -21,10 +21,37 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { ROUTES } from '../src/seo/routesRegistry.js'
+import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES } from '../src/i18n/routing.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
 const distDir = path.join(projectRoot, 'dist')
+
+// Les pages anglaises sont pré-rendues au même titre que les françaises (voir
+// prerender-for-build.mjs) : elles doivent donc être validées de la même
+// façon, sinon un <title> ou une meta description manquants côté EN
+// passeraient silencieusement en production.
+const frToEn = new Map()
+for (const key of TRANSLATED_PAGES) {
+  const pair = I18N_ROUTES[key]
+  if (pair && pair.fr && pair.en) frToEn.set(pair.fr, pair.en)
+}
+const productsPair = I18N_ROUTES.products
+function enPathFor(frPath) {
+  const direct = frToEn.get(frPath)
+  if (direct) return direct
+  if (frPath.startsWith(productsPair.fr + '/')) {
+    return productsPair.en + '/' + frPath.slice(productsPair.fr.length + 1)
+  }
+  return null
+}
+const VALIDATE_PATHS = []
+for (const r of ROUTES) {
+  VALIDATE_PATHS.push(r.path)
+  const en = enPathFor(r.path)
+  if (en) VALIDATE_PATHS.push(en)
+}
+
 
 // Define output paths for each route
 function getOutputPath(routePath) {
@@ -227,8 +254,7 @@ async function validate() {
   }
 
   // Validate each route
-  for (const route of ROUTES) {
-    const { path: routePath } = route
+  for (const routePath of VALIDATE_PATHS) {
     const filePath = getOutputPath(routePath)
 
     console.log(`\n📄 ${routePath}`)
@@ -284,8 +310,8 @@ async function validate() {
   console.log('  📊 VALIDATION SUMMARY')
   console.log('═══════════════════════════════════════════════════════════════\n')
 
-  console.log(`✅ Passed: ${results.passCount}/${ROUTES.length}`)
-  console.log(`❌ Failed: ${results.failCount}/${ROUTES.length}`)
+  console.log(`✅ Passed: ${results.passCount}/${VALIDATE_PATHS.length}`)
+  console.log(`❌ Failed: ${results.failCount}/${VALIDATE_PATHS.length}`)
 
   if (results.failedRoutes.length > 0) {
     console.log('\n❌ FAILED ROUTES:')

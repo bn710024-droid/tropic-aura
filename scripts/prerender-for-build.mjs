@@ -1,20 +1,56 @@
 #!/usr/bin/env node
 /**
- * PRERENDER FOR BUILD: Generate static HTML for all 19 routes
+ * PRERENDER FOR BUILD: Generate static HTML for every route, in BOTH languages.
  *
  * This script is called by build-and-prerender.mjs
  * It connects to the vite preview server (default: http://localhost:4173)
  * Or uses the PRERENDER_URL environment variable if provided
+ *
+ * BILINGUE : les routes anglaises (/en/...) DOIVENT être pré-rendues elles
+ * aussi. Sans cela, le serveur renvoie pour /en/products le index.html
+ * pré-rendu de l'accueil français — Googlebot lit alors un <title> et une
+ * meta description françaises sur une page annoncée comme anglaise, ce qui
+ * ruine le référencement de toute la version EN (constaté en production).
+ * La correspondance FR→EN vient de src/i18n/routing.js, même source que le
+ * sitemap et le sélecteur de langue.
  */
 
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { ROUTES } from '../src/seo/routesRegistry.js'
+import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES } from '../src/i18n/routing.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
 const distDir = path.join(projectRoot, 'dist')
+
+// ── Liste finale des chemins à pré-rendre : toutes les routes françaises,
+// plus leur équivalent anglais quand la page est réellement traduite.
+const frToEn = new Map()
+for (const key of TRANSLATED_PAGES) {
+  const pair = I18N_ROUTES[key]
+  if (pair?.fr && pair?.en) frToEn.set(pair.fr, pair.en)
+}
+const productsPair = I18N_ROUTES.products
+
+/** Équivalent anglais d'un chemin français, ou null. */
+function enPathFor(frPath) {
+  const direct = frToEn.get(frPath)
+  if (direct) return direct
+  // Fiches produit : /produits/<slug> → /en/products/<slug>
+  if (frPath.startsWith(`${productsPair.fr}/`)) {
+    return `${productsPair.en}/${frPath.slice(productsPair.fr.length + 1)}`
+  }
+  return null
+}
+
+const PRERENDER_PATHS = []
+for (const r of ROUTES) {
+  PRERENDER_PATHS.push(r.path)
+  const en = enPathFor(r.path)
+  if (en) PRERENDER_PATHS.push(en)
+}
 
 // Use environment variable or default
 const BASE_URL = process.env.PRERENDER_URL || 'http://localhost:4173'
@@ -67,8 +103,7 @@ async function prerender() {
     console.log('✅ Browser launched\n')
 
     // Process each route
-    for (const route of ROUTES) {
-      const { path: routePath } = route
+    for (const routePath of PRERENDER_PATHS) {
       const url = `${BASE_URL}${routePath}`
 
       try {
@@ -127,7 +162,7 @@ async function prerender() {
     console.log('\n✅ Browser closed\n')
 
     // Summary
-    console.log(`✅ Rendered: ${results.success.length}/${ROUTES.length} routes`)
+    console.log(`✅ Rendered: ${results.success.length}/${PRERENDER_PATHS.length} routes`)
 
     if (results.failed.length > 0) {
       console.log(`❌ Failed: ${results.failed.length}`)
