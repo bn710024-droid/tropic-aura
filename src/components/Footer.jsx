@@ -66,7 +66,7 @@ export default function Footer() {
   return (
     <footer style={{ position: "relative", zIndex: 10, background: "transparent", overflow: "hidden" }}>
       <style>{`
-        .ft-info { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: clamp(32px,5vw,80px); }
+        .ft-info { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; gap: clamp(32px,5vw,80px); }
         @media (max-width: 820px){
           .ft-info { grid-template-columns: 1fr 1fr !important; gap: 44px 32px !important; }
         }
@@ -148,7 +148,20 @@ export default function Footer() {
           <div>
             <span style={colLabel}>{t("footer.colNavigation")}</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
-              {["products", "quality", "logistics", "about", "insights", "contact"].map((page) => (
+              {["products", "about", "insights", "contact"].map((page) => (
+                <a key={page} href={pathFor(page, lang)} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>
+                  {t(`nav.${page}`)}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Ressources — pages de confiance B2B, volontairement à part de la
+             navigation principale (voir footer.colResources). */}
+          <div>
+            <span style={colLabel}>{t("footer.colResources")}</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+              {["quality", "logistics"].map((page) => (
                 <a key={page} href={pathFor(page, lang)} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>
                   {t(`nav.${page}`)}
                 </a>

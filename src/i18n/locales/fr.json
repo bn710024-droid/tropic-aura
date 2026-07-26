@@ -71,6 +71,7 @@
     "brandDesc": "Commerce tropical d'excellence, du Sénégal vers les marchés les plus exigeants.",
     "brandDescMobile": "Export premium depuis le Sénégal vers les marchés internationaux.",
     "colNavigation": "Navigation",
+    "colResources": "Ressources",
     "colContact": "Contact",
     "colLocation": "Localisation",
     "location": "Dakar, Sénégal",
@@ -686,7 +687,7 @@
       }
     },
     "why": {
-      "heading": "Pourquoi les importateurs travaillent avec Tropicaura",
+      "heading": "Pourquoi vous devriez travailler avec nous",
       "items": [
         { "title": "Sourcing fiable", "text": "Des producteurs suivis dans la durée, pas des achats d'opportunité au coup par coup." },
         { "title": "Contrôles réels", "text": "Chaque lot est inspecté avant chargement, pas seulement documenté sur le papier." },

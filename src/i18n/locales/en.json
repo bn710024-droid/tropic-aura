@@ -71,6 +71,7 @@
     "brandDesc": "Tropical trade excellence, from Senegal to the world's most demanding markets.",
     "brandDescMobile": "Premium export from Senegal to international markets.",
     "colNavigation": "Navigation",
+    "colResources": "Resources",
     "colContact": "Contact",
     "colLocation": "Location",
     "location": "Dakar, Senegal",
@@ -686,7 +687,7 @@
       }
     },
     "why": {
-      "heading": "Why importers work with Tropicaura",
+      "heading": "Why you should work with us",
       "items": [
         { "title": "Reliable sourcing", "text": "Producers followed over time, not opportunistic one-off purchases." },
         { "title": "Real inspections", "text": "Every batch is inspected before loading, not just documented on paper." },
