@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { langFromPath, pathFor } from "../i18n/routing";
@@ -33,6 +33,25 @@ const GOLD = "#D4AF6A";
 // l'on doit pouvoir lire d'un coup d'œil, pas déchiffrer.
 const COLLECTIONS = ["SIGNATURE", "SAISON", "SPÉCIALITÉS"];
 
+// Couleurs d'ambiance dédiées au hover de cette page — distinctes de
+// accentColor (productsData.js), pensé pour les pastilles du calendrier.
+// Ici on veut une teinte reconnaissable comme celle du vrai fruit, pas un
+// pastel décoratif.
+const AMBIENT_COLORS = {
+  mangue: "#E8890A",
+  avocat: "#4C7A3D",
+  ananas: "#D9A62E",
+  papaye: "#E2703A",
+  banane: "#E8C547",
+  melon: "#D4A340",
+  pasteque: "#D6455B",
+  gombo: "#5E8C3F",
+  "haricot-vert": "#4F8B3B",
+  "citron-vert": "#A8C93B",
+  "citron-jaune": "#E8D227",
+  piment: "#C23B2E",
+};
+
 export default function Disponibilite() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -45,6 +64,11 @@ export default function Disponibilite() {
   const reveal = (el) => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
   };
+
+  // Produit actuellement survolé (desktop) — pilote la teinte d'ambiance
+  // plein écran. State local à ce composant : aucun re-render du reste de
+  // l'app, transition gérée en CSS (opacity/background-color).
+  const [hoveredSlug, setHoveredSlug] = useState(null);
 
   useEffect(() => {
     const isDesktop = window.matchMedia("(min-width: 769px)").matches;
@@ -80,7 +104,15 @@ export default function Disponibilite() {
   const trail = buildBreadcrumbTrail(availabilityPath);
 
   return (
-    <>
+    <div className="avail-page">
+      <div
+        className="avail-ambient"
+        aria-hidden="true"
+        style={{
+          opacity: hoveredSlug ? 0.3 : 0,
+          backgroundColor: hoveredSlug ? AMBIENT_COLORS[hoveredSlug] : "transparent",
+        }}
+      />
       <SEOHead
         title={t("availability.seo.title")}
         description={description}
@@ -102,15 +134,16 @@ export default function Disponibilite() {
           gap: 6px;
           padding: 14px 16px;
           margin: 0 -16px;
-          border-top: 1px solid rgba(0,0,0,0.08);
+          border-top: 1px solid rgba(255,255,255,0.08);
           border-radius: 8px;
+          position: relative;
+          z-index: 1;
           transition: background-color .2s ease;
         }
-        /* Aucun état hover n'existait sur cette page (vérifié) — pour un
-           planning consulté ligne par ligne, un léger surlignage aide à suivre
-           la lecture horizontale sans distraire (même logique que le survol
-           des liens de coordonnées sur Contact.jsx). */
-        .avail-row:hover { background-color: rgba(0,0,0,0.035); }
+        /* Survol teinté avec la couleur du produit (--row-hover-bg, posée
+           inline par produit) plutôt qu'un gris générique — relie visuellement
+           la ligne survolée à l'ambiance globale (.avail-ambient ci-dessous). */
+        .avail-row:hover { background-color: var(--row-hover-bg, rgba(255,255,255,0.03)); }
         .avail-head {
           display: grid;
           grid-template-columns: 200px repeat(12, 1fr) 150px;
@@ -120,16 +153,16 @@ export default function Disponibilite() {
         }
         .avail-cell {
           height: 22px; border-radius: 5px;
-          background: rgba(0,0,0,0.06);
+          background: rgba(255,255,255,0.07);
           transition: transform .15s ease;
         }
         .avail-row:hover .avail-cell { transform: scaleY(1.12); }
         .avail-more {
-          color: #1A1A1A; text-decoration: none;
-          border-bottom: 1px solid rgba(0,0,0,0.3);
+          color: #F5F1E8; text-decoration: none;
+          border-bottom: 1px solid rgba(245,241,232,0.35);
           transition: border-color .2s ease;
         }
-        .avail-more:hover { border-color: rgba(0,0,0,0.75); }
+        .avail-more:hover { border-color: rgba(245,241,232,0.85); }
         @media (max-width: 860px) {
           .avail-head { display: none; }
           .avail-row { grid-template-columns: 1fr; gap: 10px; padding: 22px 16px; }
@@ -138,6 +171,23 @@ export default function Disponibilite() {
         .avail-row-grid { display: contents; }
         @media (max-width: 860px) {
           .avail-row-grid { display: grid; }
+        }
+
+        /* ── Ambiance : TOUTE la page (nav, hero, calendrier) change de
+           teinte, dominante par la couleur du produit survolé (desktop
+           uniquement). Calque fixed plein écran, au-dessus de tout mais
+           pointer-events:none — ne bloque jamais un clic ou un survol. ── */
+        .avail-ambient {
+          position: fixed; inset: 0; z-index: 9999;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity .7s ease, background-color .7s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .avail-ambient { transition: none; }
+        }
+        @media (hover: none), (max-width: 860px) {
+          .avail-ambient { display: none; }
         }
       `}</style>
 
@@ -183,15 +233,15 @@ export default function Disponibilite() {
       </section>
 
       {/* ━━━━━ 2. CALENDRIER ━━━━━ */}
-      <section style={{ background: "#F5F1E8", padding: "clamp(60px,10vh,110px) clamp(24px,8vw,140px) clamp(90px,14vh,150px)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <section style={{ background: "#1C1712", padding: "clamp(60px,10vh,110px) clamp(24px,8vw,140px) clamp(90px,14vh,150px)" }}>
+        <div className="avail-cal-wrap" style={{ maxWidth: 1180, margin: "0 auto" }}>
 
           <div className="avail-head" aria-hidden="true">
             <span />
             {MONTHS.map((m, i) => (
               <span key={i} title={MONTH_LABELS[i]} style={{
                 textAlign: "center", fontFamily: "'Plus Jakarta Sans',sans-serif",
-                fontSize: 11, fontWeight: 700, color: "rgba(0,0,0,0.4)", letterSpacing: ".02em",
+                fontSize: 11, fontWeight: 700, color: "rgba(245,241,232,0.45)", letterSpacing: ".02em",
               }}>{m}</span>
             ))}
             <span />
@@ -209,22 +259,38 @@ export default function Disponibilite() {
                 <span style={{
                   display: "block", marginBottom: 6,
                   fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10.5, fontWeight: 700,
-                  letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)",
+                  letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(245,241,232,0.45)",
                 }}>
                   {t(`catalog.collections.${coll}`)}
                 </span>
 
                 {items.map((p) => (
-                  <div key={p.slug} className="avail-row">
-                    <div>
-                      <Link to={`${pathFor("products", lang)}/${p.slug}`} style={{
-                        fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700, fontSize: 15,
-                        color: "#1A1A1A", textDecoration: "none",
-                      }}>{t(`catalog.items.${p.slug}.name`)}</Link>
-                      <span style={{
-                        display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif",
-                        fontSize: 11.5, color: "rgba(0,0,0,0.45)", marginTop: 2,
-                      }}>{p.origin}</span>
+                  <div
+                    key={p.slug}
+                    className="avail-row"
+                    data-product={p.slug}
+                    style={{ "--row-hover-bg": `${AMBIENT_COLORS[p.slug]}0D` }}
+                    onMouseEnter={() => setHoveredSlug(p.slug)}
+                    onMouseLeave={() => setHoveredSlug((s) => (s === p.slug ? null : s))}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <img
+                        src={p.image}
+                        alt=""
+                        width={40} height={40}
+                        loading="lazy"
+                        style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0, background: "rgba(255,255,255,0.06)" }}
+                      />
+                      <div>
+                        <Link to={`${pathFor("products", lang)}/${p.slug}`} style={{
+                          fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 700, fontSize: 15,
+                          color: "#F5F1E8", textDecoration: "none",
+                        }}>{t(`catalog.items.${p.slug}.name`)}</Link>
+                        <span style={{
+                          display: "block", fontFamily: "'Plus Jakarta Sans',sans-serif",
+                          fontSize: 11.5, color: "rgba(245,241,232,0.55)", marginTop: 2,
+                        }}>{p.origin}</span>
+                      </div>
                     </div>
 
                     <div className="avail-row-grid">
@@ -237,7 +303,7 @@ export default function Disponibilite() {
                             key={i} className="avail-cell"
                             title={`${MONTH_LABELS[i]}${active ? (peak ? t("availability.state.peak") : t("availability.state.available")) : t("availability.state.off")}`}
                             style={{
-                              background: active ? (peak ? p.accentColor : `${p.accentColor}99`) : "rgba(0,0,0,0.06)",
+                              background: active ? (peak ? p.accentColor : `${p.accentColor}99`) : "rgba(255,255,255,0.07)",
                               border: peak ? `1.5px solid ${GOLD}` : "none",
                             }}
                           />
@@ -263,12 +329,12 @@ export default function Disponibilite() {
 
           <p ref={reveal} style={{ ...r0,
             marginTop: 40, fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12.5,
-            lineHeight: 1.7, color: "rgba(0,0,0,0.45)", maxWidth: 640,
+            lineHeight: 1.7, color: "rgba(245,241,232,0.5)", maxWidth: 640,
           }}>
             {t("availability.note")}
           </p>
         </div>
       </section>
-    </>
+    </div>
   );
 }
