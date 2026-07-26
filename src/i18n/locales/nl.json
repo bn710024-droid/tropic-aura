@@ -1,0 +1,816 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "Over ons",
+    "products": "Producten",
+    "availability": "Beschikbaarheid",
+    "partnerships": "Partnerschappen",
+    "insights": "Inzichten",
+    "contact": "Contact",
+    "quote": "Offerte aanvragen",
+    "quality": "Kwaliteit & Conformiteit",
+    "logistics": "Logistiek & Export"
+  },
+  "home": {
+    "seo": {
+      "title": "Exporteur van Vers Fruit & Groenten uit Senegal",
+      "description": "Senegalese exporteur van vers fruit en groenten: mango's, avocado's, limoenen, sperzieboenen en okra voor internationale importeurs."
+    },
+    "scrollHint": "Scroll naar beneden",
+    "hero": {
+      "title": "Tropische Oorsprong Verbinden met Wereldmarkten",
+      "desc": "Tropicaura verbindt uitzonderlijke tropische oorsprong met wereldmarkten via solide partnerschappen, een kwaliteitsgerichte selectie en een langetermijnvisie op Afrikaanse handel.",
+      "mobileDesc": "Wij verbinden het beste tropische fruit van Afrika met internationale markten via een strenge selectie en duurzame partnerschappen.",
+      "cta": "Ontdek Onze Visie",
+      "mobileCta": "Ontdekken"
+    },
+    "origins": {
+      "title": "Het Potentieel van Afrika. Anders Geleverd.",
+      "desc": "Achter elk uitzonderlijk product schuilt een uitzonderlijke oorsprong. Tropicaura bestaat om de rijkdom van Afrika's tropische regio's te verbinden met kansen op wereldmarkten, waar authenticiteit, kwaliteit en ambitie samenkomen.",
+      "mobileDesc": "Wij zetten de beste tropische oorsprong van Afrika in de schijnwerpers door deze te verbinden met markten waar kwaliteit en vertrouwen het verschil maken.",
+      "cta": "Ontdek Ons Verhaal",
+      "mobileCta": "Ontdekken"
+    },
+    "products": {
+      "title": "Geselecteerd voor Veeleisende Markten.",
+      "desc": "Uitmuntendheid begint lang voordat een product zijn bestemming bereikt. Wij richten ons op kansen die voldoen aan de verwachtingen van moderne internationale markten, waar kwaliteit, regelmaat en betrouwbaarheid geen voordelen zijn — het zijn vereisten.",
+      "mobileDesc": "Elk product wordt geselecteerd om te voldoen aan de standaarden van internationale markten op het gebied van kwaliteit, regelmaat en betrouwbaarheid.",
+      "cta": "Ontdek Onze Producten",
+      "mobileCta": "Ontdekken"
+    },
+    "partnerships": {
+      "title": "Meer dan Transacties.",
+      "desc": "De sterkste toeleveringsketens zijn gebouwd op vertrouwen. Wij bouwen partnerschappen die duurzame waarde creëren, door producenten, logistieke netwerken en internationale kopers te verbinden rond een gedeelde toewijding aan uitmuntendheid.",
+      "mobileDesc": "Wij bouwen duurzame partnerschappen tussen producenten, logistieke partners en internationale kopers om gedeelde waarde te creëren.",
+      "cta": "Onze Aanpak van Partnerschappen",
+      "mobileCta": "Ontdekken"
+    },
+    "vision": {
+      "title": "De toekomst wordt gebouwd met partners die dezelfde standaarden delen.",
+      "mobileTitle": "De toekomst wordt gebouwd met de juiste partners.",
+      "desc": "Tropicaura zoekt partners die evenveel belang hechten aan kwaliteit, transparantie en langetermijnvisie als aan commerciële prestaties.",
+      "mobileDesc": "Wij werken samen met bedrijven die onze eis voor kwaliteit, transparantie en prestaties op lange termijn delen.",
+      "cta": "Ontdek Onze Toezeggingen",
+      "mobileCta": "Ontdekken"
+    },
+    "contact": {
+      "title": "Laten We Nieuwe Kansen Creëren.",
+      "desc": "Elk sterk partnerschap begint met een gesprek. Of u nu nieuwe sourcingmogelijkheden verkent of op zoek bent naar een betrouwbare aanwezigheid in Afrika, wij luisteren graag naar u.",
+      "mobileDesc": "Laten we uw behoeften bespreken en samen een duurzaam partnerschap opbouwen rond Afrikaanse tropische producten.",
+      "cta": "Neem Contact Op",
+      "mobileCta": "Ontdekken"
+    }
+  },
+  "footer": {
+    "statement": "Uitzonderlijke Oorsprong Verbinden met Uitzonderlijke Partners.",
+    "tags": {
+      "location": "Dakar, Senegal",
+      "export": "Export van Premiumproducten",
+      "focus": "Partnerschappen Gericht op Europa"
+    },
+    "brandDesc": "Tropische handel van topkwaliteit, van Senegal naar de meest veeleisende markten.",
+    "brandDescMobile": "Premiumexport vanuit Senegal naar internationale markten.",
+    "colNavigation": "Navigatie",
+    "colResources": "Bronnen",
+    "colContact": "Contact",
+    "colLocation": "Locatie",
+    "location": "Dakar, Senegal",
+    "signature": "Gebouwd voor Langetermijnpartnerschappen.",
+    "privacy": "Privacy",
+    "cookies": "Cookies beheren"
+  },
+  "a11y": {
+    "menu": "Menu",
+    "mainNav": "Hoofdnavigatie",
+    "langSwitch": "Taal wijzigen",
+    "toEnglish": "Switch to English",
+    "toFrench": "Passer en français"
+  },
+  "menu": {
+    "aboutSubs": {
+      "vision": "Onze Visie",
+      "aujourdhui": "Onze Fundamenten",
+      "demain": "Onze Ontwikkeling",
+      "ambition": "Meer Waarde Creëren",
+      "avenir": "Ons Internationale Netwerk",
+      "engagement": "Onze Toewijding"
+    },
+    "productsSubs": {
+      "signature": "Signature",
+      "saison": "Seizoen",
+      "specialites": "Specialiteiten"
+    },
+    "partnershipsSubs": {
+      "vision": "Onze visie",
+      "parcours": "Het traject",
+      "expedition": "Onze verzending",
+      "conclusion": "Partner worden"
+    },
+    "insightsSubs": {
+      "senegal": "Senegal, strategische oorsprong",
+      "supplier": "Stabiele vs opportunistische leverancier"
+    },
+    "contactSubs": {
+      "form": "Contact opnemen",
+      "partnership": "Partnerschapsaanvraag"
+    }
+  },
+  "product": {
+    "specsHeading": "Exportspecificaties",
+    "exportMarkets": "Exportmarkten",
+    "commercialHeading": "Handelsvoorwaarden & logistiek",
+    "incoterms": "Aangeboden Incoterms",
+    "calibrage": "Sortering",
+    "packaging": "Verpakking",
+    "transport": "Transport",
+    "faqHeading": "Veelgestelde vragen",
+    "relatedHeading": "Andere producten uit onze collectie",
+    "relatedNav": "Vergelijkbare producten",
+    "requestOffer": "Offerte aanvragen",
+    "requestOfferAria": "Offerte aanvragen voor {{name}}",
+    "backToCollection": "← Volledige collectie",
+    "contactUs": "Neem contact op",
+    "readInsights": "Lees onze inzichten",
+    "seoTitle": "{{name}} — B2B Export vanuit Senegal",
+    "seoDesc": "{{name}} — {{description}} Oorsprong: {{origin}}. Beschikbaarheid: {{availability}}. Incoterms: {{incoterms}}.",
+    "imageAlt": "{{name}} — premium exportproduct van Tropicaura",
+    "bgImageAlt": "Close-up van de binnenkant van {{name}}, met de versheid en textuur van het door Tropicaura geëxporteerde product",
+    "specs": {
+      "tradeName": "Handelsnaam",
+      "collection": "Collectie",
+      "origin": "Oorsprong",
+      "availability": "Beschikbaarheid",
+      "standard": "Standaard",
+      "certification": "Certificering"
+    },
+    "availabilityHeading": "Beschikbaarheid & flexibiliteit",
+    "customHeading": "Oplossingen op maat"
+  },
+  "productsPage": {
+    "kicker": "DE SHOWROOM",
+    "title": "De Collectie.",
+    "intro": "Een uitzonderlijke tropische selectie, gepresenteerd als een expositie. Elk product wordt gekozen op basis van kwaliteit, regelmaat en het vermogen om aan de meest veeleisende markten te voldoen.",
+    "scrollHint": "Scroll naar beneden",
+    "viewSheet": "Bekijk de volledige productfiche van {{name}}",
+    "goTo": "Ga naar {{name}}",
+    "custom": {
+      "kicker": "Specifieke Behoefte",
+      "title": "Op zoek naar een product dat niet in onze collectie staat?",
+      "text": "Dankzij ons netwerk van producenten en landbouwpartners in West-Afrika kunnen wij specifieke verzoeken ondersteunen op basis van uw behoeften.",
+      "tagline": "Specifiek product. Oplossing op maat.",
+      "cta": "Laten we uw project bespreken"
+    },
+    "seo": {
+      "title": "Onze Producten — Premium Export van Fruit & Groenten",
+      "description": "De Tropicaura-collectie: mango's, avocado's, ananas, citrusvruchten en verse groenten uit West-Afrika, voor premium B2B-export.",
+      "logoAlt": "Tropicaura — collectie premium exportfruit en -groenten"
+    },
+    "learnMore": "Meer weten"
+  },
+  "contact": {
+    "seo": {
+      "title": "Contact — Offerte Aanvragen voor Export",
+      "description": "Neem contact op met Tropicaura voor uw importbehoeften van vers fruit en groenten uit West-Afrika. Offertes, volumes, Incoterms FOB Dakar — reactie binnen 48 uur.",
+      "logoAlt": "Tropicaura — neem contact op voor uw importbehoeften van vers fruit en groenten"
+    },
+    "heroTitle": "Laten we samen iets uitzonderlijks bouwen.",
+    "heroText": "Wij werken samen met importeurs, distributeurs en retailorganisaties in heel Europa die op zoek zijn naar premiumproducten, betrouwbare uitvoering en een langetermijnvisie.",
+    "formHeading": "Laten we praten.",
+    "info": {
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "location": "Locatie",
+      "availability": "Beschikbaarheid",
+      "locationValue": "Dakar, Senegal",
+      "availabilityValue": "Elke dag · 8u – 00u (GMT)"
+    },
+    "pillars": {
+      "senegal": {
+        "title": "Gevestigd in Senegal",
+        "sub": "In het hart van de tropische productieregio's van West-Afrika."
+      },
+      "export": {
+        "title": "Exportgericht",
+        "sub": "Standaarden ontworpen voor internationale markten."
+      },
+      "europe": {
+        "title": "Europese markt",
+        "sub": "Importeurs, distributeurs en grote retail."
+      },
+      "longTerm": {
+        "title": "Langetermijnpartnerschappen",
+        "sub": "Een visie op duurzame waarde, geen opportunisme."
+      }
+    },
+    "form": {
+      "name": "Naam",
+      "company": "Bedrijf",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "message": "Bericht",
+      "namePh": "Uw naam",
+      "companyPh": "Uw bedrijf",
+      "emailPh": "u@bedrijf.com",
+      "phonePh": "+31 ...",
+      "messagePh": "Vertel ons over uw project, uw volumes en uw markten…",
+      "submit": "Start een gesprek",
+      "submitting": "Verzenden…",
+      "retry": "Opnieuw proberen",
+      "error": "Verzenden is mislukt. Probeer het opnieuw of mail ons rechtstreeks op contact@tropic-aura.com.",
+      "prefill": "Hallo, ik zou graag een offerte ontvangen voor {{product}}{{origin}}. Dit zijn de volumes die ik zoek…",
+      "prefillOrigin": " (oorsprong: {{origin}})"
+    },
+    "thanks": {
+      "title": "Dank u voor de tijd die u nam om ons te schrijven.",
+      "text": "Elk verzoek wordt persoonlijk gelezen. Ik neem de tijd om elk project te bestuderen, zodat we vanaf de eerste uitwisseling een duurzaam partnerschap kunnen opbouwen.",
+      "role": "Founder, Tropicaura",
+      "note1": "Elk verzoek wordt persoonlijk beoordeeld.",
+      "note2": "U ontvangt zo snel mogelijk een antwoord.",
+      "ps": "PS: Ik heb nog geen team van 50 mensen. De kans is groot dat ik zelf uw bericht lees.",
+      "waiting": "In afwachting van mijn antwoord…",
+      "products": "Ontdek onze producten",
+      "insights": "Lees onze inzichten"
+    }
+  },
+  "availability": {
+    "seo": {
+      "title": "Beschikbaarheidskalender — Seizoensgebondenheid van Producten",
+      "description": "Maandelijkse beschikbaarheidskalender per product — mango, avocado, citrusvruchten, okra, pepers en ander West-Afrikaans fruit geëxporteerd door Tropicaura.",
+      "logoAlt": "Tropicaura — beschikbaarheidskalender voor exportfruit en -groenten"
+    },
+    "kicker": "Plan uw aanvoer",
+    "title": "Een kalender, geen beloftes.",
+    "intro": "{{count}} producten en hun werkelijke beschikbaarheid, maand na maand. Alles wat u nodig heeft om een inkoopprogramma op te bouwen zonder seizoensverrassingen.",
+    "note": "Indicatieve periodes, afhankelijk van oogst- en seizoensomstandigheden. Gouden randen geven een piek in beschikbaarheid aan. Voor een vaste kalender op basis van uw volume en markt, neem rechtstreeks contact met ons op.",
+    "requestOffer": "Offerte aanvragen →",
+    "months": [
+      "Jan",
+      "Feb",
+      "Mrt",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
+    "monthsFull": [
+      "Januari",
+      "Februari",
+      "Maart",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Augustus",
+      "September",
+      "Oktober",
+      "November",
+      "December"
+    ],
+    "state": {
+      "peak": " — piekbeschikbaarheid",
+      "available": " — beschikbaar",
+      "off": " — buiten seizoen"
+    }
+  },
+  "about": {
+    "sections": {
+      "vision": {
+        "kicker": "ONZE VISIE",
+        "title": "Meer bouwen dan een exportbedrijf.",
+        "desc": [
+          "Wij willen niet alleen fruit exporteren. Wij willen de waarde vergroten die uit elke Afrikaanse oogst wordt gecreëerd.",
+          "Onze visie is om geleidelijk een netwerk op te bouwen dat producenten, logistieke partners en internationale kopers verbindt rond één gedeelde eis: kwaliteit, traceerbaarheid, conformiteit en waardecreatie in elke stap van de keten."
+        ],
+        "photoAlt": "Mangoboomgaard",
+        "hint": "Scroll om te ontdekken"
+      },
+      "aujourdhui": {
+        "kicker": "ONZE FUNDAMENTEN",
+        "title": "Elke succesvolle export rust op een strenge organisatie.",
+        "desc": [
+          "Onze prioriteit is het bouwen van solide fundamenten. Wij ontwikkelen geleidelijk een netwerk van producenten en partners die dezelfde eisen delen op het gebied van kwaliteit, traceerbaarheid en betrouwbaarheid, om duurzaam te voldoen aan de verwachtingen van internationale markten.",
+          "Elk product dat wij verkopen moet voldoen aan hoge standaarden op het gebied van selectie, voorbereiding, documentaire conformiteit en logistieke coördinatie."
+        ],
+        "photoAlt": "Verpakkingsatelier"
+      },
+      "demain": {
+        "kicker": "ONZE ONTWIKKELING",
+        "title": "Vandaag de capaciteiten van morgen voorbereiden.",
+        "desc": [
+          "Onze ontwikkeling rust niet alleen op volumegroei. Zij rust op de geleidelijke versterking van onze vaardigheden, onze partnerschappen en onze operationele capaciteiten, om duurzame groei op internationale markten te ondersteunen.",
+          "Elke stap die vandaag wordt gebouwd, bereidt de kansen van morgen voor."
+        ],
+        "photoAlt": "Verpakkingslijn van Tropicaura"
+      },
+      "ambition": {
+        "kicker": "MEER WAARDE CREËREN",
+        "title": "Verder gaan dan exporteren.",
+        "desc": [
+          "Op lange termijn is onze ambitie om onze eigen verwerkingscapaciteit te ontwikkelen om lokaal meer waarde te creëren.",
+          "Door post-oogstverliezen geleidelijk te verminderen, oogsten te valoriseren en onze eigen producten en merken te ontwikkelen, willen wij internationale markten producten met een hogere toegevoegde waarde bieden, terwijl wij het concurrentievermogen van onze sector duurzaam versterken.",
+          "Wij zien producenten als essentiële partners in deze ambitie. Een duurzame waardeketen kan niet bestaan zonder gedeelde groei met de mensen die de producten telen die wij exporteren."
+        ],
+        "photoAlt": "Industriële vestiging van Tropicaura"
+      },
+      "avenir": {
+        "kicker": "ONS INTERNATIONALE NETWERK",
+        "title": "Afrika verbinden met de wereldmarkten.",
+        "desc": [
+          "Vanuit Dakar bouwen wij geleidelijk een netwerk van commerciële en logistieke partners dat Afrikaanse producenten verbindt met de belangrijkste internationale markten.",
+          "Ons doel is om de doorstroming van producten te vergemakkelijken via een organisatie gebaseerd op transparantie, voorbereiding en betrouwbaarheid, om duurzame relaties op te bouwen met onze partners over de hele wereld."
+        ],
+        "photoAlt": "Haven van Dakar"
+      },
+      "engagement": {
+        "kicker": "ONZE TOEWIJDING",
+        "title": "Vertrouwen wordt in de tijd opgebouwd.",
+        "desc": [
+          "Wij geloven dat duurzame partnerschappen rusten op transparantie, consistentie en het naleven van toezeggingen.",
+          "Elke samenwerking moet waarde creëren voor alle partijen in de keten: producenten, logistieke partners, distributeurs en internationale kopers.",
+          "Onze ambitie is een bedrijf te bouwen dat niet alleen erkend wordt voor de kwaliteit van de producten die het verkoopt, maar ook voor de kwaliteit van de relaties die het onderhoudt met elk van zijn partners."
+        ],
+        "photoAlt": "Team van Tropicaura en partner in een mangoboomgaard"
+      }
+    },
+    "seo": {
+      "title": "Over Ons — Onze Visie op Agroalimentaire Export",
+      "description": "Tropicaura verbindt producenten, logistieke partners en internationale kopers rond één eis: kwaliteit, traceerbaarheid en exportconformiteit.",
+      "logoAlt": "Tropicaura — onze visie op agroalimentaire export"
+    }
+  },
+  "partnerships": {
+    "sections": {
+      "hero": {
+        "title": "Partnerschappen die duurzaam worden gebouwd.",
+        "subtitle": "Wij geloven dat de beste samenwerkingen ontstaan uit vertrouwen, worden opgebouwd door daden en groeien met de tijd.",
+        "photoAlt": "Twee partners van Tropicaura wandelend door een mangoboomgaard bij zonsondergang"
+      },
+      "vision": {
+        "kicker": "ONZE VISIE",
+        "statement": "Wij weten dat een partnerschap niet in één zending wordt gebouwd. Het wordt gebouwd door gesprekken, gezamenlijk genomen beslissingen en nageleefde toezeggingen.",
+        "actions": [
+          {
+            "title": "Uw doelstellingen begrijpen",
+            "text": "Wij nemen de tijd om uw markten, uw marges, uw logistieke beperkingen en uw volumes te begrijpen."
+          },
+          {
+            "title": "Elke zending voorbereiden",
+            "text": "Elke bestelling wordt met precisie en hetzelfde niveau van eisen voorbereid."
+          },
+          {
+            "title": "Aanwezig blijven na levering",
+            "text": "Onze begeleiding gaat lang door na het vertrek van de container."
+          },
+          {
+            "title": "Een duurzame relatie opbouwen",
+            "text": "Wij geven de voorkeur aan een langetermijnsamenwerking boven een eenmalige transactie."
+          }
+        ]
+      },
+      "parcours": {
+        "kicker": "ONZE WERKWIJZE",
+        "title": "Het traject van een partnerschap"
+      },
+      "expedition": {
+        "title": "Elke container verlaat ons verpakkingsstation met hetzelfde niveau van eisen, of het nu om uw eerste of uw vijftigste bestelling gaat.",
+        "photoAlt": "Container gevuld met dozen mango's, gereed om het verpakkingsstation te verlaten",
+        "paragraphs": [
+          "Achter elke container gaan tientallen controles, beslissingen en uitwisselingen schuil die het mogelijk maken om elke bestelling onder de beste omstandigheden te verzenden."
+        ]
+      },
+      "conclusion": {
+        "button": "Partner worden",
+        "paragraphs": [
+          "De beste samenwerkingen beginnen vaak met een eenvoudig gesprek.",
+          "Als u op zoek bent naar een betrouwbare partner om een duurzame relatie mee op te bouwen, horen wij graag van u."
+        ]
+      }
+    },
+    "seo": {
+      "title": "B2B-Partnerschappen — Word Importeur of Distributeur",
+      "description": "Tropicaura bouwt duurzame commerciële partnerschappen — transparantie, voorbereiding en betrouwbaarheid bij elke zending vanuit de haven van Dakar."
+    },
+    "scrollHint": "Scroll om te ontdekken"
+  },
+  "insights": {
+    "seo": {
+      "title": "Inzichten — Analyses van de Internationale Tropische Handel",
+      "description": "Analyses en perspectieven van Tropicaura op de internationale tropische handel: strategische oorsprong en sourcing in West-Afrika."
+    },
+    "kicker": "Perspectieven",
+    "title": "De analyses die duidelijkheid brengen in de internationale tropische handel.",
+    "subtitle": "Europese markten, sourcingstrategieën, exportlogistiek",
+    "published": "Gepubliceerde analyses",
+    "connecting": "Kansen die verbinden",
+    "featured": "Uitgelicht",
+    "seeAll": "Alle analyses bekijken",
+    "readTimeSuffix": "leestijd",
+    "articles": {
+      "senegal": {
+        "category": "Markten",
+        "title": "Senegal, een strategische oorsprong voor tropisch fruit",
+        "desc": "Geografische positie, maritieme toegang, complementaire seizoensgebondenheid en verbeterende infrastructuur creëren nieuwe kansen voor importeurs op zoek naar betrouwbare partners.",
+        "readTime": "7 min",
+        "date": "Juni 2026",
+        "logoAlt": "Tropicaura — Waarom Senegal een strategische oorsprong wordt voor tropisch fruit"
+      },
+      "supplier": {
+        "category": "Partnerschappen",
+        "title": "Stabiele of opportunistische leverancier in West-Afrika?",
+        "desc": "Sommige handelsrelaties ontwikkelen zich over meerdere jaren. Andere stoppen na één seizoen. Het verschil ligt niet alleen bij het product.",
+        "readTime": "7 min",
+        "date": "Juni 2026",
+        "logoAlt": "Tropicaura — Wat een stabiele leverancier onderscheidt van een opportunistische leverancier in West-Afrika"
+      }
+    }
+  },
+  "articleSenegal": {
+    "b1": "Waarom Senegal een strategische oorsprong wordt voor tropisch fruit",
+    "b2": "De internationale handel in vers fruit verandert snel. Terwijl kopers voortdurend op zoek zijn naar nieuwe oorsprongen die betrouwbaar en concurrerend zijn en kunnen voldoen aan de groeiende eisen van de Europese markten, vestigt Senegal zich geleidelijk als een strategische bestemming voor de aanvoer van tropisch fruit.",
+    "b3": "Lange tijd gedomineerd door bepaalde regio's in Latijns-Amerika en Azië, kijkt de Europese markt vandaag met groeiende belangstelling naar het potentieel van West-Afrika. In het hart van deze dynamiek profiteert Senegal van bijzonder aantrekkelijke natuurlijke, logistieke en commerciële voordelen.",
+    "b4": "Een bevoorrechte geografische positie",
+    "b5": "Een van de eerste voordelen van Senegal ligt in de nabijheid van Europa. Vergeleken met andere tropische oorsprongen die enkele weken varen verwijderd zijn, biedt Senegal kortere transittijden naar de belangrijkste Europese havens zoals Antwerpen, Rotterdam, Algeciras of Marseille.",
+    "b6": "Deze nabijheid biedt:",
+    "b7": "Voor bederfelijke producten vertegenwoordigt elke gewonnen dag tijdens het transport een belangrijk commercieel voordeel.",
+    "b8": "Een seizoensgebondenheid die andere oorsprongen aanvult",
+    "b9": "Senegal heeft ook een bijzonder interessante productiekalender. Bepaalde mangovariëteiten, met name Keitt en Kent, komen op de markt in periodes waarin het wereldwijde aanbod beperkter is.",
+    "b10": "Deze complementariteit biedt importeurs de mogelijkheid om:",
+    "b11": "In een context waarin retailers op zoek zijn naar regelmatige beschikbaarheid gedurende het hele jaar, wordt dit kenmerk een belangrijk verkoopargument.",
+    "b12": "Exportinfrastructuur in voortdurende verbetering",
+    "b13": "In de afgelopen jaren heeft de Senegalese landbouwsector belangrijke veranderingen doorgemaakt. Investeringen in:",
+    "b14": "hebben de kwaliteitsstandaarden voor export aanzienlijk verbeterd. Vandaag werken talrijke actoren in de sector volgens eisen die aansluiten bij de verwachtingen van de Europese markten.",
+    "b15": "Deze professionalisering versterkt de geloofwaardigheid van het land bij internationale kopers.",
+    "b16": "Een nog steeds concurrerende oorsprong",
+    "b17": "Terwijl de productiekosten in verschillende delen van de wereld stijgen, behoudt Senegal een interessante concurrentiepositie voor bepaalde producten. Deze concurrentiepositie berust niet alleen op de prijs. Zij steunt ook op:",
+    "b18": "Voor Europese importeurs bestaat het zoeken naar een oorsprong niet langer alleen uit het vinden van de laagste prijs, maar uit het identificeren van de beste balans tussen kwaliteit, betrouwbaarheid en totale kosten.",
+    "b19": "Een groeiende diversiteit aan producten",
+    "b20": "Hoewel mango een van de belangrijkste exportproducten blijft, beperkt het Senegalese potentieel zich niet tot één product. Internationale markten volgen ook met belangstelling:",
+    "b21": "Deze diversificatie maakt het mogelijk sterkere partnerschappen op te bouwen en de commerciële kansen tussen producenten, exporteurs en distributeurs te vergroten.",
+    "b22": "Vertrouwen wordt het echte concurrentievoordeel",
+    "b23": "In de moderne internationale handel is kwaliteit alleen niet meer voldoende. Importeurs zoeken nu ook naar:",
+    "b24": "Senegal ziet een nieuwe generatie exportactoren opkomen die aan deze verwachtingen kunnen voldoen. Deze evolutie versterkt het imago van het land als een geloofwaardige handelspartner op lange termijn.",
+    "b25": "Deze evolutie steunt ook op het ontstaan van bedrijven die lokale producenten effectief kunnen verbinden met de eisen van internationale markten.",
+    "b26": "Bij Tropicaura geloven wij dat waarde niet alleen in het product zelf ligt, maar in de kwaliteit van de uitvoering, de transparantie van de uitwisselingen en het vermogen om duurzame relaties op te bouwen tussen de verschillende actoren in de toeleveringsketen.",
+    "b27": "Onze ambitie is bij te dragen aan deze nieuwe generatie van Afrikaanse tropische handel: beter gestructureerd, betrouwbaarder en meer gericht op de lange termijn.",
+    "b28": "Een kans die nog maar net begint",
+    "b29": "De groeiende belangstelling van de Europese markten voor West-Afrika is geen tijdelijke trend. De combinatie van geografische, logistieke, landbouwkundige en menselijke factoren plaatst Senegal vandaag onder de meest veelbelovende oorsprongen van de internationale tropische handel.",
+    "b30": "Voor importeurs die op zoek zijn naar nieuwe aanvoerkansen, en voor producenten die toegang willen tot meer markten, beschikt het land nu over de fundamenten die nodig zijn om in de komende jaren een steeds belangrijkere rol te spelen.",
+    "b31": "Senegal, een oorsprong voor de toekomst",
+    "b32": "Senegal beschikt vandaag over talrijke troeven om een van de referentie-oorsprongen te worden voor tropische handel naar Europa.",
+    "b33": "De geografische nabijheid, de strategische seizoensgebondenheid, de voortdurende verbetering van de infrastructuur en de groeiende expertise van de actoren creëren een gunstige omgeving voor duurzame partnerschappen.",
+    "b34": "Bij Tropicaura zijn wij ervan overtuigd dat de toekomst van de tropische handel rust op solide relaties tussen producenten, exporteurs, logistieke partners en importeurs.",
+    "b35": "Onze missie is deze verbindingen te vergemakkelijken en bij te dragen aan de ontwikkeling van een betrouwbaardere, transparantere en performantere toeleveringsketen tussen Afrika en Europa.",
+    "b36": "De beste kansen ontstaan wanneer de juiste partners in dezelfde richting bewegen.",
+    "BULLETS_1": [
+      "Een betere bewaring van de versheid van de producten.",
+      "Een vermindering van logistieke risico's.",
+      "Een betere controle van de koudeketen.",
+      "Meer flexibiliteit voor importeurs."
+    ],
+    "BULLETS_2": [
+      "Hun commerciële seizoen te verlengen.",
+      "Een continue aanwezigheid op hun markten te behouden.",
+      "Hun afhankelijkheid van één oorsprong te verminderen."
+    ],
+    "BULLETS_3": [
+      "de verpakkingsstations,",
+      "de traceerbaarheidssystemen,",
+      "de haveninfrastructuur,",
+      "de fytosanitaire procedures,"
+    ],
+    "BULLETS_4": [
+      "de kwaliteit van de producten,",
+      "de beschikbaarheid van volumes,",
+      "de reactiviteit van de operatoren,",
+      "de logistieke nabijheid."
+    ],
+    "BULLETS_5": [
+      "avocado's,",
+      "meloenen,",
+      "watermeloenen,",
+      "limoenen,",
+      "gespecialiseerde groenten zoals okra."
+    ],
+    "BULLETS_6": [
+      "transparante communicatie,",
+      "betrouwbare uitvoering,",
+      "nauwkeurige documentatie,",
+      "het vermogen om problemen snel op te lossen."
+    ]
+  },
+  "articleSupplier": {
+    "b1": "Wat een stabiele leverancier onderscheidt van een opportunistische leverancier in West-Afrika",
+    "b2": "West-Afrika trekt vandaag een groeiende belangstelling aan van internationale importeurs. De regio profiteert van een aanzienlijk landbouwpotentieel, een gunstige geografische nabijheid van Europa en een geleidelijke stijging van de kwaliteitsstandaarden voor export.",
+    "b3": "In deze context willen veel kopers nieuwe handelsrelaties ontwikkelen om hun aanvoeroorsprongen te diversifiëren en hun volumes te beveiligen. Niet elke samenwerking levert echter dezelfde resultaten op.",
+    "b4": "Sommige handelsrelaties ontwikkelen zich over meerdere jaren en genereren wederzijdse groei. Andere stoppen na één seizoen. Het verschil ligt niet alleen bij het product — het ligt vaak bij het vermogen van een leverancier om een duurzame professionele relatie op te bouwen.",
+    "b5": "Stabiliteit begint lang voor de eerste zending",
+    "b6": "Wanneer een importeur een partner zoekt, gaat de aandacht vanzelfsprekend naar producten, prijzen of beschikbare volumes. Toch worden de sterkste samenwerkingen doorgaans opgebouwd nog vóór de eerste lading.",
+    "b7": "De kwaliteit van de eerste uitwisselingen speelt een essentiële rol:",
+    "b8": "De meest betrouwbare bedrijven proberen niet meer te beloven dan zij werkelijk kunnen leveren. Zij geven vanaf het begin de voorkeur aan realistische en transparante communicatie.",
+    "b9": "Beloftes trekken aan, uitvoering bouwt vertrouwen op",
+    "b10": "In de internationale handel is het relatief eenvoudig om grote volumes, concurrerende prijzen of ambitieuze levertijden aan te kondigen. Het echte verschil ontstaat wanneer de activiteiten van start gaan.",
+    "b11": "Een stabiele leverancier is in staat om:",
+    "b12": "Omgekeerd ontstaan moeilijkheden vaak wanneer de aan het begin gewekte verwachtingen niet overeenkomen met de operationele realiteit. Vertrouwen wordt meer opgebouwd door uitvoering dan door beloftes.",
+    "b13": "Regelmaat is vaak meer waard dan één uitstekend seizoen",
+    "b14": "De handel in verse producten hangt af van talrijke factoren: klimaat, oogsten, logistiek, beschikbaarheid van verpakkingen, transportomstandigheden. In deze omgeving bestaat perfectie niet.",
+    "b15": "Ervaren kopers weten dat zij niet noodzakelijk op zoek zijn naar een perfecte partner. Zij zoeken een partner die in staat is een constant prestatieniveau te handhaven op lange termijn.",
+    "b16": "Regelmaat wordt dan een belangrijk concurrentievoordeel. Een stabiele relatie over meerdere seizoenen creëert doorgaans meer waarde dan een uitzonderlijke operatie gevolgd door onregelmatige resultaten.",
+    "b17": "Transparantie vermindert de risico's voor alle partijen",
+    "b18": "Internationale toeleveringsketens bevatten altijd een deel onzekerheid. Havenvertragingen, klimaatbeperkingen, marktschommelingen of logistieke moeilijkheden kunnen zich op elk moment voordoen. De manier waarop deze situaties worden beheerd, beïnvloedt rechtstreeks de kwaliteit van de handelsrelatie.",
+    "b19": "De meest gewaardeerde partners zijn vaak degenen die:",
+    "b20": "Transparantie stelt de verschillende partijen in staat om risico's te anticiperen in plaats van ze te ondergaan.",
+    "b21": "Een langetermijnvisie verandert de aard van het partnerschap",
+    "b22": "De best presterende samenwerkingen rusten niet alleen op een transactie. Zij rusten op een gedeelde visie. Wanneer producenten, exporteurs, logistieke partners en importeurs werken volgens een langetermijnlogica, gaan de voordelen ver voorbij het kader van één enkele operatie.",
+    "b23": "Deze aanpak bevordert:",
+    "b24": "In een sector waar menselijke relaties fundamenteel blijven, wordt deze dimensie bijzonder belangrijk.",
+    "b25": "De evolutie van de internationale handel bevoordeelt betrouwbare partners",
+    "b26": "De Europese markten evolueren. De eisen op het gebied van kwaliteit, traceerbaarheid, regelgevingsconformiteit en logistieke zichtbaarheid worden steeds belangrijker. In deze context versterken bedrijven die het volgende kunnen bieden:",
+    "b27": "geleidelijk hun positie op de markt. Betrouwbaarheid wordt een onderscheidende factor die net zo belangrijk is als het product zelf.",
+    "b28": "Bij Tropicaura geloven wij dat duurzame partnerschappen worden opgebouwd rond een eenvoudig idee: waarde creëren voor alle actoren in de toeleveringsketen.",
+    "b29": "Onze ambitie is bij te dragen aan de ontwikkeling van handelsrelaties gebaseerd op vertrouwen, transparantie en operationele excellentie.",
+    "b30": "Wij zijn ervan overtuigd dat de toekomst van de Afrikaanse tropische handel evenveel zal rusten op de kwaliteit van de producten als op de kwaliteit van de relaties die deze begeleiden.",
+    "b31": "Stabiliteit als fundament voor groei",
+    "b32": "In een steeds veeleisender internationale omgeving wordt stabiliteit een strategisch actief.",
+    "b33": "Leveranciers die in staat zijn duurzame relaties op te bouwen, hun toezeggingen nauwgezet uit te voeren en transparant te communiceren, creëren de voorwaarden voor een solide en duurzame groei.",
+    "b34": "Naast volumes, prijzen of seizoenen zijn het vaak deze kwaliteiten die de partnerschappen die duren onderscheiden van die welke snel verdwijnen.",
+    "b35": "De sterkste handelsrelaties worden niet opgebouwd op één succesvolle transactie. Zij worden opgebouwd op het vermogen om samen te slagen, seizoen na seizoen.",
+    "list1": [
+      "duidelijkheid van de informatie;",
+      "snelheid van de reacties;",
+      "begrip van de behoeften;",
+      "het vermogen om professioneel te communiceren."
+    ],
+    "list2": [
+      "hun toezeggingen naleven;",
+      "snel communiceren bij onvoorziene omstandigheden;",
+      "een consistente kwaliteit handhaven;",
+      "volledige documentatie verstrekken;",
+      "de klant begeleiden tijdens het hele proces."
+    ],
+    "list3": [
+      "snel communiceren;",
+      "relevante informatie delen;",
+      "moeilijkheden melden zodra zij zich voordoen;",
+      "concrete oplossingen voorstellen."
+    ],
+    "list4": [
+      "een betere planning;",
+      "meer stabiliteit;",
+      "een continue verbetering van de processen;",
+      "een versterkt wederzijds vertrouwen."
+    ],
+    "list5": [
+      "consistentie;",
+      "transparantie;",
+      "reactiviteit;",
+      "voorspelbaarheid;"
+    ]
+  },
+  "privacy": {
+    "seo": {
+      "title": "Privacybeleid",
+      "description": "Privacybeleid van Tropicaura B.C. — gegevens verzameld via het contactformulier, cookies en uw AVG-rechten.",
+      "logoAlt": "Tropicaura — Privacybeleid"
+    },
+    "title": "Privacybeleid",
+    "controllerIntro": "is verantwoordelijk voor de verwerking van de hieronder beschreven gegevens. Voor vragen over uw gegevens kunt u contact met ons opnemen via",
+    "formHeading": "Contactformulier",
+    "formP1": "Wanneer u ons contactformulier invult, worden de door u ingevoerde gegevens (naam, bedrijf, e-mail, telefoon, bericht) ons per e-mail toegezonden via de dienst Resend, uitsluitend om op uw commerciële aanvraag te reageren. Zij worden voor geen ander doel gebruikt en nooit doorverkocht.",
+    "formP2": "Om geautomatiseerde inzendingen (spam) te beperken, past onze server een frequentiebeperking toe op basis van uw IP-adres. Dit adres wordt maximaal 10 minuten in het geheugen bewaard en nooit langer opgeslagen, noch gekoppeld aan andere gegevens.",
+    "cookiesHeading": "Cookies en bezoekersmeting",
+    "necessaryLabel": "Noodzakelijk:",
+    "necessaryText": " een technisch scrollpositiegegeven wordt tijdelijk opgeslagen in uw browser (sessionStorage) om uw plaats op de pagina te herstellen bij terugkeren. Dit verlaat nooit uw apparaat en is geen trackingcookie.",
+    "analyticsLabel": "Bezoekersmeting (optioneel):",
+    "analyticsText": " indien u dit accepteert via de cookiebanner, helpt Google Analytics 4 ons te begrijpen welke pagina's worden bekeken, op geaggregeerde wijze. Het IP-adres wordt geanonimiseerd voor verwerking. U kunt deze toestemming op elk moment intrekken via de link \"Cookies beheren\" onderaan de pagina.",
+    "botHeading": "Bescherming tegen robots",
+    "botText": "Een anti-robotcontrole (Cloudflare Turnstile) kan worden gebruikt op het contactformulier om geautomatiseerde inzendingen te voorkomen. Deze dienst wordt geleverd door Cloudflare.",
+    "rightsHeading": "Uw rechten",
+    "rightsText": "Overeenkomstig de Algemene Verordening Gegevensbescherming (AVG) heeft u recht op inzage, rectificatie en verwijdering van uw gegevens. Om dit recht uit te oefenen, schrijft u ons op"
+  },
+  "notFound": {
+    "description": "Deze pagina bestaat niet of niet meer. Ontdek onze producten, ons bedrijf en onze contactgegevens.",
+    "seoTitle": "Pagina niet gevonden (404)",
+    "seoDesc": "Deze pagina bestaat niet of niet meer. Ontdek onze producten, ons bedrijf en onze partnerschappen vanaf de Tropicaura-homepage.",
+    "text": "Deze pagina bestaat niet of niet meer. Ontdek onze producten, ons bedrijf en onze partnerschappen vanaf de homepage.",
+    "back": "← Terug naar home"
+  },
+  "cookies": {
+    "dialogLabel": "Cookievoorkeuren",
+    "text": "Tropicaura gebruikt cookies die strikt noodzakelijk zijn voor de werking van de site, en, alleen als u dit accepteert, een bezoekersmetingstool om te begrijpen welke pagina's onze bezoekers interesseren. Niets anders.",
+    "learnMore": "Meer weten",
+    "rejectAll": "Alles afwijzen",
+    "acceptAll": "Alles accepteren",
+    "customise": "Aanpassen",
+    "back": "Terug",
+    "save": "Mijn keuzes opslaan",
+    "alwaysOn": " (altijd actief)",
+    "categories": {
+      "necessary": "Noodzakelijk",
+      "analytics": "Bezoekersmeting"
+    }
+  },
+  "breadcrumb": {
+    "label": "Broodkruimelpad"
+  },
+  "quality": {
+    "seo": {
+      "title": "Kwaliteit & Conformiteit — Controles, Traceerbaarheid, Exportdocumenten",
+      "description": "Hoe Tropicaura zijn vers fruit en groenten selecteert, controleert en documenteert vóór verzending: inspectie, koudeketen, traceerbaarheid, exportcertificaten.",
+      "logoAlt": "Tropicaura — Kwaliteit en exportconformiteit"
+    },
+    "kicker": "Kwaliteit & Conformiteit",
+    "title": "Kwaliteit wordt opgebouwd vóór de oogst, niet op het moment van verzending.",
+    "intro": "Een internationale koper beoordeelt een exporteur niet op een foto, maar op de consistentie van wat hij ontvangt, zending na zending. Zo werken wij.",
+    "sections": {
+      "approach": {
+        "heading": "Onze kwaliteitsaanpak",
+        "intro": "De kwaliteit van een partij wordt grotendeels bepaald vóór de oogst: keuze van de producent, opvolging van de teelt, beslissing over het juiste oogstmoment.",
+        "points": [
+          "Selectie van producenten op basis van hun regelmaat en hun vermogen om een lastenboek te respecteren",
+          "Opvolging van de percelen tijdens het seizoen, niet alleen op het moment van de oogst",
+          "Oogst op het rijpheidsstadium dat past bij de transportduur en de bestemming",
+          "Kwaliteitseisen vooraf gecommuniceerd aan elke partnerproducent"
+        ]
+      },
+      "control": {
+        "heading": "Kwaliteitscontrole",
+        "intro": "Elke partij wordt geïnspecteerd vóór het laden, niet alleen bij het verlaten van het veld.",
+        "points": [
+          "Visuele inspectie: uiterlijk, kleur, aanwezigheid van gebreken",
+          "Controle van rijpheid en stevigheid naargelang het product",
+          "Sortering en kalibrering volgens de eisen van de bestemmingsmarkt",
+          "Eindcontrole vóór het laden, net vóór verzending"
+        ]
+      },
+      "phytosanitary": {
+        "heading": "Fytosanitaire conformiteit",
+        "intro": "De export van verse producten is onderworpen aan precieze regels, specifiek voor elk bestemmingsland.",
+        "points": [
+          "Onze producten zijn GlobalGAP-gecertificeerd, wat de naleving van internationaal erkende goede landbouwpraktijken garandeert",
+          "Fytosanitair certificaat afgegeven door de bevoegde autoriteiten voor elke zending die dit vereist",
+          "Conformiteit gecontroleerd ten opzichte van de eisen van het importerende land vóór het laden",
+          "Officiële inspecties uitgevoerd volgens de geldende regelgeving"
+        ]
+      },
+      "coldChain": {
+        "heading": "Koudeketen",
+        "intro": "Versheid gaat zelden in één keer verloren — zij gaat verloren bij elke onderbreking van de temperatuurketen. Wij beperken deze onderbrekingen.",
+        "points": [
+          "Voorkoeling wanneer het product en de transportduur dit vereisen",
+          "Opslag op de juiste temperatuur vóór het laden",
+          "Temperatuuropvolging tijdens maritiem of luchttransport",
+          "Keuze van de transportwijze afhankelijk van de gevoeligheid van het product"
+        ]
+      },
+      "traceability": {
+        "heading": "Traceerbaarheid",
+        "intro": "Bij een vraag over een partij moeten wij de oorsprong ervan kunnen achterhalen.",
+        "points": [
+          "Oorsprong van het product geïdentificeerd voor elke partij",
+          "Opvolging van de partij van ontvangst tot verzending",
+          "Bijbehorende documentatie bewaard en beschikbaar op aanvraag"
+        ]
+      },
+      "documents": {
+        "heading": "Verstrekte documenten",
+        "intro": "Afhankelijk van bestemming en product kan een zending het volgende omvatten:",
+        "items": [
+          "Fytosanitair certificaat",
+          "Handelsfactuur (Commercial Invoice)",
+          "Pakbon (Packing List)",
+          "Certificaat van oorsprong (indien van toepassing)",
+          "Andere specifieke documenten volgens de eisen van het importerende land"
+        ]
+      }
+    },
+    "why": {
+      "heading": "Waarom u met ons zou moeten samenwerken",
+      "items": [
+        { "title": "Betrouwbare sourcing", "text": "Producenten die duurzaam worden opgevolgd, geen opportunistische eenmalige aankopen." },
+        { "title": "Echte controles", "text": "Elke partij wordt geïnspecteerd vóór het laden, niet alleen op papier gedocumenteerd." },
+        { "title": "Directe communicatie", "text": "Één aanspreekpunt om uw bestelling op te volgen, van offerte tot levering." },
+        { "title": "Exportdocumentatie", "text": "De documenten die uw douaneafhandeling nodig heeft, voorbereid voor elke zending." },
+        { "title": "Seizoensexpertise", "text": "Een grondige kennis van de beschikbaarheidsperiodes, product per product." },
+        { "title": "Duurzame partnerschappen", "text": "Wij bouwen handelsrelaties over meerdere seizoenen, geen losstaande verkopen." }
+      ]
+    },
+    "faq": [
+      { "q": "Werkt u met gecertificeerde producenten?", "a": "Ja — al onze producten zijn GlobalGAP-gecertificeerd, wat de naleving van internationaal erkende goede landbouwpraktijken garandeert." },
+      { "q": "Hoe controleert u de kwaliteit vóór verzending?", "a": "Elke partij doorloopt een visuele inspectie, een controle van rijpheid en stevigheid, sortering en kalibrering, en vervolgens een eindcontrole net vóór het laden." },
+      { "q": "Welke documenten verstrekt u bij elke zending?", "a": "Afhankelijk van de bestemming: fytosanitair certificaat, handelsfactuur, pakbon, en certificaat van oorsprong wanneer het importerende land dit vereist." },
+      { "q": "Hoe wordt de versheid bewaard tijdens het transport?", "a": "Door voorkoeling wanneer nodig, opslag op de juiste temperatuur en opvolging van de koudeketen tijdens maritiem of luchttransport." },
+      { "q": "Kunt u de volledige afwezigheid van gebreken garanderen?", "a": "Nee — een vers landbouwproduct behoudt altijd een natuurlijke variabiliteit. Ons sorteer- en kalibreerwerk is erop gericht deze tot een minimum te beperken en te laten overeenstemmen met het met u overeengekomen lastenboek." },
+      { "q": "Biedt u traceerbaarheid per partij aan?", "a": "Ja. De oorsprong en de opvolging van elke partij worden gedocumenteerd en kunnen op aanvraag worden gedeeld." }
+    ],
+    "cta": {
+      "heading": "Een vraag over onze kwaliteitsstandaarden?",
+      "text": "Laten we uw specifieke eisen bespreken en hoe wij daaraan kunnen voldoen.",
+      "button": "Offerte aanvragen",
+      "contactButton": "Neem contact op met ons exportteam"
+    },
+    "related": {
+      "heading": "Meer ontdekken"
+    }
+  },
+  "logistics": {
+    "seo": {
+      "title": "Logistiek & Exportproces — Incoterms, Transport, Levertijden",
+      "description": "Hoe een bestelling bij Tropicaura wordt verwerkt, van aanvraag tot levering: Incoterms, lucht- en zeetransport, verpakking, exportdocumentatie.",
+      "logoAlt": "Tropicaura — Logistiek en exportproces"
+    },
+    "kicker": "Logistiek & Export",
+    "title": "Van Senegal naar uw markt, elke stap heeft een reden.",
+    "intro": "Ons proces begrijpen betekent precies weten wat u kunt verwachten tussen uw aanvraag en de ontvangst van uw bestelling.",
+    "timeline": {
+      "heading": "Ons exportproces",
+      "steps": [
+        { "label": "Aanvraag", "desc": "U deelt ons het gewenste product, volume en bestemming mee." },
+        { "label": "Offerte", "desc": "Wij bezorgen u een offerte aangepast aan uw lastenboek." },
+        { "label": "Orderbevestiging", "desc": "Volumes, kalibers en voorwaarden worden met u bevestigd." },
+        { "label": "Verpakking", "desc": "Voorbereiding volgens de overeengekomen specificaties." },
+        { "label": "Kwaliteitscontrole", "desc": "Eindinspectie vóór het laden." },
+        { "label": "Exportdocumentatie", "desc": "Voorbereiding van de documenten die uw douaneafhandeling nodig heeft." },
+        { "label": "Laden", "desc": "Inladen in container of luchtvracht." },
+        { "label": "Verzending", "desc": "Maritiem of luchttransport naar uw bestemming." },
+        { "label": "Levering", "desc": "Ontvangst door uw team of uw expediteur." }
+      ]
+    },
+    "incoterms": {
+      "heading": "Incoterms",
+      "intro": "Wij bieden verschillende Incoterms aan, te bepalen volgens uw logistieke organisatie.",
+      "items": [
+        { "name": "EXW", "desc": "U neemt het transport voor uw rekening vanaf ophaling bij ons." },
+        { "name": "FOB Dakar", "desc": "Wij nemen de export voor onze rekening tot het laden aan boord in de haven van Dakar." },
+        { "name": "CIF", "desc": "Wij organiseren het transport en de verzekering tot de overeengekomen bestemmingshaven." }
+      ]
+    },
+    "transport": {
+      "heading": "Transport",
+      "intro": "De keuze tussen zee en lucht hangt af van het product, het volume en de gewenste termijn.",
+      "air": { "heading": "Luchtvracht", "text": "Geschikt voor bederfelijke producten, kleinere volumes of strakke deadlines." },
+      "sea": { "heading": "Zeevracht", "text": "Geschikt voor grotere volumes en producten die een langer transport verdragen, met beheer van de koudeketen in een gekoelde container." }
+    },
+    "packaging": {
+      "heading": "Verpakking",
+      "intro": "De verpakking is ontworpen om het product te beschermen tot de eindbestemming.",
+      "points": [
+        "Dozen aangepast aan het product en de transportwijze",
+        "Palletisering volgens de standaarden van de bestemmingsmarkt",
+        "Bescherming tegen schokken en temperatuurschommelingen",
+        "Voorbereiding aangepast aan het lastenboek van de klant"
+      ]
+    },
+    "chain": {
+      "heading": "Logistieke keten",
+      "steps": ["Boerderij", "Verpakkingsstation", "Kwaliteitscontrole", "Haven of luchthaven", "Transport", "Importeur"]
+    },
+    "leadTimes": {
+      "heading": "Levertijden",
+      "text": "De levertijden variëren afhankelijk van de bestemming, het seizoen en de beschikbaarheid van transportmaatschappijen. Wij geven een nauwkeurige schatting voor elke bestelling in plaats van een generiek cijfer dat niet betrouwbaar zou zijn."
+    },
+    "documents": {
+      "heading": "Exportdocumenten",
+      "intro": "Afhankelijk van de bestemming kan uw zending het volgende omvatten:",
+      "items": [
+        "Handelsfactuur (Commercial Invoice)",
+        "Pakbon (Packing List)",
+        "Certificaat van oorsprong",
+        "Fytosanitair certificaat",
+        "Andere specifieke documenten volgens het importerende land"
+      ]
+    },
+    "why": {
+      "heading": "Waarom samenwerken met Tropicaura",
+      "items": [
+        { "title": "Duidelijk proces", "text": "Elke stap, van aanvraag tot levering, is gedefinieerd en gecommuniceerd." },
+        { "title": "Flexibiliteit in Incoterms", "text": "EXW, FOB Dakar of CIF, aangepast aan uw logistieke organisatie." },
+        { "title": "Dubbele transportwijze", "text": "Maritiem of via de lucht, afhankelijk van het product en de urgentie van uw behoefte." },
+        { "title": "Voorbereide documentatie", "text": "De documenten die uw douaneafhandeling nodig heeft, vooraf voorbereid voor elke zending." },
+        { "title": "Persoonlijke opvolging", "text": "Een toegewijd aanspreekpunt voor elke bestelling, van offerte tot levering." },
+        { "title": "Seizoensbetrouwbaarheid", "text": "Een organisatie aangepast aan de beschikbaarheidsperiodes van elk product." }
+      ]
+    },
+    "faq": [
+      { "q": "Welke Incoterms biedt u aan?", "a": "EXW, FOB Dakar of CIF, afhankelijk van de bestemming en uw logistieke organisatie. Wij bepalen samen de best passende oplossing." },
+      { "q": "Gebruikt u lucht- of zeetransport?", "a": "Beide. Zeetransport is geschikt voor grotere volumes en producten die een langer transport verdragen; luchttransport voor bederfelijke producten of strakke deadlines." },
+      { "q": "Wat zijn uw levertijden?", "a": "Deze hangen af van de bestemming, het seizoen en de beschikbaarheid van transportmaatschappijen. Wij geven u een nauwkeurige schatting voor elke bestelling." },
+      { "q": "Hoe worden mijn bestellingen verpakt?", "a": "Dozen en palletisering aangepast aan het product, de transportwijze en de standaarden van uw bestemmingsmarkt." },
+      { "q": "Kan ik de voortgang van mijn bestelling volgen?", "a": "Ja, ons team houdt u op de hoogte bij elke belangrijke stap: bevestiging, verpakking, kwaliteitscontrole, laden en verzending." },
+      { "q": "Welke documenten ontvang ik bij mijn bestelling?", "a": "Handelsfactuur, pakbon, certificaat van oorsprong en fytosanitair certificaat volgens de eisen van uw land." }
+    ],
+    "cta": {
+      "heading": "Een importproject te organiseren?",
+      "text": "Laten we uw volumes, uw bestemming en het tijdschema dat u past bespreken.",
+      "button": "Offerte aanvragen",
+      "contactButton": "Bespreek uw sourcingproject"
+    },
+    "related": {
+      "heading": "Meer ontdekken"
+    }
+  }
+}

@@ -21,35 +21,42 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { ROUTES } from '../src/seo/routesRegistry.js'
-import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES } from '../src/i18n/routing.js'
+import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES, SUPPORTED_LANGS, DEFAULT_LANG } from '../src/i18n/routing.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
 const distDir = path.join(projectRoot, 'dist')
 
-// Les pages anglaises sont pré-rendues au même titre que les françaises (voir
+const OTHER_LANGS = SUPPORTED_LANGS.filter((l) => l !== DEFAULT_LANG)
+
+// Les pages traduites sont pré-rendues au même titre que les françaises (voir
 // prerender-for-build.mjs) : elles doivent donc être validées de la même
-// façon, sinon un <title> ou une meta description manquants côté EN
+// façon, sinon un <title> ou une meta description manquants côté EN/NL
 // passeraient silencieusement en production.
-const frToEn = new Map()
+const frToOthers = new Map()
 for (const key of TRANSLATED_PAGES) {
   const pair = I18N_ROUTES[key]
-  if (pair && pair.fr && pair.en) frToEn.set(pair.fr, pair.en)
+  if (pair && pair[DEFAULT_LANG]) frToOthers.set(pair[DEFAULT_LANG], pair)
 }
 const productsPair = I18N_ROUTES.products
-function enPathFor(frPath) {
-  const direct = frToEn.get(frPath)
+function altPathsFor(frPath) {
+  const direct = frToOthers.get(frPath)
   if (direct) return direct
-  if (frPath.startsWith(productsPair.fr + '/')) {
-    return productsPair.en + '/' + frPath.slice(productsPair.fr.length + 1)
+  if (frPath.startsWith(productsPair[DEFAULT_LANG] + '/')) {
+    const slug = frPath.slice(productsPair[DEFAULT_LANG].length + 1)
+    const out = {}
+    for (const lang of OTHER_LANGS) out[lang] = productsPair[lang] + '/' + slug
+    return out
   }
-  return null
+  return {}
 }
 const VALIDATE_PATHS = []
 for (const r of ROUTES) {
   VALIDATE_PATHS.push(r.path)
-  const en = enPathFor(r.path)
-  if (en) VALIDATE_PATHS.push(en)
+  const alt = altPathsFor(r.path)
+  for (const lang of OTHER_LANGS) {
+    if (alt[lang]) VALIDATE_PATHS.push(alt[lang])
+  }
 }
 
 

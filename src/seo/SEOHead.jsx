@@ -10,10 +10,10 @@ import {
   APPLICATION_NAME,
   LEGAL_NAME,
 } from "./siteConfig";
-import { langFromPath, alternatePath } from "../i18n/routing";
+import { langFromPath, alternatePath, SUPPORTED_LANGS } from "../i18n/routing";
 
 // Locale Open Graph par langue (format facebook : langue_TERRITOIRE).
-const OG_LOCALES = { fr: DEFAULT_LOCALE, en: "en_US" };
+const OG_LOCALES = { fr: DEFAULT_LOCALE, en: "en_US", nl: "nl_NL" };
 
 /**
  * SEOHead — équivalent React/Vite de la Metadata API de Next.js.
@@ -58,6 +58,8 @@ export default function SEOHead({
   const lang = langFromPath(pathname);
   const frPath = alternatePath(pathname, "fr");
   const enPath = alternatePath(pathname, "en");
+  const nlPath = alternatePath(pathname, "nl");
+  const altPaths = { fr: frPath, en: enPath, nl: nlPath };
 
   return (
     <Helmet>
@@ -92,6 +94,7 @@ export default function SEOHead({
           pris en compte. x-default → le français, langue par défaut. */}
       {frPath && <link rel="alternate" hrefLang="fr" href={`${SITE_URL}${frPath}`} />}
       {enPath && <link rel="alternate" hrefLang="en" href={`${SITE_URL}${enPath}`} />}
+      {nlPath && <link rel="alternate" hrefLang="nl" href={`${SITE_URL}${nlPath}`} />}
       <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${frPath || path}`} />
 
       {/* ── Open Graph ── */}
@@ -101,8 +104,9 @@ export default function SEOHead({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:locale" content={OG_LOCALES[lang] || DEFAULT_LOCALE} />
-      {enPath && lang === "fr" && <meta property="og:locale:alternate" content={OG_LOCALES.en} />}
-      {frPath && lang === "en" && <meta property="og:locale:alternate" content={OG_LOCALES.fr} />}
+      {SUPPORTED_LANGS.filter((l) => l !== lang && altPaths[l]).map((l) => (
+        <meta key={l} property="og:locale:alternate" content={OG_LOCALES[l]} />
+      ))}
       <meta property="og:image" content={image.url} />
       <meta property="og:image:width" content={String(image.width)} />
       <meta property="og:image:height" content={String(image.height)} />

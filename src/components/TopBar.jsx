@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { alternatePath, langFromPath, pathFor } from "../i18n/routing";
+import { alternatePath, langFromPath, pathFor, SUPPORTED_LANGS } from "../i18n/routing";
 
 // Navigation desktop — mêmes destinations de premier niveau que LiquidMenu
 // (pas les sous-liens : une top nav horizontale n'a pas la place d'un
@@ -21,11 +21,10 @@ export default function TopBar({ variant = "minimal" }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = langFromPath(pathname);
-  // Équivalent de la page courante dans l'autre langue — null si elle n'est
-  // pas encore traduite : le sélecteur s'affiche alors en état inactif plutôt
-  // que de mener à une page inexistante.
-  const otherLang = lang === "fr" ? "en" : "fr";
-  const switchHref = alternatePath(pathname, otherLang);
+  // Équivalent de la page courante dans chaque autre langue — null si elle
+  // n'est pas encore traduite : le sélecteur s'affiche alors en état inactif
+  // plutôt que de mener à une page inexistante.
+  const altHrefs = Object.fromEntries(SUPPORTED_LANGS.map((l) => [l, alternatePath(pathname, l)]));
 
   const handleMenuClick = () => {
     // Dispatch un événement personnalisé que LiquidMenu écoute
@@ -54,44 +53,42 @@ export default function TopBar({ variant = "minimal" }) {
               {t(`nav.${l.key}`)}
             </a>
           ))}
-          {/* Sélecteur FR/EN — un vrai <a> (pas un bouton JS) : la langue vit
-               dans l'URL, donc la bascule est une navigation. Indexable,
+          {/* Sélecteur FR/EN/NL — de vrais <a> (pas des boutons JS) : la langue
+               vit dans l'URL, donc la bascule est une navigation. Indexable,
                partageable, fonctionne au clic-droit « ouvrir dans un onglet ».
-               Si la page courante n'existe pas encore dans l'autre langue,
-               switchHref est null → état inactif explicite plutôt qu'un lien
-               mort ou une redirection surprise vers l'accueil. */}
+               Si la page courante n'existe pas encore dans une langue donnée,
+               altHrefs[code] est null → état inactif explicite plutôt qu'un
+               lien mort ou une redirection surprise vers l'accueil. */}
           <span className="topbar-nav__lang">
-            {switchHref ? (
-              <>
-                <a
-                  href={lang === "fr" ? undefined : switchHref}
-                  className="topbar-nav__lang-link"
-                  aria-current={lang === "fr" ? "true" : undefined}
-                  style={lang === "fr" ? { fontWeight: 700, pointerEvents: "none" } : undefined}
-                  hrefLang="fr"
-                >
-                  FR
-                </a>
-                <span aria-hidden="true"> | </span>
-                <a
-                  href={lang === "en" ? undefined : switchHref}
-                  className="topbar-nav__lang-link"
-                  aria-current={lang === "en" ? "true" : undefined}
-                  style={lang === "en" ? { fontWeight: 700, pointerEvents: "none" } : undefined}
-                  hrefLang="en"
-                >
-                  EN
-                </a>
-              </>
-            ) : (
-              <>
-                <strong>{lang.toUpperCase()}</strong>
-                <span aria-hidden="true"> | </span>
-                <span className="topbar-nav__lang-en" title={t("a11y.langSwitch")}>
-                  {otherLang.toUpperCase()}
+            {SUPPORTED_LANGS.map((code, i) => {
+              const isCurrent = code === lang;
+              const href = altHrefs[code];
+              return (
+                <span key={code}>
+                  {i > 0 && <span aria-hidden="true"> | </span>}
+                  {href ? (
+                    <a
+                      href={isCurrent ? undefined : href}
+                      className="topbar-nav__lang-link"
+                      aria-current={isCurrent ? "true" : undefined}
+                      style={isCurrent ? { fontWeight: 700, pointerEvents: "none" } : undefined}
+                      hrefLang={code}
+                    >
+                      {code.toUpperCase()}
+                    </a>
+                  ) : (
+                    <span
+                      className={isCurrent ? undefined : "topbar-nav__lang-en"}
+                      style={isCurrent ? { fontWeight: 700 } : undefined}
+                      aria-current={isCurrent ? "true" : undefined}
+                      title={isCurrent ? undefined : t("a11y.langSwitch")}
+                    >
+                      {code.toUpperCase()}
+                    </span>
+                  )}
                 </span>
-              </>
-            )}
+              );
+            })}
           </span>
           <a href={`${pathFor("contact", lang)}?section=form`} className="topbar-nav__cta">
             {t("nav.quote")}

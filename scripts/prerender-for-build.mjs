@@ -19,37 +19,45 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { ROUTES } from '../src/seo/routesRegistry.js'
-import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES } from '../src/i18n/routing.js'
+import { ROUTES as I18N_ROUTES, TRANSLATED_PAGES, SUPPORTED_LANGS, DEFAULT_LANG } from '../src/i18n/routing.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.join(__dirname, '..')
 const distDir = path.join(projectRoot, 'dist')
 
+const OTHER_LANGS = SUPPORTED_LANGS.filter((l) => l !== DEFAULT_LANG)
+
 // ── Liste finale des chemins à pré-rendre : toutes les routes françaises,
-// plus leur équivalent anglais quand la page est réellement traduite.
-const frToEn = new Map()
+// plus leur équivalent dans chaque autre langue quand la page est
+// réellement traduite (voir TRANSLATED_PAGES).
+const frToOthers = new Map()
 for (const key of TRANSLATED_PAGES) {
   const pair = I18N_ROUTES[key]
-  if (pair?.fr && pair?.en) frToEn.set(pair.fr, pair.en)
+  if (pair?.[DEFAULT_LANG]) frToOthers.set(pair[DEFAULT_LANG], pair)
 }
 const productsPair = I18N_ROUTES.products
 
-/** Équivalent anglais d'un chemin français, ou null. */
-function enPathFor(frPath) {
-  const direct = frToEn.get(frPath)
+/** Équivalents (par langue) d'un chemin français, ou {} si non traduit. */
+function altPathsFor(frPath) {
+  const direct = frToOthers.get(frPath)
   if (direct) return direct
-  // Fiches produit : /produits/<slug> → /en/products/<slug>
-  if (frPath.startsWith(`${productsPair.fr}/`)) {
-    return `${productsPair.en}/${frPath.slice(productsPair.fr.length + 1)}`
+  // Fiches produit : /produits/<slug> → /en/products/<slug>, /nl/producten/<slug>...
+  if (frPath.startsWith(`${productsPair[DEFAULT_LANG]}/`)) {
+    const slug = frPath.slice(productsPair[DEFAULT_LANG].length + 1)
+    const out = {}
+    for (const lang of OTHER_LANGS) out[lang] = `${productsPair[lang]}/${slug}`
+    return out
   }
-  return null
+  return {}
 }
 
 const PRERENDER_PATHS = []
 for (const r of ROUTES) {
   PRERENDER_PATHS.push(r.path)
-  const en = enPathFor(r.path)
-  if (en) PRERENDER_PATHS.push(en)
+  const alt = altPathsFor(r.path)
+  for (const lang of OTHER_LANGS) {
+    if (alt[lang]) PRERENDER_PATHS.push(alt[lang])
+  }
 }
 
 // Use environment variable or default

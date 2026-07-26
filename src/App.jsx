@@ -64,17 +64,19 @@ export default function App() {
   // anglaise afficherait un footer que la française n'a pas.
   const isArticle =
     (path.startsWith("/insights/") && path !== "/insights") ||
-    (path.startsWith("/en/insights/") && path !== "/en/insights");
+    (path.startsWith("/en/insights/") && path !== "/en/insights") ||
+    (path.startsWith("/nl/inzichten/") && path !== "/nl/inzichten");
   // La Home rend son propre <Footer /> DANS son wrapper de scroll mobile
-  // (le body y est figé) — on évite ici le doublon. Vaut pour ses deux
-  // langues : / (fr) et /en.
-  const isHome = path === "/" || path === "/en";
+  // (le body y est figé) — on évite ici le doublon. Vaut pour ses trois
+  // langues : / (fr), /en et /nl.
+  const isHome = path === "/" || path === "/en" || path === "/nl";
   // Idem pour une fiche produit : depuis l'ajout du wrapper de scroll dédié
   // mobile (fix du calque de fond qui se décalait au scroll sur iOS Safari),
   // ProductDetail.jsx rend aussi son propre <Footer /> DANS son wrapper.
   const isProductDetail =
     (path.startsWith("/produits/") && path !== "/produits") ||
-    (path.startsWith("/en/products/") && path !== "/en/products");
+    (path.startsWith("/en/products/") && path !== "/en/products") ||
+    (path.startsWith("/nl/producten/") && path !== "/nl/producten");
 
   return (
     <>
@@ -97,6 +99,21 @@ export default function App() {
         <Route path="/en/privacy" element={<PolitiqueConfidentialite />} />
         <Route path="/en/quality-compliance" element={<Quality />} />
         <Route path="/en/logistics-export" element={<Logistics />} />
+
+        {/* ── Version néerlandaise (préfixe /nl) — même principe que /en ── */}
+        <Route path="/nl" element={<Home />} />
+        <Route path="/nl/producten" element={<Produits />} />
+        <Route path="/nl/producten/:slug" element={<ProductDetail />} />
+        <Route path="/nl/contact" element={<Contact />} />
+        <Route path="/nl/beschikbaarheid" element={<Disponibilite />} />
+        <Route path="/nl/over-ons" element={<APropos />} />
+        <Route path="/nl/partnerschappen" element={<Partenariats />} />
+        <Route path="/nl/inzichten" element={<Insights />} />
+        <Route path="/nl/inzichten/senegal-strategische-oorsprong" element={<InsightSenegal />} />
+        <Route path="/nl/inzichten/betrouwbare-vs-opportunistische-leverancier" element={<InsightPartenariats />} />
+        <Route path="/nl/privacybeleid" element={<PolitiqueConfidentialite />} />
+        <Route path="/nl/kwaliteit-conformiteit" element={<Quality />} />
+        <Route path="/nl/logistiek-export" element={<Logistics />} />
 
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />

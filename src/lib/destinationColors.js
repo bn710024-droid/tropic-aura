@@ -14,14 +14,18 @@ const ROUTE_COLORS = {
   "/about": APROPOS,
   "/a-propos": APROPOS,
   "/en/about": APROPOS,
+  "/nl/over-ons": APROPOS,
   "/products": PRODUITS,
   "/produits": PRODUITS,
   "/en/products": PRODUITS,
+  "/nl/producten": PRODUITS,
   "/partnerships": PARTENARIATS,
   "/partenariats": PARTENARIATS,
   "/en/partnerships": PARTENARIATS,
+  "/nl/partnerschappen": PARTENARIATS,
   "/contact": CONTACT,
   "/en/contact": CONTACT,
+  "/nl/contact": CONTACT,
 };
 
 /**

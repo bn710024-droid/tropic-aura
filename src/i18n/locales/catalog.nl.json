@@ -1,0 +1,128 @@
+{
+  "collections": {
+    "SIGNATURE": "Signature",
+    "SAISON": "Seizoen",
+    "SPÉCIALITÉS": "Specialiteiten"
+  },
+  "standard": "Premium Export",
+  "shared": {
+    "certification": "GlobalGAP",
+    "incoterms": [
+      "EXW",
+      "FOB Dakar",
+      "CIF (afhankelijk van bestemming en overeengekomen voorwaarden)"
+    ],
+    "incotermsNote": "De logistieke voorwaarden worden met elke partner vastgesteld om de beste oplossing voor de bestemmingsmarkt te bieden.",
+    "packaging": "Verpakking aangepast aan het lastenboek van de klant en aan de eisen van de bestemmingsmarkt.",
+    "calibrage": "Vastgesteld in overeenstemming met het lastenboek en de commerciële eisen van de klant.",
+    "transportSenegal": "Maritiem transport vanuit de haven van Dakar (Senegal) met een strikt beheer van de koudeketen voor producten die dit vereisen. Voor urgente zendingen, premiumproducten of specifieke verzoeken kunnen ook oplossingen voor luchttransport worden georganiseerd volgens de behoeften van de klant.",
+    "transportOtherAfrica": "De zendingen worden georganiseerd vanuit de meest geschikte oorsprongshaven, afhankelijk van het productieland en de logistieke beperkingen. Voor premiumproducten, urgente bestellingen of specifieke lastenboeken kunnen ook oplossingen voor luchttransport op aanvraag worden voorgesteld.",
+    "availabilityNote": "De aangeboden variëteiten hangen af van het oogstseizoen, de beschikbaarheid en de eisen van de bestemmingsmarkt. Onze teams selecteren de best passende oplossing voor elke aanvraag.",
+    "customSolutions": "Elk exportproject heeft specifieke eisen op het gebied van variëteit, kalibrering, verpakking en logistiek. Tropicaura stelt elk aanbod op volgens het door de klant meegedeelde lastenboek, om een oplossing aangepast aan zijn markt te bieden.",
+    "otherMarketsNote": "Wij onderzoeken ook commerciële kansen naar andere markten, afhankelijk van de behoeften van onze partners.",
+    "faq": [
+      {
+        "q": "Wat is het minimale bestelvolume (MOQ)?",
+        "a": "Het minimumvolume hangt af van het product, het seizoen en de bestemming. Neem contact op met ons team voor een voorstel aangepast aan uw markt."
+      },
+      {
+        "q": "Welke Incoterms biedt u aan?",
+        "a": "Onze zendingen kunnen worden georganiseerd in EXW, FOB Dakar of CIF, afhankelijk van de bestemming en de behoeften van de klant. Neem contact op met ons team om de logistieke oplossing aangepast aan uw markt te bepalen."
+      },
+      {
+        "q": "Biedt u kwaliteitscertificeringen aan?",
+        "a": "Ja, al onze producten zijn GlobalGAP-gecertificeerd, wat de naleving van internationaal erkende goede landbouwpraktijken garandeert."
+      },
+      {
+        "q": "Naar welke markten exporteert u?",
+        "a": "Wij ontwikkelen een netwerk van partners dat West-Afrika verbindt met de belangrijkste internationale markten, met name in Europa, Noord-Amerika en het Midden-Oosten."
+      }
+    ]
+  },
+  "items": {
+    "mangue": {
+      "name": "Kent Mango",
+      "description": "Geteeld onder de Senegalese zon, wordt de door Tropicaura geëxporteerde mango geselecteerd op smaakkwaliteit, transportbestendigheid en conformiteit met de eisen van internationale importeurs. Afhankelijk van het seizoen bieden wij mango's aangepast aan verschillende markten en lastenboeken.",
+      "origin": "Senegal",
+      "availability": "Juni – Half augustus",
+      "shortDesc": "Weinig vezelig vruchtvlees, uitstekende houdbaarheid na de oogst en sterke waardering op Europese markten. Een onmisbare referentie voor premium exportprogramma's."
+    },
+    "avocat": {
+      "name": "Avocado",
+      "description": "Geselecteerd binnen de belangrijkste productiegebieden van West-Afrika, onderscheidt de Tropicaura-avocado zich door zijn gecontroleerde rijping en romige textuur — twee bepalende criteria voor internationale toeleveringsketens. Een constante kwaliteit, het hele jaar beschikbaar, ontworpen om te passen in de meest veeleisende inkoopprogramma's.",
+      "origin": "West-Afrika",
+      "availability": "Het hele jaar",
+      "shortDesc": "Gecontroleerde rijping, romige textuur en constante kwaliteit. Geselecteerd om te voldoen aan de eisen van internationale toeleveringsketens."
+    },
+    "ananas": {
+      "name": "Ananas",
+      "description": "Geoogst in de tropische streken van Afrika, combineert de Tropicaura-ananas sappig vruchtvlees en aromatische intensiteit met een transportbestendigheid ontworpen voor export over lange afstand. Verzorgde presentatie en constante kwaliteit maken er het hele jaar door een referentie van op premiummarkten.",
+      "origin": "Tropisch Afrika",
+      "availability": "Het hele jaar",
+      "shortDesc": "Sappig vruchtvlees, intens aromaprofiel en verzorgde presentatie. Een tropisch product erkend voor zijn toegevoegde waarde op premiummarkten."
+    },
+    "papaye": {
+      "name": "Papaja",
+      "description": "De Tropicaura-papaja wordt in de eerste plaats herkend aan zijn stralende kleur en evenwichtige smaak — twee kenmerken die gezocht worden door gespecialiseerde afzetkanalen. Onze teams zorgen voor een constante kwaliteit gedurende het hele jaar, om te voldoen aan de eisen van de meest selectieve markten.",
+      "origin": "Tropisch Afrika",
+      "availability": "Het hele jaar",
+      "shortDesc": "Stralende kleur, evenwichtige smaak en constante kwaliteit. Een tropische referentie aangepast aan gespecialiseerde kanalen en veeleisende markten."
+    },
+    "banane": {
+      "name": "Banaan",
+      "description": "Een volumeproduct bij uitstek, de Tropicaura-banaan steunt op een regelmatige aanvoer en een gecontroleerd rijpheidsbeheer — twee essentiële eisen voor de continuïteit van internationale inkoopprogramma's. Een homogene kwaliteit, het hele jaar beschikbaar.",
+      "origin": "Tropisch Afrika",
+      "availability": "Het hele jaar",
+      "shortDesc": "Regelmaat van de volumes, homogene kwaliteit en gecontroleerd rijpheidsbeheer. Een essentieel product in de internationale handel."
+    },
+    "melon": {
+      "name": "Meloen",
+      "description": "Geteeld in Senegal en geoogst op het beste rijpheidsstadium, biedt de Tropicaura-meloen een smeltend vruchtvlees en een evenwichtige zoetheid gezocht door Europese markten in seizoen. Een specialiteit van januari tot eind april, gedragen door een versheid die niet ter discussie staat.",
+      "origin": "Senegal",
+      "availability": "Januari – Eind april",
+      "shortDesc": "Smeltend vruchtvlees, evenwichtige zoetheid en oogst op het beste rijpheidsstadium. Een seizoensspecialiteit gezocht om zijn versheid."
+    },
+    "pasteque": {
+      "name": "Watermeloen",
+      "description": "Geteeld in Senegal, onderscheidt de Tropicaura-watermeloen zich door zijn knapperige textuur en visuele kwaliteit — regelmatige kalibrering, homogene kleur — twee criteria die al meetellen bij het uitstallen. Beschikbaar van januari tot eind april, voldoet hij aan de piekvraag in de zomer op Europese markten.",
+      "origin": "Senegal",
+      "availability": "Januari – Eind april",
+      "shortDesc": "Knapperige textuur, hoog watergehalte en opmerkelijke visuele kwaliteit. Een zomerreferentie gewaardeerd om zijn natuurlijke versheid."
+    },
+    "haricot-vert": {
+      "name": "Sperzieboon",
+      "description": "De Tropicaura-sperzieboon wordt in Senegal geoogst met een strikte controle van versheid en malsheid — twee bepalende criteria voor dit product dat gevoelig is voor transport. Beschikbaar van januari tot april, voldoet hij aan de Europese piekvraag binnen dit seizoensvenster.",
+      "origin": "Senegal",
+      "availability": "Januari – April",
+      "shortDesc": "Strikte controle van versheid en malsheid van het veld tot het transport. Een seizoensspecialiteit gezocht binnen haar beschikbaarheidsvenster."
+    },
+    "citron-vert": {
+      "name": "Limoen",
+      "description": "De Tropicaura-limoen, geteeld in Senegal, onderscheidt zich door zijn intense aroma's en levendige zuurgraad — kwaliteiten gezocht door zowel de horeca als de voedingsindustrie. Het hele jaar beschikbaar, met een seizoenspiek tussen september en december.",
+      "origin": "Senegal",
+      "availability": "Het hele jaar (Piek: September – December)",
+      "shortDesc": "Intense aroma's, levendige zuurgraad en uitstekende veelzijdigheid. Een onmisbare referentie voor de horeca en de voedingsindustrie."
+    },
+    "citron-jaune": {
+      "name": "Citroen",
+      "description": "Waar de limoen inzet op intensiteit, speelt de Tropicaura-citroen de regelmaat: aromatisch evenwicht en constante versheid, geteeld in Senegal. Het hele jaar beschikbaar met een seizoenspiek tussen september en december, voldoet hij aan markten die kwaliteit en constantheid zoeken.",
+      "origin": "Senegal",
+      "availability": "Het hele jaar (Piek: September – December)",
+      "shortDesc": "Aromatisch evenwicht, constante versheid en verzorgde presentatie. Aangepast aan markten die kwaliteit en regelmaat zoeken."
+    },
+    "gombo": {
+      "name": "Okra",
+      "description": "De Tropicaura-okra wordt met zorg geoogst in Senegal om zijn versheid en malsheid tot aan de bestemming te bewaren — twee criteria die onze teams nauwlettend opvolgen, omdat ze snel achteruitgaan. Het hele jaar beschikbaar, vindt hij zijn plaats op talrijke internationale markten.",
+      "origin": "Senegal",
+      "availability": "Het hele jaar",
+      "shortDesc": "Met zorg geoogst om versheid en malsheid te bewaren. Een groentespecialiteit gewaardeerd op talrijke internationale markten."
+    },
+    "piment": {
+      "name": "Pepers",
+      "description": "De Tropicaura-pepers zijn beschikbaar in verschillende variëteiten en scherptegraden naargelang de behoeften van de markt, met een gecontroleerde versheid van Senegal tot aan de bestemming. Een strenge selectie, beschikbaar van maart tot augustus, ontworpen om zich aan te passen aan de specificaties van elke klant.",
+      "origin": "Senegal",
+      "availability": "Maart – Augustus",
+      "shortDesc": "Een assortiment van kleuren en variëteiten — mild of scherp, naargelang de behoeften. Gecontroleerde versheid en strenge selectie voor markten met hoge vraag."
+    }
+  }
+}

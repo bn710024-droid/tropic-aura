@@ -20,12 +20,14 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import fr from "./locales/fr.json";
 import en from "./locales/en.json";
+import nl from "./locales/nl.json";
 // Catalogue produit dans des fichiers dédiés : 12 produits × (nom, description,
 // origine, disponibilité) + textes partagés (incoterms, transport, FAQ…)
 // alourdiraient trop les fichiers d'interface. Le FR est GÉNÉRÉ depuis
 // productsData.js (voir scripts) pour rester la copie exacte du contenu publié.
 import catalogFr from "./locales/catalog.fr.json";
 import catalogEn from "./locales/catalog.en.json";
+import catalogNl from "./locales/catalog.nl.json";
 
 // Définis dans routing.js (module sans dépendance, utilisable au build) et
 // ré-exportés ici pour que le reste de l'app garde un point d'entrée unique.
@@ -36,6 +38,7 @@ i18n.use(initReactI18next).init({
   resources: {
     fr: { translation: { ...fr, catalog: catalogFr } },
     en: { translation: { ...en, catalog: catalogEn } },
+    nl: { translation: { ...nl, catalog: catalogNl } },
   },
   lng: DEFAULT_LANG,
   fallbackLng: DEFAULT_LANG,

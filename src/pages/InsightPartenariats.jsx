@@ -88,7 +88,7 @@ export default function InsightPartenariats() {
       {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
       <img
         src="/logo-mark.png"
-        alt="Tropicaura — Ce qui distingue un fournisseur stable d'un fournisseur opportuniste en Afrique de l'Ouest"
+        alt={t("insights.articles.supplier.logoAlt")}
         width={512}
         height={512}
         style={{ display: "none" }}

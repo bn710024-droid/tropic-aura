@@ -1,7 +1,7 @@
 ﻿import { useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { langFromPath, pathFor, alternatePath } from "../i18n/routing";
+import { langFromPath, pathFor, alternatePath, SUPPORTED_LANGS } from "../i18n/routing";
 
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
@@ -79,8 +79,8 @@ export default function LiquidMenu() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = langFromPath(pathname);
-  // Équivalent de la page courante dans l'autre langue (null si non traduite).
-  const switchHref = alternatePath(pathname, lang === "fr" ? "en" : "fr");
+  // Équivalent de la page courante dans chaque autre langue (null si non traduite).
+  const altHrefs = Object.fromEntries(SUPPORTED_LANGS.map((l) => [l, alternatePath(pathname, l)]));
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
   const imgWrapRef = useRef(null);
@@ -445,9 +445,9 @@ export default function LiquidMenu() {
                   color: "rgba(255,255,255,0.75)",
                 }}
               >
-                {["fr", "en"].map((code, i) => {
+                {SUPPORTED_LANGS.map((code, i) => {
                   const isCurrent = code === lang;
-                  const target = isCurrent ? null : switchHref;
+                  const target = isCurrent ? null : altHrefs[code];
                   return (
                     <span key={code}>
                       {i > 0 && (

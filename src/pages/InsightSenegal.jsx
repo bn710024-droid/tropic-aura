@@ -89,7 +89,7 @@ export default function InsightSenegal() {
       {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
       <img
         src="/logo-mark.png"
-        alt="Tropicaura — Pourquoi le Sénégal devient une origine stratégique pour les marchés internationaux"
+        alt={t("insights.articles.senegal.logoAlt")}
         width={512}
         height={512}
         style={{ display: "none" }}
