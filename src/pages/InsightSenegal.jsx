@@ -303,8 +303,8 @@ export default function InsightSenegal() {
 
       {/* ══ Nav fixe ══ */}
       <nav className="art-nav">
-        <a href="/" className="art-brand ghost__logo">Tropicaura</a>
-        <a href="/insights" className="art-back">← Retour aux analyses</a>
+        <a href={pathFor("home", lang)} className="art-brand ghost__logo">Tropicaura</a>
+        <a href={pathFor("insights", lang)} className="art-back">← {t("insights.seeAll")}</a>
       </nav>
       <Breadcrumbs trail={articleTrail} />
 
@@ -425,7 +425,7 @@ export default function InsightSenegal() {
           <p className="art-outro-quote">{t("articleSenegal.b36")}</p>
           <div className="art-outro-nav">
             <div className="art-outro-line" />
-            <a href="/insights" className="art-outro-link">← Toutes les analyses</a>
+            <a href={pathFor("insights", lang)} className="art-outro-link">← {t("insights.seeAll")}</a>
             <div className="art-outro-line" />
           </div>
         </div>

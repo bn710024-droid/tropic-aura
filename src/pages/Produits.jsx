@@ -571,7 +571,7 @@ export default function Produits() {
                   to={`${produitsPath}/${s.id}`}
                   aria-label={t("productsPage.viewSheet", { name: t(`catalog.items.${s.id}.name`) })}
                   className="prod-more"
-                  onClick={(e) => handleMoreClick(e, i, `/produits/${s.id}`)}
+                  onClick={(e) => handleMoreClick(e, i, `${produitsPath}/${s.id}`)}
                 >
                   {t("productsPage.learnMore")} <span className="prod-more-arrow" aria-hidden="true">→</span>
                 </Link>

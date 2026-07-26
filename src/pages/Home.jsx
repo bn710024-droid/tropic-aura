@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Lenis from "lenis";
 import { IMAGES } from "../images";
 import { getDestinationColor } from "../lib/destinationColors";
+import { pathFor } from "../i18n/routing";
 import { FRUITS_MID, FRUITS_SOFT, BLUR_PAD_RATIO, blurredFruitSrc } from "../data/mobileFruits";
 import Footer from "../components/Footer";
 import TopBar from "../components/TopBar";
@@ -77,7 +78,7 @@ const SECTIONS = [
   {
     id: "hero", bg: "#0E9F6E",
     mobileBg: "#0E9F6E",
-    link: "/about",
+    link: "about",
     items: build(LAYOUTS[0], [
       IMAGES.ananas,
       IMAGES.fraises, IMAGES.orange, IMAGES.avocat, IMAGES.papaye, IMAGES.citronVert,
@@ -86,7 +87,7 @@ const SECTIONS = [
   {
     id: "origins", bg: "#E8631C",
     mobileBg: "#E8631C",
-    link: "/about",
+    link: "about",
     items: build(LAYOUTS[1], [
       IMAGES.mangue,
       IMAGES.orange, IMAGES.papayeCoupe, IMAGES.fruitPassion,
@@ -96,7 +97,7 @@ const SECTIONS = [
   {
     id: "products", bg: "#F3B500",
     mobileBg: "#F3B500",
-    link: "/products",
+    link: "products",
     items: build(LAYOUTS[2], [
       IMAGES.ananas,
       IMAGES.melonJaune, IMAGES.banane, IMAGES.citronJaune, IMAGES.orange,
@@ -105,7 +106,7 @@ const SECTIONS = [
   {
     id: "partnerships", bg: "#1B7A3D",
     mobileBg: "#1B7A3D",
-    link: "/partnerships",
+    link: "partnerships",
     items: build(LAYOUTS[3], [
       IMAGES.avocat,
       IMAGES.citronVert, IMAGES.citronVertCoupe, IMAGES.melonVert, IMAGES.citronJaune,
@@ -114,7 +115,7 @@ const SECTIONS = [
   {
     id: "vision", bg: "#C9912B",
     mobileBg: "#C9912B",
-    link: "/partenariats",
+    link: "partnerships",
     items: build(LAYOUTS[4], [
       IMAGES.pastequeTranche,
       IMAGES.orange, IMAGES.fraises, IMAGES.fruitPassion, IMAGES.melonJaune,
@@ -123,7 +124,7 @@ const SECTIONS = [
   {
     id: "contact", bg: "#0D9488",
     mobileBg: "#0D9488",
-    link: "/contact",
+    link: "contact",
     items: build(LAYOUTS[5], [
       IMAGES.papayeCoupe,
       IMAGES.melonVert, IMAGES.coco, IMAGES.banane, IMAGES.melonJaune, IMAGES.papaye,
@@ -626,7 +627,7 @@ export default function Home() {
             </p>
             <button
               className="scene__cta"
-              onClick={(e) => handleCtaClick(e, s.link, i + 1)}
+              onClick={(e) => handleCtaClick(e, pathFor(s.link, i18n.language), i + 1)}
             >
               <span className="cta-label">
                 <span className="only-desktop">{t(`home.${s.id}.cta`)}</span>
