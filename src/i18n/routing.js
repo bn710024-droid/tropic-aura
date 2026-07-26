@@ -42,13 +42,15 @@ export const ROUTES = {
   },
   contact: { fr: "/contact", en: "/en/contact" },
   privacy: { fr: "/politique-confidentialite", en: "/en/privacy" },
+  quality: { fr: "/qualite-conformite", en: "/en/quality-compliance" },
+  logistics: { fr: "/logistique-export", en: "/en/logistics-export" },
 };
 
 // Pages réellement disponibles en anglais aujourd'hui. Tant qu'une page
 // n'est pas traduite, on ne déclare NI hreflang="en" NI de lien vers elle :
 // annoncer une version qui n'existe pas génère des erreurs Search Console
 // et envoie l'utilisateur sur une page dans la mauvaise langue.
-export const TRANSLATED_PAGES = ["home", "products", "contact", "availability", "about", "partnerships", "insights", "insightSenegal", "insightSupplier", "privacy"];
+export const TRANSLATED_PAGES = ["home", "products", "contact", "availability", "about", "partnerships", "insights", "insightSenegal", "insightSupplier", "privacy", "quality", "logistics"];
 
 /** Langue portée par un chemin : /en ou /en/... → "en", sinon "fr". */
 export function langFromPath(pathname) {

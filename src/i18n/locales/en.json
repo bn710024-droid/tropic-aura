@@ -7,7 +7,9 @@
     "partnerships": "Partnerships",
     "insights": "Insights",
     "contact": "Contact",
-    "quote": "Request a Quote"
+    "quote": "Request a Quote",
+    "quality": "Quality & Compliance",
+    "logistics": "Logistics & Export Process"
   },
   "home": {
     "seo": {
@@ -611,5 +613,201 @@
   },
   "breadcrumb": {
     "label": "Breadcrumb"
+  },
+  "quality": {
+    "seo": {
+      "title": "Quality & Compliance — Inspections, Traceability, Export Documents",
+      "description": "How Tropicaura selects, inspects and documents its fresh fruit and vegetables before export: quality control, cold chain, traceability, export certificates.",
+      "logoAlt": "Tropicaura — Quality and export compliance"
+    },
+    "kicker": "Quality & Compliance",
+    "title": "Quality is built before the harvest, not at the moment of shipping.",
+    "intro": "An international buyer doesn't judge an exporter on a photo, but on the consistency of what they receive, shipment after shipment. Here is how we work.",
+    "sections": {
+      "approach": {
+        "heading": "Our quality approach",
+        "intro": "Most of a shipment's quality is decided before harvest: choice of producer, monitoring through the season, timing of the pick.",
+        "points": [
+          "Producers selected for consistency and their ability to meet agreed specifications",
+          "Fields monitored throughout the season, not only at harvest time",
+          "Harvest timed to match transit duration and destination market",
+          "Quality requirements communicated upfront to every partner producer"
+        ]
+      },
+      "control": {
+        "heading": "Quality control",
+        "intro": "Every batch is inspected before loading, not only checked as it leaves the field.",
+        "points": [
+          "Visual inspection: appearance, colour, presence of defects",
+          "Ripeness and firmness checks appropriate to the product",
+          "Sorting and sizing to match the destination market's requirements",
+          "Final inspection immediately before loading"
+        ]
+      },
+      "phytosanitary": {
+        "heading": "Phytosanitary compliance",
+        "intro": "Exporting fresh produce is governed by rules that are specific to each destination country.",
+        "points": [
+          "Our produce is GlobalGAP certified, guaranteeing compliance with internationally recognised good agricultural practices",
+          "Phytosanitary certificate issued by the relevant authorities for every shipment that requires one",
+          "Compliance checked against the importing country's requirements before loading",
+          "Official inspections carried out in line with applicable regulations"
+        ]
+      },
+      "coldChain": {
+        "heading": "Cold chain",
+        "intro": "Freshness is rarely lost all at once — it is lost break by break in the temperature chain. We work to limit those breaks.",
+        "points": [
+          "Pre-cooling when the product and transit time require it",
+          "Storage at the appropriate temperature before loading",
+          "Temperature monitored throughout sea or air transport",
+          "Transport mode chosen according to the product's sensitivity"
+        ]
+      },
+      "traceability": {
+        "heading": "Traceability",
+        "intro": "If a question ever comes up about a shipment, we need to be able to trace it back to its origin.",
+        "points": [
+          "Origin identified for every batch",
+          "Batch tracked from intake to shipment",
+          "Related documentation kept on file and available on request"
+        ]
+      },
+      "documents": {
+        "heading": "Documents provided",
+        "intro": "Depending on destination and product, a shipment may include:",
+        "items": [
+          "Phytosanitary Certificate",
+          "Commercial Invoice",
+          "Packing List",
+          "Certificate of Origin (when applicable)",
+          "Other documents specific to the importing country's requirements"
+        ]
+      }
+    },
+    "why": {
+      "heading": "Why importers work with Tropicaura",
+      "items": [
+        { "title": "Reliable sourcing", "text": "Producers followed over time, not opportunistic one-off purchases." },
+        { "title": "Real inspections", "text": "Every batch is inspected before loading, not just documented on paper." },
+        { "title": "Direct communication", "text": "One point of contact to follow your order, from quotation to delivery." },
+        { "title": "Export documentation", "text": "The documents your customs clearance needs, prepared for every shipment." },
+        { "title": "Seasonal expertise", "text": "A close understanding of each product's availability windows." },
+        { "title": "Long-term partnerships", "text": "We build commercial relationships across seasons, not isolated sales." }
+      ]
+    },
+    "faq": [
+      { "q": "Do you work with certified producers?", "a": "Yes — all our produce is GlobalGAP certified, guaranteeing compliance with internationally recognised good agricultural practices." },
+      { "q": "How do you control quality before shipping?", "a": "Every batch goes through visual inspection, ripeness and firmness checks, sorting and sizing, then a final inspection right before loading." },
+      { "q": "What documents do you provide with each shipment?", "a": "Depending on destination: Phytosanitary Certificate, Commercial Invoice, Packing List, and Certificate of Origin when required by the importing country." },
+      { "q": "How is freshness preserved during transport?", "a": "Through pre-cooling when needed, storage at the right temperature, and cold chain monitoring throughout sea or air transport." },
+      { "q": "Can you guarantee zero defects?", "a": "No — fresh agricultural produce always carries some natural variability. Our sorting and sizing work aims to keep it to a minimum and match the specification agreed with you." },
+      { "q": "Do you offer batch-level traceability?", "a": "Yes. Each batch's origin and handling are documented and can be shared on request." }
+    ],
+    "cta": {
+      "heading": "A question about our quality standards?",
+      "text": "Let's discuss your specific requirements and how we can meet them.",
+      "button": "Request a quotation",
+      "contactButton": "Contact our export team"
+    },
+    "related": {
+      "heading": "Explore further"
+    }
+  },
+  "logistics": {
+    "seo": {
+      "title": "Logistics & Export Process — Incoterms, Transport, Lead Times",
+      "description": "How a Tropicaura order is handled, from inquiry to delivery: Incoterms, air and sea freight, packaging, export documentation.",
+      "logoAlt": "Tropicaura — Logistics and export process"
+    },
+    "kicker": "Logistics & Export Process",
+    "title": "From Senegal to your market, every step has a reason.",
+    "intro": "Understanding our process means knowing exactly what to expect between your inquiry and the arrival of your order.",
+    "timeline": {
+      "heading": "Our export process",
+      "steps": [
+        { "label": "Inquiry", "desc": "You tell us the product, volume and destination you need." },
+        { "label": "Offer", "desc": "We send you an offer matched to your specifications." },
+        { "label": "Order Confirmation", "desc": "Volumes, sizing and terms are confirmed with you." },
+        { "label": "Packing", "desc": "Preparation according to the agreed specifications." },
+        { "label": "Quality Control", "desc": "Final inspection before loading." },
+        { "label": "Export Documentation", "desc": "Preparation of the documents your customs clearance needs." },
+        { "label": "Loading", "desc": "Loading into container or air freight." },
+        { "label": "Shipping", "desc": "Sea or air transport to your destination." },
+        { "label": "Delivery", "desc": "Received by your team or your freight forwarder." }
+      ]
+    },
+    "incoterms": {
+      "heading": "Incoterms",
+      "intro": "We offer several Incoterms, to be defined according to your logistics setup.",
+      "items": [
+        { "name": "EXW", "desc": "You take charge of transport from collection at our facility." },
+        { "name": "FOB Dakar", "desc": "We handle export up to loading on board at the Port of Dakar." },
+        { "name": "CIF", "desc": "We arrange transport and insurance to the agreed destination port." }
+      ]
+    },
+    "transport": {
+      "heading": "Transport",
+      "intro": "The choice between sea and air depends on the product, the volume and the timeline you need.",
+      "air": { "heading": "Air freight", "text": "Suited to perishable products, smaller volumes or tight deadlines." },
+      "sea": { "heading": "Sea freight", "text": "Suited to larger volumes and products that tolerate longer transit, with cold chain management in a refrigerated container." }
+    },
+    "packaging": {
+      "heading": "Packaging",
+      "intro": "Packaging is designed to protect the product all the way to its final destination.",
+      "points": [
+        "Cartons suited to the product and the mode of transport",
+        "Palletisation following destination market standards",
+        "Protection against impact and temperature variation",
+        "Preparation adjusted to the customer's specifications"
+      ]
+    },
+    "chain": {
+      "heading": "Logistics chain",
+      "steps": ["Farm", "Packing station", "Quality control", "Port or airport", "Transport", "Importer"]
+    },
+    "leadTimes": {
+      "heading": "Lead times",
+      "text": "Lead times vary depending on destination, season and carrier availability. We provide a precise estimate for each order rather than a generic figure that wouldn't be reliable."
+    },
+    "documents": {
+      "heading": "Export documents",
+      "intro": "Depending on destination, your shipment may include:",
+      "items": [
+        "Commercial Invoice",
+        "Packing List",
+        "Certificate of Origin",
+        "Phytosanitary Certificate",
+        "Other documents specific to the importing country"
+      ]
+    },
+    "why": {
+      "heading": "Why work with Tropicaura",
+      "items": [
+        { "title": "Clear process", "text": "Every step, from inquiry to delivery, is defined and communicated." },
+        { "title": "Incoterm flexibility", "text": "EXW, FOB Dakar or CIF, matched to your logistics setup." },
+        { "title": "Dual transport mode", "text": "Sea or air, depending on the product and how urgent your need is." },
+        { "title": "Documentation prepared", "text": "The documents your customs clearance needs, anticipated for every shipment." },
+        { "title": "Dedicated follow-up", "text": "One point of contact for every order, from quotation to delivery." },
+        { "title": "Seasonal reliability", "text": "An organisation matched to each product's availability window." }
+      ]
+    },
+    "faq": [
+      { "q": "Which Incoterms do you offer?", "a": "EXW, FOB Dakar or CIF, depending on destination and your logistics setup. We define the best-suited solution together." },
+      { "q": "Do you use air or sea freight?", "a": "Both. Sea freight suits larger volumes and products that tolerate longer transit; air freight suits perishable products or tight deadlines." },
+      { "q": "What are your delivery lead times?", "a": "They depend on destination, season and carrier availability. We provide a precise estimate for each order." },
+      { "q": "How are my orders packaged?", "a": "Cartons and palletisation suited to the product, the mode of transport and your destination market's standards." },
+      { "q": "Can I track the progress of my order?", "a": "Yes, our team keeps you informed at each key step: confirmation, packing, quality control, loading and shipping." },
+      { "q": "What documents will I receive with my order?", "a": "Commercial Invoice, Packing List, Certificate of Origin and Phytosanitary Certificate depending on your country's requirements." }
+    ],
+    "cta": {
+      "heading": "An import project to organise?",
+      "text": "Let's discuss your volumes, your destination and the timeline that works for you.",
+      "button": "Request a quotation",
+      "contactButton": "Discuss your sourcing project"
+    },
+    "related": {
+      "heading": "Explore further"
+    }
   }
 }

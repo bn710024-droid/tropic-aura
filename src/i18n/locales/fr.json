@@ -7,7 +7,9 @@
     "partnerships": "Partenariats",
     "insights": "Insights",
     "contact": "Contact",
-    "quote": "Demander un devis"
+    "quote": "Demander un devis",
+    "quality": "Qualité & Conformité",
+    "logistics": "Logistique & Export"
   },
   "home": {
     "seo": {
@@ -611,5 +613,201 @@
   },
   "breadcrumb": {
     "label": "Fil d'Ariane"
+  },
+  "quality": {
+    "seo": {
+      "title": "Qualité & Conformité — Contrôles, Traçabilité, Documents Export",
+      "description": "Comment Tropicaura sélectionne, contrôle et documente ses fruits et légumes avant expédition : inspection, chaîne du froid, traçabilité, certificats export.",
+      "logoAlt": "Tropicaura — Qualité et conformité export"
+    },
+    "kicker": "Qualité & Conformité",
+    "title": "La qualité se construit avant la récolte, pas au moment de l'expédition.",
+    "intro": "Un acheteur international ne juge pas un exportateur sur une photo, mais sur la régularité de ce qu'il reçoit, lot après lot. Voici comment nous travaillons.",
+    "sections": {
+      "approach": {
+        "heading": "Notre approche qualité",
+        "intro": "La qualité d'un lot se joue en grande partie avant la récolte : choix du producteur, suivi de la culture, décision du bon moment de cueillette.",
+        "points": [
+          "Sélection des producteurs selon leur régularité et leur capacité à respecter un cahier des charges",
+          "Suivi des parcelles pendant la saison, pas seulement au moment de la récolte",
+          "Récolte au stade de maturité adapté à la durée de transport et à la destination",
+          "Exigences qualité communiquées en amont à chaque producteur partenaire"
+        ]
+      },
+      "control": {
+        "heading": "Contrôle qualité",
+        "intro": "Chaque lot est inspecté avant chargement, pas seulement à la sortie du champ.",
+        "points": [
+          "Inspection visuelle : aspect, couleur, présence de défauts",
+          "Contrôle de la maturité et de la fermeté selon le produit",
+          "Tri et calibrage selon les exigences du marché de destination",
+          "Contrôle final avant chargement, juste avant expédition"
+        ]
+      },
+      "phytosanitary": {
+        "heading": "Conformité phytosanitaire",
+        "intro": "L'export de produits frais est encadré par des règles précises, propres à chaque pays de destination.",
+        "points": [
+          "Nos produits sont certifiés GlobalGAP, garantissant le respect des bonnes pratiques agricoles reconnues à l'international",
+          "Certificat phytosanitaire délivré par les autorités compétentes pour chaque expédition qui en nécessite un",
+          "Conformité vérifiée par rapport aux exigences du pays importateur avant chargement",
+          "Inspections officielles réalisées selon la réglementation en vigueur"
+        ]
+      },
+      "coldChain": {
+        "heading": "Chaîne du froid",
+        "intro": "La fraîcheur se perd rarement d'un coup — elle se perd rupture après rupture de température. Nous limitons ces ruptures.",
+        "points": [
+          "Pré-refroidissement lorsque le produit et la durée de transport le nécessitent",
+          "Stockage à température adaptée avant chargement",
+          "Suivi de la température pendant le transport maritime ou aérien",
+          "Choix du mode de transport en fonction de la sensibilité du produit"
+        ]
+      },
+      "traceability": {
+        "heading": "Traçabilité",
+        "intro": "En cas de question sur un lot, nous devons pouvoir remonter jusqu'à son origine.",
+        "points": [
+          "Origine du produit identifiée pour chaque lot",
+          "Suivi du lot de la réception à l'expédition",
+          "Documentation associée conservée et disponible sur demande"
+        ]
+      },
+      "documents": {
+        "heading": "Documents fournis",
+        "intro": "Selon la destination et le produit, une expédition peut inclure :",
+        "items": [
+          "Certificat phytosanitaire",
+          "Facture commerciale (Commercial Invoice)",
+          "Liste de colisage (Packing List)",
+          "Certificat d'origine (selon destination)",
+          "Autres documents spécifiques selon les exigences du pays importateur"
+        ]
+      }
+    },
+    "why": {
+      "heading": "Pourquoi les importateurs travaillent avec Tropicaura",
+      "items": [
+        { "title": "Sourcing fiable", "text": "Des producteurs suivis dans la durée, pas des achats d'opportunité au coup par coup." },
+        { "title": "Contrôles réels", "text": "Chaque lot est inspecté avant chargement, pas seulement documenté sur le papier." },
+        { "title": "Communication directe", "text": "Un interlocuteur unique pour suivre votre commande, du devis à la livraison." },
+        { "title": "Documentation export", "text": "Les documents nécessaires à votre dédouanement, préparés pour chaque expédition." },
+        { "title": "Expertise saisonnière", "text": "Une connaissance fine des fenêtres de disponibilité, produit par produit." },
+        { "title": "Partenariats durables", "text": "Nous construisons des relations commerciales sur plusieurs saisons, pas des ventes isolées." }
+      ]
+    },
+    "faq": [
+      { "q": "Travaillez-vous avec des producteurs certifiés ?", "a": "Oui, l'ensemble de nos produits est certifié GlobalGAP, garantissant le respect des bonnes pratiques agricoles reconnues à l'international." },
+      { "q": "Comment contrôlez-vous la qualité avant expédition ?", "a": "Chaque lot passe par une inspection visuelle, un contrôle de maturité et de fermeté, un tri et un calibrage, puis un contrôle final juste avant chargement." },
+      { "q": "Quels documents fournissez-vous avec chaque expédition ?", "a": "Selon la destination : certificat phytosanitaire, facture commerciale, liste de colisage, et certificat d'origine lorsque le pays importateur l'exige." },
+      { "q": "Comment la fraîcheur est-elle préservée pendant le transport ?", "a": "Par un pré-refroidissement lorsque nécessaire, un stockage à température adaptée et un suivi de la chaîne du froid pendant le transport maritime ou aérien." },
+      { "q": "Pouvez-vous garantir l'absence totale de défauts ?", "a": "Non — un produit agricole frais conserve toujours une variabilité naturelle. Notre travail de tri et de calibrage vise à la réduire au minimum et à la faire correspondre au cahier des charges convenu avec vous." },
+      { "q": "Proposez-vous une traçabilité par lot ?", "a": "Oui. L'origine et le suivi de chaque lot sont documentés et peuvent être communiqués sur demande." }
+    ],
+    "cta": {
+      "heading": "Une question sur nos standards qualité ?",
+      "text": "Parlons de vos exigences spécifiques et de la manière dont nous pouvons y répondre.",
+      "button": "Demander une offre",
+      "contactButton": "Contacter notre équipe export"
+    },
+    "related": {
+      "heading": "Pour aller plus loin"
+    }
+  },
+  "logistics": {
+    "seo": {
+      "title": "Logistique & Process Export — Incoterms, Transport, Délais",
+      "description": "Comment une commande Tropicaura est traitée, de la demande à la livraison : Incoterms, transport aérien et maritime, conditionnement, documents export.",
+      "logoAlt": "Tropicaura — Logistique et process export"
+    },
+    "kicker": "Logistique & Export",
+    "title": "Du Sénégal à votre marché, chaque étape a une raison d'être.",
+    "intro": "Comprendre notre process, c'est savoir exactement à quoi s'attendre entre votre demande et la réception de votre commande.",
+    "timeline": {
+      "heading": "Notre process export",
+      "steps": [
+        { "label": "Demande", "desc": "Vous nous communiquez produit, volume et destination souhaités." },
+        { "label": "Offre", "desc": "Nous vous transmettons une offre adaptée à votre cahier des charges." },
+        { "label": "Confirmation de commande", "desc": "Les volumes, calibres et conditions sont validés avec vous." },
+        { "label": "Conditionnement", "desc": "Préparation selon les spécifications convenues." },
+        { "label": "Contrôle qualité", "desc": "Inspection finale avant chargement." },
+        { "label": "Documentation export", "desc": "Préparation des documents nécessaires à votre dédouanement." },
+        { "label": "Chargement", "desc": "Mise en conteneur ou en fret aérien." },
+        { "label": "Expédition", "desc": "Transport maritime ou aérien vers votre destination." },
+        { "label": "Livraison", "desc": "Réception par vos équipes ou votre transitaire." }
+      ]
+    },
+    "incoterms": {
+      "heading": "Incoterms",
+      "intro": "Nous proposons plusieurs Incoterms, à définir selon votre organisation logistique.",
+      "items": [
+        { "name": "EXW", "desc": "Vous prenez en charge le transport dès l'enlèvement chez nous." },
+        { "name": "FOB Dakar", "desc": "Nous prenons en charge l'export jusqu'au chargement à bord au port de Dakar." },
+        { "name": "CIF", "desc": "Nous organisons le transport et l'assurance jusqu'au port de destination convenu." }
+      ]
+    },
+    "transport": {
+      "heading": "Transport",
+      "intro": "Le choix entre mer et air dépend du produit, du volume et du délai souhaité.",
+      "air": { "heading": "Fret aérien", "text": "Adapté aux produits périssables, aux petits volumes ou aux délais serrés." },
+      "sea": { "heading": "Fret maritime", "text": "Adapté aux volumes plus importants et aux produits qui supportent un transport plus long, avec une gestion de la chaîne du froid en conteneur réfrigéré." }
+    },
+    "packaging": {
+      "heading": "Conditionnement",
+      "intro": "L'emballage est pensé pour protéger le produit jusqu'à sa destination finale.",
+      "points": [
+        "Cartons adaptés au produit et au mode de transport",
+        "Palettisation selon les standards du marché de destination",
+        "Protection contre les chocs et les variations de température",
+        "Préparation ajustée au cahier des charges du client"
+      ]
+    },
+    "chain": {
+      "heading": "Chaîne logistique",
+      "steps": ["Ferme", "Station de conditionnement", "Contrôle qualité", "Port ou aéroport", "Transport", "Importateur"]
+    },
+    "leadTimes": {
+      "heading": "Délais",
+      "text": "Les délais varient selon la destination, la saison et la disponibilité des compagnies de transport. Nous communiquons une estimation précise pour chaque commande plutôt qu'un délai générique qui ne serait pas fiable."
+    },
+    "documents": {
+      "heading": "Documents export",
+      "intro": "Selon la destination, votre expédition peut inclure :",
+      "items": [
+        "Facture commerciale (Commercial Invoice)",
+        "Liste de colisage (Packing List)",
+        "Certificat d'origine",
+        "Certificat phytosanitaire",
+        "Autres documents spécifiques selon le pays importateur"
+      ]
+    },
+    "why": {
+      "heading": "Pourquoi travailler avec Tropicaura",
+      "items": [
+        { "title": "Process clair", "text": "Chaque étape, de la demande à la livraison, est définie et communiquée." },
+        { "title": "Flexibilité Incoterms", "text": "EXW, FOB Dakar ou CIF selon votre organisation logistique." },
+        { "title": "Double mode de transport", "text": "Maritime ou aérien selon le produit et l'urgence de votre besoin." },
+        { "title": "Documentation préparée", "text": "Les documents nécessaires à votre dédouanement, anticipés pour chaque expédition." },
+        { "title": "Suivi personnalisé", "text": "Un interlocuteur dédié pour chaque commande, du devis à la livraison." },
+        { "title": "Fiabilité saisonnière", "text": "Une organisation adaptée aux fenêtres de disponibilité de chaque produit." }
+      ]
+    },
+    "faq": [
+      { "q": "Quels Incoterms proposez-vous ?", "a": "EXW, FOB Dakar ou CIF, selon la destination et votre organisation logistique. Nous définissons ensemble la solution la plus adaptée." },
+      { "q": "Utilisez-vous le transport aérien ou maritime ?", "a": "Les deux. Le maritime convient aux volumes importants et aux produits qui supportent un transport plus long ; l'aérien aux produits périssables ou aux délais serrés." },
+      { "q": "Quels sont les délais de livraison ?", "a": "Ils dépendent de la destination, de la saison et de la disponibilité des compagnies de transport. Nous vous communiquons une estimation précise pour chaque commande." },
+      { "q": "Comment mes commandes sont-elles conditionnées ?", "a": "Cartons et palettisation adaptés au produit, au mode de transport et aux standards de votre marché de destination." },
+      { "q": "Puis-je suivre l'avancement de ma commande ?", "a": "Oui, notre équipe vous tient informé à chaque étape clé : confirmation, conditionnement, contrôle qualité, chargement et expédition." },
+      { "q": "Quels documents recevrai-je avec ma commande ?", "a": "Facture commerciale, liste de colisage, certificat d'origine et certificat phytosanitaire selon les exigences de votre pays." }
+    ],
+    "cta": {
+      "heading": "Un projet d'import à organiser ?",
+      "text": "Parlons de vos volumes, de votre destination et du calendrier qui vous conviendrait.",
+      "button": "Demander une offre",
+      "contactButton": "Échanger sur votre projet de sourcing"
+    },
+    "related": {
+      "heading": "Pour aller plus loin"
+    }
   }
 }

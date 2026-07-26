@@ -43,6 +43,8 @@ export const ROUTES = [
   { path: "/politique-confidentialite", label: "Politique de confidentialité", labelEn: "Privacy Policy", changefreq: "yearly", priority: 0.3 },
   { path: "/about", label: "À Propos", labelEn: "About", changefreq: "monthly", priority: 0.8 },
   { path: "/partenariats", label: "Partenariats", labelEn: "Partnerships", changefreq: "monthly", priority: 0.8 },
+  { path: "/qualite-conformite", label: "Qualité & Conformité", labelEn: "Quality & Compliance", changefreq: "monthly", priority: 0.8 },
+  { path: "/logistique-export", label: "Logistique & Export", labelEn: "Logistics & Export Process", changefreq: "monthly", priority: 0.8 },
   { path: "/insights", label: "Insights", labelEn: "Insights", changefreq: "weekly", priority: 0.7 },
   {
     path: "/insights/senegal-origine-strategique",

@@ -9,6 +9,8 @@ import Produits     from "./pages/Produits";
 import ProductDetail from "./pages/ProductDetail";
 import Disponibilite from "./pages/Disponibilite";
 import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
+import Quality      from "./pages/Quality";
+import Logistics    from "./pages/Logistics";
 import Contact      from "./pages/Contact";
 import Insights        from "./pages/Insights";
 import InsightSenegal      from "./pages/InsightSenegal";
@@ -93,6 +95,8 @@ export default function App() {
         <Route path="/en/insights/senegal-strategic-origin" element={<InsightSenegal />} />
         <Route path="/en/insights/reliable-vs-opportunistic-supplier" element={<InsightPartenariats />} />
         <Route path="/en/privacy" element={<PolitiqueConfidentialite />} />
+        <Route path="/en/quality-compliance" element={<Quality />} />
+        <Route path="/en/logistics-export" element={<Logistics />} />
 
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<APropos />} />
@@ -108,6 +112,8 @@ export default function App() {
         <Route path="/insights" element={<Insights />} />
         <Route path="/insights/senegal-origine-strategique" element={<InsightSenegal />} />
         <Route path="/insights/fournisseur-stable-opportuniste" element={<InsightPartenariats />} />
+        <Route path="/qualite-conformite" element={<Quality />} />
+        <Route path="/logistique-export" element={<Logistics />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isArticle && !isHome && !isProductDetail && <Footer />}
