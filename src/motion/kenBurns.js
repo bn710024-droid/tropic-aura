@@ -20,5 +20,8 @@ export function buildKenBurnsCSS() {
     .motion-scene[data-phase="reading"] .ms-ken-burns {
       animation-play-state: running;
     }
+    @media (prefers-reduced-motion: reduce) {
+      .ms-ken-burns { animation: none !important; }
+    }
   `;
 }

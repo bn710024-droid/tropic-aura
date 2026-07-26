@@ -4,7 +4,7 @@ import TopBar from "../components/TopBar";
 import Breadcrumbs from "../components/Breadcrumbs";
 import ExportRouteMap from "../components/ExportRouteMap";
 import AboutMobileSection from "./about/AboutMobileSection";
-import { GOLD, BLACK, IVORY, FOREST, SAGE, STONE, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
+import { GOLD, IVORY, IVORY_TEXT, FOREST_TEXT, SECTIONS } from "./about/aboutTheme";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { langFromPath, pathFor } from "../i18n/routing";
@@ -504,6 +504,7 @@ export default function APropos() {
         ))}
       </nav>
 
+      <main>
       {/* ══ Arbre desktop — moteur scroll continu existant, inchangé ══ */}
       <div className="about-desktop-tree">
       {/* ══ SECTION 01 — NOTRE VISION (forêt) ══ */}
@@ -576,7 +577,7 @@ export default function APropos() {
             ))}
           </div>
           <ul className="vision-checklist" style={{ color: "#17301F" }}>
-            {SECTIONS[1].checklist.map((item, i) => (
+            {SECTIONS_T[1].checklist.map((item, i) => (
               <li key={item} ref={(el) => (s2ItemRefs.current[i] = el)} style={{ opacity: 0 }}>
                 <span className="vision-check">✓</span>
                 {item}
@@ -691,6 +692,7 @@ export default function APropos() {
           <AboutMobileSection key={s.id} section={s} isFirst={i === 0 && !isDesktopViewport} />
         ))}
       </div>
+      </main>
     </>
   );
 }

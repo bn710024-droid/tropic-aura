@@ -76,6 +76,7 @@ export default function Quality() {
       <img src="/logo-mark.png" alt={t("quality.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={trail} />
 
+      <main>
       {/* ── Hero ── */}
       <section style={{
         minHeight: "60vh", background: "#0B1310",
@@ -199,6 +200,7 @@ export default function Quality() {
           </div>
         </div>
       </section>
+      </main>
     </>
   );
 }

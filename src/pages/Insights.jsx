@@ -97,7 +97,7 @@ export default function Insights() {
         .ins-left { position: sticky; top: 0; height: 100vh; overflow: hidden; }
         .ins-left-bg {
           position: absolute; inset: 0;
-          background-image: url("/insights-leaf.png");
+          background-image: url("/insights-leaf.webp");
           background-size: cover; background-position: center center;
           filter: brightness(0.88) saturate(0.80);
         }
@@ -197,9 +197,10 @@ export default function Insights() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt="Tropicaura — Insights et analyses du commerce tropical international" width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("insights.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={insightsTrail} />
 
+      <main>
       <div className="ins-wrap">
 
         {/* ════ PANNEAU GAUCHE ════ */}
@@ -254,7 +255,7 @@ export default function Insights() {
                   <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:800, fontSize:"clamp(26px,2.4vw,34px)", letterSpacing:"-.04em", color:WHITE, lineHeight:1 }}>
                     5<span style={{ fontSize:"0.5em", fontWeight:700 }}> min</span>
                   </span>
-                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>Temps de lecture moyen</span>
+                  <span style={{ ...lbl, marginTop:7, fontSize:8.5 }}>{t("insights.avgReadTime")}</span>
                 </div>
                 {/* Stat 3 */}
                 <div className="ins-stat">
@@ -278,7 +279,7 @@ export default function Insights() {
 
             {/* Signature */}
             <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:9, fontWeight:600, letterSpacing:".20em", textTransform:"uppercase", color:"rgba(255,255,255,0.22)" }}>
-              Tropicaura · Commerce Tropical d'Excellence
+              {t("tagline")}
             </span>
           </div>
         </div>
@@ -323,6 +324,7 @@ export default function Insights() {
         </div>
 
       </div>
+      </main>
     </div>
   );
 }

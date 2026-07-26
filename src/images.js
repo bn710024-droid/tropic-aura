@@ -22,9 +22,4 @@ export const IMAGES = {
   pastequeTranche: png("pasteque-tranche.png"),
   fraises:         png("fraises.png"),
   fruitPassion:    png("fruit-passion.png"),
-  myrtilles:       png("myrtilles.png"),
-  haricots:        png("haricots.png"),
-  gombo:           png("gombo.png"),
 };
-
-export default IMAGES;

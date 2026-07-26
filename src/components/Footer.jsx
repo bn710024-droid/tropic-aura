@@ -60,7 +60,10 @@ export default function Footer() {
   const colLabel = {
     fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 700,
     letterSpacing: ".22em", textTransform: "uppercase",
-    color: "rgba(255,255,255,0.38)", marginBottom: 20, display: "block",
+    // 0.62 : 0.38 échouait le contraste WCAG AA (3.55:1 sur #09120A) —
+    // même correctif de principe que Produits.jsx (voir son commentaire sur
+    // les labels de carte produit).
+    color: "rgba(255,255,255,0.62)", marginBottom: 20, display: "block",
   };
 
   return (
@@ -110,7 +113,7 @@ export default function Footer() {
             <span key={label} style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 12, fontWeight: 500,
               letterSpacing: ".14em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.42)",
+              color: "rgba(255,255,255,0.65)",
               display: "inline-flex", alignItems: "center", gap: 26,
             }}>
               {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)", marginLeft: -26 }} />}
@@ -129,7 +132,7 @@ export default function Footer() {
           {/* Marque */}
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-              <img src="/logo-mark.png" alt="" style={{ height: 38, display: "block" }} />
+              <img src="/logo-mark.png" alt="" width={38} height={38} style={{ display: "block" }} />
               <span style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
                 fontSize: 20, letterSpacing: "-.01em", color: "#fff",
@@ -175,7 +178,7 @@ export default function Footer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               <a href={`mailto:${EMAIL}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{EMAIL}</a>
               <a href={`tel:${PHONE.replace(/\s/g, "")}`} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>{PHONE}</a>
-              <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>Instagram</a>
+              <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>Instagram</a>
             </div>
           </div>
 
@@ -208,7 +211,7 @@ export default function Footer() {
               href={pathFor("privacy", lang)}
               style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
-                letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", textDecoration: "none",
+                letterSpacing: ".08em", color: "rgba(255,255,255,0.65)", textDecoration: "none",
               }}
               onMouseEnter={overOn} onMouseLeave={overOff}
             >
@@ -218,7 +221,7 @@ export default function Footer() {
               onClick={() => window.dispatchEvent(new Event("open-cookie-preferences"))}
               style={{
                 fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
-                letterSpacing: ".08em", color: "rgba(255,255,255,0.4)", background: "none",
+                letterSpacing: ".08em", color: "rgba(255,255,255,0.65)", background: "none",
                 border: "none", padding: 0, cursor: "pointer",
               }}
               onMouseEnter={overOn} onMouseLeave={overOff}
@@ -227,7 +230,7 @@ export default function Footer() {
             </button>
             <span style={{
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, fontWeight: 500,
-              letterSpacing: ".10em", color: "rgba(255,255,255,0.28)",
+              letterSpacing: ".10em", color: "rgba(255,255,255,0.75)",
             }}>
               © 2026 Tropicaura B.C.
             </span>

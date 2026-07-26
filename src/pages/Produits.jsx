@@ -105,6 +105,7 @@ export default function Produits() {
   const lang = langFromPath(pathname);
   const navigate    = useNavigate();
   const bgRef       = useRef(null);
+  const bgFadeRef   = useRef(null);  // calque de fondu opacity — voir .bg-fade-layer dans global.css (même correctif que Home.jsx)
   const contentRefs = useRef([]);
   const photoRefs   = useRef([]);  // .prod-photo par section — point de départ du morph "En savoir plus"
   const dotRefs     = useRef([]);
@@ -149,9 +150,9 @@ export default function Produits() {
     lenisRef.current = lenis;
 
     let rafId;
-    const lerp     = (a, b, t) => Math.round(a + (b - a) * t);
     const last     = SECTIONS.length - 1;
     let lastScroll = -99999;
+    let lastColorIndex = -1;  // évite de repeindre backgroundColor à chaque frame (voir update())
 
     // Révélation du texte par IntersectionObserver — apparition fiable quand la
     // section entre réellement dans le viewport (immunisée contre la dérive de
@@ -184,15 +185,21 @@ export default function Produits() {
     window.addEventListener("resize", onResize, { passive: true });
 
     const update = (scroll, H) => {
+      // Fondu de couleur en opacity (compositor-only), pas en backgroundColor
+      // réécrit à chaque frame (repaint continu — voir le même correctif déjà
+      // appliqué à Home.jsx). Le backgroundColor n'est repeint qu'au
+      // changement d'INDEX de section (rare), pas à chaque pixel de scroll.
       const prog = scroll / H;
       const ci   = Math.min(last, Math.floor(prog));
       const ft   = Math.min(1, Math.max(0, prog - ci));
       const ca   = COLORS[ci];
       const cb   = COLORS[Math.min(last, ci + 1)];
-      if (bgRef.current) {
-        bgRef.current.style.backgroundColor =
-          `rgb(${lerp(ca[0],cb[0],ft)},${lerp(ca[1],cb[1],ft)},${lerp(ca[2],cb[2],ft)})`;
+      if (ci !== lastColorIndex) {
+        lastColorIndex = ci;
+        if (bgRef.current) bgRef.current.style.backgroundColor = `rgb(${ca[0]},${ca[1]},${ca[2]})`;
+        if (bgFadeRef.current) bgFadeRef.current.style.backgroundColor = `rgb(${cb[0]},${cb[1]},${cb[2]})`;
       }
+      if (bgFadeRef.current) bgFadeRef.current.style.opacity = ft.toFixed(3);
 
       // La RÉVÉLATION du texte n'est plus pilotée par la position de scroll ici :
       // sur mobile, ce calcul dérivait avec la barre d'URL (viewport visuel vs
@@ -349,9 +356,25 @@ export default function Produits() {
           padding-bottom: 7px;
           transition: color .25s ease, border-color .25s ease;
         }
-        .prod-more:hover { color: #fff; border-color: rgba(255,255,255,0.85); }
+        .prod-more:hover { color: #fff; border-color: rgba(255,255,255,0.85); animation-play-state: paused; }
         .prod-more-arrow { display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
-        .prod-more:hover .prod-more-arrow { transform: translateX(5px); }
+        .prod-more:hover .prod-more-arrow { transform: translateX(5px); animation-play-state: paused; }
+        /* Le lien est trop discret au repos (simple filet 1px) — un léger
+           mouvement périodique de l'ensemble (filet + flèche) attire l'œil
+           sans être agressif, en boucle jusqu'à l'interaction. */
+        @keyframes prodMoreAttention {
+          0%, 78%, 100% { border-color: rgba(255,255,255,0.4); }
+          89%           { border-color: rgba(255,255,255,0.9); }
+        }
+        @keyframes prodMoreArrowAttention {
+          0%, 78%, 100% { transform: translateX(0); }
+          89%           { transform: translateX(6px); }
+        }
+        .prod-more { animation: prodMoreAttention 2.6s ease-in-out infinite; }
+        .prod-more .prod-more-arrow { animation: prodMoreArrowAttention 2.6s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .prod-more, .prod-more .prod-more-arrow { animation: none !important; }
+        }
         @media (max-width: 820px){
           /* padding-top inclut env(safe-area-inset-top) : sur iPhone à encoche/
              Dynamic Island, cette zone ajoute 47-59px RÉELS que 96px seuls ne
@@ -385,8 +408,9 @@ export default function Produits() {
       <img src="/logo-mark.png" alt={t("productsPage.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={produitsTrail} />
 
-      {/* Fond interpolé + éclairage Combilo (halo central + vignette, soft-light) */}
+      {/* Fond interpolé (fondu opacity via .bg-fade-layer) + éclairage Combilo (halo central + vignette, soft-light) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-fade-layer" ref={bgFadeRef} />
       <div className="bg-depth" />
 
       {/* Nav dots — desktop uniquement (voir .dots-nav dans global.css) */}
@@ -408,7 +432,7 @@ export default function Produits() {
           "lutte" plus en remontant. display:contents sur desktop (no-op, Lenis
           inchangé). .bg-layer / .bg-depth / dots / morph restent HORS du wrapper
           (siblings fixes) pour rester ancrés au viewport stable. */}
-      <div className="mobile-scroll-wrapper" ref={wrapperRef}>
+      <main className="mobile-scroll-wrapper" ref={wrapperRef}>
       {SECTIONS.map((s, i) => {
         if (s.type === "besoin") {
           return (
@@ -580,7 +604,7 @@ export default function Produits() {
           </section>
         );
       })}
-      </div>
+      </main>
 
       {/* Voile de morph "En savoir plus" — même mécanisme que le CTA de Home.jsx */}
       {morphTarget && (

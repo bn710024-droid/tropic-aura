@@ -7,7 +7,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import SEOHead from "../seo/SEOHead";
 import { organizationSchema, webPageSchema, breadcrumbListSchema, faqPageSchema } from "../seo/schema";
 import { buildBreadcrumbTrail } from "../seo/routesRegistry";
-import { IconShip, IconPlane, IconBox, IconClock, IconDocument, IconHandshake } from "./trust/icons";
+import { IconShip, IconPlane, IconBox, IconClock, IconDocument } from "./trust/icons";
 
 // ============================================================
 //  LOGISTICS & EXPORT PROCESS — page de confiance B2B.
@@ -76,6 +76,7 @@ export default function Logistics() {
       <img src="/logo-mark.png" alt={t("logistics.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={trail} />
 
+      <main>
       {/* ── Hero ── */}
       <section style={{
         minHeight: "60vh", background: "#0B1310",
@@ -281,6 +282,7 @@ export default function Logistics() {
           </div>
         </div>
       </section>
+      </main>
     </>
   );
 }

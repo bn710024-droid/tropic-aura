@@ -138,6 +138,9 @@ export default async function handler(req, res) {
   if (entreprise && entreprise.length > MAX_COMPANY_LENGTH) {
     return res.status(400).json({ ok: false, error: "Nom d'entreprise trop long." });
   }
+  if (entreprise && (/https?:\/\//i.test(entreprise) || /[<>]/.test(entreprise))) {
+    return res.status(400).json({ ok: false, error: "Nom d'entreprise invalide." });
+  }
   if (message.length > MAX_MESSAGE_LENGTH) {
     return res.status(400).json({ ok: false, error: `Message trop long (${MAX_MESSAGE_LENGTH} caractères maximum).` });
   }

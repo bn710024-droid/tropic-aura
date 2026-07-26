@@ -153,7 +153,7 @@ export default function ProductDetail() {
           organizationSchema(),
           webPageSchema({ path, title: product.name, description, breadcrumb: true }),
           breadcrumbListSchema(trail, path),
-          productSchema(product, shared.incoterms),
+          productSchema(product, shared.incoterms, path),
           faqPageSchema(shared.faq),
         ]}
       />
@@ -392,7 +392,7 @@ export default function ProductDetail() {
                         fontWeight: 700,
                         letterSpacing: ".16em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.45)",
+                        color: "rgba(255,255,255,0.85)",
                         marginBottom: 8,
                       }}
                     >
@@ -420,7 +420,7 @@ export default function ProductDetail() {
                   fontSize: 13,
                   letterSpacing: ".12em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.5)",
+                  color: "rgba(255,255,255,0.85)",
                   margin: "44px 0 16px",
                 }}
               >
@@ -458,7 +458,7 @@ export default function ProductDetail() {
                   fontFamily: FONT,
                   fontSize: 13.5,
                   lineHeight: 1.7,
-                  color: "rgba(255,255,255,0.55)",
+                  color: "rgba(255,255,255,0.85)",
                   margin: "18px 0 0",
                   maxWidth: 620,
                 }}
@@ -500,7 +500,7 @@ export default function ProductDetail() {
                       fontWeight: 700,
                       letterSpacing: ".16em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "0 0 10px",
                     }}
                   >
@@ -526,7 +526,7 @@ export default function ProductDetail() {
                       fontFamily: FONT,
                       fontSize: 13.5,
                       lineHeight: 1.7,
-                      color: "rgba(255,255,255,0.55)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "12px 0 0",
                     }}
                   >
@@ -542,7 +542,7 @@ export default function ProductDetail() {
                       fontWeight: 700,
                       letterSpacing: ".16em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "0 0 10px",
                     }}
                   >
@@ -561,7 +561,7 @@ export default function ProductDetail() {
                       fontWeight: 700,
                       letterSpacing: ".16em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "0 0 10px",
                     }}
                   >
@@ -580,7 +580,7 @@ export default function ProductDetail() {
                       fontWeight: 700,
                       letterSpacing: ".16em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "0 0 10px",
                     }}
                   >
@@ -599,7 +599,7 @@ export default function ProductDetail() {
                       fontWeight: 700,
                       letterSpacing: ".16em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.45)",
+                      color: "rgba(255,255,255,0.85)",
                       margin: "0 0 10px",
                     }}
                   >

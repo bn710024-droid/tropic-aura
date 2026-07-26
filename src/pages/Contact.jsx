@@ -93,13 +93,18 @@ export default function Contact() {
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
     window.onTurnstileVerified = (token) => setTurnstileToken(token);
-    if (document.getElementById("cf-turnstile-script")) return;
-    const script = document.createElement("script");
-    script.id = "cf-turnstile-script";
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+    if (!document.getElementById("cf-turnstile-script")) {
+      const script = document.createElement("script");
+      script.id = "cf-turnstile-script";
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+    // Le script/widget Cloudflare reste en place (partagé, id-gardé) mais le
+    // callback global doit être retiré au démontage : sinon il garde vivante
+    // une closure sur setTurnstileToken d'une instance de composant détruite.
+    return () => { delete window.onTurnstileVerified; };
   }, []);
 
   useEffect(() => {
@@ -208,11 +213,14 @@ export default function Contact() {
     width: "100%", background: "transparent", border: "none",
     borderBottom: "1px solid rgba(0,0,0,0.22)", padding: "8px 0 12px",
     fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 16,
-    color: "#1A1A1A", outline: "none",
-    transition: "border-color .25s ease",
+    color: "#1A1A1A", outline: "2px solid transparent", outlineOffset: "2px",
+    transition: "border-color .25s ease, outline-color .25s ease",
   };
-  const onFocus = (e) => { e.target.style.borderColor = "#1A1A1A"; };
-  const onBlur  = (e) => { e.target.style.borderColor = "rgba(0,0,0,0.22)"; };
+  // Indicateur de focus visible (WCAG 2.4.11) : le changement de couleur du
+  // filet bas seul ne suffit pas (1px, un seul côté) — l'outline ajoute un
+  // vrai contour perceptible au clavier, en plus du filet déjà en place.
+  const onFocus = (e) => { e.target.style.borderColor = "#1A1A1A"; e.target.style.outlineColor = "#1A1A1A"; };
+  const onBlur  = (e) => { e.target.style.borderColor = "rgba(0,0,0,0.22)"; e.target.style.outlineColor = "transparent"; };
 
   const r0 = { opacity: 0, transform: "translateY(26px)", transition: "opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1)" };
 
@@ -279,6 +287,7 @@ export default function Contact() {
       <img src="/logo-mark.png" alt={t("contact.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={contactTrail} />
 
+      <main>
       {/* ━━━━━ 1. DÉCLARATION FINALE ━━━━━ */}
       <section style={{
         minHeight: "100vh", background: "#0B1310",
@@ -380,7 +389,7 @@ export default function Contact() {
             }}>
               <div className="ct-form-2">
                 <div>
-                  <label style={labelStyle} htmlFor="nom">{t("contact.form.name")}</label>
+                  <label style={labelStyle} htmlFor="nom">{t("contact.form.name")} *</label>
                   <input className="ct-input" id="nom" name="nom" type="text" required
                     placeholder={t("contact.form.namePh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
@@ -390,7 +399,7 @@ export default function Contact() {
                     placeholder={t("contact.form.companyPh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
                 <div>
-                  <label style={labelStyle} htmlFor="email">{t("contact.form.email")}</label>
+                  <label style={labelStyle} htmlFor="email">{t("contact.form.email")} *</label>
                   <input className="ct-input" id="email" name="email" type="email" required
                     placeholder={t("contact.form.emailPh")} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
@@ -402,7 +411,7 @@ export default function Contact() {
               </div>
 
               <div style={{ marginTop: 26 }}>
-                <label style={labelStyle} htmlFor="message">{t("contact.form.message")}</label>
+                <label style={labelStyle} htmlFor="message">{t("contact.form.message")} *</label>
                 <textarea ref={messageRef} className="ct-input" id="message" name="message" rows={4} required
                   maxLength={MAX_MESSAGE_LENGTH}
                   placeholder={t("contact.form.messagePh")}
@@ -447,8 +456,15 @@ export default function Contact() {
                 {status !== "submitting" && <span style={{ fontSize: 16, lineHeight: 1 }}>→</span>}
               </button>
 
+              <p style={{
+                marginTop: 20, fontFamily: "'Plus Jakarta Sans',sans-serif",
+                fontSize: 11, letterSpacing: ".04em", color: "rgba(0,0,0,0.4)",
+              }}>
+                {t("contact.form.requiredNote")}
+              </p>
+
               {status === "error" && (
-                <p style={{
+                <p role="alert" style={{
                   marginTop: 16, fontFamily: "'Plus Jakarta Sans',sans-serif",
                   fontSize: 13.5, lineHeight: 1.6, color: "#B4432F",
                 }}>
@@ -648,11 +664,12 @@ export default function Contact() {
               fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, fontWeight: 500,
               letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
             }}>
-              Tropicaura · Commerce Tropical d'Excellence
+              {t("tagline")}
             </span>
           </div>
         </div>
       </section>
+      </main>
     </>
   );
 }

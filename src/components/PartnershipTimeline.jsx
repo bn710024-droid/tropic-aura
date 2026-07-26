@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { CSS_EASE_IN_OUT } from "../motion/easing";
 
 // ============================================================
@@ -20,12 +21,14 @@ const VIEW_H = 40;
 const Y = 20;
 const R = 22;
 
+// title/text traduits via partnerships.sections.parcours.steps[i] (voir
+// PartnershipTimeline ci-dessous) — seule la géométrie (id/num/x) reste ici.
 const STEPS = [
-  { id: "echange", num: "01", x: 60, title: "Première conversation", text: "Nous faisons connaissance et comprenons vos besoins et vos objectifs." },
-  { id: "comprehension", num: "02", x: 280, title: "Comprendre vos besoins", text: "Nous analysons votre marché, vos contraintes et vos exigences." },
-  { id: "preparation", num: "03", x: 500, title: "Préparation de votre expédition", text: "Nous sélectionnons les meilleurs produits et préparons chaque détail de l'expédition." },
-  { id: "expedition", num: "04", title: "Première expédition", x: 720, text: "Votre commande est expédiée avec le même niveau d'attention que toutes les autres." },
-  { id: "developpement", num: "05", x: 940, title: "Grandir ensemble", text: "Nous restons à vos côtés pour faire grandir notre collaboration année après année." },
+  { id: "echange", num: "01", x: 60 },
+  { id: "comprehension", num: "02", x: 280 },
+  { id: "preparation", num: "03", x: 500 },
+  { id: "expedition", num: "04", x: 720 },
+  { id: "developpement", num: "05", x: 940 },
 ];
 
 const PATH = `M ${STEPS[0].x} ${Y} L ${STEPS[4].x} ${Y}`;
@@ -36,6 +39,9 @@ const HOLD_END_PCT = 86.4;
 const FADE_END_PCT = 95.5;
 
 export default function PartnershipTimeline() {
+  const { t } = useTranslation();
+  const translatedSteps = t("partnerships.sections.parcours.steps", { returnObjects: true });
+  const steps = STEPS.map((s, i) => ({ ...s, ...translatedSteps[i] }));
   return (
     <div className="pt-timeline">
       <style>{`
@@ -123,7 +129,7 @@ export default function PartnershipTimeline() {
       </svg>
 
       <div className="pt-labels">
-        {STEPS.map((s, i) => (
+        {steps.map((s, i) => (
           <div key={s.id} className={`pt-label-${i} pt-label`} style={{ left: `${(s.x / VIEW_W) * 100}%` }}>
             <span className="pt-label-title">{s.title}</span>
             <p className="pt-label-text">{s.text}</p>

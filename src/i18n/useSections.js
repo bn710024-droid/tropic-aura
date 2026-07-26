@@ -42,6 +42,7 @@ export function useLocalizedSections(sections, ns) {
     }
     if (Array.isArray(s.desc)) out.desc = trArray("desc", s.desc);
     if (Array.isArray(s.paragraphs)) out.paragraphs = trArray("paragraphs", s.paragraphs);
+    if (Array.isArray(s.checklist)) out.checklist = trArray("checklist", s.checklist);
     if (Array.isArray(s.actions)) {
       const translated = trArray("actions", null);
       out.actions = s.actions.map((a, i) => ({

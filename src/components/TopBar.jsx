@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { alternatePath, langFromPath, pathFor, SUPPORTED_LANGS } from "../i18n/routing";
@@ -25,6 +26,16 @@ export default function TopBar({ variant = "minimal" }) {
   // n'est pas encore traduite : le sélecteur s'affiche alors en état inactif
   // plutôt que de mener à une page inexistante.
   const altHrefs = Object.fromEntries(SUPPORTED_LANGS.map((l) => [l, alternatePath(pathname, l)]));
+
+  // Reflète l'état ouvert/fermé de LiquidMenu (qui l'annonce via ce même
+  // événement) pour exposer aria-expanded sur le bouton — LiquidMenu garde
+  // son propre isOpen en ref (piloté par rAF), ce state ne sert qu'à l'a11y.
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    const onToggle = (e) => setMenuOpen(e.detail.open);
+    window.addEventListener("liquidmenu-toggle", onToggle);
+    return () => window.removeEventListener("liquidmenu-toggle", onToggle);
+  }, []);
 
   const handleMenuClick = () => {
     // Dispatch un événement personnalisé que LiquidMenu écoute
@@ -96,21 +107,11 @@ export default function TopBar({ variant = "minimal" }) {
         </nav>
       )}
 
-      {/* CTA « Demander un devis » persistant, juste avant le bouton menu —
-          visible sur TOUTES les pages, à toutes les largeurs (contrairement
-          à .topbar-nav__cta, réservé à la nav complète de l'Accueil et
-          masqué sous 1025px). Masqué uniquement sur l'Accueil en desktop
-          (voir la règle @media dans global.css), où le CTA de la nav
-          complète joue déjà ce rôle — pas de doublon. */}
-      <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px,2vw,14px)" }}>
-        <a href={`${pathFor("contact", lang)}?section=form`} className="topbar-quote-btn">
-          {t("nav.quote")}
-        </a>
-
-        <button
+      <button
           id="topbar-menu-btn"
           onClick={handleMenuClick}
           aria-label={t("a11y.menu")}
+          aria-expanded={menuOpen}
           className="topbar-menu-btn"
           style={{
             width: 40, height: 40,
@@ -126,7 +127,7 @@ export default function TopBar({ variant = "minimal" }) {
             padding: 0,
             position: "relative",
             transition: "background-color .25s, border-color .25s",
-            marginRight: "clamp(10px,2.5vw,24px)",
+            marginRight: "clamp(2px,0.6vw,8px)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)";
@@ -172,7 +173,6 @@ export default function TopBar({ variant = "minimal" }) {
             }} />
           </div>
         </button>
-      </div>
     </header>
   );
 }

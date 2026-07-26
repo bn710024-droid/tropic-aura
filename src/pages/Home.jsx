@@ -451,11 +451,12 @@ export default function Home() {
   // acheteurs anglophones. Longueurs tenues sous les limites d'affichage
   // (titre ≤ 60, description ≤ 155) — des descriptions trop longues avaient
   // déjà été signalées en erreur par Bing Webmaster Tools et corrigées.
-  const isEnglish = i18n.language === "en";
   const homeDescription = t("home.seo.description");
-  const homePath = isEnglish ? "/en" : "/";
-  const homeKeywords = isEnglish
+  const homePath = pathFor("home", i18n.language);
+  const homeKeywords = i18n.language === "en"
     ? ["Senegal fruit exporter", "fresh produce exporter Senegal", "mango exporter Africa", "green beans okra export", "B2B fruit supplier West Africa", "FOB Dakar"]
+    : i18n.language === "nl"
+    ? ["Senegal fruitexporteur", "verse groenten exporteur Senegal", "mango export Senegal", "leverancier vers fruit West-Afrika", "sperzieboon okra export", "FOB Dakar"]
     : ["exportateur fruits Sénégal", "exportateur légumes Sénégal", "export mangue Sénégal", "fournisseur fruits frais Afrique", "Senegal fruit exporter", "export haricot vert gombo", "FOB Dakar"];
 
   return (
@@ -465,7 +466,7 @@ export default function Home() {
         description={homeDescription}
         path={homePath}
         keywords={homeKeywords}
-        jsonLd={[organizationSchema(), websiteSchema(), webPageSchema({ path: homePath, title: "Tropicaura", description: homeDescription })]}
+        jsonLd={[organizationSchema(), websiteSchema(homePath), webPageSchema({ path: homePath, title: "Tropicaura", description: homeDescription })]}
       />
 
       {/* Top bar complète (vitrine de l'entreprise) — les autres pages
@@ -476,7 +477,7 @@ export default function Home() {
       {/* SEO: Image avec dimensions pour validation (display:none mais présente dans HTML pré-rendu) */}
       <img
         src="/logo-mark.png"
-        alt="Logo Tropicaura — Export premium de fruits et légumes d'Afrique de l'Ouest"
+        alt={t("home.seo.logoAlt")}
         width={512}
         height={512}
         style={{ display: "none" }}
@@ -571,6 +572,7 @@ export default function Home() {
           Lenis/scroll document inchangés). Objectif : .fruits-layer-mobile (fixed, hors
           de ce wrapper) n'a plus aucune ambiguïté avec un scroller racine WebKit. */}
       <div className="mobile-scroll-wrapper" ref={wrapperRef}>
+      <main>
       {SECTIONS.map((s, i) => (
         <section
           key={s.id}
@@ -656,6 +658,7 @@ export default function Home() {
           )}
         </section>
       ))}
+      </main>
       {/* Footer DANS le wrapper : sur mobile le body est figé (overflow:hidden)
           et ce wrapper est le vrai scroller — le footer doit donc vivre ici pour
           être atteignable. Sur desktop le wrapper est display:contents (no-op),

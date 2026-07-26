@@ -205,18 +205,28 @@ export default function Partenariats() {
       rafId = requestAnimationFrame(raf);
     };
 
+    // Mobile (pas de Lenis) : écritures coalescées dans un seul rAF par frame
+    // (même correctif que Home.jsx) — sans ça, plusieurs 'scroll' events dans
+    // la même frame écrivaient des styles de façon synchrone, source de judder.
+    let scrollRafId = 0;
     const onNativeScroll = () => {
-      if (lenis) return;
-      const scroll = window.scrollY || 0;
-      if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+      if (lenis || scrollRafId) return;
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = 0;
+        const scroll = window.scrollY || 0;
+        if (Math.abs(scroll - lastScroll) > 0.04) { lastScroll = scroll; update(scroll, window.innerHeight || 1); }
+      });
     };
     if (!lenis) window.addEventListener('scroll', onNativeScroll, { passive: true });
 
     update(0, window.innerHeight || 1);
-    rafId = requestAnimationFrame(raf);
+    // Boucle rAF continue : DESKTOP UNIQUEMENT (pilote Lenis). Sur mobile,
+    // onNativeScroll ci-dessus suffit — aucun rAF permanent au repos.
+    if (lenis) rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
       window.removeEventListener("resize", onResize);
       window.removeEventListener('scroll', onNativeScroll);
       if (lenis) lenis.destroy();
@@ -379,9 +389,10 @@ export default function Partenariats() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt="Tropicaura — Partenariats B2B durables pour l'export" width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("partnerships.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
       <Breadcrumbs trail={partnershipsTrail} />
 
+      <main>
       <div className="partenariats-desktop-tree">
         <style>{`
           @keyframes dotPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
@@ -438,6 +449,7 @@ export default function Partenariats() {
           <PartnershipMobileSection key={s.id} section={s} exitDirection={i % 2 === 0 ? "left" : "right"} isDesktopViewport={isDesktopViewport} />
         ))}
       </div>
+      </main>
     </>
   );
 }

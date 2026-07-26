@@ -285,6 +285,7 @@ export default function InsightPartenariats() {
       </nav>
       <Breadcrumbs trail={articleTrail} />
 
+      <main>
       {/* ══ Hero ══ */}
       <header className="art-hero">
         <div className="art-hero-bg" />
@@ -391,6 +392,7 @@ export default function InsightPartenariats() {
           </div>
         </div>
       </div>
+      </main>
 
     </div>
   );

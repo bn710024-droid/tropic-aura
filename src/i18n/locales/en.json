@@ -1,4 +1,5 @@
 {
+  "tagline": "Tropicaura · Tropical Trade Excellence",
   "nav": {
     "home": "Home",
     "about": "About",
@@ -14,7 +15,8 @@
   "home": {
     "seo": {
       "title": "Fresh Fruit & Vegetable Exporter from Senegal",
-      "description": "Senegal-based exporter of fresh fruits and vegetables: mangoes, avocados, limes, green beans and okra for international importers."
+      "description": "Senegal-based exporter of fresh fruits and vegetables: mangoes, avocados, limes, green beans and okra for international importers.",
+      "logoAlt": "Tropicaura logo — Premium export of fruit and vegetables from West Africa"
     },
     "scrollHint": "Scroll to explore",
     "hero": {
@@ -208,6 +210,7 @@
       "email": "Email",
       "phone": "Phone",
       "message": "Message",
+      "requiredNote": "* Required fields",
       "namePh": "Your name",
       "companyPh": "Your company",
       "emailPh": "you@company.com",
@@ -296,6 +299,7 @@
           "Our priority is to build solid foundations. We are progressively developing a network of growers and partners who share the same standards of quality, traceability and reliability, so we can meet the expectations of international markets over the long term.",
           "Every product we bring to market must meet high standards of selection, preparation, documentary compliance and logistical coordination."
         ],
+        "checklist": ["Network of growers", "Quality control", "Traceability", "Export documentation", "International logistics"],
         "photoAlt": "Packing facility"
       },
       "demain": {
@@ -374,7 +378,14 @@
       },
       "parcours": {
         "kicker": "HOW WE WORK",
-        "title": "The journey of a partnership"
+        "title": "The journey of a partnership",
+        "steps": [
+          { "title": "First conversation", "text": "We get to know each other and understand your needs and objectives." },
+          { "title": "Understanding your needs", "text": "We analyze your market, your constraints and your requirements." },
+          { "title": "Preparing your shipment", "text": "We select the best products and prepare every detail of the shipment." },
+          { "title": "First shipment", "text": "Your order is shipped with the same level of care as every other." },
+          { "title": "Growing together", "text": "We stay by your side to grow our collaboration year after year." }
+        ]
       },
       "expedition": {
         "title": "Every container leaves our packing station to the same standard, whether it is your first order or your fiftieth.",
@@ -393,19 +404,24 @@
     },
     "seo": {
       "title": "B2B Partnerships — Become an Importer or Distributor",
-      "description": "Tropicaura builds lasting commercial partnerships — transparency, preparation and reliability on every shipment from the Port of Dakar."
+      "description": "Tropicaura builds lasting commercial partnerships — transparency, preparation and reliability on every shipment from the Port of Dakar.",
+      "logoAlt": "Tropicaura — Sustainable B2B partnerships for export"
     },
     "scrollHint": "Scroll to explore"
   },
   "insights": {
     "seo": {
       "title": "Insights — International Tropical Trade Analysis",
-      "description": "Tropicaura analysis and perspectives on international tropical trade: strategic origins and sourcing across West Africa."
+      "description": "Tropicaura analysis and perspectives on international tropical trade: strategic origins and sourcing across West Africa.",
+      "logoAlt": "Tropicaura — Insights and analysis on international tropical trade"
     },
     "kicker": "Perspectives",
     "title": "The analysis that brings clarity to international tropical trade.",
     "subtitle": "European markets, sourcing strategies, export logistics",
     "published": "Published analysis",
+    "avgReadTime": "Average reading time",
+    "statRouteFrom": "Africa",
+    "statRouteTo": "Europe",
     "connecting": "Opportunities that connect",
     "featured": "Featured",
     "seeAll": "See all analysis",
@@ -619,7 +635,7 @@
   },
   "quality": {
     "seo": {
-      "title": "Quality & Compliance — Inspections, Traceability, Export Documents",
+      "title": "Quality & Compliance",
       "description": "How Tropicaura selects, inspects and documents its fresh fruit and vegetables before export: quality control, cold chain, traceability, export certificates.",
       "logoAlt": "Tropicaura — Quality and export compliance"
     },
@@ -719,7 +735,7 @@
   },
   "logistics": {
     "seo": {
-      "title": "Logistics & Export Process — Incoterms, Transport, Lead Times",
+      "title": "Logistics & Export",
       "description": "How a Tropicaura order is handled, from inquiry to delivery: Incoterms, air and sea freight, packaging, export documentation.",
       "logoAlt": "Tropicaura — Logistics and export process"
     },

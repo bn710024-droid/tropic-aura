@@ -28,8 +28,24 @@ import {
   LOGO_WIDTH,
   LOGO_HEIGHT,
 } from "./siteConfig";
+import { langFromPath, DEFAULT_LANG } from "../i18n/routing";
 
 const abs = (path) => (path.startsWith("http") ? path : `${SITE_URL}${path}`);
+
+// Table BCP47 utilisée par inLanguage — dérivée du chemin de la page plutôt
+// que codée en dur, pour que WebSite/WebPage/Article reflètent la vraie
+// langue de chaque page au lieu d'annoncer systématiquement le français.
+const IN_LANGUAGE = { fr: "fr-FR", en: "en-US", nl: "nl-NL" };
+const inLanguageFor = (path) => IN_LANGUAGE[langFromPath(path ?? "/")] ?? IN_LANGUAGE[DEFAULT_LANG];
+
+// Description de l'offre traduite par langue — texte interne au schema (pas
+// une chaîne UI affichée), donc conservée ici plutôt que dans les fichiers
+// i18n pour ne pas faire dépendre schema.js de react-i18next.
+const OFFER_INCOTERMS_TEXT = {
+  fr: (incoterms) => `Incoterms disponibles : ${incoterms.join(", ")}.`,
+  en: (incoterms) => `Available Incoterms: ${incoterms.join(", ")}.`,
+  nl: (incoterms) => `Beschikbare Incoterms: ${incoterms.join(", ")}.`,
+};
 
 /**
  * Organization — combine les facettes réelles de l'activité
@@ -103,7 +119,7 @@ export function contactPointSchema() {
   };
 }
 
-export function websiteSchema() {
+export function websiteSchema(path) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -111,7 +127,7 @@ export function websiteSchema() {
     url: SITE_URL,
     name: SITE_NAME,
     publisher: { "@id": `${SITE_URL}/#organization` },
-    inLanguage: "fr-FR",
+    inLanguage: inLanguageFor(path),
   };
 }
 
@@ -130,7 +146,7 @@ export function webPageSchema({ path, title, description, breadcrumb, pageType }
     description,
     isPartOf: { "@id": `${SITE_URL}/#website` },
     about: { "@id": `${SITE_URL}/#organization` },
-    inLanguage: "fr-FR",
+    inLanguage: inLanguageFor(path),
     ...(breadcrumb ? { breadcrumb: { "@id": `${url}#breadcrumb` } } : {}),
   };
 }
@@ -150,9 +166,11 @@ export function breadcrumbListSchema(trail, currentPath) {
   };
 }
 
-/** Product + Offer pour une fiche produit /produits/:slug. */
-export function productSchema(product, incoterms) {
-  const url = abs(`/produits/${product.slug}`);
+/** Product + Offer pour une fiche produit /produits/:slug (ou son équivalent EN/NL — voir `path`). */
+export function productSchema(product, incoterms, path) {
+  const url = abs(path ?? `/produits/${product.slug}`);
+  const lang = langFromPath(path ?? "/");
+  const offerDescription = (OFFER_INCOTERMS_TEXT[lang] ?? OFFER_INCOTERMS_TEXT[DEFAULT_LANG])(incoterms);
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -180,7 +198,7 @@ export function productSchema(product, incoterms) {
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": `${SITE_URL}/#organization` },
       eligibleRegion: EXPORT_MARKETS.map((m) => ({ "@type": "Country", name: m.country })),
-      description: `Incoterms disponibles : ${incoterms.join(", ")}.`,
+      description: offerDescription,
     },
   };
 }
@@ -220,6 +238,6 @@ export function articleSchema({ path, title, description, image, datePublished }
     dateModified: datePublished,
     author: { "@id": `${SITE_URL}/#organization` },
     publisher: { "@id": `${SITE_URL}/#organization` },
-    inLanguage: "fr-FR",
+    inLanguage: inLanguageFor(path),
   };
 }

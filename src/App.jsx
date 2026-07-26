@@ -42,7 +42,12 @@ export default function App() {
   // sur /en/... ou un retour navigateur donne donc immédiatement la bonne
   // langue, sans état applicatif à restaurer.
   const lang = langFromPath(path);
-  if (i18n.language !== lang) i18n.changeLanguage(lang);
+  // Effet de bord (mutation d'état i18next partagé) : doit vivre dans un
+  // effet, pas dans le corps du render, qui doit rester pur (Strict Mode/
+  // re-render interrompu appelleraient sinon changeLanguage() sans commit).
+  useEffect(() => {
+    if (i18n.language !== lang) i18n.changeLanguage(lang);
+  }, [lang, i18n]);
 
   // L'attribut lang du <html> doit suivre : il pilote la synthèse vocale,
   // la césure typographique et sert de signal de langue aux moteurs.

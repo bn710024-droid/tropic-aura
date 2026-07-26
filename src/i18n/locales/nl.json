@@ -1,4 +1,5 @@
 {
+  "tagline": "Tropicaura · Tropische Handel van Topkwaliteit",
   "nav": {
     "home": "Home",
     "about": "Over ons",
@@ -14,7 +15,8 @@
   "home": {
     "seo": {
       "title": "Exporteur van Vers Fruit & Groenten uit Senegal",
-      "description": "Senegalese exporteur van vers fruit en groenten: mango's, avocado's, limoenen, sperzieboenen en okra voor internationale importeurs."
+      "description": "Senegalese exporteur van vers fruit en groenten: mango's, avocado's, limoenen, sperzieboenen en okra voor internationale importeurs.",
+      "logoAlt": "Tropicaura-logo — Premium export van fruit en groenten uit West-Afrika"
     },
     "scrollHint": "Scroll naar beneden",
     "hero": {
@@ -208,6 +210,7 @@
       "email": "E-mail",
       "phone": "Telefoon",
       "message": "Bericht",
+      "requiredNote": "* Verplichte velden",
       "namePh": "Uw naam",
       "companyPh": "Uw bedrijf",
       "emailPh": "u@bedrijf.com",
@@ -296,6 +299,7 @@
           "Onze prioriteit is het bouwen van solide fundamenten. Wij ontwikkelen geleidelijk een netwerk van producenten en partners die dezelfde eisen delen op het gebied van kwaliteit, traceerbaarheid en betrouwbaarheid, om duurzaam te voldoen aan de verwachtingen van internationale markten.",
           "Elk product dat wij verkopen moet voldoen aan hoge standaarden op het gebied van selectie, voorbereiding, documentaire conformiteit en logistieke coördinatie."
         ],
+        "checklist": ["Netwerk van producenten", "Kwaliteitscontrole", "Traceerbaarheid", "Exportdocumentatie", "Internationale logistiek"],
         "photoAlt": "Verpakkingsatelier"
       },
       "demain": {
@@ -374,7 +378,14 @@
       },
       "parcours": {
         "kicker": "ONZE WERKWIJZE",
-        "title": "Het traject van een partnerschap"
+        "title": "Het traject van een partnerschap",
+        "steps": [
+          { "title": "Eerste gesprek", "text": "We maken kennis en begrijpen uw behoeften en doelstellingen." },
+          { "title": "Uw behoeften begrijpen", "text": "We analyseren uw markt, uw beperkingen en uw eisen." },
+          { "title": "Voorbereiding van uw zending", "text": "We selecteren de beste producten en bereiden elk detail van de zending voor." },
+          { "title": "Eerste zending", "text": "Uw bestelling wordt verzonden met hetzelfde niveau van aandacht als elke andere." },
+          { "title": "Samen groeien", "text": "Wij blijven aan uw zijde om onze samenwerking jaar na jaar te laten groeien." }
+        ]
       },
       "expedition": {
         "title": "Elke container verlaat ons verpakkingsstation met hetzelfde niveau van eisen, of het nu om uw eerste of uw vijftigste bestelling gaat.",
@@ -393,19 +404,24 @@
     },
     "seo": {
       "title": "B2B-Partnerschappen — Word Importeur of Distributeur",
-      "description": "Tropicaura bouwt duurzame commerciële partnerschappen — transparantie, voorbereiding en betrouwbaarheid bij elke zending vanuit de haven van Dakar."
+      "description": "Tropicaura bouwt duurzame commerciële partnerschappen — transparantie, voorbereiding en betrouwbaarheid bij elke zending vanuit de haven van Dakar.",
+      "logoAlt": "Tropicaura — Duurzame B2B-partnerschappen voor export"
     },
     "scrollHint": "Scroll om te ontdekken"
   },
   "insights": {
     "seo": {
       "title": "Inzichten — Analyses van de Internationale Tropische Handel",
-      "description": "Analyses en perspectieven van Tropicaura op de internationale tropische handel: strategische oorsprong en sourcing in West-Afrika."
+      "description": "Analyses en perspectieven van Tropicaura op de internationale tropische handel: strategische oorsprong en sourcing in West-Afrika.",
+      "logoAlt": "Tropicaura — Inzichten en analyses van de internationale tropische handel"
     },
     "kicker": "Perspectieven",
     "title": "De analyses die duidelijkheid brengen in de internationale tropische handel.",
     "subtitle": "Europese markten, sourcingstrategieën, exportlogistiek",
     "published": "Gepubliceerde analyses",
+    "avgReadTime": "Gemiddelde leestijd",
+    "statRouteFrom": "Afrika",
+    "statRouteTo": "Europa",
     "connecting": "Kansen die verbinden",
     "featured": "Uitgelicht",
     "seeAll": "Alle analyses bekijken",
@@ -619,7 +635,7 @@
   },
   "quality": {
     "seo": {
-      "title": "Kwaliteit & Conformiteit — Controles, Traceerbaarheid, Exportdocumenten",
+      "title": "Kwaliteit & Conformiteit",
       "description": "Hoe Tropicaura zijn vers fruit en groenten selecteert, controleert en documenteert vóór verzending: inspectie, koudeketen, traceerbaarheid, exportcertificaten.",
       "logoAlt": "Tropicaura — Kwaliteit en exportconformiteit"
     },
@@ -719,7 +735,7 @@
   },
   "logistics": {
     "seo": {
-      "title": "Logistiek & Exportproces — Incoterms, Transport, Levertijden",
+      "title": "Logistiek & Export",
       "description": "Hoe een bestelling bij Tropicaura wordt verwerkt, van aanvraag tot levering: Incoterms, lucht- en zeetransport, verpakking, exportdocumentatie.",
       "logoAlt": "Tropicaura — Logistiek en exportproces"
     },

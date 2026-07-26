@@ -1,4 +1,4 @@
-﻿import { useRef, useCallback, useEffect } from "react";
+﻿import { useRef, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { langFromPath, pathFor, alternatePath, SUPPORTED_LANGS } from "../i18n/routing";
@@ -81,6 +81,10 @@ export default function LiquidMenu() {
   const lang = langFromPath(pathname);
   // Équivalent de la page courante dans chaque autre langue (null si non traduite).
   const altHrefs = Object.fromEntries(SUPPORTED_LANGS.map((l) => [l, alternatePath(pathname, l)]));
+  // État React séparé du ref isOpen (qui pilote l'animation impérative sans
+  // re-render) : sert uniquement à gater aria-hidden/inert et à informer
+  // TopBar (aria-expanded) — ne doit jamais être lu par la boucle rAF.
+  const [menuOpen, setMenuOpen] = useState(false);
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
   const imgWrapRef = useRef(null);
@@ -154,6 +158,8 @@ export default function LiquidMenu() {
     if (isBusy.current || isOpen.current) return;
     isBusy.current = true;
     isOpen.current = true;
+    setMenuOpen(true);
+    window.dispatchEvent(new CustomEvent("liquidmenu-toggle", { detail: { open: true } }));
     killAll();
     measure();
 
@@ -219,6 +225,8 @@ export default function LiquidMenu() {
     if (isBusy.current || !isOpen.current) return;
     isBusy.current = true;
     isOpen.current = false;
+    setMenuOpen(false);
+    window.dispatchEvent(new CustomEvent("liquidmenu-toggle", { detail: { open: false } }));
     killAll();
 
     const realGrid  = document.getElementById("topbar-menu-grid");
@@ -286,8 +294,15 @@ export default function LiquidMenu() {
       <button ref={btnRef} style={{ display: "none" }} />
 
       {/* ── Overlay plein écran (révélé par cercle) ─────────── */}
+      {/* Toujours monté (nécessaire à l'animation de cercle), donc masqué au
+          clavier/lecteur d'écran quand fermé par aria-hidden + inert — le
+          clip-path seul masque visuellement mais laisse ~28 boutons
+          atteignables au Tab. `inert` retire aussi le focus, pas seulement
+          l'annonce AT (aria-hidden seul ne suffit pas). */}
       <div
         ref={overlayRef}
+        aria-hidden={!menuOpen}
+        {...(!menuOpen ? { inert: "" } : {})}
         style={{
           position: "fixed", inset: 0, zIndex: 600,
           pointerEvents: "none", overflow: "hidden",
@@ -337,8 +352,13 @@ export default function LiquidMenu() {
         </div>
 
         {/* ── Colonnes de navigation (droite) ── */}
+        {/* Libellé distinct de TopBar.jsx (déjà "a11y.mainNav") : les deux
+            <nav> coexistent dans le DOM (LiquidMenu est toujours monté) — un
+            même libellé rendrait les deux landmarks indiscernables au lecteur
+            d'écran. */}
         <nav
           className="lm-nav"
+          aria-label={t("a11y.menu")}
           style={{
             flex: 1, height: "100%",
             display: "flex", flexDirection: "column", justifyContent: "center",
@@ -454,20 +474,24 @@ export default function LiquidMenu() {
                         <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.3)" }}> | </span>
                       )}
                       {target ? (
-                        <button
-                          onClick={() => goTo(target)}
+                        // Vrai <a href hrefLang> (indexable, partageable, clic
+                        // milieu) — même principe que le sélecteur de TopBar.jsx.
+                        // goTo() gère la transition animée avant la navigation.
+                        <a
+                          href={target}
                           hrefLang={code}
+                          onClick={(e) => { e.preventDefault(); goTo(target); }}
                           style={{
                             font: "inherit", letterSpacing: "inherit",
-                            background: "none", border: "none", padding: 0,
-                            color: "inherit", opacity: 0.5, cursor: "pointer",
+                            color: "inherit", textDecoration: "none",
+                            opacity: 0.5, cursor: "pointer",
                             transition: "opacity .25s ease",
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
                           onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
                         >
                           {code.toUpperCase()}
-                        </button>
+                        </a>
                       ) : (
                         <span
                           aria-current={isCurrent ? "true" : undefined}
@@ -504,7 +528,7 @@ export default function LiquidMenu() {
                 letterSpacing: ".24em", textTransform: "uppercase",
                 color: "rgba(255,255,255,0.26)",
               }}>
-                Tropicaura · Commerce Tropical d'Excellence
+                {t("tagline")}
               </span>
             </div>
           </div>

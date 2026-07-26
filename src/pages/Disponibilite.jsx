@@ -199,6 +199,7 @@ export default function Disponibilite() {
       />
       <Breadcrumbs trail={trail} />
 
+      <main>
       {/* ━━━━━ 1. DÉCLARATION ━━━━━ */}
       <section style={{
         minHeight: "70vh", background: "#0B1310",
@@ -335,6 +336,7 @@ export default function Disponibilite() {
           </p>
         </div>
       </section>
+      </main>
     </div>
   );
 }

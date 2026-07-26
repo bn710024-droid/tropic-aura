@@ -77,5 +77,15 @@ export function buildMotionCSS() {
     .motion-scene[data-phase="entering"] .ms-layer--image,
     .motion-scene[data-phase="reading"] .ms-layer--image { transform: scale(1) translateX(0); }
     .motion-scene[data-phase="exiting"] .ms-layer--image { transform: scale(1) translateX(var(--ms-exit-x, -32px)); }
+
+    /* Réduction de mouvement : les états finaux par phase restent corrects
+       (opacité/position), seule la TRANSITION animée entre eux est coupée —
+       même principe que .prod-float ailleurs sur le site. */
+    @media (prefers-reduced-motion: reduce) {
+      .ms-curtain,
+      .ms-layer--bg, .ms-layer--title, .ms-layer--text, .ms-layer--image, .ms-layer--icon {
+        transition: none !important;
+      }
+    }
   `;
 }
