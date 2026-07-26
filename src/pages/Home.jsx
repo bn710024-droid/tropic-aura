@@ -183,6 +183,7 @@ const SCROLL_MEMORY_KEY = "scrollpos:/";
 export default function Home() {
   const { t, i18n } = useTranslation();
   const bgRef = useRef(null);
+  const bgFadeRef = useRef(null);  // calque de fondu opacity — voir .bg-fade-layer dans global.css
   const scenesRef = useRef([]);
   const fruitsRef = useRef([]);   // éléments .cell (plats, indexés)
   const lenisRef = useRef(null);
@@ -214,7 +215,6 @@ export default function Home() {
     lenisRef.current = lenis;
 
     let rafId;
-    const lerp = (a, b, t) => Math.round(a + (b - a) * t);
     const easeOut = (t) => 1 - (1 - t) * (1 - t);  // power2.out
     const last = SECTIONS.length - 1;
 
@@ -222,6 +222,7 @@ export default function Home() {
     //  Aucun terme temporel : si le scroll ne bouge pas, rien ne bouge.
     //  Les fruits sont parfaitement figés au repos.
     let lastScroll = -99999;
+    let lastColorIndex = -1;  // évite de repeindre backgroundColor à chaque frame (voir update())
 
     // Hauteur RÉELLE d'une section (.scene à 100vh) : sur un vrai mobile,
     // window.innerHeight (viewport visuel) rétrécit avec la barre d'URL alors
@@ -238,16 +239,24 @@ export default function Home() {
     const update = (scroll, H) => {
       const half = H / 2;
 
-      // couleur de fond interpolée (fusion continue, liée au scroll)
+      // couleur de fond interpolée (fusion continue, liée au scroll) — le
+      // fondu lui-même est un opacity (compositor-only, pas de repaint) sur
+      // .bg-fade-layer ; seul le changement d'INDEX de section (rare, ~1 fois
+      // par écran, pas à chaque frame) repeint les deux backgroundColor. Avant
+      // ce correctif, backgroundColor était réécrit à chaque frame de scroll
+      // (repaint continu), visible en judder à travers les fruits semi-
+      // transparents posés juste au-dessus de ce calque.
       const prog = scroll / H;
       const i = Math.min(last, Math.floor(prog));
       const ft = Math.min(1, Math.max(0, prog - i));
       const a = COLORS[i];
       const b = COLORS[Math.min(last, i + 1)];
-      if (bgRef.current) {
-        bgRef.current.style.backgroundColor =
-          `rgb(${lerp(a[0], b[0], ft)},${lerp(a[1], b[1], ft)},${lerp(a[2], b[2], ft)})`;
+      if (i !== lastColorIndex) {
+        lastColorIndex = i;
+        if (bgRef.current) bgRef.current.style.backgroundColor = `rgb(${a[0]},${a[1]},${a[2]})`;
+        if (bgFadeRef.current) bgFadeRef.current.style.backgroundColor = `rgb(${b[0]},${b[1]},${b[2]})`;
       }
+      if (bgFadeRef.current) bgFadeRef.current.style.opacity = ft.toFixed(3);
 
       // ── PARALLAXE MOBILE : calque fruits global glisse à 50% de la vitesse du
       //    contenu (ratio 0.5, Combilo exact). Piloté par CETTE boucle rAF (lecture window.scrollY
@@ -473,8 +482,10 @@ export default function Home() {
         style={{ display: "none" }}
       />
 
-      {/* Fond : couleur interpolée + couche de profondeur (jamais plat) */}
+      {/* Fond : couleur interpolée (fondu opacity via .bg-fade-layer, voir
+          update() dans l'effet ci-dessus) + couche de profondeur (jamais plat) */}
       <div className="bg-layer" ref={bgRef} style={{ backgroundColor: SECTIONS[0].bg }} />
+      <div className="bg-fade-layer" ref={bgFadeRef} />
       <div className="bg-depth" />
 
       {/* Plan MID — rivière principale pleine largeur, SOUS le texte (z:1),

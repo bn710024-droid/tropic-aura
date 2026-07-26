@@ -120,7 +120,7 @@ export default function InsightPartenariats() {
         }
         .art-hero-bg {
           position: absolute; inset: 0;
-          background-image: url("/fonds-insights.png");
+          background-image: url("/fonds-insights.webp");
           background-size: cover; background-position: center 20%;
         }
         .art-hero-overlay {
@@ -238,7 +238,7 @@ export default function InsightPartenariats() {
         }
         .art-outro-bg {
           position: absolute; inset: 0;
-          background-image: url("/fonds-insights.png");
+          background-image: url("/fonds-insights.webp");
           background-size: cover; background-position: center bottom;
         }
         .art-outro-overlay {
@@ -290,7 +290,7 @@ export default function InsightPartenariats() {
         <div className="art-hero-bg" />
         <div className="art-hero-overlay" />
         <div className="art-hero-content" ref={reveal} style={r(0)}>
-          <span style={{ ...lbl, marginBottom: 20 }}>Partenariats</span>
+          <span style={{ ...lbl, marginBottom: 20 }}>{t("insights.articles.supplier.category")}</span>
           <h1 style={{
             fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 800,
             fontSize: "clamp(28px,3.4vw,52px)", lineHeight: 1.05,
@@ -298,7 +298,7 @@ export default function InsightPartenariats() {
             margin: "14px 0 32px", maxWidth: 820,
           }}>{t("articleSupplier.b1")}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            {[["Tropicaura", true], ["7 min de lecture", false], ["Juin 2026", false]].map(([txt, bold], i) => (
+            {[["Tropicaura", true], [`${t("insights.articles.supplier.readTime")} ${t("insights.readTimeSuffix")}`, false], [t("insights.articles.supplier.date"), false]].map(([txt, bold], i) => (
               <span key={txt} style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
                 {i > 0 && <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }} />}
                 <span style={{

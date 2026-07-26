@@ -96,71 +96,83 @@ export default function TopBar({ variant = "minimal" }) {
         </nav>
       )}
 
-      <button
-        id="topbar-menu-btn"
-        onClick={handleMenuClick}
-        aria-label={t("a11y.menu")}
-        className="topbar-menu-btn"
-        style={{
-          width: 40, height: 40,
-          borderRadius: "50%",
-          /* Pas de backdrop-filter : sur les WebView WebKit limitées (Google
-             iOS), un backdrop blur au-dessus d'un fond animé se re-rasterise
-             mal → ghosting/halo près du logo. Un fond rgba légèrement plus
-             présent donne la même lisibilité sans aucun filtre au rendu. */
-          backgroundColor: "rgba(255,255,255,0.12)",
-          border: "1.5px solid rgba(255,255,255,0.2)",
-          cursor: "pointer",
-          alignItems: "center", justifyContent: "center",
-          padding: 0,
-          position: "relative",
-          transition: "background-color .25s, border-color .25s",
-          marginRight: "clamp(10px,2.5vw,24px)",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)";
-          e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
-          e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-        }}
-      >
-        {/* Grille 2×2 — état fermé */}
-        <div id="topbar-menu-grid" style={{
-          position: "absolute",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 3,
-          pointerEvents: "none",
-          transition: "opacity .25s ease, transform .25s ease",
-        }}>
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ width: 5, height: 5, borderRadius: 1, backgroundColor: "#fff", display: "block" }} />
-          ))}
-        </div>
+      {/* CTA « Demander un devis » persistant, juste avant le bouton menu —
+          visible sur TOUTES les pages, à toutes les largeurs (contrairement
+          à .topbar-nav__cta, réservé à la nav complète de l'Accueil et
+          masqué sous 1025px). Masqué uniquement sur l'Accueil en desktop
+          (voir la règle @media dans global.css), où le CTA de la nav
+          complète joue déjà ce rôle — pas de doublon. */}
+      <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px,2vw,14px)" }}>
+        <a href={`${pathFor("contact", lang)}?section=form`} className="topbar-quote-btn">
+          {t("nav.quote")}
+        </a>
 
-        {/* Croix × — état ouvert */}
-        <div id="topbar-menu-cross" style={{
-          position: "absolute",
-          width: 16, height: 16,
-          opacity: 0,
-          transform: "scale(.6)",
-          pointerEvents: "none",
-          transition: "opacity .25s ease, transform .25s ease",
-        }}>
-          <span style={{
-            position: "absolute", top: "50%", left: "50%",
-            width: 16, height: 1.5, backgroundColor: "#fff",
-            transform: "translate(-50%,-50%) rotate(45deg)",
-          }} />
-          <span style={{
-            position: "absolute", top: "50%", left: "50%",
-            width: 16, height: 1.5, backgroundColor: "#fff",
-            transform: "translate(-50%,-50%) rotate(-45deg)",
-          }} />
-        </div>
-      </button>
+        <button
+          id="topbar-menu-btn"
+          onClick={handleMenuClick}
+          aria-label={t("a11y.menu")}
+          className="topbar-menu-btn"
+          style={{
+            width: 40, height: 40,
+            borderRadius: "50%",
+            /* Pas de backdrop-filter : sur les WebView WebKit limitées (Google
+               iOS), un backdrop blur au-dessus d'un fond animé se re-rasterise
+               mal → ghosting/halo près du logo. Un fond rgba légèrement plus
+               présent donne la même lisibilité sans aucun filtre au rendu. */
+            backgroundColor: "rgba(255,255,255,0.12)",
+            border: "1.5px solid rgba(255,255,255,0.2)",
+            cursor: "pointer",
+            alignItems: "center", justifyContent: "center",
+            padding: 0,
+            position: "relative",
+            transition: "background-color .25s, border-color .25s",
+            marginRight: "clamp(10px,2.5vw,24px)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+          }}
+        >
+          {/* Grille 2×2 — état fermé */}
+          <div id="topbar-menu-grid" style={{
+            position: "absolute",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 3,
+            pointerEvents: "none",
+            transition: "opacity .25s ease, transform .25s ease",
+          }}>
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} style={{ width: 5, height: 5, borderRadius: 1, backgroundColor: "#fff", display: "block" }} />
+            ))}
+          </div>
+
+          {/* Croix × — état ouvert */}
+          <div id="topbar-menu-cross" style={{
+            position: "absolute",
+            width: 16, height: 16,
+            opacity: 0,
+            transform: "scale(.6)",
+            pointerEvents: "none",
+            transition: "opacity .25s ease, transform .25s ease",
+          }}>
+            <span style={{
+              position: "absolute", top: "50%", left: "50%",
+              width: 16, height: 1.5, backgroundColor: "#fff",
+              transform: "translate(-50%,-50%) rotate(45deg)",
+            }} />
+            <span style={{
+              position: "absolute", top: "50%", left: "50%",
+              width: 16, height: 1.5, backgroundColor: "#fff",
+              transform: "translate(-50%,-50%) rotate(-45deg)",
+            }} />
+          </div>
+        </button>
+      </div>
     </header>
   );
 }
