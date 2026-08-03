@@ -151,7 +151,7 @@ export default function Footer() {
           <div>
             <span style={colLabel}>{t("footer.colNavigation")}</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
-              {["products", "about", "insights", "contact"].map((page) => (
+              {["about", "products", "availability", "partnerships", "insights", "contact"].map((page) => (
                 <a key={page} href={pathFor(page, lang)} style={navLink} onMouseEnter={overOn} onMouseLeave={overOff}>
                   {t(`nav.${page}`)}
                 </a>

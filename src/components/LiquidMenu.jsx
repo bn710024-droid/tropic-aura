@@ -6,15 +6,17 @@ import { langFromPath, pathFor, alternatePath, SUPPORTED_LANGS } from "../i18n/r
 // ============================================================
 //  LIQUID MENU — plein écran éditorial premium (Tropicaura)
 //
-//  Image immersive à gauche (~40%) + navigation en DEUX colonnes
-//  à droite : rubriques principales + sous-liens (style Combilo).
-//  Fond noir profond révélé par un cercle qui grandit depuis le
-//  bouton. Animation 100% RAF natif (aucune dépendance externe).
+//  Navigation en DEUX colonnes : rubriques principales + sous-liens
+//  (style Combilo). Fond noir profond révélé par un cercle qui grandit
+//  depuis le bouton. Animation 100% RAF natif (aucune dépendance externe).
 //
-//  Au survol d'une rubrique → l'image de gauche change (crossfade).
+//  Au survol d'une rubrique → teinte d'ambiance plein écran (même
+//  mécanisme que .avail-ambient sur Disponibilite.jsx : calque fixed,
+//  opacity + background-color en transition CSS, piloté par un simple
+//  state de hover).
 // ============================================================
 
-// Navigation en 2 colonnes. Chaque rubrique : { label, href, img, subs[] }
+// Navigation en 2 colonnes. Chaque rubrique : { label, href, subs[] }
 // Sous-liens = raccourcis directs vers les vraies sections de chaque page
 // (voir SECTIONS/aboutTheme.js, partnershipTheme.js, Produits.jsx). Le
 // paramètre ?section=<id> est lu au montage par chaque page pour sauter
@@ -25,31 +27,30 @@ import { langFromPath, pathFor, alternatePath, SUPPORTED_LANGS } from "../i18n/r
 // `section` = ancre ?section=<id> lue au montage par la page cible.
 const COLUMNS = [
   [
-    { navKey: "home", page: "home", img: "/menu-accueil.jpg" },
+    { navKey: "home", page: "home" },
     {
-      navKey: "about", page: "about", img: "/menu-apropos.jpg",
+      navKey: "about", page: "about",
       subsKey: "aboutSubs",
       subs: ["vision", "aujourdhui", "demain", "ambition", "avenir", "engagement"],
     },
     {
-      navKey: "products", page: "products", img: "/menu-produits.jpg",
+      navKey: "products", page: "products",
       subsKey: "productsSubs",
       subs: ["signature", "saison", "specialites"],
     },
     // Rubrique de premier niveau (pas un sous-lien de Produits) : le calendrier
     // mérite sa propre place dans le menu, au même niveau que les autres pages
-    // importantes. Réutilise la photo de Produits (thématiquement cohérente,
-    // pas de nouvelle image fabriquée).
-    { navKey: "availability", page: "availability", img: "/menu-produits.jpg" },
+    // importantes.
+    { navKey: "availability", page: "availability" },
   ],
   [
     {
-      navKey: "partnerships", page: "partnerships", img: "/menu-partenariats.jpg",
+      navKey: "partnerships", page: "partnerships",
       subsKey: "partnershipsSubs",
       subs: ["vision", "parcours", "expedition", "conclusion"],
     },
     {
-      navKey: "insights", page: "insights", img: "/menu-visual.jpg",
+      navKey: "insights", page: "insights",
       subsKey: "insightsSubs",
       // Articles : pages à part entière (pas des ancres) → `page` explicite.
       subs: [
@@ -58,17 +59,34 @@ const COLUMNS = [
       ],
     },
     {
-      navKey: "contact", page: "contact", img: "/menu-contact.jpg",
+      navKey: "contact", page: "contact",
       subsKey: "contactSubs",
       subs: [
         { key: "form", section: "form" },
         { key: "partnership", page: "partnerships", section: "conclusion" },
       ],
     },
+    // Pages de confiance B2B — mêmes destinations que le groupe « Ressources »
+    // du Footer (Footer.jsx), absentes du menu jusqu'ici.
+    { navKey: "quality", page: "quality" },
+    { navKey: "logistics", page: "logistics" },
   ],
 ];
 
-const DEFAULT_IMG = COLUMNS[0][0].img; // Accueil
+// Teinte d'ambiance par rubrique — même esprit que AMBIENT_COLORS de
+// Disponibilite.jsx (couleur reconnaissable du thème de la page, pas un
+// pastel décoratif générique).
+const SECTION_COLORS = {
+  home: "#17301F",
+  about: "#8A6A2E",
+  products: "#E8890A",
+  availability: "#D9A62E",
+  partnerships: "#4C7A3D",
+  insights: "#2E5A8A",
+  contact: "#C23B2E",
+  quality: "#B08D3E",
+  logistics: "#3E6B8A",
+};
 
 // Easings
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -85,12 +103,12 @@ export default function LiquidMenu() {
   // re-render) : sert uniquement à gater aria-hidden/inert et à informer
   // TopBar (aria-expanded) — ne doit jamais être lu par la boucle rAF.
   const [menuOpen, setMenuOpen] = useState(false);
+  // Rubrique survolée (desktop) — pilote la teinte d'ambiance plein écran.
+  // Même principe que hoveredSlug dans Disponibilite.jsx : state local,
+  // transition gérée en CSS (opacity/background-color).
+  const [hoveredSection, setHoveredSection] = useState(null);
   const overlayRef = useRef(null);
   const btnRef     = useRef(null);   // fallback si #topbar-menu-btn absent au montage
-  const imgWrapRef = useRef(null);
-  const imgARef    = useRef(null);
-  const imgBRef    = useRef(null);
-  const activeImg  = useRef(0);
   const itemRefs   = useRef([]);
   const footerRef  = useRef(null);
   const isOpen     = useRef(false);
@@ -107,22 +125,6 @@ export default function LiquidMenu() {
 
   const after = useCallback((ms, fn) => {
     tids.current.push(setTimeout(fn, ms));
-  }, []);
-
-  // Crossfade entre les deux calques d'image (fonds CSS → pas de bouton
-  // "recherche visuelle" du navigateur, qui n'apparaît que sur les <img>)
-  const setImage = useCallback((src) => {
-    if (!src) return;
-    const a = imgARef.current, b = imgBRef.current;
-    if (!a || !b) return;
-    const cur = activeImg.current === 0 ? a : b;
-    const nxt = activeImg.current === 0 ? b : a;
-    if (cur.dataset.src === src) return;
-    nxt.style.backgroundImage = `url("${src}")`;
-    nxt.dataset.src = src;
-    nxt.style.opacity = "1";
-    cur.style.opacity = "0";
-    activeImg.current = activeImg.current === 0 ? 1 : 0;
   }, []);
 
   const measure = useCallback(() => {
@@ -159,6 +161,7 @@ export default function LiquidMenu() {
     isBusy.current = true;
     isOpen.current = true;
     setMenuOpen(true);
+    setHoveredSection(null);
     window.dispatchEvent(new CustomEvent("liquidmenu-toggle", { detail: { open: true } }));
     killAll();
     measure();
@@ -173,21 +176,6 @@ export default function LiquidMenu() {
       el.style.opacity    = "0";
       el.style.transform  = "translateY(28px)";
     });
-    if (imgWrapRef.current) {
-      imgWrapRef.current.style.transition = "none";
-      imgWrapRef.current.style.opacity    = "0";
-    }
-    activeImg.current = 0;
-    [imgARef.current, imgBRef.current].forEach((im, k) => {
-      if (!im) return;
-      im.style.transition = "none";
-      im.style.transform  = "scale(1.16)";
-      im.style.opacity    = k === 0 ? "1" : "0";
-    });
-    if (imgARef.current) {
-      imgARef.current.style.backgroundImage = `url("${DEFAULT_IMG}")`;
-      imgARef.current.dataset.src = DEFAULT_IMG;
-    }
 
     // Bouton : grille → croix × (sur le VRAI bouton visible dans TopBar)
     const realGrid  = document.getElementById("topbar-menu-grid");
@@ -196,18 +184,6 @@ export default function LiquidMenu() {
     if (realCross) { realCross.style.opacity = "1"; realCross.style.transform = "scale(1)"; }
 
     tweenRadius(0, center.current.full, 1.10, easeOut, null);
-
-    after(360, () => {
-      if (imgWrapRef.current) {
-        imgWrapRef.current.style.transition = "opacity .9s ease";
-        imgWrapRef.current.style.opacity    = "1";
-      }
-      [imgARef.current, imgBRef.current].forEach((im) => {
-        if (!im) return;
-        im.style.transition = "transform 1.3s cubic-bezier(.22,1,.36,1), opacity .45s ease";
-        im.style.transform  = "scale(1)";
-      });
-    });
 
     items.forEach((el, i) =>
       after(560 + i * 55, () => {
@@ -241,10 +217,7 @@ export default function LiquidMenu() {
       el.style.opacity    = "0";
       el.style.transform  = "translateY(-16px)";
     });
-    if (imgWrapRef.current) {
-      imgWrapRef.current.style.transition = "opacity .26s ease";
-      imgWrapRef.current.style.opacity    = "0";
-    }
+    setHoveredSection(null);
 
     after(210, () =>
       tweenRadius(center.current.full, 0, 0.82, easeIn, () => {
@@ -269,10 +242,18 @@ export default function LiquidMenu() {
 
   return (
     <>
-      {/* Responsive : image masquée + colonnes empilées sous 820px */}
+      {/* Responsive : colonnes empilées sous 820px */}
       <style>{`
+        /* Ambiance : transition douce, désactivée sous reduced-motion et sur
+           tactile (pas de vrai survol) — même règles que .avail-ambient. */
+        .lm-ambient { transition: opacity .6s ease, background-color .6s ease; }
+        @media (prefers-reduced-motion: reduce) {
+          .lm-ambient { transition: none; }
+        }
+        @media (hover: none) {
+          .lm-ambient { display: none; }
+        }
         @media (max-width: 820px){
-          .lm-img  { display: none !important; }
           /* justify-content: flex-start (pas center, hérité du desktop) :
              sur mobile le contenu du menu dépasse souvent la hauteur de
              l'écran — centré verticalement, l'excédent est coupé À LA FOIS
@@ -311,47 +292,22 @@ export default function LiquidMenu() {
           display: "flex",
         }}
       >
-        {/* ── Colonne image immersive (gauche, ~40%) ── */}
+        {/* ── Ambiance de fond : teinte de la rubrique survolée ──
+            Même mécanisme que .avail-ambient sur Disponibilite.jsx — calque
+            fixed plein écran, pointer-events:none, opacity + background-color
+            transitionnées en CSS, piloté par hoveredSection. */}
         <div
-          className="lm-img"
-          ref={imgWrapRef}
+          className="lm-ambient"
+          aria-hidden="true"
           style={{
-            position: "relative",
-            width: "40%", height: "100%",
-            overflow: "hidden", opacity: 0, flexShrink: 0,
+            position: "absolute", inset: 0, zIndex: 0,
+            pointerEvents: "none",
+            opacity: hoveredSection ? 0.55 : 0,
+            backgroundColor: hoveredSection ? SECTION_COLORS[hoveredSection] : "transparent",
           }}
-        >
-          {[imgARef, imgBRef].map((ref, k) => (
-            <div
-              key={k}
-              ref={ref}
-              aria-hidden="true"
-              data-src={k === 0 ? DEFAULT_IMG : undefined}
-              style={{
-                position: "absolute", inset: 0,
-                width: "100%", height: "100%",
-                backgroundImage: k === 0 ? `url("${DEFAULT_IMG}")` : "none",
-                backgroundSize: "cover", backgroundPosition: "center",
-                transform: "scale(1.16)",
-                transition: "transform .9s cubic-bezier(.22,1,.36,1), opacity .45s ease",
-                filter: "brightness(0.92) saturate(1.05)",
-                opacity: k === 0 ? 1 : 0,
-              }}
-            />
-          ))}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(90deg, rgba(10,10,10,0) 55%, rgba(10,10,10,0.55) 85%, #0A0A0A 100%)",
-            pointerEvents: "none",
-          }} />
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.28) 100%)",
-            pointerEvents: "none",
-          }} />
-        </div>
+        />
 
-        {/* ── Colonnes de navigation (droite) ── */}
+        {/* ── Colonnes de navigation ── */}
         {/* Libellé distinct de TopBar.jsx (déjà "a11y.mainNav") : les deux
             <nav> coexistent dans le DOM (LiquidMenu est toujours monté) — un
             même libellé rendrait les deux landmarks indiscernables au lecteur
@@ -360,6 +316,7 @@ export default function LiquidMenu() {
           className="lm-nav"
           aria-label={t("a11y.menu")}
           style={{
+            position: "relative", zIndex: 1,
             flex: 1, height: "100%",
             display: "flex", flexDirection: "column", justifyContent: "center",
             padding: "clamp(80px,12vh,120px) clamp(48px,7vw,110px)",
@@ -377,8 +334,8 @@ export default function LiquidMenu() {
                     >
                       <button
                         onClick={() => goTo(pathFor(g.page, lang))}
-                        onMouseEnter={(e) => { setImage(g.img); e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.transform = "translateX(6px)"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateX(0)"; }}
+                        onMouseEnter={(e) => { setHoveredSection(g.navKey); e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.transform = "translateX(6px)"; }}
+                        onMouseLeave={(e) => { setHoveredSection(null); e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateX(0)"; }}
                         style={{
                           background: "none", border: "none", cursor: "pointer",
                           padding: 0, textAlign: "left", display: "block",
@@ -412,8 +369,8 @@ export default function LiquidMenu() {
                           >
                             <button
                               onClick={() => goTo(href)}
-                              onMouseEnter={(e) => { setImage(g.img); e.currentTarget.style.color = "rgba(255,255,255,0.92)"; e.currentTarget.style.transform = "translateX(6px)"; }}
-                              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.transform = "translateX(0)"; }}
+                              onMouseEnter={(e) => { setHoveredSection(g.navKey); e.currentTarget.style.color = "rgba(255,255,255,0.92)"; e.currentTarget.style.transform = "translateX(6px)"; }}
+                              onMouseLeave={(e) => { setHoveredSection(null); e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.transform = "translateX(0)"; }}
                               style={{
                                 background: "none", border: "none", cursor: "pointer",
                                 padding: 0, textAlign: "left", display: "block",
