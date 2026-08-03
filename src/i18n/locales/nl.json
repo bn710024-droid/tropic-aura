@@ -237,7 +237,7 @@
   },
   "availability": {
     "seo": {
-      "title": "Beschikbaarheidskalender — Seizoensgebondenheid van Producten",
+      "title": "Beschikbaarheidskalender per Product",
       "description": "Maandelijkse beschikbaarheidskalender per product — mango, avocado, citrusvruchten, okra, pepers en ander West-Afrikaans fruit geëxporteerd door Tropicaura.",
       "logoAlt": "Tropicaura — beschikbaarheidskalender voor exportfruit en -groenten"
     },
@@ -411,7 +411,7 @@
   },
   "insights": {
     "seo": {
-      "title": "Inzichten — Analyses van de Internationale Tropische Handel",
+      "title": "Inzichten — Tropische Handelsanalyses",
       "description": "Analyses en perspectieven van Tropicaura op de internationale tropische handel: strategische oorsprong en sourcing in West-Afrika.",
       "logoAlt": "Tropicaura — Inzichten en analyses van de internationale tropische handel"
     },

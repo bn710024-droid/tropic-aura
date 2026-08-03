@@ -78,8 +78,12 @@ export default function TopBar({ variant = "minimal" }) {
                 <span key={code}>
                   {i > 0 && <span aria-hidden="true"> | </span>}
                   {href ? (
+                    // href toujours présent, même pour la langue courante (auto-
+                    // référence) : un <a> sans href n'est pas explorable par les
+                    // moteurs de recherche (audit Lighthouse "crawlable-anchors").
+                    // pointer-events:none empêche déjà tout clic inutile.
                     <a
-                      href={isCurrent ? undefined : href}
+                      href={href}
                       className="topbar-nav__lang-link"
                       aria-current={isCurrent ? "true" : undefined}
                       style={isCurrent ? { fontWeight: 700, pointerEvents: "none" } : undefined}

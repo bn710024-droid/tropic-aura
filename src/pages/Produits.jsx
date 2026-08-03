@@ -82,7 +82,7 @@ const SECTIONS = [
   // ── Besoin spécifique ──
   {
     type: "besoin", id: "besoin", bg: "#080F0A",
-    png: "/multifruits.png",
+    png: "/multifruits.webp",
   },
 ];
 
