@@ -9,7 +9,7 @@
 //  chargement ni après navigation.
 //
 //  Usage :  node scripts/generate-blurred-fruits.mjs
-//  Sortie :  public/png/m/blurred/<nom>-s<taille>-b<flou>.png
+//  Sortie :  public/png/m/blurred/<nom>-s<taille>-b<flou>.webp
 //  À relancer (puis commit) après tout changement de size/blur
 //  dans le manifeste.
 // ============================================================

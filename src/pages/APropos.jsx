@@ -474,7 +474,7 @@ export default function APropos() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt={t("about.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("about.seo.logoAlt")} width={448} height={434} style={{ display: "none" }} />
       <Breadcrumbs trail={aboutTrail} />
 
       {/* ── Fond interpolé (forêt → ivoire → sauge → pierre → noir → ivoire) ── */}

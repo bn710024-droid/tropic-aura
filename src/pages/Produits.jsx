@@ -405,7 +405,7 @@ export default function Produits() {
       `}</style>
 
       <TopBar />
-      <img src="/logo-mark.png" alt={t("productsPage.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("productsPage.seo.logoAlt")} width={448} height={434} style={{ display: "none" }} />
       <Breadcrumbs trail={produitsTrail} />
 
       {/* Fond interpolé (fondu opacity via .bg-fade-layer) + éclairage Combilo (halo central + vignette, soft-light) */}

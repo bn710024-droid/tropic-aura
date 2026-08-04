@@ -89,8 +89,8 @@ export default function InsightPartenariats() {
       <img
         src="/logo-mark.png"
         alt={t("insights.articles.supplier.logoAlt")}
-        width={512}
-        height={512}
+        width={448}
+        height={434}
         style={{ display: "none" }}
       />
 

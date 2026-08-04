@@ -195,7 +195,7 @@ export default function Disponibilite() {
       <img
         src="/logo-mark.png"
         alt={t("availability.seo.logoAlt")}
-        width={512} height={512} style={{ display: "none" }}
+        width={448} height={434} style={{ display: "none" }}
       />
       <Breadcrumbs trail={trail} />
 

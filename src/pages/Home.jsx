@@ -478,8 +478,8 @@ export default function Home() {
       <img
         src="/logo-mark.png"
         alt={t("home.seo.logoAlt")}
-        width={512}
-        height={512}
+        width={448}
+        height={434}
         style={{ display: "none" }}
       />
 

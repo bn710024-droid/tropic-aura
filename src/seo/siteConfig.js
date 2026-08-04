@@ -63,8 +63,8 @@ export const DEFAULT_OG_IMAGE = {
 };
 
 export const LOGO_URL = `${SITE_URL}/logo-mark.png`;
-export const LOGO_WIDTH = 512;
-export const LOGO_HEIGHT = 512;
+export const LOGO_WIDTH = 448;
+export const LOGO_HEIGHT = 434;
 
 // Pas de comptes sociaux Twitter/X confirmés dans le code existant →
 // on omet twitter:site/creator plutôt que d'inventer un handle.

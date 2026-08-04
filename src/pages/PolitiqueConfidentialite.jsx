@@ -62,7 +62,7 @@ export default function PolitiqueConfidentialite() {
       <img
         src="/logo-mark.png"
         alt={t("privacy.seo.logoAlt")}
-        width={512} height={512} style={{ display: "none" }}
+        width={448} height={434} style={{ display: "none" }}
       />
       <Breadcrumbs trail={trail} />
 

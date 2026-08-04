@@ -284,7 +284,7 @@ export default function Contact() {
 
       {/* Top bar avec logo + menu */}
       <TopBar />
-      <img src="/logo-mark.png" alt={t("contact.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("contact.seo.logoAlt")} width={448} height={434} style={{ display: "none" }} />
       <Breadcrumbs trail={contactTrail} />
 
       <main>

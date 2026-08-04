@@ -73,7 +73,7 @@ export default function Quality() {
         ]}
       />
       <TopBar />
-      <img src="/logo-mark.png" alt={t("quality.seo.logoAlt")} width={512} height={512} style={{ display: "none" }} />
+      <img src="/logo-mark.png" alt={t("quality.seo.logoAlt")} width={448} height={434} style={{ display: "none" }} />
       <Breadcrumbs trail={trail} />
 
       <main>
